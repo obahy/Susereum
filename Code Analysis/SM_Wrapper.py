@@ -38,7 +38,7 @@ def read_write_file(data, cols, file_mode):
     with open('CodeAnalysis.csv', file_mode, newline='') as csv_out_file:
         out_writer = csv.writer(csv_out_file)
         if (file_mode == 'w'):  # write the header data in case of new file only.
-            out_writer.writerow(["Hello Abel, this is your project ID"])  # Header on file
+            out_writer.writerow(["Pusher ID: XXX", "Repo ID: YYY", "Commit URL: ZZZ"])  # Header on file
             out_writer.writerow(["Ref", "Ref-Name", "LOC", "CD", "Params"])  # Header on file
         for i in range(1, data_columns):
             if (file_mode == 'w'):
@@ -68,7 +68,7 @@ read_write_file(data, csv_read_cols, 'w')
 csv_method_file = project_name+"-Method.csv"
 data = list(csv.reader(open(csv_in_path + csv_method_file)))
 # 1 name, 30 LOC, 24 CD, 32 NUMPAR(number of parameters
-csv_read_cols = [1, 30, 24, 32]  # sequence of column numbers that you want to write in the out file
+csv_read_cols = [1, 30, 23, 32]  # sequence of column numbers that you want to write in the out file
 read_write_file(data, csv_read_cols, 'a')
 
 print("\nFile: CodeAnalysis.csv created!", time.strftime("[ Time: %H:%M:%S ]"))
