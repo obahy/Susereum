@@ -1,0 +1,15 @@
+/Code Analysis
+/Github App
+/Sawtooth/*_pycache_*
+/Sawtooth/intkey*
+/Sawtooth/data
+/Sawtooth/client
+/Sawtooth/keys
+/Sawtooth/logs/
+/Sawtooth/policy
+/Sawtooth/setup
+*.pyc
+/Sawtooth/*.intkey
+/Sawtooth/*.batch
+
+/Code
