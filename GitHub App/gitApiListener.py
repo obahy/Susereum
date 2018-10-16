@@ -26,16 +26,30 @@ class RequestHandler:
 	def installationEvent(self, payload):
 		repoID = payload['repositories_added'][0]['id']
 		repoName = payload['repositories_added'][0]['name']
+		suseFile = self.createSuseFile(repoID)
+		starCount = self.getStarCount(repoID)
+		
 		print "Repo ID: " + str(repoID)
 		print "Repo Name: " + repoName
-		# TODO: Send this information to Christian somehow
-		owner = payload['sender']['login']
-		self.createSuseFile(repoID)
+		#print "Suse File: " + suseFile
+		print "Star Count: " + str(starCount)
+		# TODO: Send this information to Sawtooth to handle creating new blockchains
 
-	def sendSuseFileToBC(self, repoID):
+	def starEvent(self, payload):
+		repoID = payload['repository']['id']
+		starCount = self.getStarCount(repoID)
+		print "Star Count: " + str(starCount)
+		# TODO: Send this star count to Sawtooth so they can use it for calculating Suse
+
+	def getStarCount(self, repoID):
+		rawFileContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/stargazers')
+		starCount = len(rawFileContents)
+		return starCount
+
+	def getSuseFile(self, repoID):
 		rawFileContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/contents/SuseMeasures.suse')
 		decodedContents = base64.b64decode(rawFileContents['content'])
-		# TODO: send contents to Blockchain
+		return decodedContents
 
 	def createSuseFile(self, repoID):
 		# First check if Suse file already exists in the repo
@@ -46,7 +60,7 @@ class RequestHandler:
 			if file['name'] == filename:
 				fileFound = True
 				print "Suse Measures file already exists for this repo. Let's parse it for default params!"
-				self.sendSuseFileToBC(repoID)
+				return self.getSuseFile(repoID)
 	
 		if not fileFound:
 			# push Suse file	
@@ -76,8 +90,10 @@ CommentsToCodeRatioLower = 0.1
 			resultStatusCode = self.gitPUT(URL, data)
 			if resultStatusCode == 201:
 				print "Suse file created successfully"
+				return content
 			else:
 				print "Problem creating Suse file"
+				return ""
 
 	# Github sends a signature in the payload header. Github created that signature by using their secret and hashing the entire payload with sha1
 	# We encrypt the payload we received with our secret and sha1 and check if they match
@@ -114,7 +130,8 @@ CommentsToCodeRatioLower = 0.1
 		# Map events to functions that handle those events
 		functionMapping = {
 			'push': self.pushEvent,
-			'integration_installation_repositories': self.installationEvent
+			'integration_installation_repositories': self.installationEvent,
+			'watch': self.starEvent
 		}
 		genericFunc = functionMapping.get(event)	# Figure out which handler function to use
 		genericFunc(json.loads(payload))	# Call handler function with json payload
