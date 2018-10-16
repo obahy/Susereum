@@ -1,8 +1,16 @@
+# from github import Github tried to use PyGithub library but it was out of date
 import web
 import os
 import json
 import hmac
 import hashlib
+import requests
+from requests_oauthlib import OAuth1
+import jwt
+import datetime
+import calendar
+import base64
+import toml
 
 class RequestHandler:
 
@@ -21,6 +29,55 @@ class RequestHandler:
 		print "Repo ID: " + str(repoID)
 		print "Repo Name: " + repoName
 		# TODO: Send this information to Christian somehow
+		owner = payload['sender']['login']
+		self.createSuseFile(repoID)
+
+	def sendSuseFileToBC(self, repoID):
+		rawFileContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/contents/SuseMeasures.suse')
+		decodedContents = base64.b64decode(rawFileContents['content'])
+		# TODO: send contents to Blockchain
+
+	def createSuseFile(self, repoID):
+		# First check if Suse file already exists in the repo
+		fileFound = False
+		reposCurrContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/contents')
+		filename = "SuseMeasures.suse"
+		for file in reposCurrContents:
+			if file['name'] == filename:
+				fileFound = True
+				print "Suse Measures file already exists for this repo. Let's parse it for default params!"
+				self.sendSuseFileToBC(repoID)
+	
+		if not fileFound:
+			# push Suse file	
+			URL = 'https://api.github.com/repositories/'+str(repoID)+'/contents/'+filename
+			commitMsg = "Creating initial Suse file"
+			username = 'susereum'
+			email = 'susereum@gmail.com'
+			content = """title = "Susereum Information"
+[about]
+NewUserLink = https://www.google.com
+[code_smells]
+[code_smells.class]
+LargeClass = 500
+SmallClass = 100
+GodClass = 5
+InappropriateIntimacy = 2
+[code_smells.method]
+LargeMethod = 250
+SmallMethod = 10
+LargeParameterList = 4
+[code_smells.comments]
+CommentsToCodeRatioUpper = 0.2
+CommentsToCodeRatioLower = 0.1
+"""
+			content = base64.b64encode(content)
+			data = {"message": commitMsg, "committer": {"name": username, "email": email}, "content": content}
+			resultStatusCode = self.gitPUT(URL, data)
+			if resultStatusCode == 201:
+				print "Suse file created successfully"
+			else:
+				print "Problem creating Suse file"
 
 	# Github sends a signature in the payload header. Github created that signature by using their secret and hashing the entire payload with sha1
 	# We encrypt the payload we received with our secret and sha1 and check if they match
@@ -31,6 +88,18 @@ class RequestHandler:
 		ourDigest = digestMaker.hexdigest()
 		return hmac.compare_digest(theirDigest, ourDigest)
 
+	def gitGET(self, URL):
+		rawData = requests.get(URL)
+		jsonData = json.loads(rawData.text)
+		return jsonData
+
+	def gitPUT(self, URL, data):
+		global TOKEN
+		data = json.dumps(data)		# This encodes the data as json, which is necessary bc we have nested json data
+		headers = {'Authorization': ('Token ' + TOKEN)}
+		rawData = requests.put(URL, data=data, headers=headers)
+		return rawData.status_code
+
 	def POST(self):
 		# Verify POST request from GitHub
 		signature = web.ctx.env.get('HTTP_X_HUB_SIGNATURE')
@@ -40,7 +109,7 @@ class RequestHandler:
 
 		# Figure out which event happend, call the function to handle it
 		event = web.ctx.env.get('HTTP_X_GITHUB_EVENT')
-		print 'Received ' + event + ' event'
+		print '\nReceived ' + event + ' event'
 		#print 'PAYLOAD: ' + payload
 		# Map events to functions that handle those events
 		functionMapping = {
@@ -61,12 +130,35 @@ def getEnvironmentVars():
 	global PRIVATE_KEY, WEBHOOK_SECRET, APP_IDENTIFIER
 	# Used to verify POST requests from GitHub
 	WEBHOOK_SECRET = os.environ['GITHUB_WEBHOOK_SECRET']
-	
-	# Used to instantiate an Octokit API client (bot that can change repos, files, issues, etc.)
+
+	# Used to authenticate our app	
 	PRIVATE_KEY = os.environ['GITHUB_PRIVATE_KEY']
 	APP_IDENTIFIER = os.environ['GITHUB_APP_IDENTIFIER']
 
+# Generates token needed to authenticate Git API commands
+def createInstallationToken(JWT):
+	global TOKEN
+	installationID = "363304"	# This can be found in a integration_installation_repositories payload
+	URL = 'https://api.github.com/app/installations/'+installationID+'/access_tokens'
+	headers = {'Accept': 'application/vnd.github.machine-man-preview+json',
+				'Authorization': ('Bearer ' + JWT)}
+	rawData = requests.post(URL, headers = headers)
+	jsonData = json.loads(rawData.text)
+	TOKEN = jsonData['token']
+
+# Creates a Json Web Token with a current time stamp and expiration time, which is used to create an installation token
+def generateJWT():
+	global PRIVATE_KEY, APP_IDENTIFIER 
+	current = datetime.datetime.utcnow()
+	currentTime = calendar.timegm(current.timetuple())
+	future = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
+	expirationTime = calendar.timegm(future.timetuple())
+	payload = {'iat': currentTime, 'exp': expirationTime, 'iss': APP_IDENTIFIER}
+	JWT = jwt.encode({'iat': currentTime, 'exp': expirationTime, 'iss': APP_IDENTIFIER}, PRIVATE_KEY, algorithm='RS256')
+	createInstallationToken(JWT)
+	
 if __name__ == '__main__':
-	getEnvironmentVars() 
+	getEnvironmentVars()
+	generateJWT()
 	app = createListener()
 	app.run()
