@@ -28,6 +28,7 @@ import pkg_resources
 
 from colorlog import ColoredFormatter
 from pprint import pprint
+from argparse import RawTextHelpFormatter
 from code_smell_client import codeSmellClient
 from code_smell_exceptions import codeSmellException
 
@@ -102,6 +103,11 @@ def add_show_parser(subparser, parent_parser):
         help='Address of asset')
 
     parser.add_argument(
+        '--url',
+        type=str,
+        help='specify URL of REST API')
+
+    parser.add_argument(
         '--username',
         type=str,
         help="identify name of user's private key file")
@@ -166,7 +172,9 @@ def add_proposal_parser(subparser, parent_parser):
     parser = subparser.add_parser(
         'proposal',
         help='Request a change in the current code smell configuration',
-        description='Request a change in the current code smell configuration',
+        description='Request a change in the current code smell configuration \n'
+                    'list of code smells and metrics {<code smell=metric>, <code smell=metric> }',
+        formatter_class=RawTextHelpFormatter,
         parents=[parent_parser])
 
     parser.add_argument(
@@ -329,11 +337,52 @@ def create_parser(prog_name):
     return parser
 
 def do_show(args):
-    print ("show")
+    """
+    list transaction of code smell family
+
+    Args:
+        args (str) transaction id
+    """
+    if args.address is None:
+        raise codeSmellException ("Missing Transaction Address")
+
+    url = _get_url(args)
+    keyfile = _get_keyfile(args)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    transaction = client.show(address=args.address)
+
+    if len(transaction) == 0:
+        raise codeSmellException("No transaction found")
+    else:
+        print (transaction)
+
 def do_vote(args):
     print ("vote")
 def do_proposal(args):
-    print ("proposal")
+    """
+    propose new metric for the code smell family
+
+    Args:
+        args (str): new code smells configuration
+    """
+
+    if args.propose is None:
+        raise codeSmellException ("Missing code smells")
+
+    url = _get_url(args)
+    keyfile = _get_keyfile(args)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    """ parse input into a dict"""
+    code_smells = {}
+    str_input = args.propose
+    code_smells = dict(code_smell.split("=") for code_smell in str_input.split(","))
+
+    response = client.propose(code_smells=code_smells)
+
+    print("Response: {}".format(response))
+
 def do_list(args):
     """
     list transactions of code smell family
@@ -347,12 +396,12 @@ def do_list(args):
     keyfile = _get_keyfile(args)
     client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transctions = client.list(type=args.type)
+    transactions = client.list(type=args.type)
 
-    if len(transctions) == 0:
+    if len(transactions) == 0:
         raise codeSmellException("No transactions found")
     else:
-        print (transctions)
+        print (transactions)
 
 def do_default(args):
     """

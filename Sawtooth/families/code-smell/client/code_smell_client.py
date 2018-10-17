@@ -139,15 +139,34 @@ class codeSmellClient:
         except BaseException:
             return None
 
-    def create(self, name, value, action, wait=None, auth_user=None, auth_password=None):
-        print ("on client", name, value, action)
-        return self._send_codeSmell_txn(
-            name,
-            value,
-            action,
-            wait=wait,
-            auth_user=auth_user,
-            auth_password=auth_password)
+    def show(self, address):
+        """
+        list a specific transaction, based on its address
+
+        Args:
+            address (str), transaction's address
+        """
+        result = self._send_request("transactions/{}".format(address))
+
+        transactions = {}
+        try:
+            encoded_entries = yaml.safe_load(result)["data"]
+            transactions["payload"] = base64.b64decode(encoded_entries["payload"])
+            transactions["header_signature"] = encoded_entries["header_signature"]
+            return transactions
+        except BaseException:
+            return None
+
+    def propose(self, code_smells):
+        """
+        propose new metrics for the code smell families
+        the function assumes that all code smells have been updated even if they don't
+
+        Args:
+            code_smells (dict), dictionary of code smells and metrics
+        """
+        print (code_smells)
+        return code_smells
 
     def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
         try:
