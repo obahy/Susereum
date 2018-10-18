@@ -36,7 +36,7 @@ def exec_metric_analysis():
          "-runFB=false",
          "-runPMD=true"
          ]
-    Popen(shlex.split(run_cmd, posix=POSIX)).wait() if POSIX else Popen(run_cmd).wait()
+    Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
 
 
 def consolidate_metrics():
