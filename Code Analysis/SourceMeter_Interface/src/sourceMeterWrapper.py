@@ -1,9 +1,10 @@
 import os
+import shlex
 import shutil
 from subprocess import Popen
 from pandas import read_csv, concat
 from constants import RESULTS_DIR, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, JAVA_SAMPLE_PROJ_DIR, \
-    PYTHON_SAMPLE_PROJ_DIR, CLASS_KEEP_COL, METHOD_KEEP_COL
+    PYTHON_SAMPLE_PROJ_DIR, CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR
 
 clean_up_sm_files = True                    # Delete Source Meter-created metrics after script execution?
 testing_java = False                        # Test Java project? If 'False', will test Python project
@@ -35,7 +36,7 @@ def exec_metric_analysis():
          "-runFB=false",
          "-runPMD=true"
          ]
-    Popen(run_cmd).wait()
+    Popen(shlex.split(run_cmd, posix=POSIX)).wait() if POSIX else Popen(run_cmd).wait()
 
 
 def consolidate_metrics():
@@ -58,8 +59,9 @@ def consolidate_metrics():
 
     # Read method-level metrics, keep only certain columns, and rename 'Path' column to 'Class'
     tmp_f = read_csv(methods_file)[METHOD_KEEP_COL].rename(columns={'Path': 'Class'})
-    # Make every row in column 'Class' contain only the last token (class name) when splitting with "/"
-    tmp_f['Class'] = tmp_f['Class'].apply(lambda x: str(x)).apply(lambda x: x.split("/")[len(x.split("/")) - 1])
+    # Make every row in column 'Class' contain only the last token (class name) when splitting with DIR_SEPARATOR
+    tmp_f['Class'] = tmp_f['Class']\
+        .apply(lambda x: str(x)).apply(lambda x: x.split(DIR_SEPARATOR)[len(x.split(DIR_SEPARATOR)) - 1])
     # Insert 'Level' column
     tmp_f.insert(0, 'Level', 'Method')
     # Insert Class-Level Columns and set value to '-'
@@ -82,7 +84,7 @@ if __name__ == "__main__":
     project_dir = JAVA_SAMPLE_PROJ_DIR if project_type == "java" else PYTHON_SAMPLE_PROJ_DIR
 
     # Get project name
-    project_name_tokens = project_dir.split("/")
+    project_name_tokens = project_dir.split(DIR_SEPARATOR)
     project_name = project_name_tokens[len(project_name_tokens) - 1]
 
     exec_metric_analysis()
