@@ -23,7 +23,6 @@ from sawtooth_sdk.processor.exceptions import InternalError
 CODESMELL_NAMESPACE = hashlib.sha512('code-smell'.encode('utf-8')).hexdigest()[0:6]
 
 def _make_codeSmell_address(id):
-    print (id)
     return CODESMELL_NAMESPACE + hashlib.sha512(id.encode('utf-8')).hexdigest()[:64]
 
 class code_smell_transaction:

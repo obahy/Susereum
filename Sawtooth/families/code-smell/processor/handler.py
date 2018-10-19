@@ -61,8 +61,7 @@ class codeSmellTransactionHandler(TransactionHandler):
             _display("Peer {} created a codeSmell config.".format(signer[:6]))
 
         else:
-            raise InvalidTransaction('Unhandled action: {}'.format(
-                payload.action))
+            raise InvalidTransaction('Unhandled Type: {}'.format(code_smell_payload.type))
 
 def _display(msg):
     n = msg.count("\n")

@@ -173,7 +173,7 @@ def add_proposal_parser(subparser, parent_parser):
         'proposal',
         help='Request a change in the current code smell configuration',
         description='Request a change in the current code smell configuration \n'
-                    'list of code smells and metrics {<code smell=metric>, <code smell=metric> }',
+                    'list of code smells and metrics {<code smell=metric>,<code smell=metric> }',
         formatter_class=RawTextHelpFormatter,
         parents=[parent_parser])
 

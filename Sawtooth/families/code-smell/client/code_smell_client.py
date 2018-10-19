@@ -116,9 +116,6 @@ class codeSmellClient:
         Args:
             type (str), asset that we want to list (code smells, proposals, votes)
         """
-        #get code smell family address prefix
-        code_smell_prefix = self._get_prefix()
-
         #pull all transactions of code smell family
         result = self._send_request("transactions")
 
@@ -165,8 +162,46 @@ class codeSmellClient:
         Args:
             code_smells (dict), dictionary of code smells and metrics
         """
-        print (code_smells)
-        return code_smells
+        #get code smell family address prefix
+        code_smell_prefix = self._get_prefix()
+
+        #check for an active proposal, transactions are return in sequential order.
+        proposal_result = self._send_request("state?address={}".format(code_smell_prefix))
+        encoded_entries = yaml.safe_load(proposal_result)["data"]
+        for entry in encoded_entries:
+            #look for the first proposal transactiosn
+            if base64.b64decode(entry["data"]).decode().split(',')[0] == "proposal":
+                last_proposal = base64.b64decode(entry["data"]).decode().split(',')
+                break
+                #within the transactions look for an active
+                #if base64.b64decode(entry["data"]).decode().split(',')[3] == "active":
+                    #return "Invalid Operation, another proposal is Active"
+                    #print ( base64.b64decode(entry["data"]).decode().split(',')[3] )
+        try:
+            if last_proposal[3] == "active":
+                return "Invalid Operation, another proposal is Active"
+        except BaseException:
+            pass
+
+        #if no active proposal continue
+        ####################REMOVE THIS##########
+        # str_dict = str(code_smells)
+        # print ("str: {}".format(str_dict))
+        # another_dict = yaml.safe_load(str_dict)
+        # print (another_dict)
+        # print (another_dict["LargeClass"])
+        # for key in another_dict.keys():
+        #     print (key)
+        #encoded = str(code_smells)
+        #print (encoded.replace(",", ";"))
+
+        response = self._send_codeSmell_txn(
+             id=_sha512 ( str(code_smells).encode('utf-8') ),
+             type='proposal',
+             data=str(code_smells).replace(",", ";"),
+             state='active')
+
+        return response
 
     def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
         try:
@@ -257,7 +292,7 @@ class codeSmellClient:
         #serialization is just a delimited utf-8 encoded strings
         payload = ",".join([type, id, data, state]).encode()
 
-        pprint(payload)
+        pprint(payload)######################################## pprint
 
         #construct the address
         address = self._get_address(id)

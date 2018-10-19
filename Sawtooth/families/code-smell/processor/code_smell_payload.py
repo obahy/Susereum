@@ -27,9 +27,16 @@ class codeSmellPayload(object):
     """
 
     def __init__(self, payload):
+        #The payload is csv utf-8 encoded string
         try:
-            #The payload is csv utf-8 encoded string
-            type, id, data, state = payload.decode().split(",")
+            """
+            identify which type of transaction we got
+            """
+            if payload.decode().split(",")[0] == "code_smell":
+                type, id, data, state = payload.decode().split(",")
+            if payload.decode().split(",")[0] == "proposal":
+                print ( payload.decode().split(",") )
+                type, id, data, state = payload.decode().split(",")
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
 
