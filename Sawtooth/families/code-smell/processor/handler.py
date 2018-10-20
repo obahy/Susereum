@@ -55,13 +55,18 @@ class codeSmellTransactionHandler(TransactionHandler):
                          type=code_smell_payload.type,
                          id=code_smell_payload.id,
                          data=code_smell_payload.data,
-                         state=code_smell_payload.state,
-                         owner=signer)
-            code_smell_state.set_transaction(code_smell_payload.id, active_transaction)
-            _display("Peer {} created a codeSmell config.".format(signer[:6]))
-
+                         state=code_smell_payload.state)
+        elif code_smell_payload.type == 'proposal':
+            active_transaction = code_smell_transaction (
+                         type=code_smell_payload.type,
+                         id=code_smell_payload.id,
+                         data=code_smell_payload.data,
+                         state=code_smell_payload.state)
         else:
             raise InvalidTransaction('Unhandled Type: {}'.format(code_smell_payload.type))
+
+        code_smell_state.set_transaction(code_smell_payload.id, active_transaction)
+        _display("Peer {} created a codeSmell config.".format(signer[:6]))
 
 def _display(msg):
     n = msg.count("\n")

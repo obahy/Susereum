@@ -26,7 +26,7 @@ def _make_codeSmell_address(id):
     return CODESMELL_NAMESPACE + hashlib.sha512(id.encode('utf-8')).hexdigest()[:64]
 
 class code_smell_transaction:
-    def __init__(self, type, id, data, state, owner):
+    def __init__(self, type, id, data, state):
         """
         Constructor, set up transaction attributes
 
@@ -41,7 +41,6 @@ class code_smell_transaction:
         self.id = id
         self.data = data
         self.state = state
-        self.owner = owner
 
 class codeSmellState:
     TIMEOUT = 3
@@ -51,21 +50,23 @@ class codeSmellState:
 
         Ars:
             context (sawtooth_sdk.processor.context.Context): Access to
-                validator state from within the transaction processor
+                validator state from the transaction processor
         """
 
         self._context = context
         self._address_cache = {}
 
     def set_transaction(self, transaction_id, transaction):
-        """Store tran in the validator state
+        """
+        Save transaction state, the transaction state will be send to
+        validator.
 
         Args:
             codeSmell_name (str): The name
             codesmell (codeSmell): The information specifying the current specs.
         """
         #dictCodeSmells = self._load_codeSmell(codeSmell_name=codeSmell_name)
-        transactions = {} #transaction dict
+        transactions = {} #transactions dictionary
         transactions[transaction.type] = transaction
 
         self._store_codeSmell(transaction_id, transactions=transactions)
@@ -90,12 +91,20 @@ class codeSmellState:
 
         return dictCodeSmells
 
-    def _store_codeSmell(self, codeSmell_name, transactions):
-        address = _make_codeSmell_address(codeSmell_name)
+    def _store_codeSmell(self, transaction_id, transactions):
+        """
+        store transaction in the chain. refered as saving the state of the active transaction
+
+        Args:
+            transaction_id (str): id to identify the transaction
+            transactions (dict):  dictionary of transactions
+        """
+        address = _make_codeSmell_address(transaction_id)
 
         state_data = self._serialize(transactions)
         self._address_cache[address] = state_data
 
+        print (state_data)
         self._context.set_state({address: state_data}, timeout=self.TIMEOUT)
 
     def _deserialize(self, data):
@@ -132,7 +141,8 @@ class codeSmellState:
         codesmell_strs = []
         for type, g in codesmell.items():
             #print (type, g.id, g.data, g.state, g.owner)
-            codesmell_str = ",".join([type, g.id, g.data, g.state, g.owner])
+            codesmell_str = ",".join([type, g.id, g.data, g.state])
             codesmell_strs.append(codesmell_str)
 
+        #print (codesmell_strs)
         return "|".join(sorted(codesmell_strs)).encode()

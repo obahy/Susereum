@@ -118,6 +118,7 @@ class codeSmellClient:
         """
         #pull all transactions of code smell family
         result = self._send_request("transactions")
+        #print (result)
 
         transactions = {}
         try:
@@ -148,6 +149,7 @@ class codeSmellClient:
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]
+            print ( base64.b64decode(encoded_entries["payload"]))
             transactions["payload"] = base64.b64decode(encoded_entries["payload"])
             transactions["header_signature"] = encoded_entries["header_signature"]
             return transactions
@@ -196,7 +198,7 @@ class codeSmellClient:
         #print (encoded.replace(",", ";"))
 
         response = self._send_codeSmell_txn(
-             id=_sha512 ( str(code_smells).encode('utf-8') ),
+             id=_sha512( str(code_smells).encode('utf-8') )[0:6],
              type='proposal',
              data=str(code_smells).replace(",", ";"),
              state='active')

@@ -355,7 +355,7 @@ def do_show(args):
     if len(transaction) == 0:
         raise codeSmellException("No transaction found")
     else:
-        print (transaction)
+        pprint (transaction)
 
 def do_vote(args):
     print ("vote")

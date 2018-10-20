@@ -20,8 +20,13 @@
 
 # The url to connect to a running Validator
 #   connect = "tcp://localhost:4004"
-title = "code smell family config"
+title = "code smell family configuration"
 
+#Default metric of code smells
+#Suserum 1.0 does not allow new code smells,
+#the project will be limit to the 9 code smells below.
+#To remove a code smell set the value to -1
+#example: LargeClass = -1
 [code_smells]
     [code_smells.class]
     LargeClass = 500
@@ -35,3 +40,10 @@ title = "code smell family config"
     [code_smells.comments]
     CommentsToCodeRationLower = 0.2
     CommentsToCodeRationUpper = 0.1
+
+#vote settings
+#proposal_active_days indicates the time that users have to cast their vote
+#approval_treshold refers to the value of require votes to approve a proposal
+[vote_setting]
+proposal_active_days = 5
+approval_treshold = 3

@@ -35,7 +35,7 @@ class codeSmellPayload(object):
             if payload.decode().split(",")[0] == "code_smell":
                 type, id, data, state = payload.decode().split(",")
             if payload.decode().split(",")[0] == "proposal":
-                print ( payload.decode().split(",") )
+                #print ( payload.decode().split(",") )
                 type, id, data, state = payload.decode().split(",")
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
