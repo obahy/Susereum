@@ -127,24 +127,24 @@ def add_vote_parser(subparser, parent_parser):
     """
     parser = subparser.add_parser(
         'vote',
-        help='Vote Proposal',
-        description='vote to a specific proposal',
+        help='Vote on Proposal',
+        description='cast a vote to accep or reject a proposal',
         parents=[parent_parser])
 
     parser.add_argument(
-        '--proposalID',
+        '--id',
         type=str,
         help='Vote to <proposal_id>')
 
     parser.add_argument(
-        '--accept',
+        '--vote',
         type=str,
-        help='Accept proposal')
+        help='accept (yes) or reject (no) proposal')
 
     parser.add_argument(
-        '--reject',
+        '--view',
         type=str,
-        help='Reject proposal')
+        help='view number of votes')
 
     parser.add_argument(
         '--url',
@@ -341,7 +341,7 @@ def do_show(args):
     list transaction of code smell family
 
     Args:
-        args (str) transaction id
+        args (array) arguments
     """
     if args.address is None:
         raise codeSmellException ("Missing Transaction Address")
@@ -358,13 +358,39 @@ def do_show(args):
         pprint (transaction)
 
 def do_vote(args):
-    print ("vote")
+    """
+    cast vote to accept or reject a code measure proposal
+
+    Args:
+        args (array) arguments<proposalid, vote>
+    """
+    if args.view is None:
+        if args.id is None:
+            raise codeSmellException ("Missing proposal ID")
+        if args.vote is None:
+            raise codeSmellException ("Missing VOTE")
+        if args.vote == 'yes':
+            vote=1
+        else:
+            vote=0
+
+    url = _get_url(args)
+    keyfile = _get_keyfile(args)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    if args.vote:
+        response = client.vote(proposal_id=args.id,vote=vote)
+    else:
+        response = client._check_votes(proposal_id=args.view)
+
+    print("Response: {}".format(response))
+
 def do_proposal(args):
     """
     propose new metric for the code smell family
 
     Args:
-        args (str): new code smells configuration
+        args (array) arguments
     """
 
     if args.propose is None:
@@ -408,7 +434,7 @@ def do_default(args):
     load a set of default code smells.
 
     Args:
-        args, arguments (array)
+        args (array) arguments
     """
     url = _get_url(args)
     keyfile = _get_keyfile(args)

@@ -26,7 +26,7 @@ def _make_codeSmell_address(id):
     return CODESMELL_NAMESPACE + hashlib.sha512(id.encode('utf-8')).hexdigest()[:64]
 
 class code_smell_transaction:
-    def __init__(self, type, id, data, state):
+    def __init__(self, type, id, data, state, date=None):
         """
         Constructor, set up transaction attributes
 
@@ -41,6 +41,7 @@ class code_smell_transaction:
         self.id = id
         self.data = data
         self.state = state
+        self.date = date
 
 class codeSmellState:
     TIMEOUT = 3
@@ -141,7 +142,11 @@ class codeSmellState:
         codesmell_strs = []
         for type, g in codesmell.items():
             #print (type, g.id, g.data, g.state, g.owner)
-            codesmell_str = ",".join([type, g.id, g.data, g.state])
+            if type == 'proposal':
+                codesmell_str = ",".join([type, g.id, g.data, g.state, g.date])
+            else:
+                codesmell_str = ",".join([type, g.id, g.data, g.state])
+
             codesmell_strs.append(codesmell_str)
 
         #print (codesmell_strs)

@@ -13,6 +13,7 @@
 # limitations under the License.
 # -----------------------------------------------------------------------------
 
+import time
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
 
@@ -32,11 +33,13 @@ class codeSmellPayload(object):
             """
             identify which type of transaction we got
             """
-            if payload.decode().split(",")[0] == "code_smell":
-                type, id, data, state = payload.decode().split(",")
+            #if payload.decode().split(",")[0] == "code_smell":
+            #    type, id, data, state = payload.decode().split(",")
             if payload.decode().split(",")[0] == "proposal":
-                #print ( payload.decode().split(",") )
+                type, id, data, state, date = payload.decode().split(",")
+            else:
                 type, id, data, state = payload.decode().split(",")
+                date = None
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
 
@@ -48,13 +51,14 @@ class codeSmellPayload(object):
             raise InvalidTransaction('Data is required')
         if not state:
             raise InvalidTransaction('State is required')
-        if type not in ('code_smell', 'proposal', 'vote', 'list'):
+        if type not in ('code_smell', 'proposal', 'vote'):
             raise InvalidTransaction('Invalid action: {}'.format(action))
 
         self._type = type
         self._id = id
         self._data = data
         self._state = state
+        self._date = date
 
     @staticmethod
     def from_bytes(payload):
@@ -75,3 +79,7 @@ class codeSmellPayload(object):
     @property
     def state(self):
         return self._state
+
+    @property
+    def date(self):
+        return self._date

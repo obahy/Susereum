@@ -149,7 +149,7 @@ class codeSmellClient:
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]
-            print ( base64.b64decode(encoded_entries["payload"]))
+            #print ( base64.b64decode(encoded_entries["payload"]))
             transactions["payload"] = base64.b64decode(encoded_entries["payload"])
             transactions["header_signature"] = encoded_entries["header_signature"]
             return transactions
@@ -197,11 +197,159 @@ class codeSmellClient:
         #encoded = str(code_smells)
         #print (encoded.replace(",", ";"))
 
+        localtime = time.localtime(time.time())
+        transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+        propose_date = str(transac_time)
+
         response = self._send_codeSmell_txn(
              id=_sha512( str(code_smells).encode('utf-8') )[0:6],
              type='proposal',
              data=str(code_smells).replace(",", ";"),
-             state='active')
+             state='active',
+             date=propose_date)
+
+        return response
+
+    def _update_proposal(self, proposal, state):
+        """
+        update proposal, update state.
+
+        Args:
+            proposal (dict), proposal data
+            sate (str), new proposal's state
+        """
+        localtime = time.localtime(time.time())
+        transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+        propose_date = str(transac_time)
+
+        response = self._send_codeSmell_txn(
+             id=proposal[1],
+             type='proposal',
+             data=proposal[2],
+             state=state,
+             date=propose_date)
+
+        ## TODO: call health family to re-calculate health
+
+
+    def _update_config(self, toml_config, proposal):
+        """
+        update code smell configuration metrics, after the proposal is accepted
+        the configuration file needs to be updated.
+
+        Args:
+            toml_config (dict), current configuration
+            proposal (str), proposal that contains new configuration
+        """
+        #get proposal payload
+        proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
+        tmp_payload = {}
+
+        #print (proposal_payload)
+        #print (toml_config)
+
+        """
+        start by traversing the proposal,
+        get the code smell and the metric
+        """
+        for proposal_key, proposal_metric in proposal_payload.items():
+            tmp_type = ""
+            """
+            we don't know where on the toml file is the code smell,
+            traverse the toml dictionary looking for the same code smell.
+            """
+            for type in toml_config["code_smells"]:
+                """
+                once you found the code smell, break the loop and return
+                a pseudo location
+                """
+                if proposal_key in toml_config["code_smells"][type].keys():
+                    tmp_type = type
+                    break
+            #update configuration
+            toml_config["code_smells"][tmp_type][proposal_key] = int(proposal_metric)
+            #print (toml_config["code_smells"][tmp_type][proposal_key])
+
+        #save new configuration
+        conf_file = self._work_path + '/etc/code_smell.toml'
+        try:
+            with open(conf_file, 'w+') as config:
+                toml.dump(toml_config, config)
+        except IOError as e:
+            raise codeSmellException ("Unable to open configuration file")
+
+    def _check_votes(self, proposal_id, flag=None):
+        """
+        review the votes of a proposal
+
+        Args:
+            proposal_id (str), proposal id
+        """
+        result = self._send_request("transactions/{}".format(proposal_id))
+        encoded_result = yaml.safe_load(result)["data"]
+        proposal = base64.b64decode(encoded_result["payload"]).decode().split(',')
+        proposal_id = proposal[1]
+        transactions = self.list(type='vote')
+        total_votes = 0
+        for vote in transactions:
+            #for all votes of proposal
+            if transactions[vote].decode().split(',')[2] == proposal_id:
+                #get vote and count
+                total_votes += int(transactions[vote].decode().split(',')[3])
+
+        #get treshold
+        """identify code_smell family configuration file"""
+        conf_file = self._work_path + '/etc/code_smell.toml'
+
+        if flag is not None:
+            if os.path.isfile(conf_file):
+                try:
+                    with open(conf_file) as config:
+                        raw_config = config.read()
+                        config.close()
+                except IOError as e:
+                    raise codeSmellException ("Unable to load code smell family configuration file")
+
+                """load toml config into a dict"""
+                parsed_toml_config = toml.loads(raw_config)
+
+                """get treshold"""
+                code_smells_config = parsed_toml_config['vote_setting']
+
+                vote_treshold = int(code_smells_config['approval_treshold'])
+
+                if (total_votes >= vote_treshold):
+                    self._update_config(parsed_toml_config, proposal)
+                    ## TODO: add logic to handle window period check.
+                    self._update_proposal(proposal, "accepted")
+        else:
+            return "Total votes: " + str(total_votes)
+
+    def vote(self, proposal_id, vote):
+        """
+        vote to accept or reject a proposal
+
+        Args:
+            proposal_id (str), id of proposal
+            vote (int), value of vote 1=accept, 0=reject
+        """
+
+        #verify active proposal
+        result = self._send_request("transactions/{}".format(proposal_id))
+        encoded_result = yaml.safe_load(result)["data"]
+        proposal = base64.b64decode(encoded_result["payload"]).decode().split(',')
+        if proposal[3] != 'active':
+            return ("Proposal is not active")
+
+        #active proposal, record vote
+        response = self._send_codeSmell_txn(
+             id=str(random.randrange(1,99999)),
+             type='vote',
+             data=proposal[1],
+             state=str(vote))
+
+        if response is not None:
+            self._check_votes(proposal_id,1)
 
         return response
 
@@ -280,6 +428,7 @@ class codeSmellClient:
                             id=None,
                             data=None,
                             state=None,
+                            date=None,
                             wait=None):
         """
         serialize payload and create header transaction
@@ -292,9 +441,12 @@ class codeSmellClient:
             wait (int):    delay to process transactions
         """
         #serialization is just a delimited utf-8 encoded strings
-        payload = ",".join([type, id, data, state]).encode()
+        if type == 'proposal':
+            payload = ",".join([type, id, data, state, str(date)]).encode()
+        else:
+            payload = ",".join([type, id, data, state]).encode()
 
-        pprint(payload)######################################## pprint
+        pprint("payload: {}".format(payload))######################################## pprint
 
         #construct the address
         address = self._get_address(id)

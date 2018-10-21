@@ -1,49 +1,16 @@
-#
-# Copyright 2017 Intel Corporation
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ------------------------------------------------------------------------------
-
-#
-# Sawtooth -- Settings Transaction Processor Configuration
-#
-
-# The url to connect to a running Validator
-#   connect = "tcp://localhost:4004"
 title = "code smell family configuration"
-
-#Default metric of code smells
-#Suserum 1.0 does not allow new code smells,
-#the project will be limit to the 9 code smells below.
-#To remove a code smell set the value to -1
-#example: LargeClass = -1
-[code_smells]
-    [code_smells.class]
-    LargeClass = 500
-    SmallClass = 100
-    GodClass = 5
-    InappropriateIntimacy = 2
-    [code_smells.method]
-    LargeMethod = 250
-    SmallMethod = 10
-    LargeParameterList = 4
-    [code_smells.comments]
-    CommentsToCodeRationLower = 0.2
-    CommentsToCodeRationUpper = 0.1
-
-#vote settings
-#proposal_active_days indicates the time that users have to cast their vote
-#approval_treshold refers to the value of require votes to approve a proposal
 [vote_setting]
+approval_treshold = 5
 proposal_active_days = 5
-approval_treshold = 3
+[code_smells.class]
+SmallClass = 250
+GodClass = 5
+InappropriateIntimacy = 2
+LargeClass = 500
+[code_smells.method]
+SmallMethod = 10
+LargeMethod = 250
+LargeParameterList = 4
+[code_smells.comments]
+CommentsToCodeRationLower = 0.2
+CommentsToCodeRationUpper = 0.1

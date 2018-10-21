@@ -13,6 +13,7 @@
 # limitations under the License.
 # -----------------------------------------------------------------------------
 
+import time
 import logging
 
 from sawtooth_sdk.processor.exceptions import InternalError
@@ -58,6 +59,13 @@ class codeSmellTransactionHandler(TransactionHandler):
                          state=code_smell_payload.state)
         elif code_smell_payload.type == 'proposal':
             active_transaction = code_smell_transaction (
+                         type=code_smell_payload.type,
+                         id=code_smell_payload.id,
+                         data=code_smell_payload.data,
+                         state=code_smell_payload.state,
+                         date=code_smell_payload.date)
+        elif code_smell_payload.type == 'vote':
+            active_transaction = code_smell_transaction(
                          type=code_smell_payload.type,
                          id=code_smell_payload.id,
                          data=code_smell_payload.data,
