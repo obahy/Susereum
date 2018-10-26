@@ -275,6 +275,8 @@ class codeSmellClient:
         try:
             with open(conf_file, 'w+') as config:
                 toml.dump(toml_config, config)
+
+            ## TODO: call github an send new code smell. 
         except IOError as e:
             raise codeSmellException ("Unable to open configuration file")
 
