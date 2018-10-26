@@ -12,21 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # -----------------------------------------------------------------------------
-
+"""
+sends transaction state to the chain.
+"""
 import hashlib
-import datetime
-from pprint import pprint
 
-from sawtooth_sdk.processor.exceptions import InternalError
+from sawtooth_sdk.processor.exceptions import InternalError #pylint: disable=import-error
 
 
 CODESMELL_NAMESPACE = hashlib.sha512('code-smell'.encode('utf-8')).hexdigest()[0:6]
 
-def _make_codeSmell_address(id):
-    return CODESMELL_NAMESPACE + hashlib.sha512(id.encode('utf-8')).hexdigest()[:64]
+def _make_codeSmell_address(transaction_id):
+    """
+    creates and returns a transaction address based on the transaction id and
+    the family namespace
 
-class code_smell_transaction:
-    def __init__(self, type, id, data, state, date=None):
+    Returns:
+        str: transaction address
+    """
+
+    return CODESMELL_NAMESPACE + hashlib.sha512(transaction_id.encode('utf-8')).hexdigest()[:64]
+
+class CodeSmellTransaction:
+    """
+    define an object of the code smell transaction class
+
+    Args:
+        variable (type):  transaction payload
+    """
+
+    def __init__(self, trac_type, trac_id, data, state, date=None):
         """
         Constructor, set up transaction attributes
 
@@ -37,13 +52,17 @@ class code_smell_transaction:
             state (str):   transaction status
             owner (str):   user who send the trasanction
         """
-        self.type = type
-        self.id = id
+        self.trac_type = trac_type
+        self.trac_id = trac_id
         self.data = data
         self.state = state
         self.date = date
 
-class codeSmellState:
+class CodeSmellState:
+    """
+    code state class, serialize and send transaction to the chain.
+    """
+
     TIMEOUT = 3
 
     def __init__(self, context):
@@ -66,31 +85,10 @@ class codeSmellState:
             codeSmell_name (str): The name
             codesmell (codeSmell): The information specifying the current specs.
         """
-        #dictCodeSmells = self._load_codeSmell(codeSmell_name=codeSmell_name)
         transactions = {} #transactions dictionary
-        transactions[transaction.type] = transaction
+        transactions[transaction.trac_type] = transaction
 
         self._store_codeSmell(transaction_id, transactions=transactions)
-
-    def _load_codeSmell(self, codeSmell_name):
-        address = _make_codeSmell_address(codeSmell_name)
-
-        if address in self._address_cache:
-            if self._address_cache[address]:
-                serialized_codeSmell = self._address_cache[address]
-                dictCodeSmells = self._deserialize(serialized_codeSmell)
-            else:
-                dictCodeSmells = {}
-        else:
-            state_entries = self._context.get_state([address], timeout=self.TIMEOUT)
-            if state_entries:
-                self._address_cache[address] = state_entries[0].data
-                dictCodeSmells = self._deserialize(data=state_entries[0].data)
-            else:
-                self._address_cache[address] = None
-                dictCodeSmells = {}
-
-        return dictCodeSmells
 
     def _store_codeSmell(self, transaction_id, transactions):
         """
@@ -105,29 +103,7 @@ class codeSmellState:
         state_data = self._serialize(transactions)
         self._address_cache[address] = state_data
 
-        print (state_data)
         self._context.set_state({address: state_data}, timeout=self.TIMEOUT)
-
-    def _deserialize(self, data):
-        """Take bytes stored in state and deserialize them into Python codeSmell Objects
-
-        Args:
-            data (bytes): The UTF-8 encoded string stored in state.
-
-        Returns:
-            (dict): codesmell name (str) keys, codesmell values.
-        """
-        dictCodeSmells = {}
-        try:
-            for codesmell in data.encode().split("|"):
-                name, value, action, owner = payload.decode().split(",")
-
-                dictCodeSmells[name] = codeSmell(name, value, action, owner)
-
-        except ValueError:
-            raise InternalError("Failed to deserialize codesmell data")
-
-        return dictCodeSmells
 
     def _serialize(self, codesmell):
         """Takes a dict of codeSmell objects and serializes them into bytes.
@@ -140,14 +116,13 @@ class codeSmellState:
         """
 
         codesmell_strs = []
-        for type, g in codesmell.items():
-            #print (type, g.id, g.data, g.state, g.owner)
-            if type == 'proposal':
-                codesmell_str = ",".join([type, g.id, g.data, g.state, g.date])
+        for trac_type, attr in codesmell.items():
+            if trac_type == 'proposal':
+                codesmell_str = ",".join(
+                    [trac_type, attr.trac_id, attr.data, attr.state, attr.date])
             else:
-                codesmell_str = ",".join([type, g.id, g.data, g.state])
+                codesmell_str = ",".join([trac_type, attr.trac_id, attr.data, attr.state])
 
             codesmell_strs.append(codesmell_str)
 
-        #print (codesmell_strs)
         return "|".join(sorted(codesmell_strs)).encode()
