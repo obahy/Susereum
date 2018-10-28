@@ -1,16 +1,16 @@
 title = "code smell family configuration"
 [vote_setting]
-approval_treshold = 5
 proposal_active_days = 5
+approval_treshold = 5
 [code_smells.class]
-SmallClass = 250
-GodClass = 5
-InappropriateIntimacy = 2
 LargeClass = 500
+SmallClass = 250
+InappropriateIntimacy = 2
+GodClass = 5
 [code_smells.method]
 SmallMethod = 10
 LargeMethod = 250
 LargeParameterList = 4
 [code_smells.comments]
-CommentsToCodeRationLower = 0.2
 CommentsToCodeRationUpper = 0.1
+CommentsToCodeRationLower = 0.2

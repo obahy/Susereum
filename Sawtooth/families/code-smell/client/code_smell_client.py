@@ -21,6 +21,7 @@ import random
 import base64
 import hashlib
 import requests
+import urllib
 
 from pprint import pprint
 from base64 import b64encode
@@ -98,12 +99,11 @@ class codeSmellClient:
                 for name, metric in code_smells.items():
                     """send trasaction"""
                     #print("{},{}".format(name,metric))
-                    response = self._send_codeSmell_txn(
-                        type='code_smell',
-                        id=name,
+                    response = self._send_code_smell_txn(
+                        tran_type='code_smell',
+                        tran_id=name,
                         data=str(metric),
-                        state='create',
-                        wait=wait)
+                        state='create')
         else:
             raise codeSmellException("Configuration File {} does not exists".format(conf_file))
 
@@ -201,9 +201,9 @@ class codeSmellClient:
         transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
         propose_date = str(transac_time)
 
-        response = self._send_codeSmell_txn(
-             id=_sha512( str(code_smells).encode('utf-8') )[0:6],
-             type='proposal',
+        response = self._send_code_smell_txn(
+             tran_id=_sha512( str(code_smells).encode('utf-8') )[0:6],
+             tran_type='proposal',
              data=str(code_smells).replace(",", ";"),
              state='active',
              date=propose_date)
@@ -222,15 +222,20 @@ class codeSmellClient:
         transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
         propose_date = str(transac_time)
 
-        response = self._send_codeSmell_txn(
-             id=proposal[1],
-             type='proposal',
+        response = self._send_code_smell_txn(
+             tran_id=proposal[1],
+             tran_type='proposal',
              data=proposal[2],
              state=state,
              date=propose_date)
 
         ## TODO: call health family to re-calculate health
 
+
+    def _send_git_request(self, toml_config):
+        data = urllib.urlencode(toml_config)
+        f = urllib.urlopen("http://IP:3000", data)
+        print (f.read())
 
     def _update_config(self, toml_config, proposal):
         """
@@ -244,9 +249,6 @@ class codeSmellClient:
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
         tmp_payload = {}
-
-        #print (proposal_payload)
-        #print (toml_config)
 
         """
         start by traversing the proposal,
@@ -276,10 +278,11 @@ class codeSmellClient:
             with open(conf_file, 'w+') as config:
                 toml.dump(toml_config, config)
 
-            ## TODO: call github an send new code smell. 
+            #self._send_git_request(toml_config)
         except IOError as e:
             raise codeSmellException ("Unable to open configuration file")
 
+    ## TODO: add logic to handle window period check.
     def _check_votes(self, proposal_id, flag=None):
         """
         review the votes of a proposal
@@ -296,8 +299,9 @@ class codeSmellClient:
         for vote in transactions:
             #for all votes of proposal
             if transactions[vote].decode().split(',')[2] == proposal_id:
-                #get vote and count
-                total_votes += int(transactions[vote].decode().split(',')[3])
+                #get vote and count, only accepted votes
+                if transactions[vote].decode().split(',')[3] == '1':
+                    total_votes += int(transactions[vote].decode().split(',')[3])
 
         #get treshold
         """identify code_smell family configuration file"""
@@ -322,10 +326,9 @@ class codeSmellClient:
 
                 if (total_votes >= vote_treshold):
                     self._update_config(parsed_toml_config, proposal)
-                    ## TODO: add logic to handle window period check.
                     self._update_proposal(proposal, "accepted")
         else:
-            return "Total votes: " + str(total_votes)
+            return "Total votes (accepted): " + str(total_votes)
 
     def vote(self, proposal_id, vote):
         """
@@ -343,10 +346,20 @@ class codeSmellClient:
         if proposal[3] != 'active':
             return ("Proposal is not active")
 
+        #verify double voting
+        # proposal_id = proposal[1]
+        # result = self._send_request("transactions")
+        # encoded_entries = yaml.safe_load(result)["data"]
+        # for entry in encoded_entries:
+        #     transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+        #     if transaction_type == 'vote':
+        #         if entry['header']['signer_public_key'] == self._signer.get_public_key().as_hex():
+        #             return ("User already submitted a vote")
+
         #active proposal, record vote
-        response = self._send_codeSmell_txn(
-             id=str(random.randrange(1,99999)),
-             type='vote',
+        response = self._send_code_smell_txn(
+             tran_id=str(random.randrange(1,99999)),
+             tran_type='vote',
              data=proposal[1],
              state=str(vote))
 
@@ -371,16 +384,16 @@ class codeSmellClient:
         """
         return _sha512('code-smell'.encode('utf-8'))[0:6]
 
-    def _get_address(self, id):
+    def _get_address(self, transaction_id):
         """
         get transaction address
 
         Args:
             id (str): trasaction id
         """
-        codeSmell_prefix = self._get_prefix()
-        codeSmell_address = _sha512(id.encode('utf-8'))[0:64]
-        return codeSmell_prefix + codeSmell_address
+        code_smell_prefix = self._get_prefix()
+        code_smell_address = _sha512(transaction_id.encode('utf-8'))[0:64]
+        return code_smell_prefix + code_smell_address
 
     def _send_request(self,
                       suffix,
@@ -418,20 +431,19 @@ class codeSmellClient:
                 raise codeSmellException("Error {}:{}".format(result.status_code, result.reason))
 
         except requests.ConnectionError as err:
-            raise codeSmellException ('Failed to connect to {}:{}'.format(url, str(err)))
+            raise codeSmellException('Failed to connect to {}:{}'.format(url, str(err)))
 
         except BaseException as err:
             raise codeSmellException(err)
 
         return result.text
 
-    def _send_codeSmell_txn(self,
-                            type=None,
-                            id=None,
-                            data=None,
-                            state=None,
-                            date=None,
-                            wait=None):
+    def _send_code_smell_txn(self,
+                             tran_type=None,
+                             tran_id=None,
+                             data=None,
+                             state=None,
+                             date=None):
         """
         serialize payload and create header transaction
 
@@ -443,15 +455,15 @@ class codeSmellClient:
             wait (int):    delay to process transactions
         """
         #serialization is just a delimited utf-8 encoded strings
-        if type == 'proposal':
-            payload = ",".join([type, id, data, state, str(date)]).encode()
+        if tran_type == 'proposal':
+            payload = ",".join([tran_type, tran_id, data, state, str(date)]).encode()
         else:
-            payload = ",".join([type, id, data, state]).encode()
+            payload = ",".join([tran_type, tran_id, data, state]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
         #construct the address
-        address = self._get_address(id)
+        address = self._get_address(tran_id)
 
 
         #construct header`
@@ -470,39 +482,17 @@ class codeSmellClient:
         signature = self._signer.sign(header)
 
         #create transaction
-        transaction = Transaction (
+        transaction = Transaction(
             header=header,
             payload=payload,
             header_signature=signature
         )
 
-        """create batch list, suserum policy: one transaction per batch"""
+        #create batch list, suserum policy: one transaction per batch
         batch_list = self._create_batch_list([transaction])
-        batch_id = batch_list.batches[0].header_signature
-
-        ## TODO: enable wait logic and test on further releases
-        if wait and wait > 0:
-            wait_time = 0
-            start_time = time.time()
-            response = self._send_request(
-                "batches", batch_list.SerializeToString(),
-                'application/octet-stream',
-                auth_user=auth_user,
-                auth_password=auth_password)
-            while wait_time < wait:
-                status = self._get_status(
-                    batch_id,
-                    wait - int(wait_time),
-                    auth_user=auth_user,
-                    auth_password=auth_password)
-
-                if status != 'PENDING':
-                    return response
-
-            return response
 
         return self._send_request(
-            "batches" ,
+            "batches",
             batch_list.SerializeToString(),
             'application/octet-stream')
 
