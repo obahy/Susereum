@@ -20,3 +20,5 @@ RESULTS_DIR = os.path.join(os.getcwd(), "..", "Results")
 
 JAVA_SAMPLE_PROJ_DIR = os.path.join(os.getcwd(), "..", SOURCE_METER_DIR_NAME, "Java", "Demo", "apache-log4j-1.2.17")
 PYTHON_SAMPLE_PROJ_DIR = os.path.join(os.getcwd(), "..", SOURCE_METER_DIR_NAME, "Python", "Demo", "ceilometer")
+
+CLEAN_UP_SM_FILES = True                    # Delete Source Meter-created metrics after script execution?
