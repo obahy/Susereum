@@ -1,17 +1,19 @@
 #!/bin/bash
+sudo su
 NAME=$1
 ID=$2
+SUSE=$3
 if [ -z "$NAME" ] 
 then
-echo "Please enter name of project: new_chain.sh [prj_name] [prj_id]"
+echo "Please enter name of project: new_chain.sh [prj_name] [prj_id] [suse_file]"
 exit 1
 fi
 if [ -z "$ID" ] 
 then
-echo "Please enter ID of project: new_chain.sh [prj_name] [prj_id]"
+echo "Please enter ID of project: new_chain.sh [prj_name] [prj_id] [suse_file]"
 exit 1
 fi
-#echo $NAME $ID
+echo $NAME $ID
 export SAWTOOTH_HOME="$HOME/.$(echo $NAME)_$(echo $ID)"
 
 #TODO make thread safe (else ports may conflict)
@@ -20,27 +22,34 @@ STARTINGPORT=1000
 ENDINGPORT=655354
 
 for i in $(seq $STARTINGPORT $ENDINGPORT);do
-port=$(lsof -i :$i)
+port=$(netstat -an | grep "LISTEN" | grep "$i ")
+echo trying port - $port - $i
 if [ -z "$port" ]
 then
 #assign first port
 if [ -z "$VALIDATOR_PORT_COM" ] 
 then
-VALIDATOR_PORT_COM=$port
+VALIDATOR_PORT_COM=$i
+echo I set $VALIDATOR_PORT_COM
+continue
 fi
 #assign second port
 if [ -z "$VALIDATOR_PORT_NET" ] 
 then
-VALIDATOR_PORT_NET=$port
+VALIDATOR_PORT_NET=$i
+echo I set $VALIDATOR_PORT_NET
+continue
 fi
 #assign third port
 if [ -z "$API_PORT" ] 
 then
-API_PORT=$port
+API_PORT=$i
+echo I set $API_PORT
 break
 fi
 fi
 done 
+
 
 #check if i got all the ports
 if [ -z VALIDATOR_PORT_COM ] || [ -z VALIDATOR_PORT_NET ] || [ -z API_PORT ]; then
@@ -76,15 +85,21 @@ sawtooth.publisher.max_batches_per_block=100
 sawadm genesis config-genesis.batch config.batch poet.batch poet-settings.batch
 
 #TODO generate webpage for connection
-web=$(mktemp -p /opt/lampp/htdocs/connect/)
+web=$( mktemp -p /opt/lampp/htdocs/connect/)
 echo $VALIDATOR_PORT_COM > $web
 echo $VALIDATOR_PORT_NET >> $web
 echo $API_PORT >> $web
+chmod +r $web
 web=$(basename -- "$web")
 name=$(echo "$web" | cut -d'.' -f1)
 ext=$(echo "$web" | cut -d'.' -f2)
+#TODO send url via netcat to port 3000
+URL="http://$IP/connect/$name.$ext"
 echo "http://$IP/connect/$name.$ext"
+curl --silent --request POST --url http://129.108.7.2:3000/  --header '"CONTENT_TYPE": "application/json"'  --data '{"sender": "Sawtooth", "url": "'$URL'", "repoID": "'$ID'"}'
+sudo cat /opt/lampp/htdocs/connect/$web
 
+#start services
 #validator
 sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET &
 #rest api
@@ -94,5 +109,10 @@ settings-tp -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
 intkey-tp-python -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
 #read block
 sawtooth block list --url http://$IP:$API_PORT
+
+
+#TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
+python3 code_smell.py default --url ... --path ...
+
 
 
