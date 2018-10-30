@@ -8,8 +8,26 @@ from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, RESULTS_DIR, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
     CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR
 
+"""Source Meter Wrapper.
+
+Given a valid GitHub repository URL or system path to a project, this module automates the analysis and 
+consolidation of pre-specified metrics.
+
+Example:
+    To run the module:
+
+        $ python sourceMeterWrapper.py <(GitHub Project Repo) | (Path to Project)>
+"""
+
 
 def exec_metric_analysis(project_dir, project_name, project_type):
+    """Executes Source Meter Analysis on the project at 'project_dir'.
+
+        Args:
+            project_dir (str): The path to the directory containing the project's source files.
+            project_name (str):  The name of the project to be analyzed.
+            project_type (str): The type of the project to be analyzed ("java"/"python").
+        """
     run_cmd = [SOURCE_METER_PYTHON_PATH,
                "-projectBaseDir:" + project_dir,
                "-projectName:" + project_name,
@@ -38,6 +56,14 @@ def exec_metric_analysis(project_dir, project_name, project_type):
 
 
 def consolidate_metrics(project_name, project_type):
+    """Creates a 'metrics.csv' file containing a subset of Source Meter-generated metrics at both Class/Method levels.
+        Clears Source Meter-generated files to free disk space, depending on the value of 'CLEAN_UP_SM_FILES'
+        in 'constants.py'.
+
+        Args:
+            project_name (str):  The name of the analyzed project.
+            project_type (str): The type for the analyzed project ("java"/"python").
+        """
     # Consolidate Source Meter Metrics
     sc_results_dir = os.path.join(RESULTS_DIR, project_name, "java" if project_type == "java" else "python")
     latest_results_path = os.path.join(sc_results_dir, os.listdir(sc_results_dir)[0])
@@ -85,15 +111,34 @@ def consolidate_metrics(project_name, project_type):
 
 
 def clear_dir(directory):
+    """Clears a given directory.
+
+    Args:
+        directory (str): The path to the directory to be removed.
+    """
     shutil.rmtree(directory)
 
 
 def get_project_name(directory):
+    """Returns the name of the project, given the path to the directory of the project.
+
+    Args:
+        directory (str): The path to the directory of the project.
+    Returns:
+        str: The name of the project.
+    """
     proj_name_tokens = directory.split(DIR_SEPARATOR)
     return proj_name_tokens[len(proj_name_tokens) - 1]
 
 
 def get_project_type(directory):
+    """Returns the type of the project, either "java" or "python", based on the file extensions in 'directory'.
+
+    Args:
+        directory (str): The path to the directory of the project.
+    Returns:
+        str: "java" or "python"
+    """
     java_files = [os.path.join(dirpath, f)
                   for dirpath, dirnames, files in os.walk(directory) for f in fnmatch.filter(files, '*.java')]
     python_files = [os.path.join(dirpath, f)
@@ -102,6 +147,11 @@ def get_project_type(directory):
 
 
 def analyze_from_repo(url):
+    """Clones GitHub project from 'url', executes Source Meter analysis, and consolidates metrics.
+
+    Args:
+         url (str): The URL of the GitHub repository containing the project to be analyzed.
+    """
     url_tokens = url.split('/')
     proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
     tmp_dir = os.path.join(os.getcwd(), "..", "tmp")
@@ -115,10 +165,15 @@ def analyze_from_repo(url):
     proj_type = get_project_type(proj_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type)
     consolidate_metrics(proj_name, proj_type)
-    shutil.rmtree(tmp_dir)
+    clear_dir(tmp_dir)
 
 
 def analyze_from_path(proj_dir):
+    """Executes Source Meter analysis and consolidates metrics, given the path to the project.
+
+        Args:
+             proj_dir (str): The directory of the project to be analyzed.
+    """
     if proj_dir[-1] == '/':
         proj_dir = proj_dir[:-1]
     proj_name = get_project_name(proj_dir)
@@ -128,6 +183,11 @@ def analyze_from_path(proj_dir):
 
 
 def arg_type(arg):
+    """Returns the type of argument, either "url"" or "path".
+
+    Args:
+        arg (str): Either a URL to a GitHub repository or the system path to a project.
+    """
     return "url" if "github.com" in arg else "path"
 
 
