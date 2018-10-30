@@ -28,6 +28,7 @@ import pkg_resources
 
 from colorlog import ColoredFormatter
 from pprint import pprint
+from argparse import RawTextHelpFormatter
 from code_smell_client import codeSmellClient
 from code_smell_exceptions import codeSmellException
 
@@ -102,6 +103,11 @@ def add_show_parser(subparser, parent_parser):
         help='Address of asset')
 
     parser.add_argument(
+        '--url',
+        type=str,
+        help='specify URL of REST API')
+
+    parser.add_argument(
         '--username',
         type=str,
         help="identify name of user's private key file")
@@ -121,24 +127,24 @@ def add_vote_parser(subparser, parent_parser):
     """
     parser = subparser.add_parser(
         'vote',
-        help='Vote Proposal',
-        description='vote to a specific proposal',
+        help='Vote on Proposal',
+        description='cast a vote to accep or reject a proposal',
         parents=[parent_parser])
 
     parser.add_argument(
-        '--proposalID',
+        '--id',
         type=str,
         help='Vote to <proposal_id>')
 
     parser.add_argument(
-        '--accept',
+        '--vote',
         type=str,
-        help='Accept proposal')
+        help='accept (yes) or reject (no) proposal')
 
     parser.add_argument(
-        '--reject',
+        '--view',
         type=str,
-        help='Reject proposal')
+        help='view number of votes')
 
     parser.add_argument(
         '--url',
@@ -166,7 +172,9 @@ def add_proposal_parser(subparser, parent_parser):
     parser = subparser.add_parser(
         'proposal',
         help='Request a change in the current code smell configuration',
-        description='Request a change in the current code smell configuration',
+        description='Request a change in the current code smell configuration \n'
+                    'list of code smells and metrics {<code smell=metric>,<code smell=metric> }',
+        formatter_class=RawTextHelpFormatter,
         parents=[parent_parser])
 
     parser.add_argument(
@@ -329,11 +337,78 @@ def create_parser(prog_name):
     return parser
 
 def do_show(args):
-    print ("show")
+    """
+    list transaction of code smell family
+
+    Args:
+        args (array) arguments
+    """
+    if args.address is None:
+        raise codeSmellException ("Missing Transaction Address")
+
+    url = _get_url(args)
+    keyfile = _get_keyfile(args)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    transaction = client.show(address=args.address)
+
+    if len(transaction) == 0:
+        raise codeSmellException("No transaction found")
+    else:
+        pprint (transaction)
+
 def do_vote(args):
-    print ("vote")
+    """
+    cast vote to accept or reject a code measure proposal
+
+    Args:
+        args (array) arguments<proposalid, vote>
+    """
+    if args.view is None:
+        if args.id is None:
+            raise codeSmellException ("Missing proposal ID")
+        if args.vote is None:
+            raise codeSmellException ("Missing VOTE")
+        if args.vote == 'yes':
+            vote=1
+        else:
+            vote=0
+
+    url = _get_url(args)
+    keyfile = _get_keyfile(args)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    if args.vote:
+        response = client.vote(proposal_id=args.id,vote=vote)
+    else:
+        response = client._check_votes(proposal_id=args.view)
+
+    print("Response: {}".format(response))
+
 def do_proposal(args):
-    print ("proposal")
+    """
+    propose new metric for the code smell family
+
+    Args:
+        args (array) arguments
+    """
+
+    if args.propose is None:
+        raise codeSmellException ("Missing code smells")
+
+    url = _get_url(args)
+    keyfile = _get_keyfile(args)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    """ parse input into a dict"""
+    code_smells = {}
+    str_input = args.propose
+    code_smells = dict(code_smell.split("=") for code_smell in str_input.split(","))
+
+    response = client.propose(code_smells=code_smells)
+
+    print("Response: {}".format(response))
+
 def do_list(args):
     """
     list transactions of code smell family
@@ -347,19 +422,19 @@ def do_list(args):
     keyfile = _get_keyfile(args)
     client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transctions = client.list(type=args.type)
+    transactions = client.list(type=args.type)
 
-    if len(transctions) == 0:
+    if len(transactions) == 0:
         raise codeSmellException("No transactions found")
     else:
-        print (transctions)
+        print (transactions)
 
 def do_default(args):
     """
     load a set of default code smells.
 
     Args:
-        args, arguments (array)
+        args (array) arguments
     """
     url = _get_url(args)
     keyfile = _get_keyfile(args)
