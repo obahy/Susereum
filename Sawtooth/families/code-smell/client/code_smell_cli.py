@@ -262,6 +262,12 @@ def add_default_parser(subparser, parent_parser):
         help="identify directory of user's private key file")
 
     parser.add_argument(
+        '--path',
+        type=str,
+        default=HOME,
+        help="working directory")
+
+    parser.add_argument(
         '--disable-client-valiation',
         action='store_true',
         default=False,
@@ -438,7 +444,7 @@ def do_default(args):
     """
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=args.path)
 
     if args.wait and args.wait > 0:
         response = client.default(wait=args.wait)
