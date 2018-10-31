@@ -262,6 +262,12 @@ def add_default_parser(subparser, parent_parser):
         help="identify directory of user's private key file")
 
     parser.add_argument(
+        '--path',
+        type=str,
+        default=HOME,
+        help="working directory")
+
+    parser.add_argument(
         '--disable-client-valiation',
         action='store_true',
         default=False,
@@ -417,7 +423,7 @@ def do_list(args):
         args (array) arguments
     """
     if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote'):
-            raise codeSmellException ("Incorrect Transaction Type")
+        raise codeSmellException("Incorrect Transaction Type")
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
@@ -438,7 +444,7 @@ def do_default(args):
     """
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=args.path)
 
     if args.wait and args.wait > 0:
         response = client.default(wait=args.wait)
@@ -487,7 +493,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
         args, arguments to process code smells (array)
     """
     if args is None:
-        args=sys.argv[1:]
+        args = sys.argv[1:]
     parser = create_parser(prog_name)
     args = parser.parse_args(args)
 
@@ -498,7 +504,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
 
     setup_loggers(verbose_level=verbose_level)
 
-    """Define code smell family functions"""
+    #Define code smell family functions
     if args.command == 'default':
         do_default(args)
     elif args.command == 'list':
