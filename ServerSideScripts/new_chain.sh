@@ -14,7 +14,7 @@ echo "Please enter ID of project: new_chain.sh [prj_name] [prj_id] [suse_file]"
 exit 1
 fi
 echo $NAME $ID
-export SAWTOOTH_HOME="$HOME/.$(echo $NAME)_$(echo $ID)"
+export SAWTOOTH_HOME="$HOME/.sawtooth_projects/.$(echo $NAME)_$(echo $ID)"
 
 #TODO make thread safe (else ports may conflict)
 #generate ports based on availablity
@@ -65,6 +65,7 @@ cd $SAWTOOTH_HOME
 mkdir data
 mkdir logs
 mkdir keys
+cp -r ~/Suserium/Susereum/Sawtooth/* .
 
 #make keys
 sawadm keygen
@@ -89,6 +90,7 @@ web=$( mktemp -p /opt/lampp/htdocs/connect/)
 echo $VALIDATOR_PORT_COM > $web
 echo $VALIDATOR_PORT_NET >> $web
 echo $API_PORT >> $web
+echo $SUSE >> $web
 chmod +r $web
 web=$(basename -- "$web")
 name=$(echo "$web" | cut -d'.' -f1)
@@ -97,7 +99,7 @@ ext=$(echo "$web" | cut -d'.' -f2)
 URL="http://$IP/connect/$name.$ext"
 echo "http://$IP/connect/$name.$ext"
 curl --silent --request POST --url http://129.108.7.2:3000/  --header '"CONTENT_TYPE": "application/json"'  --data '{"sender": "Sawtooth", "url": "'$URL'", "repoID": "'$ID'"}'
-sudo cat /opt/lampp/htdocs/connect/$web
+cat /opt/lampp/htdocs/connect/$web
 
 #start services
 #validator
@@ -106,13 +108,13 @@ sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind n
 sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
 #processors
 settings-tp -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
-intkey-tp-python -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
+#intkey-tp-python -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
 #read block
-sawtooth block list --url http://$IP:$API_PORT
-
+#sawtooth block list --url http://$IP:$API_PORT
+python3 bin/code_smell-tp --connect tcp://$IP:$VALIDATOR_PORT_COM &
 
 #TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
-python3 code_smell.py default --url ... --path ...
+python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME/Sawtooth
 
 
-
+#make this persistant - append service commands to a script that will run on reboot
