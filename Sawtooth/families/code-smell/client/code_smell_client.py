@@ -77,7 +77,7 @@ class codeSmellClient:
         """
 
         """identify code_smell family configuration file"""
-        conf_file = self._work_path + '/etc/code_smell.toml'
+        conf_file = self._work_path + '/etc/.suse'
         response = ""
 
         if os.path.isfile(conf_file):
@@ -273,7 +273,7 @@ class codeSmellClient:
             #print (toml_config["code_smells"][tmp_type][proposal_key])
 
         #save new configuration
-        conf_file = self._work_path + '/etc/code_smell.toml'
+        conf_file = self._work_path + '/etc/.suse'
         try:
             with open(conf_file, 'w+') as config:
                 toml.dump(toml_config, config)
@@ -304,8 +304,8 @@ class codeSmellClient:
                     total_votes += int(transactions[vote].decode().split(',')[3])
 
         #get treshold
-        """identify code_smell family configuration file"""
-        conf_file = self._work_path + '/etc/code_smell.toml'
+        #identify code_smell family configuration file
+        conf_file = self._work_path + '/etc/.suse'
 
         if flag is not None:
             if os.path.isfile(conf_file):
@@ -344,7 +344,7 @@ class codeSmellClient:
         encoded_result = yaml.safe_load(result)["data"]
         proposal = base64.b64decode(encoded_result["payload"]).decode().split(',')
         if proposal[3] != 'active':
-            return ("Proposal is not active")
+            return "Proposal not active"
 
         #verify double voting
         # proposal_id = proposal[1]
@@ -358,13 +358,13 @@ class codeSmellClient:
 
         #active proposal, record vote
         response = self._send_code_smell_txn(
-             tran_id=str(random.randrange(1,99999)),
-             tran_type='vote',
-             data=proposal[1],
-             state=str(vote))
+            tran_id=str(random.randrange(1, 99999)),
+            tran_type='vote',
+            data=proposal[1],
+            state=str(vote))
 
         if response is not None:
-            self._check_votes(proposal_id,1)
+            self._check_votes(proposal_id, 1)
 
         return response
 
