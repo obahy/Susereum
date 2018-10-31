@@ -11,8 +11,56 @@ import datetime
 import calendar
 import base64
 import toml
+from subprocess import call
 
 class RequestHandler:
+
+	def beautifyContent(self, content):
+		header = """# Copyright 2017 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+
+#
+# Sawtooth -- Settings Transaction Processor Configuration
+#
+
+# The url to connect to a running Validator
+#"""
+
+		dictConvert = json.loads(content)
+		tomlConvert = toml.dumps(dictConvert)
+		return header + tomlConvert
+
+	def addURLToSuseFile(self, payload):
+		repoID = payload['repoID']
+		url = payload['url']
+		suseFile = self.getSuseFileContents(repoID)
+		parsedSuseFile = toml.loads(suseFile)
+		parsedSuseFile['about']['NewUserLink'] = url
+		content = json.dumps(parsedSuseFile)
+		
+		content = self.beautifyContent(content)		# Converts json to toml with a license header
+
+		URL = 'https://api.github.com/repositories/'+str(repoID)+'/contents/.suse'	
+		contentEncoded = base64.b64encode(content)
+		data = {"message": "Updating suse file with URL", "committer": {"name": "susereum", "email": "susereum@gmail.com"}, "content": contentEncoded}
+
+		resultStatusCode = self.gitUPDATE(URL, str(data))
+		if resultStatusCode == 200:
+			print "\nSuse file updated successfully"
+		else:
+			print "Problem editing Suse file"
 
 	def pushEvent(self, payload):
 		senderID = payload['sender']['id']
@@ -21,7 +69,6 @@ class RequestHandler:
 		print "Sender ID: " + str(senderID)
 		print "Repo ID: " + str(repoID)
 		print "Commit URL: " + commitURL
-		print "In order to download a specific commit refer to https://stackoverflow.com/questions/3489173/how-to-clone-git-repository-with-specific-revision-changeset"
 
 	def installationEvent(self, payload):
 		repoID = payload['repositories_added'][0]['id']
@@ -32,8 +79,13 @@ class RequestHandler:
 		print "Repo ID: " + str(repoID)
 		print "Repo Name: " + repoName
 		#print "Suse File: " + suseFile
-		print "Star Count: " + str(starCount)
-		# TODO: Send this information to Sawtooth to handle creating new blockchains
+		#print "Star Count: " + str(starCount)
+		# Send information to server side script that creates the project's blockchain
+		suseFile = suseFile.replace('"', "'")	# The Bash script requires single quotes, not double quotes
+		os.system("echo \"practicum2018\" | sudo -S /home/practicum2018/Suserium/Susereum/ServerSideScripts/new_chain.sh "+repoName+" "+str(repoID)+" \""+suseFile+"\" > /dev/null 2>&1")
+
+	def installEventToIgnore(self, payload):
+		x = 3
 
 	def starEvent(self, payload):
 		repoID = payload['repository']['id']
@@ -47,7 +99,11 @@ class RequestHandler:
 		return starCount
 
 	def getSuseFile(self, repoID):
-		rawFileContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/contents/SuseMeasures.suse')
+		rawFileContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/contents/.suse')
+		return rawFileContents
+
+	def getSuseFileContents(self, repoID):
+		rawFileContents = self.getSuseFile(repoID)
 		decodedContents = base64.b64decode(rawFileContents['content'])
 		return decodedContents
 
@@ -55,38 +111,72 @@ class RequestHandler:
 		# First check if Suse file already exists in the repo
 		fileFound = False
 		reposCurrContents = self.gitGET('https://api.github.com/repositories/'+str(repoID)+'/contents')
-		filename = "SuseMeasures.suse"
-		for file in reposCurrContents:
-			if file['name'] == filename:
-				fileFound = True
-				print "Suse Measures file already exists for this repo. Let's parse it for default params!"
-				return self.getSuseFile(repoID)
-	
+		filename = ".suse"
+		
+		# Check if .suse already exists
+		if ('message' not in reposCurrContents or (reposCurrContents['message'] != 'This repository is empty.' and reposCurrContents['message'] != 'Not Found')):	# Make sure there are files in the repo, if not suse file can't exist
+			print reposCurrContents
+			print reposCurrContents['message']
+			for file in reposCurrContents:		# Loop through files in repo to see if suse file is there
+				if file['name'] == filename:
+					fileFound = True			# Suse file does already exist
+					print "Suse Measures file already exists for this repo. Let's parse it for default params!"
+				return self.getSuseFileContents(repoID)
 		if not fileFound:
 			# push Suse file	
 			URL = 'https://api.github.com/repositories/'+str(repoID)+'/contents/'+filename
 			commitMsg = "Creating initial Suse file"
 			username = 'susereum'
 			email = 'susereum@gmail.com'
-			content = """title = "Susereum Information"
+			content = """
+
+# Copyright 2017 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+
+#
+# Sawtooth -- Settings Transaction Processor Configuration
+#
+
+# The url to connect to a running Validator
+# connect = "tcp://localhost:4004"
+
 [about]
-NewUserLink = https://www.google.com
-[code_smells]
+Title = "Code Smell Family Configuration"
+NewUserLink="#"
+
 [code_smells.class]
-LargeClass = 500
-SmallClass = 100
-GodClass = 5
-InappropriateIntimacy = 2
+LargeClass=500
+SmallClass=100
+GodClass=5
+InappropriateIntimacy=2
 [code_smells.method]
-LargeMethod = 250
-SmallMethod = 10
-LargeParameterList = 4
+LargeMethod=250
+SmallMethod=10
+LargeParameterList=4
 [code_smells.comments]
-CommentsToCodeRatioUpper = 0.2
-CommentsToCodeRatioLower = 0.1
+CommentsToCodeRationLower=0.2
+CommentsToCodeRationUpper=0.1
+
+#vote settings
+#proposal_active_days indicates the time that users have to cast their vote
+#approval_treshold refers to the value of require votes to approve a proposal
+[vote_setting]
+proposal_active_days=5
+approval_treshold=3
 """
-			content = base64.b64encode(content)
-			data = {"message": commitMsg, "committer": {"name": username, "email": email}, "content": content}
+			contentEncoded = base64.b64encode(content)
+			data = {"message": commitMsg, "committer": {"name": username, "email": email}, "content": contentEncoded}
 			resultStatusCode = self.gitPUT(URL, data)
 			if resultStatusCode == 201:
 				print "Suse file created successfully"
@@ -105,7 +195,8 @@ CommentsToCodeRatioLower = 0.1
 		return hmac.compare_digest(theirDigest, ourDigest)
 
 	def gitGET(self, URL):
-		rawData = requests.get(URL)
+		headers = {'Authorization': ('Token ' + TOKEN)}
+		rawData = requests.get(URL, headers=headers)
 		jsonData = json.loads(rawData.text)
 		return jsonData
 
@@ -116,10 +207,25 @@ CommentsToCodeRatioLower = 0.1
 		rawData = requests.put(URL, data=data, headers=headers)
 		return rawData.status_code
 
+	def gitUPDATE(self, URL, data):
+		jsonData = self.gitGET(URL)		# Get the old .suse file to retrieve the old sha
+		oldSha = jsonData['sha'].encode("ascii")	# It's returned in Unicode, need to encode in Ascii bc the rest of the data is ascii
+		data = data.replace("'", '"')	# JSON strings require double quotes instead of single
+		data = json.loads(data)
+		data['sha'] = oldSha
+		return self.gitPUT(URL, data)
+
 	def POST(self):
+		payload = web.data()
+		jsonPayload = json.loads(payload)
+
+		# Check if POST is from Sawtooth
+		if 'sender' in jsonPayload and jsonPayload['sender'] == 'Sawtooth':		# Check if sender is in headers
+			self.addURLToSuseFile(jsonPayload)
+			return 'OK'
+
 		# Verify POST request from GitHub
 		signature = web.ctx.env.get('HTTP_X_HUB_SIGNATURE')
-		payload = web.data()
 		if(not self.validSignature(signature, payload)):
 			return 'Unauthorized'		
 
@@ -131,10 +237,11 @@ CommentsToCodeRatioLower = 0.1
 		functionMapping = {
 			'push': self.pushEvent,
 			'integration_installation_repositories': self.installationEvent,
+			'installation_repositories': self.installEventToIgnore,
 			'watch': self.starEvent
 		}
 		genericFunc = functionMapping.get(event)	# Figure out which handler function to use
-		genericFunc(json.loads(payload))	# Call handler function with json payload
+		genericFunc(jsonPayload)	# Call handler function with json payload
 		return 'OK'
 	
 def createListener():
@@ -162,6 +269,7 @@ def createInstallationToken(JWT):
 	rawData = requests.post(URL, headers = headers)
 	jsonData = json.loads(rawData.text)
 	TOKEN = jsonData['token']
+	#print TOKEN
 
 # Creates a Json Web Token with a current time stamp and expiration time, which is used to create an installation token
 def generateJWT():
