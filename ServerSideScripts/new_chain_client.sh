@@ -9,12 +9,16 @@ RESULT=$(curl $URL)
 port1=$(echo $RESULT | cut -d$' ' -f1)
 port2=$(echo $RESULT | cut -d$' ' -f2)
 port3=$(echo $RESULT | cut -d$' ' -f3)
-SUSE=$(echo $RESULT | cut -d$' ' -f4-)
-
+NAME=$(echo $RESULT | cut -d$' ' -f4)
+ID=$(echo $RESULT | cut -d$' ' -f5)
+SUSE=$(echo $RESULT | cut -d$' ' -f6-)
 echo $SUSE
 
 #get ip address
 IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -n 1)
+
+mkdir $HOME/.sawtooth_projects
+export SAWTOOTH_HOME="$HOME/.sawtooth_projects/.$(echo $NAME)_$(echo $ID)"
 
 mkdir $SAWTOOTH_HOME
 cd $SAWTOOTH_HOME

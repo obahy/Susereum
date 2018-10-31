@@ -90,6 +90,8 @@ web=$( mktemp -p /opt/lampp/htdocs/connect/)
 echo $VALIDATOR_PORT_COM > $web
 echo $VALIDATOR_PORT_NET >> $web
 echo $API_PORT >> $web
+echo $NAME >> $web
+echo $ID >> $web
 echo $SUSE >> $web
 chmod +r $web
 web=$(basename -- "$web")
