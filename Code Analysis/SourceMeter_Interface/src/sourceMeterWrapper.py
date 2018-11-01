@@ -1,7 +1,7 @@
 import fnmatch
 import os
 import shlex
-import shutil
+import stat
 import sys
 from subprocess import Popen
 from pandas import read_csv, concat
@@ -116,7 +116,14 @@ def clear_dir(directory):
     Args:
         directory (str): The path to the directory to be removed.
     """
-    shutil.rmtree(directory)
+    for root, dirs, files in os.walk(directory, topdown=False):
+        for name in files:
+            filename = os.path.join(root, name)
+            os.chmod(filename, stat.S_IWRITE)
+            os.remove(filename)
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+    os.rmdir(directory)
 
 
 def get_project_name(directory):
@@ -155,6 +162,8 @@ def analyze_from_repo(url):
     url_tokens = url.split('/')
     proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
     tmp_dir = os.path.join(os.getcwd(), "..", "tmp")
+    if os.path.isdir(tmp_dir):
+        clear_dir(tmp_dir)
     curr_dir = os.getcwd()
     os.makedirs(tmp_dir)
     clone_cmd = ["git", "clone", url]

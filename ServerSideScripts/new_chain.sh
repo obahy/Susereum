@@ -66,30 +66,37 @@ mkdir data
 mkdir logs
 mkdir keys
 cp -r ~/Suserium/Susereum/Sawtooth/* .
+echo $SUSE > etc/.suse
 
 #make keys
 sawadm keygen
 sawtooth keygen
+
 sawset genesis -k keys/validator.priv -o config-genesis.batch
-sawset proposal create -k keys/validator.priv \
--o config.batch \
+
+sawset proposal create -k keys/validator.priv -o config.batch \
 sawtooth.consensus.algorithm=poet \
 sawtooth.poet.report_public_key_pem="$(cat /etc/sawtooth/simulator_rk_pub.pem)" \
 sawtooth.poet.valid_enclave_measurements=$(poet enclave measurement) \
 sawtooth.poet.valid_enclave_basenames=$(poet enclave basename)
+
 poet registration create -k keys/validator.priv -o poet.batch
+
 sawset proposal create -k keys/validator.priv \
 -o poet-settings.batch \
 sawtooth.poet.target_wait_time=5 \
 sawtooth.poet.initial_wait_time=25 \
 sawtooth.publisher.max_batches_per_block=100
-sawadm genesis config-genesis.batch config.batch poet.batch poet-settings.batch
 
+sawadm genesis config-genesis.batch config.batch poet-settings.batch #poet.batch
+sleep 3
 #TODO generate webpage for connection
 web=$( mktemp -p /opt/lampp/htdocs/connect/)
 echo $VALIDATOR_PORT_COM > $web
 echo $VALIDATOR_PORT_NET >> $web
 echo $API_PORT >> $web
+echo $NAME >> $web
+echo $ID >> $web
 echo $SUSE >> $web
 chmod +r $web
 web=$(basename -- "$web")
@@ -103,18 +110,21 @@ cat /opt/lampp/htdocs/connect/$web
 
 #start services
 #validator
-sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET &
+sawtooth-validator -v --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET &
+sleep 3
 #rest api
 sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
+sleep 3
 #processors
-settings-tp -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
+settings-tp -v --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+sleep 3
 #intkey-tp-python -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
 #read block
 #sawtooth block list --url http://$IP:$API_PORT
-python3 bin/code_smell-tp --connect tcp://$IP:$VALIDATOR_PORT_COM &
+python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 #TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
-python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME/Sawtooth
+python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME
 
 
 #make this persistant - append service commands to a script that will run on reboot
