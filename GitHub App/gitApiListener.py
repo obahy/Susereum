@@ -34,9 +34,7 @@ class RequestHandler:
 #
 # Sawtooth -- Settings Transaction Processor Configuration
 #
-
-# The url to connect to a running Validator
-#"""
+"""
 
 		dictConvert = json.loads(content)
 		tomlConvert = toml.dumps(dictConvert)
@@ -82,7 +80,11 @@ class RequestHandler:
 		#print "Star Count: " + str(starCount)
 		# Send information to server side script that creates the project's blockchain
 		suseFile = suseFile.replace('"', "'")	# The Bash script requires single quotes, not double quotes
-		os.system("echo \"practicum2018\" | sudo -S /home/practicum2018/Suserium/Susereum/ServerSideScripts/new_chain.sh "+repoName+" "+str(repoID)+" \""+suseFile+"\" > /dev/null 2>&1")
+
+		newChainCommandFile = open("new_chain_command", "r")	# Read command from a file
+		newChainCommand = newChainCommandFile.read()
+		newChainCommand.rstrip()	# Remove newlines from command
+		os.system(newChainCommand.format(repoName, str(repoID), suseFile)) 	# Fill in commands with variables and run command
 
 	def installEventToIgnore(self, payload):
 		x = 3
@@ -147,9 +149,6 @@ class RequestHandler:
 #
 # Sawtooth -- Settings Transaction Processor Configuration
 #
-
-# The url to connect to a running Validator
-# connect = "tcp://localhost:4004"
 
 [about]
 Title = "Code Smell Family Configuration"
