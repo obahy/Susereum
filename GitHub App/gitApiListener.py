@@ -63,10 +63,20 @@ class RequestHandler:
 	def pushEvent(self, payload):
 		senderID = payload['sender']['id']
 		repoID = payload['repository']['id']
+		repoName = payload['repository']['name']
 		commitURL = payload['head_commit']['url']
 		print "Sender ID: " + str(senderID)
 		print "Repo ID: " + str(repoID)
+		print "Repo Name: " + repoName
 		print "Commit URL: " + commitURL
+
+		# TODO: Check URL for spaces (if users input a malicious URL)		
+		pushCommandFile = open("push_command", "r")
+		pushCommandFile = pushCommandFile.read()
+		pushCommandFile.rstrip()	# Remove newlines from command
+		command = pushCommandFile.format(str(senderID), str(repoID), repoName, commitURL)
+		print "Command I'm running: " + command
+		os.system(command)
 
 	def installationEvent(self, payload):
 		repoID = payload['repositories_added'][0]['id']
@@ -84,8 +94,15 @@ class RequestHandler:
 		newChainCommandFile = open("new_chain_command", "r")	# Read command from a file
 		newChainCommand = newChainCommandFile.read()
 		newChainCommand.rstrip()	# Remove newlines from command
-		os.system(newChainCommand.format(repoName, str(repoID), suseFile)) 	# Fill in commands with variables and run command
-
+	
+		path = "/tmp/SuseFile" + str(repoID)	
+		f = open(path, "w+")
+		f.write(suseFile)
+		f.close()
+		command = newChainCommand.format(repoName, str(repoID), path)
+		os.system(command)
+		print "Sent information to server script"
+	
 	def installEventToIgnore(self, payload):
 		x = 3
 

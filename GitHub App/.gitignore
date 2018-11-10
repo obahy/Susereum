@@ -1,3 +1,4 @@
 # Ignore these files when pushing to the GitHub repo
 new_chain_command
+push_command
 private-key.pem
