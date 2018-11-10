@@ -61,10 +61,10 @@ fi
 IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -n 1)
 
 
-
 #map repo id to ports
-mkdir map
-cd map
+
+mkdir $(dirname "$0")/map
+cd $(dirname "$0")/map
 echo $VALIDATOR_PORT_COM > $ID
 echo $VALIDATOR_PORT_NET >> $ID
 echo $API_PORT >> $ID
@@ -134,10 +134,11 @@ poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #read block
 #sawtooth block list --url http://$IP:$API_PORT
 python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 #TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
-#python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME
-xxxxx
+python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME &
+
 
 #make this persistant - append service commands to a script that will run on reboot
 
