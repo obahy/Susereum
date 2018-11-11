@@ -1,7 +1,7 @@
 import fnmatch
 import os
 import shlex
-import stat
+import shutil
 import sys
 from subprocess import Popen
 from pandas import read_csv, concat
@@ -108,11 +108,11 @@ def consolidate_metrics(project_name, project_type, results_path):
                                     'Path': 'Name of Owner Class',
                                     'NUMPAR': 'Number of Parameters'
                                     })
-    result.to_csv(os.path.join(results_path, project_name, "metrics.csv"), index=False)
+    result.to_csv(os.path.join(results_path, project_name + ".csv"), index=False)
 
     # Clean up excess Source Meter files
     if CLEAN_UP_SM_FILES:
-        clear_dir(sc_results_dir)
+        clear_dir(os.path.join(results_path, project_name))
 
 
 def clear_dir(directory):
@@ -121,14 +121,7 @@ def clear_dir(directory):
     Args:
         directory (str): The path to the directory to be removed.
     """
-    for root, dirs, files in os.walk(directory, topdown=False):
-        for name in files:
-            filename = os.path.join(root, name)
-            os.chmod(filename, stat.S_IWRITE)
-            os.remove(filename)
-        for name in dirs:
-            os.rmdir(os.path.join(root, name))
-    os.rmdir(directory)
+    shutil.rmtree(directory)
 
 
 def get_project_name(directory):
