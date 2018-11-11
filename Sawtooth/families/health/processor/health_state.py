@@ -95,7 +95,6 @@ class HealthState:
         address = _make_health_address(txn_id)
 
         state_data = self._serialize(transactions)
-        self._address_cache[address] = state_data
 
         self._context.set_state({address: state_data}, timeout=self.TIMEOUT)
 

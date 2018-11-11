@@ -28,7 +28,6 @@ import base64
 import hashlib
 import yaml
 import requests
-import time
 
 from pprint import pprint
 from base64 import b64encode
@@ -86,22 +85,14 @@ class HealthClient:
             github_url (str): commit url
             github_user (str): github user id
         """
-        result = self._send_request("transactions?limit=1")
-        encoded_result = yaml.safe_load(result)["data"]
-        transaction = base64.b64decode(encoded_result[0]["payload"]).decode().split(',')
-        txn_type = transaction[0]
-        print (txn_type)
-        time.sleep (2)
-
-        if txn_type != "health":
-            ## TODO: talk to code analysis, and then publish the actual result
-            response = self._send_health_txn(
-                txn_type='health',
-                txn_id=github_user,
-                data='code_analysis_result',
-                state='processed',
-                url=self._base_url)
-            return response
+        ## TODO: talk to code analysis, and then publish the actual result
+        response = self._send_health_txn(
+            txn_type='health',
+            txn_id=github_user,
+            data='code_analysis_result',
+            state='processed',
+            url=self._base_url)
+        return response
 
     def commit(self, commit_url, github_id):
         """
@@ -121,7 +112,7 @@ class HealthClient:
         list all transactions.
         """
         #pull all transactions of health family
-        ## todo: modify logic to pull transactions per family
+        ## TODO: modify logic to pull transactions per family
         result = self._send_request("transactions")
 
         transactions = {}
@@ -209,14 +200,14 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        payload = ",".join([txn_type, txn_id, data, state,url]).encode()
+        payload = ",".join([txn_type, txn_id, data, state, url]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
         #construct the address
         address = self._get_address(txn_id)
 
-        #construct header`
+        #construct header
         header = TransactionHeader(
             signer_public_key=self._signer.get_public_key().as_hex(),
             family_name="health",
