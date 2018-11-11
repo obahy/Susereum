@@ -13,14 +13,13 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 """
-Health Family Processor Command Line Interface
+Suse Family Processor Command Line Interface
 
-This processor handles all transaction related to the commit of new code,
-whenever users made a commit to github this class will trigger logic to process
-the commit and calculate project's health.
+This processor handles all transaction related to the commit of suse and healt scores,
+after processing the health, the new health is send to the suse family.
 
 Raises:
-    health exceptions: health family exceptions to display misuse of functions
+    suse exceptions: suse family exceptions to display misuse of functions
 """
 from __future__ import print_function
 
@@ -32,10 +31,10 @@ import argparse
 import traceback
 
 from colorlog import ColoredFormatter #pylint: disable=import-error
-from client.health_client import HealthClient
-from client.health_exceptions import HealthException
+from client.suse_client import SuseClient
+from client.suse_exceptions import SuseException
 
-DISTRIBUTION_NAME = 'susereum-health'
+DISTRIBUTION_NAME = 'susereum-suse'
 HOME = os.getenv('SAWTOOTH_HOME')
 DEFAULT_URL = 'http://127.0.0.1:8008'
 
@@ -89,7 +88,7 @@ def setup_loggers(verbose_level):
 
 def add_list_parser(subparser, parent_parser):
     """
-    define subparser list. Displays information for all health transactions
+    define subparser list. Displays user's suse
 
     Args:
         subparser (subparser): subparser handler
@@ -97,19 +96,9 @@ def add_list_parser(subparser, parent_parser):
     """
     parser = subparser.add_parser(
         'list',
-        help='Displays information for all health transactions',
-        description='Displays information for all health trasactions in state',
+        help='Display suse ',
+        description='Display users suse',
         parents=[parent_parser])
-
-    parser.add_argument(
-        '--type',
-        type=str,
-        help='Display specific type of transaction')
-
-    parser.add_argument(
-        '--limit',
-        type=str,
-        help='limit number of transaction to retrive')
 
     parser.add_argument(
         '--url',
@@ -126,25 +115,24 @@ def add_list_parser(subparser, parent_parser):
         type=str,
         help="identify directory of user's private key file")
 
-def add_commit_parser(subparser, parent_parser):
+def add_create_parser(subparser, parent_parser):
     """
-    add subparser default. this subparser will create a commit transaction that
-        will be send to the code analysis
+    add subparser default. this subparser will create suse based on the new  health
 
     Args:
         subparser (subparser): subparser handler
         parent_parser (parser): parent parser
     """
     parser = subparser.add_parser(
-        'commit',
-        help='Process commit',
-        description='Send commit to code analysis',
+        'create',
+        help='Create suse',
+        description='Generate suse from commit',
         parents=[parent_parser])
 
     parser.add_argument(
-        '--giturl',
+        '--health',
         type=str,
-        help='specify commit URL')
+        help='New Health')
 
     parser.add_argument(
         '--gituser',
@@ -208,7 +196,7 @@ def create_parser(prog_name):
     subparsers = parser.add_subparsers(title='subcommands', dest='command')
 
     subparsers.required = True
-    add_commit_parser(subparsers, parent_parser)
+    add_create_parser(subparsers, parent_parser)
     add_list_parser(subparsers, parent_parser)
 
     return parser
@@ -223,44 +211,33 @@ def do_list(args):
     """
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = SuseClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transactions = client.list(txn_type=args.type, limit=args.limit)
+    transactions = client.list()
 
     if len(transactions) == 0:
-        raise HealthException("No transactions found")
+        raise SuseException("No transactions found")
     else:
         print (transactions)
 
-def process_health(github_user, github_url, url):
+
+def do_create(args):
     """
-    Process commit, send url to code analysis
-    """
-    keyfile = _get_keyfile()
-    client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
-
-    response = client.code_analysis(github_url, github_user)
-
-    print("Response: {}".format(response))
-
-
-def do_commit(args):
-    """
-    load a set of default code smells.
+    create suse of new commit
 
     Args:
         args (array) arguments
     """
-    if args.giturl is None:
-        raise HealthException("Missing Commit URL")
+    if args.health is None:
+        raise SuseException("Missing health")
     if args.gituser is None:
-        raise HealthException("Missing User ID")
+        raise SuseException("Missing User ID")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = SuseClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.commit(commit_url=args.giturl, github_id=args.gituser)
+    response = client.create(new_health=args.health, github_id=args.gituser)
 
     print("Response: {}".format(response))
 
@@ -317,13 +294,13 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
 
     setup_loggers(verbose_level=verbose_level)
 
-    #Define code smell family functions
-    if args.command == 'commit':
-        do_commit(args)
+    #Define suse family functions
+    if args.command == 'create':
+        do_create(args)
     elif args.command == 'list':
         do_list(args)
     else:
-        raise HealthException("Invalid command: {}".format(args.command))
+        raise SuseException("Invalid command: {}".format(args.command))
 
 def main_wrapper():
     """
@@ -339,7 +316,7 @@ def main_wrapper():
     """
     try:
         main()
-    except HealthException as err:
+    except SuseException as err:
         print("Error: {}".format(err), file=sys.stderr)
         sys.exit(1)
     except KeyboardInterrupt:

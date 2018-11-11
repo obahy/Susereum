@@ -243,8 +243,8 @@ class CodeSmellClient:
         toml_config["sender"] = "Sawtooth"
         data = json.dumps(toml_config)
         print (data)
-        request = requests.post('http://129.108.7.2:300', data)
-        print ("Payload:" + request)
+        request = requests.post('http://129.108.7.2:3000', data=data)
+        print (request)
 
     def _update_config(self, toml_config, proposal):
         """

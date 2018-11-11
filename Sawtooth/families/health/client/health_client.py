@@ -93,6 +93,8 @@ class HealthClient:
             state='processed',
             url=self._base_url)
         return response
+        ## TODO: add health to chain
+        ## TODO: call suse family to process suse.
 
     def commit(self, commit_url, github_id):
         """
@@ -107,22 +109,34 @@ class HealthClient:
 
         return response
 
-    def list(self):
+    def list(self, txn_type=None, limit=None ):
         """
         list all transactions.
         """
         #pull all transactions of health family
         ## TODO: modify logic to pull transactions per family
-        result = self._send_request("transactions")
-
+        if limit is None:
+            result = self._send_request("transactions")
+        else:
+            result = self._send_request("transactions?limit={}".format(limit))
+        #
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]
-            for entry in encoded_entries:
-                transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+            if txn_type is None:
+                for entry in encoded_entries:
+                    transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+
+            else:
+                for entry in encoded_entries:
+                    transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                    if transaction_type == txn_type:
+                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+
             return transactions
         except BaseException:
             return None
+
 
     def _get_prefix(self):
         """
