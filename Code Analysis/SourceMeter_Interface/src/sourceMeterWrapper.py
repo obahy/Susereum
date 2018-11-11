@@ -89,7 +89,7 @@ def consolidate_metrics(project_name, project_type, results_path):
     # Make every row in column 'Class' contain only the last token (class name) when splitting with DIR_SEPARATOR
     tmp_f['Path'] = tmp_f['Path']\
         .apply(lambda x: str(x)).apply(lambda x: x.split(DIR_SEPARATOR)[len(x.split(DIR_SEPARATOR)) - 1])
-    # Insert 'Level' column
+    # Insert 'Type of Smell' column
     tmp_f.insert(0, 'Type of Smell', 'Method')
     # Insert Class-Level Columns and set value to '-'
     curr_column = len(METHOD_KEEP_COL) + 1
