@@ -88,7 +88,7 @@ sawtooth.poet.target_wait_time=5 \
 sawtooth.poet.initial_wait_time=25 \
 sawtooth.publisher.max_batches_per_block=100
 
-sawadm genesis config-genesis.batch config.batch poet-settings.batch #poet.batch
+sawadm genesis config-genesis.batch config.batch poet.batch poet-settings.batch
 sleep 3
 #TODO generate webpage for connection
 web=$( mktemp -p /opt/lampp/htdocs/connect/)

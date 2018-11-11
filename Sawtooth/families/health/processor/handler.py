@@ -24,7 +24,7 @@ from processor.health_state import HealthTransaction
 from processor.health_state import HealthState
 from processor.health_state import HEALTH_NAMESPACE
 from processor.health_payload import HealthPayload
-from client.health_client import process_health
+from client.health_cli import process_health
 
 LOGGER = logging.getLogger(__name__)
 
@@ -83,30 +83,25 @@ class HealthTransactionHandler(TransactionHandler):
         health_state = HealthState(context)
 
         if health_payload.txn_type == 'commit':
-            #_dummy_code_analysis(health_payload)
             active_transaction = HealthTransaction(
                 txn_type=health_payload.txn_type,
                 txn_id=health_payload.txn_id,
                 data=health_payload.data,
                 state=health_payload.state)
-
             health_state.set_transaction(health_payload.txn_id, active_transaction)
-
-            #call code analysis and process the commit
-            process_health(health_payload.txn_id)
+            #call code analysis
+            process_health(health_payload.txn_id, health_payload.data, health_payload.url)
+        elif health_payload.txn_type == 'health':
+            active_transaction = HealthTransaction(
+                txn_type=health_payload.txn_type,
+                txn_id=health_payload.txn_id,
+                data=health_payload.data,
+                state=health_payload.state)
+            health_state.set_transaction(health_payload.txn_id, active_transaction)
+            ## TODO: call suse family, pass new health and txn_id
 
         else:
             raise InvalidTransaction('Unhandled Type: {}'.format(health_payload.txn_type))
-
-        #health_state.set_transaction(health_payload.txn_id, active_transaction)
-        #print (result)
-            #_dummy_code_analysis()
-
-        #Call Code Analysis
-        # if _dummy_code_analysis():
-        #     print ("dummy")
-        # else:
-        #     raise InvalidTransaction('Unable to get a response from code analysis')
 
         _display("transaction {},{} created".
                  format(health_payload.txn_type, health_payload.data))

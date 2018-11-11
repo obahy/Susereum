@@ -28,6 +28,7 @@ import base64
 import hashlib
 import yaml
 import requests
+import time
 
 from pprint import pprint
 from base64 import b64encode
@@ -51,8 +52,6 @@ def _sha512(data):
         data (object), object to get hash
     """
     return hashlib.sha512(data).hexdigest()
-def process_health(user_id):
-    print (user_id)
 
 class HealthClient:
     """
@@ -79,15 +78,41 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    def commit(self, commit_url):
+    def code_analysis(self, github_url, github_user):
+        """
+        send github url to code analysis to generate new health
+
+        Args:
+            github_url (str): commit url
+            github_user (str): github user id
+        """
+        result = self._send_request("transactions?limit=1")
+        encoded_result = yaml.safe_load(result)["data"]
+        transaction = base64.b64decode(encoded_result[0]["payload"]).decode().split(',')
+        txn_type = transaction[0]
+        print (txn_type)
+        time.sleep (2)
+
+        if txn_type != "health":
+            ## TODO: talk to code analysis, and then publish the actual result
+            response = self._send_health_txn(
+                txn_type='health',
+                txn_id=github_user,
+                data='code_analysis_result',
+                state='processed',
+                url=self._base_url)
+            return response
+
+    def commit(self, commit_url, github_id):
         """
         Send commit url to code analysis
         """
         response = self._send_health_txn(
             txn_type='commit',
-            txn_id=self._signer.get_public_key().as_hex()[0:24],
+            txn_id=github_id,
             data=commit_url,
-            state='new')
+            state='new',
+            url=self._base_url)
 
         return response
 
@@ -172,7 +197,8 @@ class HealthClient:
                          txn_type=None,
                          txn_id=None,
                          data=None,
-                         state=None):
+                         state=None,
+                         url=None):
         """
         serialize payload and create header transaction
 
@@ -183,7 +209,7 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        payload = ",".join([txn_type, txn_id, data, state]).encode()
+        payload = ",".join([txn_type, txn_id, data, state,url]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
