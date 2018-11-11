@@ -24,7 +24,7 @@ from sawtooth_sdk.processor.log  import init_console_logging #pylint: disable=im
 from sawtooth_sdk.processor.core import TransactionProcessor #pylint: disable=import-error
 from processor.handler import HealthTransactionHandler
 
-DISTRIBUTION_NAME = 'suserum-codeSmell'
+DISTRIBUTION_NAME = 'suserum-health'
 
 def parse_args(args):
     """

@@ -51,8 +51,6 @@ def _sha512(data):
         data (object), object to get hash
     """
     return hashlib.sha512(data).hexdigest()
-def process_health(user_id):
-    print (user_id)
 
 class HealthClient:
     """
@@ -79,34 +77,66 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    def commit(self, commit_url):
+    def code_analysis(self, github_url, github_user):
+        """
+        send github url to code analysis to generate new health
+
+        Args:
+            github_url (str): commit url
+            github_user (str): github user id
+        """
+        ## TODO: talk to code analysis, and then publish the actual result
+        response = self._send_health_txn(
+            txn_type='health',
+            txn_id=github_user,
+            data='code_analysis_result',
+            state='processed',
+            url=self._base_url)
+        return response
+        ## TODO: add health to chain
+        ## TODO: call suse family to process suse.
+
+    def commit(self, commit_url, github_id):
         """
         Send commit url to code analysis
         """
         response = self._send_health_txn(
             txn_type='commit',
-            txn_id=self._signer.get_public_key().as_hex()[0:24],
+            txn_id=github_id,
             data=commit_url,
-            state='new')
+            state='new',
+            url=self._base_url)
 
         return response
 
-    def list(self):
+    def list(self, txn_type=None, limit=None ):
         """
         list all transactions.
         """
         #pull all transactions of health family
-        ## todo: modify logic to pull transactions per family
-        result = self._send_request("transactions")
-
+        ## TODO: modify logic to pull transactions per family
+        if limit is None:
+            result = self._send_request("transactions")
+        else:
+            result = self._send_request("transactions?limit={}".format(limit))
+        #
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]
-            for entry in encoded_entries:
-                transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+            if txn_type is None:
+                for entry in encoded_entries:
+                    transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+
+            else:
+                for entry in encoded_entries:
+                    transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                    if transaction_type == txn_type:
+                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+
             return transactions
         except BaseException:
             return None
+
 
     def _get_prefix(self):
         """
@@ -172,7 +202,8 @@ class HealthClient:
                          txn_type=None,
                          txn_id=None,
                          data=None,
-                         state=None):
+                         state=None,
+                         url=None):
         """
         serialize payload and create header transaction
 
@@ -183,14 +214,14 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        payload = ",".join([txn_type, txn_id, data, state]).encode()
+        payload = ",".join([txn_type, txn_id, data, state, url]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
         #construct the address
         address = self._get_address(txn_id)
 
-        #construct header`
+        #construct header
         header = TransactionHeader(
             signer_public_key=self._signer.get_public_key().as_hex(),
             family_name="health",
