@@ -99,8 +99,10 @@ def consolidate_metrics(project_name, project_type, results_path):
     method_portion = tmp_f
 
     result = concat([class_portion, method_portion], sort=False)
+    # Change CD (Comment Density) to 'Comment-to-Code Percentage' by every row in column 'CD' by 100
+    result['CD'] = result['CD'].apply(lambda x: x * 100)
     result = result.rename(columns={'LOC': 'Lines of Code',
-                                    'CD': 'Comment-to-Code Ratio',
+                                    'CD': 'Comment-to-Code Percentage',
                                     'CBO': 'Number of Directly-Used Elements',
                                     'NOI': 'Number of Outgoing Invocations',
                                     'Path': 'Name of Owner Class',
