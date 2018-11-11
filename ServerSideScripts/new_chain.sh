@@ -61,10 +61,10 @@ fi
 IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -n 1)
 
 
-
 #map repo id to ports
-mkdir map
-cd map
+
+mkdir $(dirname "$0")/map
+cd $(dirname "$0")/map
 echo $VALIDATOR_PORT_COM > $ID
 echo $VALIDATOR_PORT_NET >> $ID
 echo $API_PORT >> $ID
@@ -77,6 +77,13 @@ mkdir logs
 mkdir keys
 cp -r ~/Suserium/Susereum/Sawtooth/* .
 cp $SUSE_PATH etc/.suse
+
+
+#write ports to .ports
+echo $VALIDATOR_PORT_COM > etc/.ports  #TODO make ports dynamic based on host's usage
+echo $VALIDATOR_PORT_NET >> etc/.ports
+echo $API_PORT >> etc/.ports
+
 
 #make keys
 sawadm keygen
@@ -98,8 +105,8 @@ sawtooth.poet.target_wait_time=5 \
 sawtooth.poet.initial_wait_time=25 \
 sawtooth.publisher.max_batches_per_block=100
 
-sawadm genesis config-genesis.batch config.batch poet.batch poet-settings.batc
-sleep 3
+sawadm genesis config-genesis.batch config.batch poet.batch poet-settings.batch
+#sleep 3
 #TODO generate webpage for connection
 web=$( mktemp -p /opt/lampp/htdocs/connect/)
 echo $VALIDATOR_PORT_COM > $web
@@ -115,29 +122,30 @@ ext=$(echo "$web" | cut -d'.' -f2)
 #TODO send url via netcat to port 3000
 URL="http://$IP/connect/$name.$ext"
 echo "http://$IP/connect/$name.$ext"
-curl --silent --request POST --url http://129.108.7.2:3000/  --header '"CONTENT_TYPE": "application/json"'  --data '{"sender": "Sawtooth", "url": "'$URL'", "repoID": "'$ID'"}'
+curl --silent --request POST --url http://129.108.7.2:3000/  --header '"CONTENT_TYPE": "application/json"'  --data '{"sender": "ConfigurationURL", "url": "'$URL'", "repoID": "'$ID'"}'
 cat /opt/lampp/htdocs/connect/$web #TODO delete me on the first proposal
 rm $SUSE_PATH
 
 #start services
 #validator
 sawtooth-validator -vv --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET --peering dynamic &
-sleep 3
+#sleep 3
 #rest api
 sawtooth-rest-api -v --bind localhost:$API_PORT --connect 127.0.0.1:$VALIDATOR_PORT_COM &
-sleep 3
+#sleep 3
 #processors
 settings-tp -v --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
-sleep 3
+#sleep 3
 poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #intkey-tp-python -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
 #read block
 #sawtooth block list --url http://$IP:$API_PORT
 python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 #TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
-#python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME
-xxxxx
+#python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME 
+
 
 #make this persistant - append service commands to a script that will run on reboot
 
