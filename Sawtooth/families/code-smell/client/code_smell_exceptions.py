@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------------
+"""
+code smell family exceptions
+"""
 
-class codeSmellException(Exception):
+class CodeSmellException(Exception):
+    """
+    display code smell family exceptions
+    """
     pass

@@ -14,29 +14,30 @@
 # ------------------------------------------------------------------------------
 
 import os
-import toml
 import time
-import yaml
 import random
 import base64
 import hashlib
-import requests
 import urllib
+import json
+import requests
+import yaml
+import toml #pylint: disable=import-error
 
 from pprint import pprint
 from base64 import b64encode
-from sawtooth_signing import ParseError
-from sawtooth_signing import CryptoFactory
-from sawtooth_signing import create_context
-from sawtooth_signing.secp256k1 import Secp256k1PrivateKey
+from sawtooth_signing import ParseError #pylint: disable=import-error
+from sawtooth_signing import CryptoFactory #pylint: disable=import-error
+from sawtooth_signing import create_context #pylint: disable=import-error
+from sawtooth_signing.secp256k1 import Secp256k1PrivateKey #pylint: disable=import-error
 
-from sawtooth_sdk.protobuf.batch_pb2 import Batch
-from sawtooth_sdk.protobuf.batch_pb2 import BatchList
-from sawtooth_sdk.protobuf.batch_pb2 import BatchHeader
-from sawtooth_sdk.protobuf.transaction_pb2 import Transaction
-from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader
+from sawtooth_sdk.protobuf.batch_pb2 import Batch #pylint: disable=import-error
+from sawtooth_sdk.protobuf.batch_pb2 import BatchList #pylint: disable=import-error
+from sawtooth_sdk.protobuf.batch_pb2 import BatchHeader #pylint: disable=import-error
+from sawtooth_sdk.protobuf.transaction_pb2 import Transaction #pylint: disable=import-error
+from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: disable=import-error
 
-from code_smell_exceptions import codeSmellException
+from client.code_smell_exceptions import CodeSmellException
 
 def _sha512(data):
     """
@@ -46,7 +47,7 @@ def _sha512(data):
     """
     return hashlib.sha512(data).hexdigest()
 
-class codeSmellClient:
+class CodeSmellClient:
     """
     construct and send code smell transaction.
     """
@@ -59,24 +60,24 @@ class codeSmellClient:
             return
 
         try:
-            with open(keyfile) as fd:
-                private_key_str = fd.read().strip()
+            with open(keyfile) as fileptr:
+                private_key_str = fileptr.read().strip()
         except OSError as err:
-            raise codeSmellException('Failed to read private key {}: {}'.format(keyfile, str(err)))
+            raise CodeSmellException('Failed to read private key {}: {}'.format(keyfile, str(err)))
 
         try:
             private_key = Secp256k1PrivateKey.from_hex(private_key_str)
-        except ParseError as e:
-            raise codeSmellException('Unable to load private key: {}'.format(str(e)))
+        except ParseError as error:
+            raise CodeSmellException('Unable to load private key: {}'.format(str(error)))
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    def default(self, wait=None):
+    def default(self):
         """
         load a defautl code smell configuration
         """
 
-        """identify code_smell family configuration file"""
+        #identify code_smell family configuration file
         conf_file = self._work_path + '/etc/.suse'
         response = ""
 
@@ -84,32 +85,32 @@ class codeSmellClient:
             try:
                 with open(conf_file) as config:
                     raw_config = config.read()
-            except IOError as e:
-                raise codeSmellException ("Unable to load code smell family configuration file")
+            except IOError as error:
+                raise CodeSmellException("Unable to load code smell family configuration file: {}"
+                                         .format(error))
 
-            """load toml config into a dict"""
+            #load toml config into a dict
             parsed_toml_config = toml.loads(raw_config)
 
-            """get default code smells"""
+            #get default code smells
             code_smells_config = parsed_toml_config['code_smells']
 
             """traverse dict and process each code smell
                 nested for loop to procces level two dict."""
             for code_smells in code_smells_config.values():
                 for name, metric in code_smells.items():
-                    """send trasaction"""
-                    #print("{},{}".format(name,metric))
+                    #send trasaction
                     response = self._send_code_smell_txn(
-                        tran_type='code_smell',
-                        tran_id=name,
-                        data=str(metric),
+                        txn_type='code_smell',
+                        txn_id=name,
+                        data=str(metric[0]),
                         state='create')
         else:
-            raise codeSmellException("Configuration File {} does not exists".format(conf_file))
+            raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
         return response
 
-    def list(self,type=None):
+    def list(self, type=None):
         """
         list all transactions.
 
@@ -125,13 +126,13 @@ class codeSmellClient:
             encoded_entries = yaml.safe_load(result)["data"]
             if type is None:
                 for entry in encoded_entries:
-                    transactions[ entry["header_signature"] ] = base64.b64decode(entry["payload"])
+                    transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
 
             else:
                 for entry in encoded_entries:
                     transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
                     if transaction_type == type:
-                        transactions[ entry["header_signature"] ] = base64.b64decode(entry["payload"])
+                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
 
             return transactions
         except BaseException:
@@ -202,11 +203,11 @@ class codeSmellClient:
         propose_date = str(transac_time)
 
         response = self._send_code_smell_txn(
-             tran_id=_sha512( str(code_smells).encode('utf-8') )[0:6],
-             tran_type='proposal',
-             data=str(code_smells).replace(",", ";"),
-             state='active',
-             date=propose_date)
+            txn_id=_sha512(str(code_smells).encode('utf-8'))[0:6],
+            txn_type='proposal',
+            data=str(code_smells).replace(",", ";"),
+            state='active',
+            date=propose_date)
 
         return response
 
@@ -223,19 +224,27 @@ class codeSmellClient:
         propose_date = str(transac_time)
 
         response = self._send_code_smell_txn(
-             tran_id=proposal[1],
-             tran_type='proposal',
-             data=proposal[2],
-             state=state,
-             date=propose_date)
+            txn_id=proposal[1],
+            txn_type='proposal',
+            data=proposal[2],
+            state=state,
+            date=propose_date)
 
         ## TODO: call health family to re-calculate health
 
 
     def _send_git_request(self, toml_config):
-        data = urllib.urlencode(toml_config)
-        f = urllib.urlopen("http://IP:3000", data)
-        print (f.read())
+        """
+        send new code smell configuration to github
+
+        Args:
+            toml_config (dict): code smells to send
+        """
+        toml_config["sender"] = "Sawtooth"
+        data = json.dumps(toml_config)
+        print (data)
+        request = requests.post('http://129.108.7.2:300', data)
+        print ("Payload:" + request)
 
     def _update_config(self, toml_config, proposal):
         """
@@ -248,7 +257,6 @@ class codeSmellClient:
         """
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
-        tmp_payload = {}
 
         """
         start by traversing the proposal,
@@ -260,27 +268,25 @@ class codeSmellClient:
             we don't know where on the toml file is the code smell,
             traverse the toml dictionary looking for the same code smell.
             """
-            for type in toml_config["code_smells"]:
+            for code_type in toml_config["code_smells"]:
                 """
                 once you found the code smell, break the loop and return
                 a pseudo location
                 """
-                if proposal_key in toml_config["code_smells"][type].keys():
-                    tmp_type = type
+                if proposal_key in toml_config["code_smells"][code_type].keys():
+                    tmp_type = code_type
                     break
             #update configuration
-            toml_config["code_smells"][tmp_type][proposal_key] = int(proposal_metric)
-            #print (toml_config["code_smells"][tmp_type][proposal_key])
+            toml_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
         #save new configuration
         conf_file = self._work_path + '/etc/.suse'
         try:
             with open(conf_file, 'w+') as config:
                 toml.dump(toml_config, config)
-
-            #self._send_git_request(toml_config)
-        except IOError as e:
-            raise codeSmellException ("Unable to open configuration file")
+            self._send_git_request(toml_config)
+        except IOError as error:
+            raise CodeSmellException("Unable to open configuration file {}".format(error))
 
     ## TODO: add logic to handle window period check.
     def _check_votes(self, proposal_id, flag=None):
@@ -313,20 +319,22 @@ class codeSmellClient:
                     with open(conf_file) as config:
                         raw_config = config.read()
                         config.close()
-                except IOError as e:
-                    raise codeSmellException ("Unable to load code smell family configuration file")
+                except IOError as error:
+                    raise CodeSmellException(
+                        "Unable to load code smell family configuration file {}".format(error))
 
-                """load toml config into a dict"""
+                #load toml config into a dict
                 parsed_toml_config = toml.loads(raw_config)
 
-                """get treshold"""
+                #get treshold
                 code_smells_config = parsed_toml_config['vote_setting']
 
                 vote_treshold = int(code_smells_config['approval_treshold'])
 
-                if (total_votes >= vote_treshold):
+                if total_votes >= vote_treshold:
                     self._update_config(parsed_toml_config, proposal)
-                    self._update_proposal(proposal, "accepted")
+                    #you need this, you commented out to test the github stuff
+                    #self._update_proposal(proposal, "accepted")
         else:
             return "Total votes (accepted): " + str(total_votes)
 
@@ -358,8 +366,8 @@ class codeSmellClient:
 
         #active proposal, record vote
         response = self._send_code_smell_txn(
-            tran_id=str(random.randrange(1, 99999)),
-            tran_type='vote',
+            txn_id=str(random.randrange(1, 99999)),
+            txn_type='vote',
             data=proposal[1],
             state=str(vote))
 
@@ -376,7 +384,7 @@ class codeSmellClient:
                 auth_password=auth_password)
             return yaml.safe_load(result)['data'][0]['status']
         except BaseException as err:
-            raise codeSmellException(err)
+            raise CodeSmellException(err)
 
     def _get_prefix(self):
         """
@@ -426,21 +434,21 @@ class codeSmellClient:
                 result = requests.get(url, headers=headers)
 
             if result.status_code == 404:
-                raise codeSmellException("No such transaction")
+                raise CodeSmellException("No such transaction")
             elif not result.ok:
-                raise codeSmellException("Error {}:{}".format(result.status_code, result.reason))
+                raise CodeSmellException("Error {}:{}".format(result.status_code, result.reason))
 
         except requests.ConnectionError as err:
-            raise codeSmellException('Failed to connect to {}:{}'.format(url, str(err)))
+            raise CodeSmellException('Failed to connect to {}:{}'.format(url, str(err)))
 
         except BaseException as err:
-            raise codeSmellException(err)
+            raise CodeSmellException(err)
 
         return result.text
 
     def _send_code_smell_txn(self,
-                             tran_type=None,
-                             tran_id=None,
+                             txn_type=None,
+                             txn_id=None,
                              data=None,
                              state=None,
                              date=None):
@@ -455,16 +463,15 @@ class codeSmellClient:
             wait (int):    delay to process transactions
         """
         #serialization is just a delimited utf-8 encoded strings
-        if tran_type == 'proposal':
-            payload = ",".join([tran_type, tran_id, data, state, str(date)]).encode()
+        if txn_type == 'proposal':
+            payload = ",".join([txn_type, txn_id, data, state, str(date)]).encode()
         else:
-            payload = ",".join([tran_type, tran_id, data, state]).encode()
+            payload = ",".join([txn_type, txn_id, data, state]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
         #construct the address
-        address = self._get_address(tran_id)
-
+        address = self._get_address(txn_id)
 
         #construct header`
         header = TransactionHeader(

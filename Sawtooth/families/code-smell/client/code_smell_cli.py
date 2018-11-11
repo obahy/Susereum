@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------------
-
+"""
+code smell command line interface.
+"""
 ## TODO: research if peers will require a username and password to join the network
 
 from __future__ import print_function
@@ -29,8 +31,8 @@ import pkg_resources
 from colorlog import ColoredFormatter
 from pprint import pprint
 from argparse import RawTextHelpFormatter
-from code_smell_client import codeSmellClient
-from code_smell_exceptions import codeSmellException
+from client.code_smell_client import CodeSmellClient
+from client.code_smell_exceptions import CodeSmellException
 
 DISTRIBUTION_NAME = 'sawtooth-code_smell'
 HOME = os.getenv('SAWTOOTH_HOME')
@@ -273,14 +275,6 @@ def add_default_parser(subparser, parent_parser):
         default=False,
         help='disable client validation')
 
-    parser.add_argument(
-        '--wait',
-        nargs='?',
-        const=sys.maxsize,
-        type=int,
-        #default=30, ## TODO: update this value to something appropiate
-        help='set time, in seconds, to wait for code smell to commit')
-
 def create_parent_parser(prog_name):
     """
     Create parent parser
@@ -350,16 +344,16 @@ def do_show(args):
         args (array) arguments
     """
     if args.address is None:
-        raise codeSmellException ("Missing Transaction Address")
+        raise CodeSmellException ("Missing Transaction Address")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     transaction = client.show(address=args.address)
 
     if len(transaction) == 0:
-        raise codeSmellException("No transaction found")
+        raise CodeSmellException("No transaction found")
     else:
         pprint (transaction)
 
@@ -372,9 +366,9 @@ def do_vote(args):
     """
     if args.view is None:
         if args.id is None:
-            raise codeSmellException ("Missing proposal ID")
+            raise CodeSmellException ("Missing proposal ID")
         if args.vote is None:
-            raise codeSmellException ("Missing VOTE")
+            raise CodeSmellException ("Missing VOTE")
         if args.vote == 'yes':
             vote=1
         else:
@@ -382,7 +376,7 @@ def do_vote(args):
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     if args.vote:
         response = client.vote(proposal_id=args.id,vote=vote)
@@ -400,11 +394,11 @@ def do_proposal(args):
     """
 
     if args.propose is None:
-        raise codeSmellException ("Missing code smells")
+        raise CodeSmellException ("Missing code smells")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     """ parse input into a dict"""
     code_smells = {}
@@ -423,15 +417,15 @@ def do_list(args):
         args (array) arguments
     """
     if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote'):
-        raise codeSmellException("Incorrect Transaction Type")
+        raise CodeSmellException("Incorrect Transaction Type")
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
+    client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     transactions = client.list(type=args.type)
 
     if len(transactions) == 0:
-        raise codeSmellException("No transactions found")
+        raise CodeSmellException("No transactions found")
     else:
         print (transactions)
 
@@ -444,12 +438,9 @@ def do_default(args):
     """
     url = _get_url(args)
     keyfile = _get_keyfile(args)
-    client = codeSmellClient(base_url=url, keyfile=keyfile, work_path=args.path)
+    client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=args.path)
 
-    if args.wait and args.wait > 0:
-        response = client.default(wait=args.wait)
-    else:
-        response = client.default()
+    response = client.default()
 
     print("Response: {}".format(response))
 
@@ -516,7 +507,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
     elif args.command == 'vote':
         do_vote(args)
     else:
-        raise codeSmellException("Invalid command: {}".format(args.command))
+        raise CodeSmellException("Invalid command: {}".format(args.command))
 
 def main_wrapper():
     """
@@ -532,7 +523,7 @@ def main_wrapper():
     """
     try:
         main()
-    except codeSmellException as err:
+    except CodeSmellException as err:
         print("Error: {}".format(err), file=sys.stderr)
         sys.exit(1)
     except KeyboardInterrupt:

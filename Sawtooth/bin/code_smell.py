@@ -18,9 +18,10 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'client'))
+sys.path.insert(0, os.path.join(os.path.dirname(
+    os.path.dirname(os.path.realpath(__file__))), 'families/code-smell'))
 
-from code_smell_cli import main_wrapper
+from client.code_smell_cli import main_wrapper #pylint: disable=import-error
 
 if __name__ == '__main__':
     main_wrapper()
