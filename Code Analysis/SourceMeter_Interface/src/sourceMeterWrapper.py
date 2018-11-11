@@ -56,7 +56,6 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_path):
     Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
 
 
-# TODO: Change column 'Comment-to-code ratio' to 'comment-to-code %'
 def consolidate_metrics(project_name, project_type, results_path):
     """Creates a 'metrics.csv' file containing a subset of Source Meter-generated metrics at both Class/Method levels.
         Clears Source Meter-generated files to free disk space, depending on the value of 'CLEAN_UP_SM_FILES'
