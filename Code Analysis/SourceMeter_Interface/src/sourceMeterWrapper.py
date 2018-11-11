@@ -5,7 +5,7 @@ import stat
 import sys
 from subprocess import Popen
 from pandas import read_csv, concat
-from constants import CLEAN_UP_SM_FILES, RESULTS_DIR, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
+from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
     CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR
 
 """Source Meter Wrapper.
@@ -20,18 +20,19 @@ Example:
 """
 
 
-def exec_metric_analysis(project_dir, project_name, project_type):
+def exec_metric_analysis(project_dir, project_name, project_type, results_path):
     """Executes Source Meter Analysis on the project at 'project_dir'.
 
         Args:
             project_dir (str): The path to the directory containing the project's source files.
             project_name (str):  The name of the project to be analyzed.
             project_type (str): The type of the project to be analyzed ("java"/"python").
+            results_path (str): The path where to store the results
         """
     run_cmd = [SOURCE_METER_PYTHON_PATH,
                "-projectBaseDir:" + project_dir,
                "-projectName:" + project_name,
-               "-resultsDir:" + RESULTS_DIR,
+               "-resultsDir:" + results_path,
                "-runMetricHunter:false",
                "-runFaultHunter:false",
                "-runDCF:false",
@@ -41,7 +42,7 @@ def exec_metric_analysis(project_dir, project_name, project_type):
         [SOURCE_METER_JAVA_PATH,
          "-projectBaseDir=" + project_dir,
          "-projectName=" + project_name,
-         "-resultsDir=" + RESULTS_DIR,
+         "-resultsDir=" + results_path,
          "-runAndroidHunter=false"
          "-runMetricHunter=false",
          "-runFaultHunter=false",
@@ -55,7 +56,8 @@ def exec_metric_analysis(project_dir, project_name, project_type):
     Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
 
 
-def consolidate_metrics(project_name, project_type):
+# TODO: Change column 'Comment-to-code ratio' to 'comment-to-code %'
+def consolidate_metrics(project_name, project_type, results_path):
     """Creates a 'metrics.csv' file containing a subset of Source Meter-generated metrics at both Class/Method levels.
         Clears Source Meter-generated files to free disk space, depending on the value of 'CLEAN_UP_SM_FILES'
         in 'constants.py'.
@@ -63,9 +65,10 @@ def consolidate_metrics(project_name, project_type):
         Args:
             project_name (str):  The name of the analyzed project.
             project_type (str): The type for the analyzed project ("java"/"python").
+            results_path (str): The path where to store the results
         """
     # Consolidate Source Meter Metrics
-    sc_results_dir = os.path.join(RESULTS_DIR, project_name, "java" if project_type == "java" else "python")
+    sc_results_dir = os.path.join(results_path, project_name, "java" if project_type == "java" else "python")
     latest_results_path = os.path.join(sc_results_dir, os.listdir(sc_results_dir)[0])
     class_file = os.path.join(latest_results_path, project_name + "-Class.csv")
     methods_file = os.path.join(latest_results_path, project_name + "-Method.csv")
@@ -103,7 +106,7 @@ def consolidate_metrics(project_name, project_type):
                                     'Path': 'Name of Owner Class',
                                     'NUMPAR': 'Number of Parameters'
                                     })
-    result.to_csv(os.path.join(RESULTS_DIR, project_name, "metrics.csv"), index=False)
+    result.to_csv(os.path.join(results_path, project_name, "metrics.csv"), index=False)
 
     # Clean up excess Source Meter files
     if CLEAN_UP_SM_FILES:
@@ -153,11 +156,12 @@ def get_project_type(directory):
     return "java" if len(java_files) and len(java_files) > len(python_files) else "python"
 
 
-def analyze_from_repo(url):
+def analyze_from_repo(url, results_path):
     """Clones GitHub project from 'url', executes Source Meter analysis, and consolidates metrics.
 
     Args:
          url (str): The URL of the GitHub repository containing the project to be analyzed.
+         results_path (str): The path where to store the results
     """
     url_tokens = url.split('/')
     proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
@@ -172,23 +176,26 @@ def analyze_from_repo(url):
     proj_dir = os.path.join(os.getcwd(), os.listdir(tmp_dir)[0])
     os.chdir(curr_dir)
     proj_type = get_project_type(proj_dir)
-    exec_metric_analysis(proj_dir, proj_name, proj_type)
-    consolidate_metrics(proj_name, proj_type)
+    exec_metric_analysis(proj_dir, proj_name, proj_type, results_path)
+    consolidate_metrics(proj_name, proj_type, results_path)
     clear_dir(tmp_dir)
+    return results_path
 
 
-def analyze_from_path(proj_dir):
+def analyze_from_path(proj_dir, results_path):
     """Executes Source Meter analysis and consolidates metrics, given the path to the project.
 
         Args:
              proj_dir (str): The directory of the project to be analyzed.
+             results_path (str): The path where to store the results
     """
     if proj_dir[-1] == '/':
         proj_dir = proj_dir[:-1]
     proj_name = get_project_name(proj_dir)
     proj_type = get_project_type(proj_dir)
-    exec_metric_analysis(proj_dir, proj_name, proj_type)
-    consolidate_metrics(proj_name, proj_type)
+    exec_metric_analysis(proj_dir, proj_name, proj_type, results_path)
+    consolidate_metrics(proj_name, proj_type, results_path)
+    return results_path
 
 
 def arg_type(arg):
@@ -201,11 +208,13 @@ def arg_type(arg):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print "Error: Please pass an argument with a URL or the path to the project that will be analyzed."
+    if len(sys.argv) != 3:
+        print "Error: Incorrect number of arguments. Usage should be:\n" \
+              "$ python sourceMeterWrapper.py <(GitHub Project Repo) | (Path to Project)> " \
+              "<Directory Where to Store Results>"
     elif arg_type(sys.argv[1]) is "url":
-        analyze_from_repo(sys.argv[1])
+        analyze_from_repo(sys.argv[1], sys.argv[1])
     elif os.path.isdir(sys.argv[1]):
-        analyze_from_path(sys.argv[1])
+        analyze_from_path(sys.argv[1], sys.argv[1])
     else:
         print "Error: The passed argument is not a url and it is not a valid directory."
