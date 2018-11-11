@@ -20,19 +20,19 @@ Example:
 """
 
 
-def exec_metric_analysis(project_dir, project_name, project_type, results_path):
+def exec_metric_analysis(project_dir, project_name, project_type, results_dir):
     """Executes Source Meter Analysis on the project at 'project_dir'.
 
         Args:
             project_dir (str): The path to the directory containing the project's source files.
             project_name (str):  The name of the project to be analyzed.
             project_type (str): The type of the project to be analyzed ("java"/"python").
-            results_path (str): The path where to store the results
+            results_dir (str): The path where to store the results
         """
     run_cmd = [SOURCE_METER_PYTHON_PATH,
                "-projectBaseDir:" + project_dir,
                "-projectName:" + project_name,
-               "-resultsDir:" + results_path,
+               "-resultsDir:" + results_dir,
                "-runMetricHunter:false",
                "-runFaultHunter:false",
                "-runDCF:false",
@@ -42,7 +42,7 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_path):
         [SOURCE_METER_JAVA_PATH,
          "-projectBaseDir=" + project_dir,
          "-projectName=" + project_name,
-         "-resultsDir=" + results_path,
+         "-resultsDir=" + results_dir,
          "-runAndroidHunter=false"
          "-runMetricHunter=false",
          "-runFaultHunter=false",
@@ -56,7 +56,7 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_path):
     Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
 
 
-def consolidate_metrics(project_name, project_type, results_path):
+def consolidate_metrics(project_name, project_type, results_dir):
     """Creates a 'metrics.csv' file containing a subset of Source Meter-generated metrics at both Class/Method levels.
         Clears Source Meter-generated files to free disk space, depending on the value of 'CLEAN_UP_SM_FILES'
         in 'constants.py'.
@@ -64,10 +64,10 @@ def consolidate_metrics(project_name, project_type, results_path):
         Args:
             project_name (str):  The name of the analyzed project.
             project_type (str): The type for the analyzed project ("java"/"python").
-            results_path (str): The path where to store the results
+            results_dir (str): The path where to store the results
         """
     # Consolidate Source Meter Metrics
-    sc_results_dir = os.path.join(results_path, project_name, "java" if project_type == "java" else "python")
+    sc_results_dir = os.path.join(results_dir, project_name, "java" if project_type == "java" else "python")
     latest_results_path = os.path.join(sc_results_dir, os.listdir(sc_results_dir)[0])
     class_file = os.path.join(latest_results_path, project_name + "-Class.csv")
     methods_file = os.path.join(latest_results_path, project_name + "-Method.csv")
@@ -107,11 +107,11 @@ def consolidate_metrics(project_name, project_type, results_path):
                                     'Path': 'Name of Owner Class',
                                     'NUMPAR': 'Number of Parameters'
                                     })
-    result.to_csv(os.path.join(results_path, project_name + ".csv"), index=False)
+    result.to_csv(os.path.join(results_dir, project_name + ".csv"), index=False)
 
     # Clean up excess Source Meter files
     if CLEAN_UP_SM_FILES:
-        clear_dir(os.path.join(results_path, project_name))
+        clear_dir(os.path.join(results_dir, project_name))
 
 
 def clear_dir(directory):
@@ -150,12 +150,12 @@ def get_project_type(directory):
     return "java" if len(java_files) and len(java_files) > len(python_files) else "python"
 
 
-def analyze_from_repo(url, results_path):
+def analyze_from_repo(url, results_dir):
     """Clones GitHub project from 'url', executes Source Meter analysis, and consolidates metrics.
 
     Args:
          url (str): The URL of the GitHub repository containing the project to be analyzed.
-         results_path (str): The path where to store the results
+         results_dir (str): The path where to store the results
     """
     url_tokens = url.split('/')
     proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
@@ -170,10 +170,10 @@ def analyze_from_repo(url, results_path):
     proj_dir = os.path.join(os.getcwd(), os.listdir(tmp_dir)[0])
     os.chdir(curr_dir)
     proj_type = get_project_type(proj_dir)
-    exec_metric_analysis(proj_dir, proj_name, proj_type, results_path)
-    consolidate_metrics(proj_name, proj_type, results_path)
+    exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
+    consolidate_metrics(proj_name, proj_type, results_dir)
     clear_dir(tmp_dir)
-    return results_path
+    return results_dir
 
 
 def analyze_from_path(proj_dir, results_path):
