@@ -105,7 +105,7 @@ class MainWindow(Gtk.Window):
         list_store.append(x)
 
     def open_project(self, widget):
-        from screen_2 import MainWindow
+        from screen_details import MainWindow
         win = MainWindow()
         #var1.show()
 

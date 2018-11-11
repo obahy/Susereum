@@ -40,7 +40,7 @@ class UserInput(Gtk.Window):
   def sign_in(self, widget):
     if(self.username.get_text()=='Admin' and self.password.get_text()=='P@ssw0rd'):
       print("login sucessful")
-      from screen_1 import MainWindow
+      from screen_add_project import MainWindow
       win = MainWindow()
       self.destroy()
 
