@@ -37,7 +37,7 @@ class HealthTransaction:
         variable (type):  transaction payload
     """
 
-    def __init__(self, txn_type, txn_id, data, state):
+    def __init__(self, txn_type, txn_id, data, state, txn_date=None):
         """
         Constructor, set up transaction attributes
 
@@ -51,6 +51,7 @@ class HealthTransaction:
         self.txn_id = txn_id
         self.data = data
         self.state = state
+        self._txn_date = txn_date
 
 class HealthState:
     """

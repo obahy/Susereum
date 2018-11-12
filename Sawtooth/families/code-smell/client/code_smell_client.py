@@ -110,6 +110,7 @@ class CodeSmellClient:
 
         return response
 
+        #add argument to send active proposal
     def list(self, type=None):
         """
         list all transactions.
@@ -211,6 +212,7 @@ class CodeSmellClient:
 
         return response
 
+    ###get notification from server accepted or rejected
     def _update_proposal(self, proposal, state):
         """
         update proposal, update state.
@@ -289,6 +291,7 @@ class CodeSmellClient:
             raise CodeSmellException("Unable to open configuration file {}".format(error))
 
     ## TODO: add logic to handle window period check.
+    ### the server will send proposal id, i will return total votes
     def _check_votes(self, proposal_id, flag=None):
         """
         review the votes of a proposal

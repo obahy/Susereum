@@ -22,7 +22,7 @@ the commit and calculate project's health.
 Raises:
     health exceptions: health family exceptions to display misuse of functions
 """
-
+import time
 import random
 import base64
 import hashlib
@@ -86,12 +86,16 @@ class HealthClient:
             github_user (str): github user id
         """
         ## TODO: talk to code analysis, and then publish the actual result
+        localtime = time.localtime(time.time())
+        txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+        txn_date = str(txn_time)
+
         response = self._send_health_txn(
             txn_type='health',
             txn_id=github_user,
             data='code_analysis_result',
             state='processed',
-            url=self._base_url)
+            txn_date=txn_date)
         return response
         ## TODO: add health to chain
         ## TODO: call suse family to process suse.
@@ -203,7 +207,8 @@ class HealthClient:
                          txn_id=None,
                          data=None,
                          state=None,
-                         url=None):
+                         url=None,
+                         txn_date=None):
         """
         serialize payload and create header transaction
 
@@ -214,7 +219,10 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        payload = ",".join([txn_type, txn_id, data, state, url]).encode()
+        if txn_type == 'commit':
+            payload = ",".join([txn_type, txn_id, data, state, url]).encode()
+        elif txn_type == 'health':
+            payload = ",".join([txn_type, txn_id, data, state, str(txn_date)]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
