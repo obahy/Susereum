@@ -6,9 +6,9 @@ echo "Please connecting url of project: new_chain_client.sh [url]"
 exit 1
 fi
 RESULT=$(curl $URL)
-port1=$(echo $RESULT | cut -d$' ' -f1)
-port2=$(echo $RESULT | cut -d$' ' -f2)
-port3=$(echo $RESULT | cut -d$' ' -f3)
+VALIDATOR_PORT_COM=$(echo $RESULT | cut -d$' ' -f1)
+VALIDATOR_PORT_NET=$(echo $RESULT | cut -d$' ' -f2)
+API_PORT=$(echo $RESULT | cut -d$' ' -f3)
 NAME=$(echo $RESULT | cut -d$' ' -f4)
 ID=$(echo $RESULT | cut -d$' ' -f5)
 SUSE=$(echo $RESULT | cut -d$' ' -f6-)
@@ -32,17 +32,35 @@ sawtooth keygen
 
 
 #TODO cp sawtooth families and stuff into hidden folder
-cp -r ~/Suserium/Susereum/Sawtooth/* .
-echo $SUSE >. suse
+cp -r ~/Desktop/Susereum/Sawtooth/* . #TODO make dynamic
+echo $SUSE > etc/.suse
+
+
+#write ports to .ports
+echo $VALIDATOR_PORT_COM > etc/.ports  #TODO make ports dynamic based on host's usage
+echo $VALIDATOR_PORT_NET >> etc/.ports
+echo $API_PORT >> etc/.ports
+
+
+#ports check if in VM - set endpoint
+if [[ $(virt-what) ]]; then
+ENDPOINT=$IP
+else
+tracepath 129.108.7.2 | grep "2:" | awk '{print $2}'
+fi
+
 
 #start services
 #validator
-sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET &
+sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET --peers tcp://129.108.7.1:$VALIDATOR_PORT_NET &
 #rest api
 sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
 #processors
-settings-tp -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
+settings-tp -v --connect tcp://localhost:$VALIDATOR_PORT_COM &
 #cd $SAWTOOTH_HOME/bin
-code_smell-tp -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
+python3 bin/codesmell-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
+python3 bin/health-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
+
+
 
 
