@@ -86,10 +86,11 @@ class HealthClient:
             github_user (str): github user id
         """
         ## TODO: talk to code analysis, and then publish the actual result
+	
         response = self._send_health_txn(
             txn_type='health',
             txn_id=github_user,
-            data='code_analysis_result',
+            data='code_analysis_result',#TODO replace result
             state='processed',
             url=self._base_url)
         return response
