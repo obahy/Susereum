@@ -25,6 +25,8 @@ cd $SAWTOOTH_HOME
 mkdir data
 mkdir logs
 mkdir keys
+mkdir results
+chmod +w results
 
 #make keys
 sawadm keygen

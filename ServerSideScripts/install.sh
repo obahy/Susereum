@@ -10,6 +10,7 @@ apt-get install python3
 apt-get install python2
 
 pip install pygobjecd
+pip install pandas
 
 #start services on reboot
 

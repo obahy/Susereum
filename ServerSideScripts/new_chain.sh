@@ -74,6 +74,8 @@ cd $SAWTOOTH_HOME
 mkdir data
 mkdir logs
 mkdir keys
+mkdir results
+chmod +w results
 cp -r ~/Suserium/Susereum/Sawtooth/* .
 cp $SUSE_PATH etc/.suse
 

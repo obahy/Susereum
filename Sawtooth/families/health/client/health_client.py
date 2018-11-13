@@ -28,6 +28,7 @@ import base64
 import hashlib
 import yaml
 import requests
+import subprocess
 
 from pprint import pprint
 from base64 import b64encode
@@ -86,11 +87,13 @@ class HealthClient:
             github_user (str): github user id
         """
         ## TODO: talk to code analysis, and then publish the actual result
-	
-        response = self._send_health_txn(
+	sawtooth_home = self._work_path + "/results"
+	save_path = subprocess.check_output(['python','/home/practicum2018/Suserium/Susereum/Code\ Analysis/SourceMeter_Interface/src/sourceMeterWrapper.py', github_url, sawtooth_home]).decode('utf-8')
+        save_path = save_path[save_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
+	response = self._send_health_txn(
             txn_type='health',
             txn_id=github_user,
-            data='code_analysis_result',#TODO replace result
+            data=save_path,#TODO replace result
             state='processed',
             url=self._base_url)
         return response
