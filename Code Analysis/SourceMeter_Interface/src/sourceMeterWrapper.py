@@ -177,7 +177,7 @@ def analyze_from_repo(url, results_dir):
     return results_dir
 
 
-def analyze_from_path(proj_dir, results_path):
+def analyze_from_path(proj_dir, results_dir):
     """Executes Source Meter analysis and consolidates metrics, given the path to the project.
 
         Args:
@@ -188,10 +188,10 @@ def analyze_from_path(proj_dir, results_path):
         proj_dir = proj_dir[:-1]
     proj_name = get_project_name(proj_dir)
     proj_type = get_project_type(proj_dir)
-    exec_metric_analysis(proj_dir, proj_name, proj_type, results_path)
-    consolidate_metrics(proj_name, proj_type, results_path)
-    print results_path
-    return results_path
+    exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
+    consolidate_metrics(proj_name, proj_type, results_dir)
+    print results_dir
+    return results_dir
 
 
 def arg_type(arg):
