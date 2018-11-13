@@ -106,7 +106,8 @@ class HealthTransactionHandler(TransactionHandler):
                 txn_type=health_payload.txn_type,
                 txn_id=health_payload.txn_id,
                 data=health_payload.data,
-                state=health_payload.state)
+                state=health_payload.state,
+                txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
             ## TODO: call suse family, pass new health and txn_id
 
