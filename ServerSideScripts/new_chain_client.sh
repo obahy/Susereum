@@ -34,7 +34,7 @@ sawadm keygen
 sawtooth keygen
 
 #TODO cp sawtooth families and stuff into hidden folder
-cp -r ~/Desktop/Susereum/Sawtooth/* . #TODO make dynamic
+cp -r $REPO_PATH/Sawtooth/* . #TODO make dynamic
 echo $SUSE > etc/.suse
 
 
