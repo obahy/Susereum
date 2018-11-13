@@ -1,5 +1,6 @@
 #!/bin/bash
 URL=$1
+REPO_PATH=$2
 if [ -z "$URL" ] 
 then
 echo "Please connecting url of project: new_chain_client.sh [url]"
@@ -32,9 +33,8 @@ chmod +w results
 sawadm keygen
 sawtooth keygen
 
-
 #TODO cp sawtooth families and stuff into hidden folder
-cp -r ~/Desktop/Susereum/Sawtooth/* . #TODO make dynamic
+cp -r $REPO_PATH/Sawtooth/* . #TODO make dynamic
 echo $SUSE > etc/.suse
 
 
@@ -43,6 +43,8 @@ echo $VALIDATOR_PORT_COM > etc/.ports  #TODO make ports dynamic based on host's 
 echo $VALIDATOR_PORT_NET >> etc/.ports
 echo $API_PORT >> etc/.ports
 
+#repo path
+echo $REPO_PATH > etc/.repo
 
 #ports check if in VM - set endpoint
 if [[ $(virt-what) ]]; then

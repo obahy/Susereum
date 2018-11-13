@@ -38,7 +38,12 @@ class HealthPayload(object):
     def __init__(self, payload):
         #The payload is csv utf-8 encoded string
         try:
-            txn_type, txn_id, data, state, url = payload.decode().split(",")
+            if payload.decode().split(",")[0] == "commit":
+                txn_type, txn_id, data, state, url = payload.decode().split(",")
+                txn_date = None
+            else:
+                txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
+                url = None
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
 
@@ -58,6 +63,7 @@ class HealthPayload(object):
         self._data = data
         self._state = state
         self._url = url
+        self._txn_date = txn_date
 
     @staticmethod
     def from_bytes(payload):
@@ -118,3 +124,13 @@ class HealthPayload(object):
             str: url
         """
         return self._url
+
+    @property
+    def txn_date(self):
+        """
+        return  date
+
+        Returns:
+            str: date
+        """
+        return self._txn_date
