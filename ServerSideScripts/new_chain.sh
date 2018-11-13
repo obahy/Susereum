@@ -62,7 +62,6 @@ IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\
 
 
 #map repo id to ports
-
 mkdir $(dirname "$0")/map
 cd $(dirname "$0")/map
 echo $VALIDATOR_PORT_COM > $ID
@@ -75,6 +74,8 @@ cd $SAWTOOTH_HOME
 mkdir data
 mkdir logs
 mkdir keys
+mkdir results
+chmod +w results
 cp -r ~/Suserium/Susereum/Sawtooth/* .
 cp $SUSE_PATH etc/.suse
 

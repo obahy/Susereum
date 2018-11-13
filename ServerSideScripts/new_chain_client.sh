@@ -25,6 +25,8 @@ cd $SAWTOOTH_HOME
 mkdir data
 mkdir logs
 mkdir keys
+mkdir results
+chmod +w results
 
 #make keys
 sawadm keygen
@@ -46,13 +48,13 @@ echo $API_PORT >> etc/.ports
 if [[ $(virt-what) ]]; then
 ENDPOINT=$IP
 else
-tracepath 129.108.7.2 | grep "2:" | awk '{print $2}'
+ENDPOINT=$(tracepath 129.108.7.2 | grep "2:" | awk '{print $2}')
 fi
 
 
 #start services
 #validator
-sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET --peers tcp://129.108.7.1:$VALIDATOR_PORT_NET &
+sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$ENDPOINT:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET & #--peers tcp://129.108.7.1:$VALIDATOR_PORT_NET &
 #rest api
 sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
 #processors
