@@ -19,7 +19,7 @@ import hashlib
 
 HEALTH_NAMESPACE = hashlib.sha512('health'.encode('utf-8')).hexdigest()[0:6]
 
-def _make_codeSmell_address(transaction_id):
+def _make_health_address(transaction_id):
     """
     creates and returns a transaction address based on the transaction id and
     the family namespace
@@ -27,7 +27,6 @@ def _make_codeSmell_address(transaction_id):
     Returns:
         str: transaction address
     """
-
     return HEALTH_NAMESPACE + hashlib.sha512(transaction_id.encode('utf-8')).hexdigest()[:64]
 
 class HealthTransaction:
@@ -38,7 +37,7 @@ class HealthTransaction:
         variable (type):  transaction payload
     """
 
-    def __init__(self, txn_type, txn_id, data, state, date=None):
+    def __init__(self, txn_type, txn_id, data, state, txn_date=None):
         """
         Constructor, set up transaction attributes
 
@@ -52,7 +51,7 @@ class HealthTransaction:
         self.txn_id = txn_id
         self.data = data
         self.state = state
-        self.date = date
+        self._txn_date = txn_date
 
 class HealthState:
     """
@@ -94,12 +93,11 @@ class HealthState:
             transaction_id (str): id to identify the transaction
             transactions (dict):  dictionary of transactions
         """
-        address = _make_codeSmell_address(txn_id)
+        address = _make_health_address(txn_id)
 
         state_data = self._serialize(transactions)
-        self._address_cache[address] = state_data
 
-        return ( self._context.set_state({address: state_data}, timeout=self.TIMEOUT) )
+        self._context.set_state({address: state_data}, timeout=self.TIMEOUT)
 
     def _serialize(self, transactions):
         """Takes a dict of objects and serializes them into bytes.

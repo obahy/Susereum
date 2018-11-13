@@ -102,6 +102,16 @@ def add_list_parser(subparser, parent_parser):
         parents=[parent_parser])
 
     parser.add_argument(
+        '--type',
+        type=str,
+        help='Display specific type of transaction')
+
+    parser.add_argument(
+        '--limit',
+        type=str,
+        help='limit number of transaction to retrive')
+
+    parser.add_argument(
         '--url',
         type=str,
         help='specify URL of REST API')
@@ -135,6 +145,11 @@ def add_commit_parser(subparser, parent_parser):
         '--giturl',
         type=str,
         help='specify commit URL')
+
+    parser.add_argument(
+        '--gituser',
+        type=str,
+        help='specify user github ID')
 
     parser.add_argument(
         '--url',
@@ -210,12 +225,24 @@ def do_list(args):
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transactions = client.list()
+    transactions = client.list(txn_type=args.type, limit=args.limit)
 
     if len(transactions) == 0:
         raise HealthException("No transactions found")
     else:
         print (transactions)
+
+def process_health(github_user, github_url, url):
+    """
+    Process commit, send url to code analysis
+    """
+    keyfile = _get_keyfile()
+    client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
+
+    response = client.code_analysis(github_url, github_user)
+
+    print("Response: {}".format(response))
+
 
 def do_commit(args):
     """
@@ -226,12 +253,14 @@ def do_commit(args):
     """
     if args.giturl is None:
         raise HealthException("Missing Commit URL")
+    if args.gituser is None:
+        raise HealthException("Missing User ID")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.commit(commit_url=args.giturl)
+    response = client.commit(commit_url=args.giturl, github_id=args.gituser)
 
     print("Response: {}".format(response))
 
@@ -248,7 +277,7 @@ def _get_url(args):
     """
     return DEFAULT_URL if args.url is None else args.url
 
-def _get_keyfile(args):
+def _get_keyfile(args=None):
     """
     Retrives user's private key directory.
     Each transaction should be sign by the user who create it.
@@ -259,8 +288,10 @@ def _get_keyfile(args):
     Returns:
         str: path of user's private key
     """
-
-    username = getpass.getuser() if args.username is None else args.username
+    if args is None:
+        username = getpass.getuser()
+    else:
+        username = getpass.getuser() if args.username is None else args.username
     home = os.path.expanduser("~")
     key_dir = os.path.join(home, ".sawtooth", "keys")
 

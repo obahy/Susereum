@@ -1,2 +1,2 @@
 #!/bin/bash
-ps -lah | grep python | grep -v git |awk '{print $3}' | xargs kill -9
+ps aux | grep python | grep -v git |awk '{print $2}' | xargs kill -9
