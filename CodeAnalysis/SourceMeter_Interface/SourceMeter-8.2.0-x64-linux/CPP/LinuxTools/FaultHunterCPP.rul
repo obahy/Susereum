@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rul xmlns = "http://www.frontendart.com" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://www.frontendart.com rul.xsd">
+  <ToolDescription>
+    <Configuration name = "Default">
+      <ToolDescriptionItem name = "ID">FaultHunterCPP</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+  <Configurations/>
+  <Views/>
+  <Edges/>
+  <Metric id = "Exception Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Exception Rules</DisplayName>
+        <Description>The Exception Ruleset contains rules about throwing and catching exceptions.</Description>
+        <HelpText>The Exception Ruleset contains rules about throwing and catching exceptions.</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_CEBV">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Exception Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Catching Non Primitive Type Exceptions By Value</DisplayName>
+        <Description>Reference should be used for catching a non primitive type exception.</Description>
+        <HelpText>&lt;p&gt;Reference should be used for catching a non primitive type exception.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Reference should be used for catching a non primitive type exception.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_HP">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Readability and Consistency Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Hidden Parameter</DisplayName>
+        <Description>Parameter hidden by a local variable.</Description>
+        <HelpText>&lt;p&gt;Local variables can hide the parameters of the function, because the local variables are defined in the closest scope. It causes those parameters unreachable.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Local variable &quot;%&quot; is hiding the function parameter.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_IL">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Object Orientedness Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Member Init Order</DisplayName>
+        <Description>The evaluation order in the constructor initialization list does not match the order they listed. It may cause unexpected effects like use of uninitialized class members.</Description>
+        <HelpText>&lt;p&gt;The evaluation order in the constructor initialization list does not match the order they listed. It may cause unexpected effects like use of uninitialized class members.&lt;/p&gt;&#x0A;&lt;p&gt;For example the member ‘a’ will be uninitialized when passed to the ‘Bar’ constructor, because the initialization order is the following: ‘Bar’ constructor call, ‘a’, ‘b’.&lt;/p&gt;&#x0A;&lt;pre class=&quot;sourceCode cpp&quot;&gt;&lt;code class=&quot;sourceCode cpp&quot;&gt;&lt;span class=&quot;kw&quot;&gt;class&lt;/span&gt; Foo : &lt;span class=&quot;kw&quot;&gt;public&lt;/span&gt; Bar {&#x0A;  &lt;span class=&quot;dt&quot;&gt;int&lt;/span&gt; a;&#x0A;  &lt;span class=&quot;dt&quot;&gt;int&lt;/span&gt; b;&#x0A;&lt;span class=&quot;kw&quot;&gt;public&lt;/span&gt;:&#x0A;  Foo (&lt;span class=&quot;dt&quot;&gt;int&lt;/span&gt; param) : b(param), a(b), Bar(a) {&#x0A;    ...&#x0A;  }&#x0A;}&lt;/code&gt;&lt;/pre&gt;&#x0A;</HelpText>
+        <WarningText>The evaluation order in the constructor initialization list does not match the order they listed. It may cause unexpected effects like use of uninitialized class members.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_MVDUD">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Object Orientedness Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Missing Virtual Destructor Using Delete</DisplayName>
+        <Description>Class of the pointer type does not have virtual destructor, but one of its accessible descendant has destructor.</Description>
+        <HelpText>&lt;p&gt;When using pointers, make sure that the class of the pointer type has virtual destructor if any of its accessible descendant has destructor.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Class of the pointer type &quot;%&quot; does not have virtual destructor, but the following descendants have destructor: &quot;%&quot;.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_MVDUN">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Object Orientedness Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Missing Virtual Destructor Using New</DisplayName>
+        <Description>Class of the created object or one of its base class has destructor, but the class of the pointer type does not have virtual destructor!</Description>
+        <HelpText>&lt;p&gt;When using pointers, make sure that the class of the pointer type has virtual destructor if any of its descendant has destructor.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Class of the created object &quot;%&quot; or one of its base class has destructor, but the class of the pointer type &quot;%&quot; does not have virtual destructor!</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_NDEO">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Readability and Consistency Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Not Defined Evaluation Order</DisplayName>
+        <Description>The order that operands and function parameters are evaluated is unspecified behavior.</Description>
+        <HelpText>&lt;p&gt;The order that operands and function parameters are evaluated is unspecified behavior.&lt;/p&gt;&#x0A;&lt;p&gt;For example in the following function call, the value of the first and second arguments could be (4, 5) or (5, 4).&lt;/p&gt;&#x0A;&lt;pre class=&quot;sourceCode cpp&quot;&gt;&lt;code class=&quot;sourceCode cpp&quot;&gt;&lt;span class=&quot;dt&quot;&gt;int&lt;/span&gt; i = &lt;span class=&quot;dv&quot;&gt;3&lt;/span&gt;;&#x0A;foo(++i, ++i);&lt;/code&gt;&lt;/pre&gt;&#x0A;</HelpText>
+        <WarningText>Unspecified behavior. The evaluation order of the operands and parameters is not defined. It may cause unexpected side effects.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_NPIFCT">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Exception Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Not Public Inheritance From Catch Type</DisplayName>
+        <Description>Not publicly derived class from a type that appears in a catch clause. This class cannot be caught in the catch clause as that base class, because no public conversion exists.</Description>
+        <HelpText>&lt;p&gt;Not publicly derived class from a type that appears in a catch clause. This class cannot be caught in the catch clause as that base class, because no public conversion exists.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Not publicly derived class from a type that appears in a catch clause!</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_OETS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Suspicious Construct Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Check For Self Assignment In Assignment Operator</DisplayName>
+        <Description>Missing check for self assignment in assignment operator</Description>
+        <HelpText>&lt;p&gt;Missing check for self assignment in assignment operator&lt;/p&gt;&#x0A;&lt;p&gt;For example in the following operator the ‘rhs._data’ will be no longer a valid object if it is a self assignment.&lt;/p&gt;&#x0A;&lt;pre class=&quot;sourceCode cpp&quot;&gt;&lt;code class=&quot;sourceCode cpp&quot;&gt;Foo&amp;amp; &lt;span class=&quot;kw&quot;&gt;operator&lt;/span&gt;= (&lt;span class=&quot;dt&quot;&gt;const&lt;/span&gt; Foo&amp;amp; rhs) {&#x0A;  &lt;span class=&quot;kw&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;-&amp;gt;_data;&#x0A;  &lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;-&amp;gt;_data = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; Bar(*rhs._data);&#x0A;  &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; *&lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;;&#x0A;}&lt;/code&gt;&lt;/pre&gt;&#x0A;&lt;p&gt;A simple solution to this problem:&lt;/p&gt;&#x0A;&lt;pre class=&quot;sourceCode cpp&quot;&gt;&lt;code class=&quot;sourceCode cpp&quot;&gt;Foo&amp;amp; &lt;span class=&quot;kw&quot;&gt;operator&lt;/span&gt;= (&lt;span class=&quot;dt&quot;&gt;const&lt;/span&gt; Foo&amp;amp; rhs) {&#x0A;  &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt; == &amp;amp;rhs) &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; *&lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;;&#x0A;  &lt;span class=&quot;kw&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;-&amp;gt;_data;&#x0A;  &lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;-&amp;gt;_data = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; Bar(*rhs._data);&#x0A;  &lt;span class=&quot;kw&quot;&gt;return&lt;/span&gt; *&lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;;&#x0A;}&lt;/code&gt;&lt;/pre&gt;&#x0A;</HelpText>
+        <WarningText>Missing check for self assignment in assignment operator.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_SA">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Suspicious Construct Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Self Assignment</DisplayName>
+        <Description>Avoid assign an object to itself.</Description>
+        <HelpText>Avoid assign an object to itself.</HelpText>
+        <WarningText>Avoid assign an object to itself.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_SDANSIH">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Performance Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Static Data At Namespace Scope In Header</DisplayName>
+        <Description>Static data at namespace scope in header files generates one instance inside each compilation unit. It cause bigger executables.</Description>
+        <HelpText>&lt;p&gt;Static data at namespace scope in header files generates one instance inside each compilation unit. It cause bigger executables.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Avoid use of static data at namespace scope in header files!</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_SENIP">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Exception Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Std::exception Not Inherited Publicly</DisplayName>
+        <Description>Not publicly derived class from std::exception cannot be caught in the catch clause as std::exception, because no public conversion exists.</Description>
+        <HelpText>&lt;p&gt;Not publicly derived class from std::exception cannot be caught in the catch clause as std::exception, because no public conversion exists.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>Not publicly derived from std::exception!</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_UDINIH">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Readability and Consistency Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Using Directive In Namespace In Header</DisplayName>
+        <Description>&quot;using namespace&quot; should not occour at namespace level in a header.</Description>
+        <HelpText>&lt;p&gt;“using namespace” should not occour at namespace level in a header.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>&quot;using namespace&quot; should not occour at namespace level in a header.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "FHCPP_ULTZ">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Simple Type Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Unsigned Compare Less Than Zero</DisplayName>
+        <Description>Pointless comparison of unsigned integer against zero.</Description>
+        <HelpText>&lt;p&gt;Pointless comparison of unsigned integer against zero.&lt;/p&gt;&#x0A;</HelpText>
+        <WarningText>%s</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "Object Orientedness Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Object Orientedness Rules</DisplayName>
+        <Description>The Object Orientedness Ruleset contains rules that find various mistakes about classes and other object orientedness related constructs.</Description>
+        <HelpText>The Object Orientedness Ruleset contains rules that find various mistakes about classes and other object orientedness related constructs.</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "Performance Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Performance Rules</DisplayName>
+        <Description>The Performance Ruleset contains rules that find various performance issues.</Description>
+        <HelpText>The Performance Ruleset contains rules that find various performance issues.</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "Readability and Consistency Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Readability and Consistency Rules</DisplayName>
+        <Description>The Readability and Consistency Ruleset contains rules about constructs that reduce the code readability.</Description>
+        <HelpText>The Readability and Consistency Ruleset contains rules about constructs that reduce the code readability.</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "Simple Type Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Simple Type Rules</DisplayName>
+        <Description>The Simple Type Ruleset contains rules that find simple type related issues.</Description>
+        <HelpText>The Simple Type Ruleset contains rules that find simple type related issues.</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "Suspicious Construct Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Suspicious Construct Rules</DisplayName>
+        <Description>The Suspicious Construct Ruleset contains rules about constructs that are redundant or could lead to unexpected results.</Description>
+        <HelpText>The Suspicious Construct Ruleset contains rules about constructs that are redundant or could lead to unexpected results.</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+</Rul>

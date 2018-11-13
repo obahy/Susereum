@@ -1,0 +1,1867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rul>
+
+  <ToolDescription>
+    <Configuration name = "Default">
+      <ToolDescriptionItem name = "ID">FaultHunterRPG</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+
+  <Configurations>
+    <config name = "Default"/>
+  </Configurations>
+  
+  <Metric id = "FHRPG_UV">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Unnecessary and Unused Code Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Unused Variable</DisplayName>
+        <Description>
+        Variables are declared in the source code, but never used. Unused variables are unnecessary in the program. By removing such variables, the size of the code will decrease and the readability will improve as well. In RPG environment we consider the following source code elements as variables:
+            •    Data Structrue 
+            •    Data Structure Subfield 
+            •    Standalone Field 
+            •    Named Constant 
+            •    Variables defined by a Define 
+            •    Arrays and Tables defined in Extension Specification
+        <!--When using a Data Structure Subfield, the containing Data Structure is considered as a used element even though the Data Structure itself is not referenced from the code.
+        Reverse case is not applied.-->
+</Description>
+        <HelpText>Variables are declared in the source code, but never used. Unused variables are unnecessary in the program. By removing such variables, the size of the code will decrease and the readability will improve as well. In RPG environment we consider the following source code elements as variables:
+            •    Data Structrue 
+            •    Data Structure Subfield 
+            •    Standalone Field 
+            •    Named Constant 
+            •    Variables defined by a Define 
+            •    Arrays and Tables defined in Extension Specification
+        <!--When using a Data Structure Subfield, the containing Data Structure is considered as a used element even though the Data Structure itself is not referenced from the code.
+        Reverse case is not applied.--></HelpText>
+        <WarningText>Variable % declared but never used.</WarningText>
+      </Language>
+      
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A változót a program nem használja.</DisplayName>
+        <Description>A programban deklaráltak olyan változókat, melyeket a forráskód más pontjain nem használnak fel. A nem használt változók feleslegesen szerepelnek a forráskódban. Eltávolításukkal kisebb lesz a forráskód mérete is, továbbá javul a minőség is.
+        RPG források esetében váltózónak tekintjük az alábbi elemeket:
+            •    Data Structrue elemként definiált adatstruktúrák
+            •    Data Structure Subfield elemek
+            •    Standalone Field elemek
+            •    Named Constant elemek
+            •    Define által létrehozott változók
+            •    Extension Spec elemben definiált tömbök és táblák
+        <!--Adatstruktúra mezőinek használatakor magát az adatstruktúrát is használjuk, így abban az esetben, ha magára az adatstruktúrára nem történt hivatkozás viszont valamelyik mezőjét használja a forráskód más pontja, akkor az adatstruktúra is használtnak minősül. Ugyanakkor a kapcsolat fordítottja nem áll fent.-->
+</Description>
+        <HelpText>A programban deklaráltak olyan változókat, melyeket a forráskód más pontjain nem használnak fel. A nem használt változók feleslegesen szerepelnek a forráskódban. Eltávolításukkal kisebb lesz a forráskód mérete is, továbbá javul az olvashatóság is.
+        RPG források esetében váltózónak tekintjük az alábbi elemeket:
+            •    Data Structrue elemként definiált adatstruktúrák
+            •    Data Structure Subfield elemek
+            •    Standalone Field elemek
+            •    Named Constant elemek
+            •    Define által létrehozott változók
+            •    Extension Spec elemben definiált tömbök és táblák
+        <!--Adatstruktúra mezőinek használatakor magát az adatstruktúrát is használjuk, így abban az esetben, ha magára az adatstruktúrára nem történt hivatkozás viszont valamelyik mezőjét használja a forráskód más pontja, akkor az adatstruktúra is használtnak minősül. Ugyanakkor a kapcsolat fordítottja nem áll fent.--></HelpText>
+        <WarningText>A % valtozot a program nem hasznalja, csak deklaralta.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_VUIUS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Unnecessary and Unused Code Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Variable Only Referenced From An Unused Subroutine</DisplayName>
+        <Description>
+            The source code contains variables that are only referenced from a subroutine. However, the appropriate subroutine is never called from the program, so the variable’s value is never changed. Consider the elimination of the affected variable and subroutine. Variables only used in the initialization subroutine (*INZSR) are not cause a rule violation.
+        </Description>
+        <HelpText>
+            The source code contains variables that are only referenced from a subroutine. However, the appropriate subroutine is never called from the program, so the variable’s value is never changed. Consider the elimination of the affected variable and subroutine. Variables only used in the initialization subroutine (*INZSR) are not cause a rule violation.
+        </HelpText>
+        <WarningText>Variable % only referenced from unused subroutine(s).</WarningText>
+      </Language>
+      
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A változót csak nem hívott szubrutin használja</DisplayName>
+        <Description>
+            A programban deklaráltak olyan változót, melyet csak egy vagy több nem használt szubrutin módosítani, viszont a szubrutin nincs meghívva, így a változó értéke sem módosul. Ilyen esetben érdemes felülvizsgálni a szubrutin és a változó létjogosultságát. A nem használt szubrutinok halmazába nem számítódik bele az inicializáló szubrutin, vagyis kizárólag a *INZSR szubrutinon belüli ilyen változók nem idéznek elő szabálysértést.
+        </Description>
+        <HelpText>
+            A programban deklaráltak olyan változót, melyet csak egy vagy több nem használt szubrutin módosítani, viszont a szubrutin nincs meghívva, így a változó értéke sem módosul. Ilyen esetben érdemes felülvizsgálni a szubrutin és a változó létjogosultságát. A nem használt szubrutinok halmazába nem számítódik bele az inicializáló szubrutin, vagyis kizárólag a *INZSR szubrutinon belüli ilyen változók nem idéznek elő szabálysértést.
+        </HelpText>
+        <WarningText>A % valtozot csak nem hasznalt szubrutin(ok) hasznalja/hasznaljak.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_US">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Unnecessary and Unused Code Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Subroutine Is Never Called</DisplayName>
+        <Description>
+            The source code contains a subroutine that is never called. By eliminating unused subroutines the size of the code can be decreased, and the readability can be improved. The initialization subroutine is not taken into consideration since it is called implicitly.
+        </Description>
+        <HelpText>
+            The source code contains a subroutine that is never called. By eliminating unused subroutines the size of the code can be decreased, and the readability can be improved. The initialization subroutine is not taken into consideration since it is called implicitly.
+        </HelpText>
+        <WarningText>Subroutine % is never called.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A szubrutint kódból nem hívják meg</DisplayName>
+        <Description>
+            A programban található olyan szubrutin, melyet a kód más részeiből nem hívtak meg, azaz sosem használták fel a szubrutint. A nem használt szubrutinok létjogosultságát ellenőrizni kell. Amennyiben valóban nem szükséges a szubrutin használata, akkor javasolt az irreleváns kódrész törlése, ezzel csökkenthető a kód mérete és javul az olvashatóság is. A nem használt szubrutinok halmazába nem tartozik bele az inicializáló szubrutin (*INZSR), mivel automatikus futtatású.
+        </Description>
+        <HelpText>
+            A programban található olyan szubrutin, melyet a kód más részeiből nem hívtak meg, azaz sosem használták fel a szubrutint. A nem használt szubrutinok létjogosultságát ellenőrizni kell. Amennyiben valóban nem szükséges a szubrutin használata, akkor javasolt az irreleváns kódrész törlése, ezzel csökkenthető a kód mérete és javul az olvashatóság is. A nem használt szubrutinok halmazába nem tartozik bele az inicializáló szubrutin (*INZSR), mivel automatikus futtatású.
+        </HelpText>
+        <WarningText>A % nevu szubrutint kodbol nem hivjak meg.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_FPN">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>File Uses Prefixed Name</DisplayName>
+        <Description>
+            Externally defined files declared in File Specification can use names with a given prefix. By specifying a prefix on a file, the contained fields can be referenced by the appropriate prefix and the desired field name. Using prefixed names in this way improves ubderstandability. However, prefix keyword supports the replacement of the beginning of the original names with the prefix name which is undesired because it decreases readability and debug processes can also be longer. Prefix keyword can only be used in RPG IV.
+        </Description>
+        <HelpText>
+            Externally defined files declared in File Specification can use names with a given prefix. By specifying a prefix on a file, the contained fields can be referenced by the appropriate prefix and the desired field name. Using prefixed names in this way improves ubderstandability. However, prefix keyword supports the replacement of the beginning of the original names with the prefix name which is undesired because it decreases readability and debug processes can also be longer. Prefix keyword can only be used in RPG IV.
+        </HelpText>
+        <WarningText>In File Description Specification, a prefixed name is given with a replace: %</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az állomány prefixes nevet használ</DisplayName>
+        <Description>A használni kívánt állományok megadásakor lehetőség van egy prefixes név bevezetésére. A külsőleg definiált fájlok megadásakor (File Description Specification) lehetőség van megadni egy prefixet, melynek használatával a fájlból származó mezők nevei a megadott prefixszel hivatkozhatóak. A prefix használata ilyen formában segíti az átláthatóságot, ugyanakkor lehetőség van arra is, hogy az eredeti nevekben adott számú karaktert le is cseréljünk a prefixre. Ebben az esetben viszont az olvashatóság és nyomon-követhetőség nagymértékben romlik, így ez az eset kerülendő. A prefix használata csak ILE RPG forrásokban megengedett, így a szabály csak ebben a környezetben kerül értelmezésre.
+        </Description>
+        <HelpText>Az adott állomány bevezetésénél prefixes nevet definiáltak.</HelpText>
+        <WarningText>A File Description Specifikacioban az allomany prefixes nevet hasznal, melyben replace is talalhato. %</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_BNE">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+            <GroupMember>Unnecessary and Unused Code Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Conditional Expression Is Always False</DisplayName>
+        <Description>
+            RPG contains many statements for specifying the control flow of a program upon a condition. If the given conditional expression only contains character literals, numeric literals and named constants we can evaluate these expressions and check whether the condition returns false. In this cases the conditional branch is unused and unnecessary, so the unrelevant branch can be removed from the conditional statement.
+        </Description>
+        <HelpText>RPG contains many statements for specifying the control flow of a program upon a condition. If the given conditional expression only contains character literals, numeric literals and named constants we can evaluate these expressions and check whether the condition returns false. In this cases the conditional branch is unused and unnecessary, so the unrelevant branch can be removed from the conditional statement.</HelpText>
+        <WarningText>Conditional expression is always false.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Soha nem teljesülő vezérlési ág</DisplayName>
+        <Description>Az RPG feltételes utasításainak vezérlési ágai egy vagy több feltétel teljesülése esetén futnak le. Amennyiben a feltételek szöveges, vagy numerikus literálokat, illetve konstansokat tartalmaznak, kiértékelhetjük a feltételeket, és amennyiben a kiértékelés eredménye hamis, tudjuk, hogy ezen vezérlési ágak soha nem fognak lefutni (mivel konstansokról van szó, az értékek futás időben nem változhatnak meg). Az ilyen esetek programozói hibára, illetve időlegesen kikapcsolt, majd később a forráskódban maradt, fölösleges vezérlési ágakra utalhatnak.
+        </Description>
+        <HelpText>Az adott feltételes vezérlési szerkezet valamely vezérlési ága soha nem teljesül</HelpText>
+        <WarningText>Soha nem teljesulo vezerlesi ag.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_ULCF">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Documentation Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Uncommented Long Code Fragment</DisplayName>
+        <Description>
+            A massive coherent code block contains no comment lines. Code blocks with high LLOC metric are subservient to have explanatory comments for the sake of easier comprehension. Modification of this code becomes easier and the source code will have a better maintainability index as well. The rule is applied for RPG III, RPG IV, and also for free-form blocks.
+        </Description>
+        <HelpText>
+            A massive coherent code block contains no comment lines. Code blocks with high LLOC metric are subservient to have explanatory comments for the sake of easier comprehension. Modification of this code becomes easier and the source code will have a better maintainability index as well. The rule is applied for RPG III, RPG IV, and also for free-form blocks.
+        </HelpText>
+        <WarningText>There were no comment for % lines. At least one comment line is expected per % lines of code.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Túl hosszú kódrész kommentezés nélkül</DisplayName>
+        <Description>
+            Túl sok egymást követő utasítás szerepel a kódrész kommentezése nélkül. A nagyobb terjedelmű, komplexebb utasítássorozatokat célszerű kommentekkel ellátni a könnyebb érthetőség szempontjából. Ezzel elősegíthetjük a forráskódok jobb karbantarthatóságát, könnyebb lesz a későbbi módosítások végrehajtása is, mivel segítő szöveg részletezi az adott kódrészt. A szabály érvényes RPG III illetve ILE RPG környezetben is, továbbá ILE RPG esetén a free-form blokkokra is.
+        </Description>
+        <HelpText>
+            Túl sok egymást követő utasítás szerepel a kódrész kommentezése nélkül. A nagyobb terjedelmű, komplexebb utasítássorozatokat célszerű kommentekkel ellátni a könnyebb érthetőség szempontjából. Ezzel elősegíthetjük a forráskódok jobb karbantarthatóságát, könnyebb lesz a későbbi módosítások végrehajtása is, mivel segítő szöveg részletezi az adott kódrészt. A szabály érvényes RPG III illetve ILE RPG környezetben is, továbbá ILE RPG esetén a free-form blokkokra is.
+        </HelpText>
+        <WarningText>% sor ota nem szerepelt komment a kodban. Legalabb % soronkent egy sor komment az elvart.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "MinLinesBetweenComments" editable="true">40</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_TMS">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Size Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Subroutine Has Too Many Statements</DisplayName>
+        <Description>
+            A specific subroutine has too many statements. Maintaining a large, complex subroutine can be difficult. Try to split complex subroutines into smaller ones with simpler functionalities. Splitting results in less complex program elements with easy to understand logic that helps comprehension and maintainability.
+        </Description>
+        <HelpText>
+            A specific subroutine has too many statements. Maintaining a large, complex subroutine can be difficult. Try to split complex subroutines into smaller ones with simpler functionalities. Splitting results in less complex program elements with easy to understand logic that helps comprehension and maintainability.
+        </HelpText>
+        <WarningText>Subroutine named % has too many statements (%).</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A szubrutin túl sok utasítást tartalmaz</DisplayName>
+        <Description>
+            Az adott RPG forráskódban egy egzakt szubrutin túl sok utasítást tartalmaz. A hosszú, komplex szubrutinok karbantartása, későbbi módosítása igen bonyolulttá válhat. Túl hosszú szubrutinok esetében érdemes felülvizsgálni azoknak a törzsét, illetve a funkcionalitását. Sok esetben felfedezhetőek kisebb, különválasztható részek a szubrutinon belül, így azok átcsoportosításával egyszerűbb logikájú alkotóelemeket nyerhetünk, mely segíti a komplexebb logika megértését.
+        </Description>
+        <HelpText>
+            Az adott RPG forráskódban egy egzakt szubrutin túl sok utasítást tartalmaz. A hosszú, komplex szubrutinok karbantartása, későbbi módosítása igen bonyolulttá válhat. Túl hosszú szubrutinok esetében érdemes felülvizsgálni azoknak a törzsét, illetve a funkcionalitását. Sok esetben felfedezhetőek kisebb, különválasztható részek a szubrutinon belül, így azok átcsoportosításával egyszerűbb logikájú alkotóelemeket nyerhetünk, mely segíti a komplexebb logika megértését.
+        </HelpText>
+        <WarningText>A % szubrutin tul sok utasitast tartalmaz (%).</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "NOS_Min" editable = "true">40</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_UCO">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Documentation Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Uncommented Conditional Operation</DisplayName>
+        <Description>
+            No comment found before the conditional program flow control operation. To help intelligibility an explanatory comment should be placed before the conditional operation. In this way in the later stages maintainance effort can be reduced. The desired modification will require less time to be completed as well.
+        </Description>
+        <HelpText>
+            No comment found before the conditional program flow control operation. To help intelligibility an explanatory comment should be placed before the conditional operation. In this way in the later stages maintainance effort can be reduced. The desired modification will require less time to be completed as well.
+        </HelpText>
+        <WarningText>Before the % conditional statement no comment can be found.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A feltételes vezérlési szerkezet előtt nem szerepel komment</DisplayName>
+        <Description>
+            A feltételes vezérlési szerkezet előtt nem szerepel komment. Erősen javasolt a dokumentáció alkalmazása a könnyebb érthetőség végett. Későbbi programmódosítás során megkönnyíthetjük a módosítást alkalmazó programozó munkáját az elágazás kommentezésével, mivel így könnyebben követheti az elágazások szerepét a forráskódban és gyorsabban végrehajthatja a kívánt módosítást.
+        </Description>
+        <HelpText>
+            A feltételes vezérlési szerkezet előtt nem szerepel komment. Erősen javasolt a dokumentáció alkalmazása a könnyebb érthetőség végett. Későbbi programmódosítás során megkönnyíthetjük a módosítást alkalmazó programozó munkáját az elágazás kommentezésével, mivel így könnyebben követheti az elágazások szerepét a forráskódban és gyorsabban végrehajthatja a kívánt módosítást.
+        </HelpText>
+        <WarningText>A(z) % felteteles vezerlesi szerkezet elott nem talalhato komment.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_CRS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Unnecessary and Unused Code Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Commented RPG Statement</DisplayName>
+        <Description>
+            A probable RPG operation is found in the specified comment line. Using comment lines in code aims to help the intelligibility. Undesired operations should be romeved from the code. In a native RPG environment these commented operations can be the source of misunderstanding because the programmers cannot see the asterisk at the beginning of the line. Highlighting a comment line containing RPG operations may worth some extra characters. So, predefined patterns can be applied for marking a commented RPG operation. The set of operations are different according to the program’s version.
+        </Description>
+        <HelpText>
+            A probable RPG operation is found in the specified comment line. Using comment lines in code aims to help the intelligibility. Undesired operations should be romeved from the code. In a native RPG environment these commented operations can be the source of misunderstanding because the programmers cannot see the asterisk at the beginning of the line. Highlighting a comment line containing RPG operations may worth some extra characters. So, predefined patterns can be applied for marking a commented RPG operation. The set of operations are different according to the program’s version.
+        </HelpText>
+        <WarningText>
+            A probable RPG operation (%) found in the specified comment line, that is not highlighted. Use one pattern from this list: "%". The pattern have to start at the 7th column. 
+        </WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Utasítás szerepel komment sorban megfelelő kiemelés nélkül</DisplayName>
+        <Description>
+            Az adott komment sorban vélhetően egy utasítás található. A komment célja, hogy javítsa a forráskód érthetőségét. A nem használt utasításokat jobb eltávolítani a kódból. A kikommentezett utasítások natív programozás esetén problémát jelenthetnek, mivel a fejlesztő szeme könnyen átsiklik a kommentet jelentő csillag (*) karakterről, így azt hiheti egy komment sorról, hogy az valamilyen feladatot el is lát. Ilyen módon érdemes lehet a nem használt utasításokat úgy kikommentezni, hogy az kitűnjön a többi sor közül., ennek érdekében egy előre megadható minta használható. Az utasítás mivolta céljából az operációs kódok kerülnek ellenőrzésre, amennyiben az adott RPG verziótól függően található létező operációs kód a komment sorban, egy szabálysértés jön létre.
+        </Description>
+        <HelpText>
+            Az adott komment sorban vélhetően egy utasítás található. A komment célja, hogy javítsa a forráskód érthetőségét. A nem használt utasításokat jobb eltávolítani a kódból. A kikommentezett utasítások natív programozás esetén problémát jelenthetnek, mivel a fejlesztő szeme könnyen átsiklik a kommentet jelentő csillag (*) karakterről, így azt hiheti egy komment sorról, hogy az valamilyen feladatot el is lát. Ilyen módon érdemes lehet a nem használt utasításokat úgy kikommentezni, hogy az kitűnjön a többi sor közül., ennek érdekében egy előre megadható minta használható. Az utasítás mivolta céljából az operációs kódok kerülnek ellenőrzésre, amennyiben az adott RPG verziótól függően található létező operációs kód a komment sorban, egy szabálysértés jön létre.
+        </HelpText>
+        <WarningText>A komment sorban nagy valoszinuseggel egy RPG nyelvu utasitas szerepel (%), mely sor nincs kellokeppen kiemelve, igy megteveszto lehet a programozo szamara. Hasznald a "%" mintak valamelyiket a komment sorban a 7. poziciotol.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "RPG3Operations" editable="true">ACQ, ADD, ANDxx, BEGSR, BITOF, BITON, CABxx, CALL, CASxx, CAT, CHAIN, CHECK, CHEKR, CLEAR, , COMIT, COMP, DEBUG, DEFN, DEFN, DELET, DIV , DO, DOUxx, DOWxx, DSPLY, DUMP, ELSE, END, ENDCS, ENDDO, ENDIF, ENDSL, ENDSR, EXCPT, EXFMT, EXSR, FEOD, FORCE, FREE, GOTO, IFxx, IN, ITER, KFLD, KLIST, LEAVE, LOKUP , MHHZO, MHLZO, MLHZO, MLLZO, MOVE, MOVEA, MOVEL, MULT, MVR, NEXT, OCUR, OPEN, ORxx, OTHER, OUT, PARM, PLIST, POST, READ, READC, READE, READP, REDPE, REL, RESET, RETRN, ROLBK, SCAN, SELEC, SETGT, SETLL, SETOF, SETON, SHTDN, SORTA, SQRT, SUB, SUBST, TAG, TESTB, TESTN, TESTZ, TIME, UNLCK, UPDAT, WHxx , WRITE, XFOOT, XLATE, Z-ADD, Z-SUB</Setting>
+        <Setting name = "RPG4Operations" editable="true">ADD, ADDDUR, ALLOC, ANDxx, BEGSR, BITOFF, BITON, CABxx, CALL, CALLB, CALLP, CASxx, CAT, CHAIN, CHECK, CHECKR, CLEAR, CLOSE, COMMIT, COMP, DEALLOC, DEFINE, DELETE, DIV, DO, DOU, DOUxx, DOW, DOWxx, DSPLY, DUMP, ELSE, ELSEIF, ENDxx, ENDSR, EVAL, EVALR, EVAL-CORR, EXCEPT, EXFMT, EXSR, EXTRCT, FEOD, FOR, FORCE, GOTO, IF, IFxx, IN, ITER, KFLD, KLIST, LEAVE, LEAVESR, LOOKUP, MHHZO, MHLZO, MLHZO, MLLZO, MONITOR, MOVE, MOVEA, MOVEL, MULT, MVR, NEXT, OCCUR, ON-ERROR, OPEN, ORxx, OTHER, OUT, PARM, PLIST, POST, READ, READC, READE, READP, READPE, REALLOC, REL, RESET, RETURN, ROLBK, SCAN, SELECT, SETGT, SETLL, SETOFF, SETON, SHTDN, SORTA, SQRT, SUB , SUBDUR, SUBST, TAG, TEST, TESTB, TESTN, TESTZ, TIME, UNLOCK, UPDATE, WHEN, WHENxx, WRITE, XFOOT, XLATE, XML-INTO, XML-SAX, Z-ADD, Z-SUB</Setting>
+        <Setting name = "RPG3CommentPatterns" editable="true">***, *--, *!</Setting>
+        <Setting name = "RPG4CommentPatterns" editable="true">***, *--, *!</Setting>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_SVN">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Too Short Name</DisplayName>
+        <Description>
+            The declared name is too short. In general, at least 3 character length variable names should be used. Using appropriate variable name length impoves the readability. In RPG sources the variable name’s length is limited by the language syntax itself, but an additional lower limit can be added. By defining different variable name lengths for different source code elements a fine-granularity can be achived in naming conventions. Naming groups are the following:
+                •    array and table names
+                •    datastructure names
+                •    datastructure subfield names
+                •    standalone field names
+                •    named constant names
+                •    prototype and procedure interface namas
+                •    prototype and procedure interface parameter names
+                •    procedure names
+        </Description>
+        <HelpText>
+            The declared name is too short. In general, at least 3 character length variable names should be used. Using appropriate variable name length impoves the readability. In RPG sources the variable name’s length is limited by the language syntax itself, but an additional lower limit can be added. By defining different variable name lengths for different source code elements a fine-granularity can be achived in naming conventions. Naming groups are the following:
+                •    array and table names
+                •    datastructure names
+                •    datastructure subfield names
+                •    standalone field names
+                •    named constant names
+                •    prototype and procedure interface namas
+                •    prototype and procedure interface parameter names
+                •    procedure names
+        </HelpText>
+        <WarningText>Name of declared vaiable '%' should be at least % character long, however it is % long.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Túl rövid név</DisplayName>
+        <Description>
+            Az RPG forráskódban deklarált név túl rövid. Javasolt legalább 3 karakter hosszú, beszédes neveket használni. A megfelelő hosszúságú nevek jobb olvashatóságot biztosítanak. Az RPG forráskódokban hatványozottan érvényes, ahol a változók neve alapvetően korlátokba ütközik. A változók nevének hosszúsága paraméterezhető. A többféle változóra többféle hosszúsági paraméter adható meg, így finomabb granularitás érhető el a szűrés során. A nevek csoportjait a következő halmazok képzik:
+                •    tömb- és táblanevek (array and table)
+                •    adatstruktúra nevek (datastructure)
+                •    adatstruktúra mezőnevek (datastructure subfield)
+                •    egyedi mezőnevek (standalone field)
+                •    konstans nevek (named constant)
+                •    prototípus és eljárás interfész nevek (prototype and procedure interface)
+                •    prototípus és eljárás interfész paraméter nevek (prototype and procedure interface parameter)
+                •    eljárás nevek (procedure)
+        </Description>
+        <HelpText>Az RPG forrásnyelvű programban az adott változó túl rövid névvel van ellátva.</HelpText>
+        <WarningText>'%' elem neve minimum % karakter hosszu kell, hogy legyen. Helyette % karakter hosszu.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "ArrayOrTableMinLenght" editable="true">3</Setting>
+        <Setting name = "DataStructureMinLenght" editable="true">3</Setting>
+        <Setting name = "DataStructureSubfieldMinLenght" editable="true">3</Setting>
+        <Setting name = "StandaloneFieldMinLenght" editable="true">3</Setting>
+        <Setting name = "ConstantMinLenght" editable="true">3</Setting>
+        <Setting name = "PrototypeAndProcedureInterfaceMinLenght" editable="true">3</Setting>
+        <Setting name = "PrototypeAndProcedureInterfaceParamMinLenght" editable="true">3</Setting>
+        <Setting name = "ProcedureSpecMinLenght" editable="true">3</Setting>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_LVN">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Too Long Name</DisplayName>
+        <Description>
+        The declared variable name is too long. Using appropriate variable name length impoves the readability. In RPG III sources the variable name’s length is limited by the language syntax itself, but an additional upper limit can be added. In RPG IV one can use “unlimited” variable names in a definition or in a procedure specification. By defining different variable name lengths for different source code elements a fine-granularity can be achived in naming conventions. Naming groups are the following:
+                •    array and table names
+                •    datastructure names
+                •    datastructure subfield names
+                •    standalone field names
+                •    named constant names
+                •    prototype and procedure interface namas
+                •    prototype and procedure interface parameter names
+                •    procedure names
+        </Description>
+        <HelpText>The declared variable name is too long. Using appropriate variable name length impoves the readability. In RPG III sources the variable name’s length is limited by the language syntax itself, but an additional upper limit can be added. In RPG IV one can use “unlimited” variable names in a definition or in a procedure specification. By defining different variable name lengths for different source code elements a fine-granularity can be achived in naming conventions. Naming groups are the following:
+                •    array and table names
+                •    datastructure names
+                •    datastructure subfield names
+                •    standalone field names
+                •    named constant names
+                •    prototype and procedure interface namas
+                •    prototype and procedure interface parameter names
+                •    procedure names</HelpText>
+        <WarningText>Name of declared vaiable '%' should be maximum % character long, however it is % long.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Túl hosszú név</DisplayName>
+        <Description>
+            Az RPG forráskódban deklarált név túl hosszú. Javasolt beszédes neveket használni. A megfelelő hosszúságú nevek jobb olvashatóságot biztosítanak. Az RPG forráskódokban hatványozottan érvényes, ahol a változók neve alapvetően korlátokba ütközik. Az RPG III esetében sok helyen korlátozott a maximálisan megadható névhossz, ugyanakkor további korlátozásokat is megadhatunk a szabály paramétereivel. ILE RPG esetében a definíció és eljárás specifikációban tetszőleges hosszú név szerepelhet, így fontos a felső korlát megadása. A változók nevének hosszúsága paraméterezhető. A többféle változóra többféle hosszúsági paraméter adható meg, így finomabb granularitás érhető el a szűrés során. A nevek csoportjait a következő halmazok képzik:
+                •    tömb- és táblanevek (array and table)
+                •    adatstruktúra nevek (datastructure)
+                •    adatstruktúra mezőnevek (datastructure subfield)
+                •    egyedi mezőnevek (standalone field)
+                •    konstans nevek (named constant)
+                •    prototípus és eljárás interfész nevek (prototype and procedure interface)
+                •    prototípus és eljárás interfész paraméter nevek (prototype and procedure interface papameter)
+                •    eljárás nevek (procedure)
+        </Description>
+        <HelpText>Az RPG forrásnyelvű programban az adott változó túl hosszú névvel van ellátva.</HelpText>
+        <WarningText>'%' elem neve maximum % karakter hosszu kell, hogy legyen. Helyette % karakter hosszu.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "ArrayOrTableMaxLenght" editable="true">8</Setting>
+        <Setting name = "DataStructureMaxLenght" editable="true">8</Setting>
+        <Setting name = "DataStructureSubfieldMaxLenght" editable="true">8</Setting>
+        <Setting name = "StandaloneFieldMaxLenght" editable="true">8</Setting>
+        <Setting name = "ConstantMaxLenght" editable="true">8</Setting>
+        <Setting name = "PrototypeAndProcedureInterfaceMaxLenght" editable="true">8</Setting>
+        <Setting name = "PrototypeAndProcedureInterfaceParamMaxLenght" editable="true">8</Setting>
+        <Setting name = "ProcedureSpecMaxLenght" editable="true">8</Setting>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_CVNWD">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Character Variable Names Should Begin With '$'.</DisplayName>
+        <Description>
+            In a large code base it can be difficult to find out a variable’s type. In many cases knowing the type of the given operands is essential for correct calculations. So, programmers have to take care of proper declarations for simplifying the further use of variables. Using name conventions that imply the type of a variable can make this process a lot easier. For instance, character variables should use ‘$’ sign in the beginning of their names, character-typed parameters should use ‘p$’ prefix. The set of patterns can be custumized easily. The given patterns will be applied for the following character types:
+                •    Character (A)
+                •    Indicator (N)
+                •    Graphic (G)
+                •    UCS-2 (C)
+        </Description>
+        <HelpText>
+            In a large code base it can be difficult to find out a variable’s type. In many cases knowing the type of the given operands is essential for correct calculations. So, programmers have to take care of proper declarations for simplifying the further use of variables. Using name conventions that imply the type of a variable can make this process a lot easier. For instance, character variables should use ‘$’ sign in the beginning of their names, character-typed parameters should use ‘p$’ prefix. The set of patterns can be custumized easily. The given patterns will be applied for the following character types:
+                •    Character (A)
+                •    Indicator (N)
+                •    Graphic (G)
+                •    UCS-2 (C)</HelpText>
+        <WarningText>Name of the variable % is not suitable. Character variables' names should match with on of the % prefix.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Karakteres változók nevének ’$’ karakterrel kell kezdődnie</DisplayName>
+        <Description>Hosszú, komplex RPG forráskódok esetén igen nehézkessé válhat egy-egy változó típusának megállapítása, mely sok esetben fontos volna, így magának a programozónak utána kell néznie, hogy az adott változót hol deklarálták és milyen típussal rendelkezik. Ezt megkönnyítendő, alkalmazható egy egyszerű konvenció annak érdekében, hogy az adott változóról könnyen megállapíthassunk néhány információt. Karakteres változók nevének megadásakor például alkalmazhatjuk azt a szabályt, miszerint ’$’ karakterrel kell kezdődnie a névnek, vagy paraméterek esetén a ’p$’ prefixszel. A szabály során reguláris kifejezések alkalmazásával bármilyen minta könnyen megadható. A megadott minták a következő karaktertípusokra lesznek alkalmazva:
+•    Character (A)
+•    Indicator (N)
+•    Graphic (G)
+•    UCS-2 (C)
+</Description>
+        <HelpText>Az RPG forráskódban minden karakteres változó nevének $ kell kezdődnie. </HelpText>
+        <WarningText>A % valtozo neve nem megfelelo. Karakteres valtozok eseten % prefixek alkalmazandoak.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Prefixes" editable="true">^[a-zA-Z]\$[a-zA-Z0-9_@]+, ^\$\$[a-zA-Z0-9_@]+</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_NVNWH">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Numeric Variable Names Should Begin With '#'.</DisplayName>
+        <Description>
+            In a large code base it can be difficult to find out a variable’s type. In many cases knowing the type of the given operands is essential for correct calculations. So, programmers have to take care of proper declarations for simplifying the further use of variables. Using name conventions that imply the type of a variable can make this process a lot easier. For instance, numeric variables should use ‘#’ sign in the beginning of their names, numeric-typed parameters should use ‘p#’ prefix. The set of patterns can be custumized easily. The given patterns will be applied for the following numeric types:
+                •    Binary (B)
+                •    Float (F)
+                •    Integer (I)
+                •    Packed-Decimal (P)
+                •    Unsigned (U)
+                •    Zoned-Decimal (Z)
+        </Description>
+        <HelpText>
+            In a large code base it can be difficult to find out a variable’s type. In many cases knowing the type of the given operands is essential for correct calculations. So, programmers have to take care of proper declarations for simplifying the further use of variables. Using name conventions that imply the type of a variable can make this process a lot easier. For instance, numeric variables should use ‘#’ sign in the beginning of their names, numeric-typed parameters should use ‘p#’ prefix. The set of patterns can be custumized easily. The given patterns will be applied for the following numeric types:
+                •    Binary (B)
+                •    Float (F)
+                •    Integer (I)
+                •    Packed-Decimal (P)
+                •    Unsigned (U)
+                •    Zoned-Decimal (Z)
+        </HelpText>
+        <WarningText>Name of the variable % is not suitable. Numeric variables' names should match with on of the # prefix.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A numerikus változók nevének ’#’ karakterrel kell kezdődnie</DisplayName>
+        <Description>
+            Hosszú, komplex RPG forráskódok esetén igen nehézkessé válhat egy-egy változó típusának megállapítása, mely sok esetben fontos volna, így magának a programozónak utána kell néznie, hogy az adott változót hol deklarálták és milyen típussal rendelkezik. Ezt megkönnyítendő, alkalmazható egy egyszerű konvenció annak érdekében, hogy az adott változóról könnyen megállapíthassunk néhány információt. Numerikus változók nevének megadásakor például alkalmazhatjuk azt a szabályt, miszerint ’#’ karakterrel kell kezdődnie a névnek, vagy paraméterek esetén a ’p#’ prefixszel. A szabály során reguláris kifejezések alkalmazásával bármilyen minta könnyen megadható. A megadott minták a következő numerikus típusokra lesznek alkalmazva:
+                •    Binary (B)
+                •    Float (F)
+                •    Integer (I)
+                •    Packed-Decimal (P)
+                •    Unsigned (U)
+                •    Zoned-Decimal (Z)
+        </Description>
+        <HelpText>Az RPG forráskódban minden numerikus változó nevének ’#’-kal kell kezdődnie.</HelpText>
+        <WarningText>A % valtozo neve nem megfelelo. Numerikus valtozok eseten % prefixek alkalmazandoak.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Prefixes" editable="true">^[a-zA-Z]#[a-zA-Z0-9_@]+, ^##[a-zA-Z0-9_@]+</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_FO">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Forbidden Operation</DisplayName>
+        <Description>
+            A forbidden operation can be found in the source code. In calculation specification avoid using forbidden operations because they have a bad effect on quality index. The set of forbidden operations is fully customizable for RPG III programs and also for source codes written in RPG IV. So, organization standards can be applied. Recommendation of how to replace forbidden operations with code that has the same funcionality is the responsibility of the organization.
+        </Description>
+        <HelpText>
+            A forbidden operation can be found in the source code. In calculation specification avoid using forbidden operations because they have a bad effect on quality index. The set of forbidden operations is fully customizable for RPG III programs and also for source codes written in RPG IV. So, organization standards can be applied. Recommendation of how to replace forbidden operations with code that has the same funcionality is the responsibility of the organization.
+        </HelpText>
+        <WarningText>Forbidden operation (%).</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Tiltott operáció használata</DisplayName>
+        <Description>Az RPG nyelvű programban olyan operációk szerepelnek, melyek használata tiltott. A Calculation specifikációs blokkban a tiltott operációkat kerülni kell, mivel azok ronthatják a programkód minőségét adott szempontok alapján. A tiltott operációk halmaza teljesen az adott szervezet igényeire szabható, illetve külön megadható a tiltott operációk halmaza RPG III, illetve ILE RPG esetén. Az egyes szervezetek külön-külön konvencionális igényekkel rendelkezhetnek a tiltott operációkat illetően. A tiltott operációkra a szervezet határozhat meg alternatív megoldási módot.</Description>
+        <HelpText>Az RPG forrásnyelvű program tiltott operációt tartalmaz.</HelpText>
+        <WarningText>Tiltott operacio hasznalata (%).</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "RPG3_Forbidden_Operations" editable="true">ACQ, BITOF, BITON, CABxx, CASxx, COMIT, COMP, EXCPT, FORCE, ITER, LEAVE, MHHZO, MHLZO, MLLZO, NEXT, OCUR, REL, ROLBK, SETOF, SETON, TAG</Setting>
+       <Setting name = "RPG4_Forbidden_Operations" editable="true">ACQ, BITOFF, BITON, CABxx, CASxx, COMMIT, COMP, EVAL-CORR, EXCEPT, FORCE, ITER, LEAVE, LEAVESR, MHHZO, MHLZO, MLHZO, MLLZO, NEXT, OCCUR, REL, ROLBK, SETOFF, SETON, TAG</Setting> 
+       <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_AO">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Avoid Operation</DisplayName>
+        <Description>
+            An avoid operation can be found in the source code. In calculation specification avoid using these operations because they have a bad effect on quality index. The set of avoid operations is fully customizable for RPG III programs and also for source codes written in RPG IV. So, organization standards can be applied. Recommendation of how to replace avoid operations with code that has the same funcionality is the responsibility of the organization.
+        </Description>
+        <HelpText>
+            An avoid operation can be found in the source code. In calculation specification avoid using these operations because they have a bad effect on quality index. The set of avoid operations is fully customizable for RPG III programs and also for source codes written in RPG IV. So, organization standards can be applied. Recommendation of how to replace avoid operations with code that has the same funcionality is the responsibility of the organization.
+        </HelpText>
+        <WarningText>Avoid operation (%).</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az operáció használata kerülendő</DisplayName>
+        <Description>
+            Az RPG nyelvű programban olyan operációk szerepelnek, melyek használata kerülendő. A Calculation specifikációs blokkban a kerülendő operációkat ajánlatos nem használni, mivel azok ronthatják a programkód minőségét adott szempontok alapján, azonban használatuk nem jelent súlyos kockázatot. A kerülendő operációk halmaza teljesen az adott szervezet igényeire szabható, illetve külön megadható a kerülendő operációk halmaza RPG III, illetve ILE RPG esetén.. Az egyes szervezetek külön-külön konvencionális igényekkel rendelkezhetnek a kerülendő operációkat illetően. A kerülendő operációkra a szervezet határozhat meg alternatív megoldási módot.</Description>
+        <HelpText>Az RPG forrásnyelvű program kerülendő operációt tartalmaz.</HelpText>
+        <WarningText>Az operacio hasznalata kerulendo (%).</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "RPG3_Avoid_Operations" editable="true">DEBUG, DSPLY, DUMP, END, FEOD, FREE, GOTO, POST, SHTDN, TESTB, TESTN, TESTZ</Setting>
+        <Setting name = "RPG4_Avoid_Operations" editable="true">ADDDUR, DSPLY, DUMP, ELSEIF, END, FEOD, GOTO, POST, SHTDN, TEST, TESTB, TESTN, TESTZ, XML-INTO, XML-SAX</Setting> 
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_DCI">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Deep /COPY, /INCLUDE Embededdness</DisplayName>
+        <Description>
+            Too deep /COPY and/or /INCLUDE directives can be found in the code. In general, RPG programmers prefer using these directives only in single depth because the code remains readable and more maintainable. A program’s source can contain more than one /COPY or /INCLUDE operations, however included sources cannot contain further directives like these. This rule is only applied for RPG IV, because the compiler checks this property in RPG III. The maximal depth can be parameterized.
+        </Description>
+        <HelpText>
+            Too deep /COPY and/or /INCLUDE directives can be found in the code. In general, RPG programmers prefer using these directives only in single depth because the code remains readable and more maintainable. A program’s source can contain more than one /COPY or /INCLUDE operations, however included sources cannot contain further directives like these. This rule is only applied for RPG IV, because the compiler checks this property in RPG III. The maximal depth can be parameterized.
+        </HelpText>
+        <WarningText> /COPY and/or /INCLUDE embededness is too deep(%). Maximum depth is %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Beágyazott (több mélységű) /COPY és /INCLUDE direktívák</DisplayName>
+        <Description>A forráskódban több mélységben beágyazott /COPY és /INCLUDE direktívák találhatóak. A /COPY és /INCLUDE fordítási direktívákat egy mélységig ajánlott használni, mivel így átláthatóbb lesz az adott program és könnyebb lesz azt karbantartani. Ugyanakkor egy forráson belül szerepelhet több /COPY vagy /INCLUDE direktíva is, viszont azok már nem tartalmazhatják ezt a direktívát. A szabály ellenőrzése csak ILE RPG esetén történik meg, mivel RPG III esetben ezt a megkötést már maga a fordító is leellenőrzi. A beágyazási mélység paraméterezhető.</Description>
+        <HelpText>Az RPG forrásnyelvű programban több mélységű /COPY és /INCLUDE direktíva található.</HelpText>
+        <WarningText>A /COPY vagy /INCLUDE fajlok legnagyobb melysege (%) nagyobb, mint a maximalisan megengedett ertek (%).</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "MaxDepth" editable="true">1</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_CWLL">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Lower Case Letter In The Name Of Called Program Or Procedure</DisplayName>
+        <Description>
+            The compilation or execution can fail with an error when the operand of a call or callb operation is a literal that contains one ore more lower-case letters. Avoid this rule violation by using upper-case string literals.
+        </Description>
+        <HelpText>
+            The compilation or execution can fail with an error when the operand of a call or callb operation is a literal that contains one ore more lower-case letters. Avoid this rule violation by using upper-case string literals.
+        </HelpText>
+        <WarningText>Lower-case letter is not permitted in call oparand. Called program/procedure name: %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Call vagy Callb hívásban megadott program vagy eljárás neve kisbetűt tartalmaz</DisplayName>
+        <Description>A kisbetű(ke)t tartalmazó call és callb operációs kódok esetében előfordulhat, hogy a fordító nem tudja értelmezni a megadott nevet, így ennek eredményeként a híváskor hiba lép fel, mely meghiúsíthatja magát a fordítást is. Ennek érdekében a call operációk használatakor ügyeljünk a nagybetűs megadásra, ezzel elkerülhetjük a fent leírt probléma fellépését.
+        </Description>
+        <HelpText>A kisbetű(ke)t tartalmazó call és callb operációs kódok esetében előfordulhat, hogy a fordító nem tudja értelmezni a megadott nevet, így ennek eredményeként a híváskor hiba lép fel, mely meghiúsíthatja magát a fordítást is. Ennek érdekében a call operációk használatakor ügyeljünk a nagybetűs megadásra, ezzel elkerülhetjük a fent leírt probléma fellépését.
+        </HelpText>
+        <WarningText>A Call hivas soran kisbetu nem megengedett, mert gondot jelenthet futasi idoben. Hivott program/eljaras neve: %</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_COV">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Call Operand Is A Variable</DisplayName>
+        <Description>
+            A variable was given as call operand that can complicate the source code, its readability, and the tracking process. Using a character literal as call operand makes the program more readable and understandandable.
+            </Description>
+        <HelpText>A variable was given as call operand that can complicate the source code, its readability, and the tracking process. Using a character literal as call operand makes the program more readable and understandandable.</HelpText>
+        <WarningText>Variable is given as call operand. Name of the variable: %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A Call hivas soran valtozot adtak meg operanduskent</DisplayName>
+        <Description>A Call operáció használatakor változót adtak meg operandusként. Ez sok esetben bonyolítja a programot és ronthatja az olvashatóságot, követhetőséget. Ennek elkerülése végett célszerű mindig az adott program nevét megadni, melyet meg akarunk hívni, így a hívási operációt látva a programozó egyértelműen és gyorsan képes beazonosítani a hívást.</Description>
+        <HelpText>A Call operáció használatakor változót adtak meg operandusként. Ez sok esetben bonyolítja a programot és ronthatja az olvashatóságot, követhetőséget. Ennek elkerülése végett célszerű mindig az adott program nevét megadni, melyet meg akarunk hívni, így a hívási operációt látva a programozó egyértelműen és gyorsan képes beazonosítani a hívást.</HelpText>
+        <WarningText>A Call hivas soran valtozot adtak meg operanduskent. A valtozo neve: %.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_IMO">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Type Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Numeric Operands Of MOVE(L) Are Not Compatible</DisplayName>
+        <Description>
+            The operands of MOVE(L) are not compatible, thus precision problems may occur during assignment. The following numeric types will be checked:
+                •    Binary (B)
+                •    Float (F)
+                •    Integer (I)
+                •    Packed-Decimal (P)
+                •    Unsigned (U)
+                •    Zoned-Decimal (Z)
+            The compiler will not mark all the conversion and precision issues. In the business segment a little precision difference in decimal positions can be fatal. To avoid these kinds of errors, use numeric values with the right lenght and type.
+        </Description>
+        <HelpText>
+            The operands of MOVE(L) are not compatible, thus precision problems may occur during assignment. The following numeric types will be checked:
+                •    Binary (B)
+                •    Float (F)
+                •    Integer (I)
+                •    Packed-Decimal (P)
+                •    Unsigned (U)
+                •    Zoned-Decimal (Z)
+            The compiler will not mark all the conversion and precision issues. In the business segment a little precision difference in decimal positions can be fatal. To avoid these kinds of errors, use numeric values with the right lenght and type.
+        </HelpText>
+        <WarningText>Numeric operands of MOVE(L) are not compatible. % long, % type variable moved to a variable % long, % type.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A MOVE(L) utasitas numerikus operandusai nem kompatibilisek egymassal</DisplayName>
+        <Description>A MOVE(L) utasítás operandusai nem kompatibilisek egymással, azaz az értékadás során bizonyos problémák léphetnek fel. A kompatibilitás ellenőrzése a numerikus típusú változók körére terjed ki, melyek a következőek:
+        •    Binary (B)
+        •    Float (F)
+        •    Integer (I)
+        •    Packed-Decimal (P)
+        •    Unsigned (U)
+        •    Zoned-Decimal (Z)
+        A felsorolt típusok között konverziós hibák léphetnek fel, melyről a fordító nem minden esetben képes értesíteni a programozót, illetve az eltérő tizedesjegyek száma miatt felléphet információvesztés is, melynek igen súlyos következményei lehetnek üzleti rendszerek esetében. A hibák elkerülése érdekében próbáljunk mindig megfelelő hosszúságú és típusú numerikus változókkal dolgozni.
+        </Description>
+        <HelpText>A MOVE(L) utasítás operandusai nem kompatibilisek egymással, azaz az értékadás során bizonyos problémák léphetnek fel. A kompatibilitás ellenőrzése a numerikus típusú változók körére terjed ki, melyek a következőek:
+        •    Binary (B)
+        •    Float (F)
+        •    Integer (I)
+        •    Packed-Decimal (P)
+        •    Unsigned (U)
+        •    Zoned-Decimal (Z)
+        A felsorolt típusok között konverziós hibák léphetnek fel, melyről a fordító nem minden esetben képes értesíteni a programozót, illetve az eltérő tizedesjegyek száma miatt felléphet információvesztés is, melynek igen súlyos következményei lehetnek üzleti rendszerek esetében. A hibák elkerülése érdekében próbáljunk mindig megfelelő hosszúságú és típusú numerikus változókkal dolgozni.</HelpText>
+        <WarningText>A MOVE(L) utasitas numerikus operandusai nem kompatibilisek egymassal. % hosszu, % tipusu operandust mozgat egy % hosszu, % tipusu operandusba.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>  
+  
+  <Metric id = "FHRPG_LSA">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Large Static Array</DisplayName>
+        <Description>
+            A too large static array is used in the program that consumes a lot of memory. In many cases the array can be splitted into smaller disjoint pieces. Size of an array is checked in three different ways. The dimension of the array and the size of its elements (in bytes) can be limited. The product of these values can be limited independently (max size).
+        </Description>
+        <HelpText>
+            A too large static array is used in the program that consumes a lot of memory. In many cases the array can be splitted into smaller disjoint pieces. Size of an array is checked in three different ways. The dimension of the array and the size of its elements (in bytes) can be limited. The product of these values can be limited independently (max size).
+        </HelpText>
+        <WarningText>% array is too large. Size: % (Limit: %), Length: % (Limit: %), Element size: % (Limit: %)</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Túl nagy statikus tömb</DisplayName>
+        <Description>
+            Az RPG programban túl nagy statikus tömböt hoztak létre. A nagy tömb sok memóriát foglal, ugyanakkor sok esetben elkerülhető a nagy tömbök használata, így feleslegesen foglalja a memóriát, mely RPG programok esetében igen fontos erőforrásnak számít. A tömb méretének ellenőrzése több szempont alapján működik, így 3 különböző paraméterrel állíthatjuk be a megengedni kívánt tömb méretét. Elsőként beállíthatjuk a tömb dimenziójának maximális korlátját, továbbá megadható az egyes tömbelemek maximális hosszúsága is. A 3. paraméter az előző két paramétertől függetlenül ezek szorzatára vonatkozik, ezzel a totális méret adható meg.
+        </Description>
+        <HelpText>Az RPG nyelvű forráskódban túl nagy statikus tömböt deklaráltak.</HelpText>
+        <WarningText>A(z) % tömb túl nagy. Méret: % (Korlát: %), hossz: % (Korlát: %), tömbelem méret: % (Korlát: %)</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "ArrayMaxSize" editable="true">1000</Setting>
+        <Setting name = "ArrayMaxLenght" editable="true">100</Setting>
+        <Setting name = "ArrayMaxElementLenght" editable="true">100</Setting>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_CCO">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Complete Conditional Operation Needed</DisplayName>
+        <Description>
+            In RPG IV user can specify conditions without explicitly writing out the equivalents of ‘true’ or ‘false’. Adding these constant values to conditions make them more understandable and readable. Adding true or false to a condition reflects the idea behind it.
+        </Description>
+        <HelpText>
+            In RPG IV user can specify conditions without explicitly writing out the equivalents of ‘true’ or ‘false’. Adding these constant values to conditions make them more understandable and readable. Adding true or false to a condition reflects the idea behind it.
+        </HelpText>
+        <WarningText>True or false constants have to be specified in a conditional expression.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Feltételes kifejezésben a teljes logikai kifejezés kiírása kötelező</DisplayName>
+        <Description>Az RPG IV ’free form’-os részeinél a feltételes operációkban elegendő csak egy operandust megadni, amennyiben az adott operandus igazra, vagy hamisra értékelődik ki. Azonban az ilyen esetek könnyen programozói hibához vezethetnek, mivel ilyenkor a programozó szándéka ismeretlen, nem derül ki, hogy valójában hamis vagy igaz értéket vár-e a feltétel.</Description>
+        <HelpText>Feltételes kifejezésben az igaz/hamis konstansok kiírása kötelező.</HelpText>
+        <WarningText>Felteteles kifejezesben az igaz/hamis konstansok kiirasa kotelezo.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_SCC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Circular Reference Between Subroutines</DisplayName>
+        <Description>
+            Subroutines can call other subroutines. There is no barrier that prevents the presence of a circular reference between subroutine calls that may result in a infinite loop.
+        </Description>
+        <HelpText>
+            Subroutines can call other subroutines. There is no barrier that prevents the presence of a circular reference between subroutine calls that may result in a infinite loop.
+        </HelpText>
+        <WarningText>Circular reference between subroutines. Circle stands from: %</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Kör található a szubrutin hívások között</DisplayName>
+        <Description>Egy-egy programban definiált szubrutinok között előfordulhat körhivatkozás. A körhivatkozások végtelen ciklust idézhetnek elő, melyet csak alapos debugolással szüntethetünk meg. A körök detektálásához alkalmazott módszer Tarjan erősen összefüggő komponensek kereséséhez használt algoritmusa.</Description>
+        <HelpText>Egy-egy programban definiált szubrutinok között előfordulhat körhivatkozás. A körhivatkozások végtelen ciklust idézhetnek elő, melyet csak alapos debugolással szüntethetünk meg. A körök detektálásához alkalmazott módszer Tarjan erősen összefüggő komponensek kereséséhez használt algoritmusa.</HelpText>
+        <WarningText>Kor talalhato a szubrutin hívasok kozott. Kort alkot: %</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_FSDE">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Files Should Be Defined Externally</DisplayName>
+        <Description>
+            To separate logic from data, it is a good strategy to use externally defined files in File Description Specification.
+        </Description>
+        <HelpText>
+            To separate logic from data, it is a good strategy to use externally defined files in File Description Specification.
+        </HelpText>
+        <WarningText>In File Description Specification not an externally defined file was used.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>File specifikációban nem külső fájlt adtak meg</DisplayName>
+        <Description>A fájlleíró specifikációban jó gyakorlat az, ha külsőleg definiált állományokat adunk meg a programban közvetlenül leírt állományokkal szemben, így az adatok jobban elválnak a forráskódtól, mellyel növelhető az olvashatóság, az érthetőség.</Description>
+        <HelpText>A fájlleíró specifikációban jó gyakorlat az, ha külsőleg definiált állományokat adunk meg a programban közvetlenül leírt állományokkal szemben, így az adatok jobban elválnak a forráskódtól, mellyel növelhető az olvashatóság, az érthetőség.</HelpText>
+        <WarningText>A File Specifikacios sor nem kulso fajlt hasznal. Ezzel javithato lenne a program atlathatosaga.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+  <Metric id = "FHRPG_CSD">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Security Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Copyright Keyword Should Be Defined In Control Specification</DisplayName>
+        <Description>
+            Granting exclusive rights to the creator of the original work for its use and distribution can be achieved by defining copyright keyword in Control Specification (works only in RPG IV environment). Copyright information is granted by a maximum 256 long string that can be displayed by the operations DSPMOD, DSPPGM, or DSPSRVPGM.
+        </Description>
+        <HelpText>
+            Granting exclusive rights to the creator of the original work for its use and distribution can be achieved by defining copyright keyword in Control Specification (works only in RPG IV environment). Copyright information is granted by a maximum 256 long string that can be displayed by the operations DSPMOD, DSPPGM, or DSPSRVPGM. 
+        </HelpText>
+        <WarningText>Cannot found copyright keyword in file %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A fájl elején, a Control specifikációban nem található a copyright kulcsszó.</DisplayName>
+        <Description>Az állományok elején, a Control specifikációs részben megadható a copyright kulcsszó (ILE RPG esetében), mely szerzői jogi információk ad az állományhoz. A szerzői jogokat a DSPMOD, DSPPGM, vagy DSPSRVPGM parancsok használatával tekinthetjük meg. A szerzői jog megadásakor egy maximum 256 hosszú sztringet specifikálhatunk.</Description>
+        <HelpText>Az állományok elején, a Control specifikációs részben megadható a copyright kulcsszó (ILE RPG esetében), mely szerzői jogi információk ad az állományhoz. A szerzői jogokat a DSPMOD, DSPPGM, vagy DSPSRVPGM parancsok használatával tekinthetjük meg. A szerzői jog megadásakor egy maximum 256 hosszú sztringet specifikálhatunk.</HelpText>
+        <WarningText>A(z) % fajl elejen nem talalhato copyright kulcsszo, ami tartalmazna a szerzoi jogokat.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_ONFSU">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Odd Numeric Fields Should Be Used</DisplayName>
+        <Description>
+            Lossless memory allocation can be a good reason for using odd length numeric fields. In this case the extra memory block is not used for storing the sign of the numbers.
+        </Description>
+        <HelpText>
+            Lossless memory allocation can be a good reason for using odd length numeric fields. In this case the extra memory block is not used for storing the sign of the numbers.
+        </HelpText>
+        <WarningText>Numeric field %'s length(%) should be declared as an odd number to grant optimal memory allocation.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Páros hosszú numerikus mező</DisplayName>
+        <Description>A mezők megadásakor fontos lehet a veszteségmentes tárolás. Ennek érdekében a numerikus típusú mezők esetében páratlan hosszúságú mezőket adjunk meg, így a változóhoz tartozó előjel is tárolható, továbbá így elkerülhető az adatvesztés is.</Description>
+        <HelpText>A mezők megadásakor fontos lehet a veszteségmentes tárolás. Ennek érdekében a numerikus típusú mezők esetében páratlan hosszúságú mezőket adjunk meg, így a változóhoz tartozó előjel is tárolható, továbbá így elkerülhető az adatvesztés is.</HelpText>
+        <WarningText>A(z) % numerikus mezo hosszat(%) celszerubb paratlan hosszusagura deklaralni, mert igy az elojelet beleertve hatekonyabb az adat tarolasa.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+  <Metric id = "FHRPG_ADS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Avoid Debug Operations</DisplayName>
+        <Description>
+            During the developement process DEBUG(*YES) and DUMP operations provide useful information for tracking and finding bugs. So, a faster bug fixing phase can be achieved, however, debug operations are unwanted in production code.
+        </Description>
+        <HelpText>
+            During the developement process DEBUG(*YES) and DUMP operations provide useful information for tracking and finding bugs. So, a faster bug fixing phase can be achieved, however, debug operations are unwanted in production code.
+        </HelpText>
+        <WarningText>% DEBUG operation should be avoided in production code. </WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A debuggoláshoz használatos DEBUG(*YES) és DUMP operációk kerülendőek</DisplayName>
+        <Description>A fejlesztési folyamat közben a DEBUG(*YES) és a DUMP operációk hasznos információkat nyújtanak a programozó számára, melyekkel gyorsabban megtalálhatóak a hibák okai, így gyorsabb fejlesztést tesz lehetővé, azonban ezen operációk használata az éles rendszerekben már kerülendő.</Description>
+        <HelpText>A fejlesztési folyamat közben a DEBUG(*YES) és a DUMP operációk hasznos információkat nyújtanak a programozó számára, melyekkel gyorsabban megtalálhatóak a hibák okai, így gyorsabb fejlesztést tesz lehetővé, azonban ezen operációk használata az éles rendszerekben már kerülendő.</HelpText>
+        <WarningText>A debuggolashoz kapcsolodo % parancs eles kodban kerulendo.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_ESU">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Use ENDxx Instead of END</DisplayName>
+        <Description>
+            In RPG, structured conrol operations can be used to group more statements into a block. These structures use the END statement to indicate the end of the block. Embedding numerous different blocks can be difficult to read. So, instead of END, ENDxx should be used to indicate the type of the structured operation wanted to be closed.
+        </Description>
+        <HelpText>
+            In RPG, structured conrol operations can be used to group more statements into a block. These structures use the END statement to indicate the end of the block. Embedding numerous different blocks can be difficult to read. So, instead of END, ENDxx should be used to indicate the type of the structured operation wanted to be closed.
+        </HelpText>
+        <WarningText>Use END% instead of END for better readability.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az END helyett ENDxx használandó</DisplayName>
+        <Description>Az RPG programozási nyelvben található struktúrált vezérlési szerkezetek esetében keretes szerkezetek használandóak, azaz rendre az END operációval zárandóak, ezzel jelölve az adott blokkhoz tartozó utasítások végét. Több ilyen keretes szerkezetet használó elem egymásba való beágyazásakor azonban nehézkes lehet követni, hogy melyik elemhez mely lezárás tartozik. A könnyebb olvashatóság érdekében ildomos a END operáció helyett az ENDxx használata, mely megjelöli a blokkos szerkezet típusát is.</Description>
+        <HelpText>Az RPG programozási nyelvben található struktúrált vezérlési szerkezetek esetében keretes szerkezetek használandóak, azaz rendre az END operációval zárandóak, ezzel jelölve az adott blokkhoz tartozó utasítások végét. Több ilyen keretes szerkezetet használó elem egymásba való beágyazásakor azonban nehézkes lehet követni, hogy melyik elemhez mely lezárás tartozik. A könnyebb olvashatóság érdekében ildomos a END operáció helyett az ENDxx használata, mely megjelöli a blokkos szerkezet típusát is.</HelpText>
+        <WarningText>Az END helyett END% hasznalando a jobb kovethetoseg erdekeben.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_ISNUI">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>If Should Not Use Indicators</DisplayName>
+        <Description>
+            Besides using conditional expressions in IF statements, users can define dependencies on indicators. Using indicators as conditions results in poor logic and an intricate code, thus indicators should not be used in conditions.
+        </Description>
+        <HelpText>
+            Besides using conditional expressions in IF statements, users can define dependencies on indicators. Using indicators as conditions results in poor logic and an intricate code, thus indicators should not be used in conditions.
+        </HelpText>
+        <WarningText>Use AND and OR operations to add further dependencies on a condition instead of using indicator conditions.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az IF operáció feltétele indikátortól (is) függ</DisplayName>
+        <Description>Az IF operációk használatakor a feltételek megadásán kívül megadható indikátortól való függés is. Az indikátorokkal vezérelt végrehajtási ágak azonban kerülendőek, mivel gyenge logikát szolgáltatnak, továbbá rontják az érthetőséget és olvashatóságot. Az indikátortól való függés nehezen követhető végrehajtást eredményez, ezért használatuk nem javasolt.</Description>
+        <HelpText>Az IF operációk használatakor a feltételek megadásán kívül megadható indikátortól való függés is. Az indikátorokkal vezérelt végrehajtási ágak azonban kerülendőek, mivel gyenge logikát szolgáltatnak, továbbá rontják az érthetőséget és olvashatóságot. Az indikátortól való függés nehezen követhető végrehajtást eredményez, ezért használatuk nem javasolt.</HelpText>
+        <WarningText>Az IF utasitasban indikatortol valo fuggest(%) ne hasznaljunk. Azt az IF-hez fuzott AND es OR elemekkel adjuk meg!</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_SSD">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Documentation Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Subroutines Should be Documented</DisplayName>
+        <Description>
+            Documentation on subroutines are strongly recommended to have an easy to understand code. It helps in performing later modification tasks. Documentation should be consistent with the subroutine’s functionality.
+        </Description>
+        <HelpText>
+            Documentation on subroutines are strongly recommended to have an easy to understand code. It helps in performing later modification tasks. Documentation should be consistent with the subroutine’s functionality.
+        </HelpText>
+        <WarningText>% subroutine has no documentation.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A szubrutin előtt nem található magyarázó komment</DisplayName>
+        <Description>
+            A szubrutin előtt nem szerepel magyarázó komment. Erősen javasolt a dokumentáció alkalmazása a könnyebb érthetőség végett. Későbbi programmódosítás során megkönnyíthetjük a módosítást alkalmazó programozó munkáját a szubrutin kommentezésével, mivel így könnyebben követheti a szubrutinok szerepét a forráskódban és gyorsabban végrehajthatja a kívánt módosítást.
+        </Description>
+        <HelpText>
+            A szubrutin előtt nem szerepel magyarázó komment. Erősen javasolt a dokumentáció alkalmazása a könnyebb érthetőség végett. Későbbi programmódosítás során megkönnyíthetjük a módosítást alkalmazó programozó munkáját a szubrutin kommentezésével, mivel így könnyebben követheti a szubrutinok szerepét a forráskódban és gyorsabban végrehajthatja a kívánt módosítást.
+        </HelpText>
+        <WarningText>A(z) % szubrutin elott nem talalhato magyarazo komment.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_SNWNC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Naming Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Subroutine Name Without Naming Convention</DisplayName>
+        <Description>
+            It is a good approach to define a subroutine with an appropriate naming convention. By using naming conventions in the subroutines’ names we can add a grouping or mark identifiers referencing a subroutine’s name. Naming conventions can be controlled by using regular expression patterns.
+        </Description>
+        <HelpText> It is a good approach to define a subroutine with an appropriate naming convention. By using naming conventions in the subroutines’ names we can add a grouping or mark identifiers referencing a subroutine’s name. Naming conventions can be controlled by using regular expression patterns.</HelpText>
+        <WarningText>% subroutine's name does not match the pattern given: %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A szubrutin neve nem illeszkedik a megadott mintára</DisplayName>
+        <Description>A szubrutinok megadásakor fontos szempont lehet a szubrutin neve. Jó névmegadással sokat javíthatunk a programok olvashatóságán. Célszerű olyan egységes nevet használni, mely alapján más programozók is egyértelműen láthatják, hogy egy szubrutinról, egy szubrutin hívásról van szó. Alapvető minta lehet, ha a szubrutinok nevét például az SR prefixszel látjuk el.</Description>
+        <HelpText>A szubrutinok megadásakor fontos szempont lehet a szubrutin neve. Jó névmegadással sokat javíthatunk a programok olvashatóságán. Célszerű olyan egységes nevet használni, mely alapján más programozók is egyértelműen láthatják, hogy egy szubrutinról, egy szubrutin hívásról van szó. Alapvető minta lehet, ha a szubrutinok nevét például az SR prefixszel látjuk el.</HelpText>
+        <WarningText>A(z) % szubrutin neve nem illeszkedik a megadott semara: %</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Patterns" editable="true">^SR[a-zA-Z0-9]*$</Setting>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+   <Metric id = "FHRPG_UFSEC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>USROPN Files Should Explicitly Closed</DisplayName>
+        <Description>
+            A file defined in File Description Specification can be accessed many times from different places of the source code. Files can be used concurrently, thus a correct file handling mechanism is desired. After the OPEN operation is executed, users can read, update, and write files depending on how the file was specified in the File Description Specification. After a process is finished working with the file, it should close the file explicitly (in case of USROPN files).
+        </Description>
+        <HelpText>
+            A file defined in File Description Specification can be accessed many times from different places of the source code. Files can be used concurrently, thus a correct file handling mechanism is desired. After the OPEN operation is executed, users can read, update, and write files depending on how the file was specified in the File Description Specification. After a process is finished working with the file, it should close the file explicitly (in case of USROPN files).
+        </HelpText>
+        <WarningText>File % should be closed explicity by calling CLOSE operation.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A fájlok használatát követően explicit lezárás alkalmazandó</DisplayName>
+        <Description>
+            A fájlleíró specifikációban megadott fájlokkal való munka során ügyelni kell a helyes használatra, mivel egy-egy fájl több helyen is előfordulhat és több folyamat is használhatja. Az OPEN utasítást követően a fájlon elvégzett módosításokat, olvasásokat követően a fájl explicit le kell zárni a CLOSE operációval, hogy ne lépjen fel az erőforrás lock-olása, azaz a többi folyamat is használni tudja a megadott fájlt.
+        </Description>
+        <HelpText>
+            A fájlleíró specifikációban megadott fájlokkal való munka során ügyelni kell a helyes használatra, mivel egy-egy fájl több helyen is előfordulhat és több folyamat is használhatja. Az OPEN utasítást követően a fájlon elvégzett módosításokat, olvasásokat követően a fájl explicit le kell zárni a CLOSE operációval, hogy ne lépjen fel az erőforrás lock-olása, azaz a többi folyamat is használni tudja a megadott fájlt.
+        </HelpText>
+        <WarningText>A(z) % fajlt hasznalat utan (OPEN utan) explicit le kell zarni a CLOSE operacioval.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_NFSUNL">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Non-Input Files Should Use No-Lock</DisplayName>
+        <Description>
+            When accessing the records in files opened for update and output, the records are locked. When a longer process follows the read operation, it is intolerable that other processes have to wait for the input locked by another process. So, no-lock option should be specified on READxx and CHAIN operations to prevent such cases.
+            </Description>
+        <HelpText>
+            When accessing the records in files opened for update and output, the records are locked. When a longer process follows the read operation, it is intolerable that other processes have to wait for the input locked by another process. So, no-lock option should be specified on READxx and CHAIN operations to prevent such cases.
+        </HelpText>
+        <WarningText>No-lock oparation extender should be used on READxx and CHAIN operations when accessing file %, to prevent long record lock periods.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Update-re és outputra megnyitott fájlokat a no-lock opcióval használjuk a READ és CHAIN utasításokban</DisplayName>
+        <Description>Az update-re és output-ra megnyitott fájlok során a rekordok zárolódnak és elérhetetlenné válnak a rendszer és más folyamatok számára. Az olvasást követően az azonnali update megengedhető, azonban amikor az olvasást egy hosszabb feldolgozás követi, akkor az erőforrás sokáig zárolva maradhat. Ennek érdekében a READxx és a CHAIN operációkat a no-lock opcióval lássuk el, melyet az operáció kiterjesztésében az 'N' karakter megadásával tehetünk meg.</Description>
+        <HelpText>Az update-re és output-ra megnyitott fájlok során a rekordok zárolódnak és elérhetetlenné válnak a rendszer és más folyamatok számára. Az olvasást követően az azonnali update megengedhető, azonban amikor az olvasást egy hosszabb feldolgozás követi, akkor az erőforrás sokáig zárolva maradhat. Ennek érdekében a READxx és a CHAIN operációkat a no-lock opcióval lássuk el, melyet az operáció kiterjesztésében az 'N' karakter megadásával tehetünk meg.</HelpText>
+        <WarningText>Az update-re és ouputra (combined) megnyitott fajlt(%) no-lock operaciokkal kell hasznalni a READx es CHAIN parancsoknal, hogy ez ne kepezzen szuk keresztmetszetet a fajl hasznalataban.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_COSURI">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>CHAIN Operation Should Use Resulting Indicator</DisplayName>
+        <Description>
+            Resulting indicators should be used on CHAIN oparations (NOT located in free-form) to automatically handle “end of file” and “record not found” errors without specifying further error-handling procedures.
+        </Description>
+        <HelpText>
+            Resulting indicators should be used on CHAIN oparations (NOT located in free-form) to automatically handle “end of file” and “record not found” errors without specifying further error-handling procedures.
+        </HelpText>
+        <WarningText>CHAIN operation does not use any resulting indicator.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A CHAIN operáció nem használ resulting indikátort</DisplayName>
+        <Description>
+            A CHAIN utasítás használatakor erősen ajánlott a resulting indikátor használata, mivel megadásával a kód tisztább, egyszerűbben olvasható és a helyesebb működés is biztosított, mivel így a "record not found" és az "end of file" fellépésekor automatikusan biztosított a helyes működés, és nincs szükség további hibakezelő eljárások megadására.
+        </Description>
+        <HelpText>
+            A CHAIN utasítás használatakor erősen ajánlott a resulting indikátor használata, mivel megadásával a kód tisztább, egyszerűbben olvasható és a helyesebb működés is biztosított, mivel így a "record not found" és az "end of file" fellépésekor automatikusan biztosított a helyes működés, és nincs szükség további hibakezelő eljárások megadására.
+        </HelpText>
+        <WarningText>A nem free-form blokkban talalhato CHAIN utasitas nem hasznal egy resulting indicatort sem.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_WBWTMS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Size Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>WHEN Branch With Too Many Statements</DisplayName>
+        <Description>
+            In a WHEN branch of the SELECT statement, there are too many statements. By specifying many statements in such structures can easily cause the phenomenon called “Spaghetti Code”. Try to extract these statements into a subroutine or procedure.
+        </Description>
+        <HelpText>
+            In a WHEN branch of the SELECT statement, there are too many statements. By specifying many statements in such structures can easily cause the phenomenon called “Spaghetti Code”. Try to extract these statements into a subroutine or procedure.
+        </HelpText>
+        <WarningText>WHEN branch contains too many statements(%). Allowed number of statements is %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A WHEN ágban túl sok utasítás szerepel</DisplayName>
+        <Description>A SELECT feltételes elágazási szerkezet adott ágaiban (WHEN) megadható utasítások egy sorozata. Azonban kerülendő a túl sok utasítás megadása, mivel az nagyban rontja az olvashatóságot. A bonyolult ágak átláthatatlanokká válhatnak, így könnyen létrejöhet a "spaggeti kódnak" nevezett jelenség. Amennyiben egy-egy ághoz túl sok utasítás tartozik, akkor érdemes elkondolkozni az utasítások szubrutinba való kielemelésén.</Description>
+        <HelpText>A SELECT feltételes elágazási szerkezet adott ágaiban (WHEN) megadható utasítások egy sorozata. Azonban kerülendő a túl sok utasítás megadása, mivel az nagyban rontja az olvashatóságot. A bonyolult ágak átláthatatlanokká válhatnak, így könnyen létrejöhet a "spaggeti kódnak" nevezett jelenség. Amennyiben egy-egy ághoz túl sok utasítás tartozik, akkor érdemes elkondolkozni az utasítások szubrutinba való kielemelésén.</HelpText>
+        <WarningText>A WHEN adott agaban tul sok utasitas szerepel(%). A megengedett utasitasok szama: %. Komplex muveletek elvegzeset erdemesebb szubrutinba kiemelni.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "StatementLimit" editable="true">5</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_TDN">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Too Deep Nesting</DisplayName>
+        <Description>
+            Subroutine/Subprocedure has a too deep nesting. The following operations are taken into consideration: if, for, do, do-while, do-until, select. Try to avoid high nesting levels since it can cause poor maintainability.
+        </Description>
+        <HelpText>
+            Subroutine/Subprocedure has a too deep nesting. The following operations are taken into consideration: if, for, do, do-while, do-until, select. Try to avoid high nesting levels since it can cause poor maintainability.
+        </HelpText>
+        <WarningText>Too deep nesting level(%) in a subroutine/subprocedure. Maximal nesting is set to %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Túl mélyen egybeágyazott vezérlési elemek.</DisplayName>
+        <Description>
+            Subprocedure/Subroutine elemekben túl mély az egymásba ágyazás. A következő utasítások számítanak bele a mélységbe:  if, for, do, do-while, do-until, selec. A túl mély szerkezet esetében a program futása nehezen követhetővé válik a komplexitás miatt. Megfontolandó adott kódrészek kiemelése külön szubrutinba vagy eljárásba.
+        </Description>
+        <HelpText>
+            Subprocedure/Subroutine elemekben túl mély az egymásba ágyazás. A következő utasítások számítanak bele a mélységbe:  if, for, do, do-while, do-until, selec. A túl mély szerkezet esetében a program futása nehezen követhetővé válik a komplexitás miatt. Megfontolandó adott kódrészek kiemelése külön szubrutinba vagy eljárásba.
+        </HelpText>
+        <WarningText>Tul melyen egybeagyazott vezerlesi elemeket tartalmazo(%) kodreszlet. A maximalisan kovetendo melyseg: %.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "MaxDepth" editable="true">4</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_STC">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Subroutine Is Too Complex</DisplayName>
+        <Description>
+            The subroutine has a high cyclomatic complexity value that causes the code to be hard to maintain. Try to extract relevant code logic to another subroutine.
+        </Description>
+        <HelpText>
+            The subroutine has a high cyclomatic complexity value that causes the code to be hard to maintain. Try to extract relevant code logic to another subroutine.
+        </HelpText>
+        <WarningText>Subroutine % has a too high McCabe's Cyclomatic Complexity value(%).Upper limit is: %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A szubrutin túl nagy komplexitással rendelkezik.</DisplayName>
+        <Description>
+            A szubrutin feladatának leírása során a tartalmazott utasítások alapján a szubrutin ciklomatikus komplexitása túl magas. A magas komplexitás nehézzé teszi a szubrutin módosítását, illetve az olvashatósággal is lehetnek problémák. Megfontolandó adott kódrészek kiemelése külön szubrutinba.
+        </Description>
+        <HelpText>
+            A szubrutin feladatának leírása során a tartalmazott utasítások alapján a szubrutin ciklomatikus komplexitása túl magas. A magas komplexitás nehézzé teszi a szubrutin módosítását, illetve az olvashatósággal is lehetnek problémák. Megfontolandó adott kódrészek kiemelése külön szubrutinba.
+        </HelpText>
+        <WarningText>A(z) % szubrutin McCabe komplexitasa tul magas (%). A megengedett ertek: %.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "MaxMcCC" editable="true">3</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_FHTML">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Size Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>File Has Too Many Lines</DisplayName>
+        <Description>
+            File contains too many lines that can cause decreased understandability and maintainability. Separate programs into different files.
+        </Description>
+        <HelpText>
+            File contains too many lines that can cause decreased understandability and maintainability. Separate programs into different files.
+        </HelpText>
+        <WarningText>File name % has too many lines(%). Allowed maximum value is %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A forrásfájl túl sok sort tartalmaz</DisplayName>
+        <Description>
+            Az adott forrásfájlban túl sok sor található. A nagy méretű forrásfájlokat nehéz megérteni, így a későbbiekben nem egyszerű feladat azok módosítása sem. Jobb programozói gyakorlat, ha a nagy forrásokat kisebb egységekbe szervezzük az ellátott funkcionalitás és feladat alapján.
+        </Description>
+        <HelpText>
+            Az adott forrásfájlban túl sok sor található. A nagy méretű forrásfájlokat nehéz megérteni, így a későbbiekben nem egyszerű feladat azok módosítása sem. Jobb programozói gyakorlat, ha a nagy forrásokat kisebb egységekbe szervezzük az ellátott funkcionalitás és feladat alapján.
+        </HelpText>
+        <WarningText>A(z) % forrasfajl tul sok sort tartalmaz(%). A megengedett ertek: %. A jobb karbantarthatosag erdekeben a megfelelo reszek kiemelendoek.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "MaxProgLOC" editable="true">400</Setting>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_FCSU">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Figurative Constant Should Used</DisplayName>
+        <Description>
+            In assignments and in initializations ‘’, ‘0’, ‘1’ literals can be used. RPG provides figurative constants to avoid possible errors coming from using these literals. Replace the literals with *BLANK, *OFF, or *ON.
+        </Description>
+        <HelpText>
+            In assignments and in initializations ‘’, ‘0’, ‘1’ literals can be used. RPG provides figurative constants to avoid possible errors coming from using these literals. Replace the literals with *BLANK, *OFF, or *ON.
+        </HelpText>
+        <WarningText> Use figurative constants instead of the following literals: ' ', '0', '1'.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Használjunk figuratív konstansokat a ' ', '0' és '1' értékek helyett</DisplayName>
+        <Description>Az RPG forráskódokban mind inicializálás és értékadás során adott típusú elemekhez megadhatóak a következő literálok: ' ', '0', '1'. Ezek használata azonban hibára ad lehetőséget, illetve az olvashatóságot is rontja. Az RPG nyelv biztosít előre definiált figuratív konstansokat is, melyek használatával a forráskód érthetősége és a biztonság is növelhető. A fent megadott értékekhez használjuk a *BLANK, *BLANKS, *OFF, *ON figuratív konstansokat.</Description>
+        <HelpText>Az RPG forráskódokban mind inicializálás és értékadás során adott típusú elemekhez megadhatóak a következő literálok: ' ', '0', '1'. Ezek használata azonban hibára ad lehetőséget, illetve az olvashatóságot is rontja. Az RPG nyelv biztosít előre definiált figuratív konstansokat is, melyek használatával a forráskód érthetősége és a biztonság is növelhető. A fent megadott értékekhez használjuk a *BLANK, *BLANKS, *OFF, *ON figuratív konstansokat.</HelpText>
+        <WarningText>Az ertekadas soran ' ', '0' és '1' ertekek helyett hasznaljunk figurativ konstansokat, mert azok javitjak a kod olvashatosagat es megszuntetik a ketertelmuseget.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_DHTMS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Size Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Do Block Has Too Many Statements</DisplayName>
+        <Description>
+            Do block contains too many statements that harms the readabilty and understandabilty. Consdier extracting relevant code logic to a new subroutine or procedure.
+        </Description>
+        <HelpText>
+            Do block contains too many statements that harms the readabilty and understandabilty. Consdier extracting relevant code logic to a new subroutine or procedure.
+        </HelpText>
+        <WarningText>Do block has too manz statements(%). Upper limit is %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A do block túl sok utasítást tartalmaz.</DisplayName>
+        <Description>
+            A do vezérlési szerkezet túl sok utasítást tartalmaz, mely rontja az olvashatóságot és nehézzé teszi az adott kódrész megértését. Megfontolandó az adott kódrészek kiemelése egy külön szubrutinba vagy eljárásba amennyiben az lehetséges. A kiemelés után egy letisztultabb, jobb kódot kapunk eredményül.
+        </Description>
+        <HelpText>
+            A do vezérlési szerkezet túl sok utasítást tartalmaz, mely rontja az olvashatóságot és nehézzé teszi az adott kódrész megértését. Megfontolandó az adott kódrészek kiemelése egy külön szubrutinba vagy eljárásba amennyiben az lehetséges. A kiemelés után egy letisztultabb, jobb kódot kapunk eredményül.
+        </HelpText>
+        <WarningText>A do block tul sok utasitast tartalmaz(%). Maximalisan megadhato utasitasok szama: %.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+        <Setting name = "MaxStatementsNum" editable="true">10</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_SLD">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Unnecessary and Unused Code Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>String Literal Duplicated</DisplayName>
+        <Description>
+            A string literal is duplicated in the program. Use named constants rather than duplicated literals.
+        </Description>
+        <HelpText>
+            A string literal is duplicated in the program. Use named constants rather than duplicated literals.
+        </HelpText>
+        <WarningText>String literal % is duplicated in the code. Replace the occurances with a named constant storing the string.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Duplikált sztring literál található a kódban</DisplayName>
+        <Description>
+            Az adott programban egy string literál többször is előfordul. Az ilyen literálokat célszerű egy konstansba összefogni, majd magát a konstanst használni. A beszédes nevű konstansok használata nagyban javíthatja az olvashatóságot.
+        </Description>
+        <HelpText>
+            Az adott programban egy string literál többször is előfordul. Az ilyen literálokat célszerű egy konstansba összefogni, majd magát a konstanst használni. A beszédes nevű konstansok használata nagyban javíthatja az olvashatóságot.
+        </HelpText>
+        <WarningText>A % string literal korabbi elofordulasa is megtalalhato a kodban. Az ilyen elemeket jobb egy konstansban tarolni, majd a konstansra hivatkozni.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_IHTMS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Size Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>If Block Has Too Many Statements</DisplayName>
+        <Description>
+            If block contains too many statements that harms the readabilty and understandabilty. Consdier extracting relevant code logic to a new subroutine or procedure.</Description>
+        <HelpText>
+            If block contains too many statements that harms the readabilty and understandabilty. Consdier extracting relevant code logic to a new subroutine or procedure.
+        </HelpText>
+        <WarningText>If block has too manz statements(%). Upper limit is %.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az if feltételes vezérlési szerkezet túl sok utasítást tartalmaz</DisplayName>
+        <Description>
+            Az if feltételes vezérlési szerkezet túl sok utasítást tartalmaz, mely rontja az olvashatóságot és nehézzé teszi az adott kódrész megértését. Megfontolandó az adott kódrészek kiemelése egy külön szubrutinba vagy eljárásba amennyiben az lehetséges. A kiemelés után egy letisztultabb, jobb kódot kapunk eredményül.
+        </Description>
+        <HelpText>
+            Az if feltételes vezérlési szerkezet túl sok utasítást tartalmaz, mely rontja az olvashatóságot és nehézzé teszi az adott kódrész megértését. Megfontolandó az adott kódrészek kiemelése egy külön szubrutinba vagy eljárásba amennyiben az lehetséges. A kiemelés után egy letisztultabb, jobb kódot kapunk eredményül.
+        </HelpText>
+        <WarningText>Az if block tul sok utasitast tartalmaz(%). Maximalisan megadhato utasitasok szama: %.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+        <Setting name = "MaxStatementsNum" editable="true">10</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_SHOSU">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>“*SRCSTMT, *NODEBUGIO” Header Option Should Be Used</DisplayName>
+        <Description>
+            Cannot found the option(*SRCSTMT: *NODEBUGIO) entry in Control Specification. Using *SRCSTMT imply that line numbers cited in error statements will correspond correctly to the code. *NODEBUGIO prevents debug operations from stopping on I/O.
+        </Description>
+        <HelpText>
+            Cannot found the option(*SRCSTMT: *NODEBUGIO) entry in Control Specification. Using *SRCSTMT imply that line numbers cited in error statements will correspond correctly to the code. *NODEBUGIO prevents debug operations from stopping on I/O.
+        </HelpText>
+        <WarningText>% file does not contain the "option(*nodebugio: *srcstmt)" entry in Control Specification.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az RPG forráskód Control specifikációs részében nem található a *SRCSTMT és a *NODEBUGIO opciók</DisplayName>
+        <Description>
+            A control specifikációs blokkban nem található meg az option(*SRCSTMT: *NODEBUGIO) bejegyzés. Ennek használatával a hibát kezelő utasításokban hivatkozott sorszámok megfelelően képződnek le és segítik a hibajavítást. A *SRCSTMT paramétert érdemes a *NODEBUGIO paraméterrel karöltve használni, mivel így elkerülhetjük az input/output műveletek miatti megszakításokat.
+        </Description>
+        <HelpText>
+            A control specifikációs blokkban nem található meg az option(*SRCSTMT: *NODEBUGIO) bejegyzés. Ennek használatával a hibát kezelő utasításokban hivatkozott sorszámok megfelelően képződnek le és segítik a hibajavítást. A *SRCSTMT paramétert érdemes a *NODEBUGIO paraméterrel karöltve használni, mivel így elkerülhetjük az input/output műveletek miatti megszakításokat.
+        </HelpText>
+        <WarningText>A % forrasfajlban a Control Specifikációs reszben az "option(*nodebugio: *srcstmt)" nem talalhato.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_ESUAS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>/Eject Should Used After Specifications (F,D,C)</DisplayName>
+        <Description>
+            After File Description, Calculation, and Definiton specifications an /EJECT compiler directive should be inserted that leads to a better formatted compiler listing. When a specification type is missing, no rule violation occurs.
+            </Description>
+        <HelpText>
+            After File Description, Calculation, and Definiton specifications an /EJECT compiler directive should be inserted that leads to a better formatted compiler listing. When a specification type is missing, no rule violation occurs.
+        </HelpText>
+        <WarningText>In file % after % specification no /EJECT compiler directive can be found.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az F,D és C specifikációs blokkok után a /EJECT fordítási direktíva használata ajánlott</DisplayName>
+        <Description>
+            A File, Definition és Calculation specifikációs blokkok után érdemes az /EJECT fordítási direktívát használni, mivel így a fordításkor létrejövő lista jobban formázott lesz és a megfelelő részek jobban elkülönülnek egymástól. Amennyiben az egyes specifikációs blokkok nem szerepelnek az adott fájlban akkor ilyen a szabálysértés nem lép fel.
+        </Description>
+        <HelpText>
+            A File, Definition és Calculation specifikációs blokkok után érdemes az /EJECT fordítási direktívát használni, mivel így a fordításkor létrejövő lista jobban formázott lesz és a megfelelő részek jobban elkülönülnek egymástól. Amennyiben az egyes specifikációs blokkok nem szerepelnek az adott fájlban akkor ilyen a szabálysértés nem lép fel.
+        </HelpText>
+        <WarningText>A % forrasfajlban a % specifikációs blokk után nem találhato /EJECT forditasi direktiva.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_MEHFS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Missing Error Handling In F Spec</DisplayName>
+        <Description>
+            During reading or writing files errors can occur. To handle such errors INFSR keyword should be added to File Description specification lines. INFSR specifies an error-handling subroutine by the given parameter (name of the subroutine). A default error-handling subroutine is *PSSR.
+        </Description>
+        <HelpText>
+            During reading or writing files errors can occur. To handle such errors INFSR keyword should be added to File Description specification lines. INFSR specifies an error-handling subroutine by the given parameter (name of the subroutine). A default error-handling subroutine is *PSSR.
+        </HelpText>
+        <WarningText>INFSR keyword is missing when % file was declared.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A file-ok kezelésekor fellépő hibák nincsenek lekezelve, azaz az INFSR kulcsszó nem szerepel az F specifikációban</DisplayName>
+        <Description>
+            A file-ok olvasásakor és írásakor hibák léphetnek fel. Ezen hibák kezeléséhez érdemes a file specifikációs részben megadni az INFSR kulcsszót, mely a hibát kezelő szubrutin nevét várja paraméterül. A megadott szubrutin fogja a felléphető hibákat kezelni. Egy ilyen megadható szubrutin lehet például a *PSSR, de a felhasználó maga is definiálhat ilyen szubrtuinokat.
+        </Description>
+        <HelpText>
+            A file-ok olvasásakor és írásakor hibák léphetnek fel. Ezen hibák kezeléséhez érdemes a file specifikációs részben megadni az INFSR kulcsszót, mely a hibát kezelő szubrutin nevét várja paraméterül. A megadott szubrutin fogja a felléphető hibákat kezelni. Egy ilyen megadható szubrutin lehet például a *PSSR, de a felhasználó maga is definiálhat ilyen szubrtuinokat.
+        </HelpText>
+        <WarningText>A % fájl megadásakor hiányzik a hibakezelő szubrutin (INFSR).</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Critical</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_DASDUD">
+    <Configuration name = "Default">
+      <Enabled>false</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Data Area Should Defined Using DataStructure Definition</DisplayName>
+        <Description>
+            Data Area elements should be declared in Defintion Specification using DS type (Datastructure) and DTAARA keyword.
+        </Description>
+        <HelpText>
+            Data Area elements should be declared in Defintion Specification using DS type (Datastructure) and DTAARA keyword.
+        </HelpText>
+        <WarningText>
+        A % fájl megadásakor hiányzik a hibakezelő szubrutin (INFSR).</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A "data area" elemek megadása jobb ha a Definition Spec-ben történik a DS típussal, melyben a DTAARA kulcsszót használjuk.</DisplayName>
+        <Description>A "data area" elemek megadása jobb ha a Definition Spec-ben történik a DS típussal, melyben a DTAARA kulcsszót használjuk. Így az adatstruktúrák és azok mezői egy helyen kerülnek definiálásra, ami könnyebb átláthatóságot eredményez, így növelve a karbantarthatóságot is.</Description>
+        <HelpText>xxxxxxxxxx</HelpText>
+        <WarningText>A % fájl megadásakor hiányzik a hibakezelő szubrutin (INFSR).</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_LCSDI">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Line Count Should Defined In INFDS</DisplayName>
+        <Description>
+            Line count information should be read from the data structure specified in the parameter of INFDS (in PRINTER files). Line count information can be read from positions 367-368.
+        </Description>
+        <HelpText>
+            Line count information should be read from the data structure specified in the parameter of INFDS (in PRINTER files). Line count information can be read from positions 367-368.
+        </HelpText>
+        <WarningText>INFDS keyword missing or the datastructure cannot be found specified in INFDS or the datastructure does not reference the line counter in % PRINTER file.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>A line count data printer fájlok esetében az INFDS kulcszóban megadott adatstruktúrában a 367-368 pozícióból olvasandó ki.</DisplayName>
+        <Description>A line count data printer fájlok esetében az INFDS kulcszóban megadott adatstruktúrában a 367-368 pozícióból olvasandó ki.</Description>
+        <HelpText>
+            A line count data printer fájlok esetében az INFDS kulcszóban megadott adatstruktúrában a 367-368 pozícióból olvasandó ki.
+        </HelpText>
+        <WarningText>A % PRINTER fájl esetében hiányzik az INFDS kulcsszó vagy az INFDS-ben megadott adatstruktúra nem található vagy a nem hivatkozott a line counter-re az adatstruktúra.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "FHRPG_ISTWE">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>IF-ELSEIF Should Terminated With ELSE</DisplayName>
+        <Description>
+            ELSE should be used after IF-ELSEIF structure as a defensive programming component. At least one ELSEIF have to occur in the strucutre.
+        </Description>
+        <HelpText>
+            ELSE should be used after IF-ELSEIF structure as a defensive programming component. At least one ELSEIF have to occur in the strucutre.
+        </HelpText>
+        <WarningText>IF-ELSEIF should terminated with ELSE.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>Az IF-ELSEIF blokk végén nem található meg az ELSE lezáró blokk</DisplayName>
+        <Description>Az IF - ELSEIF szerkezet után egy ELSE lezárás is megadandó, ezzel az alap védekező programozási elvet követhetjük. Legalább egy ELSE IF is szükséges a szabálysértés fellépéséhez.</Description>
+        <HelpText>Az IF-ELSEIF blokk végén nem található meg az ELSE lezáró blokk</HelpText>
+        <WarningText>Az IF - ELSEIF blokk után nem található a lezáró ELSE ág.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+  <Metric id = "FHRPG_FPMK">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>First Parameter Must Be KLIST</DisplayName>
+        <Description>
+            First parameter must be KLIST when using a CHAIN, DELETE, READE, READPE, SETGT or SETLL operation.
+        </Description>
+        <HelpText>First parameter must be KLIST when using a CHAIN, DELETE, READE, READPE, SETGT or SETLL operation.</HelpText>
+        <WarningText>% operation's first parameter(%) is not a KLIST.</WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>true</Warning>
+        <DisplayName>CHAIN, DELETE, READE, READPE, SETGT és SETLL operációk során az első paraméternek (factor1) egy KLIST típusú elemnek kell lennie.</DisplayName>
+        <Description>
+            A CHAIN, DELETE, READE, READPE, SETGT és SETLL utasítások első paraméterében egy KLIST argumentumot adjunk meg, ezzel átláthatóbbá tesszük a kódot, illetve megteremtjük a szabályos/szabványos kulcs megadási módot.
+        </Description>
+        <HelpText>CHAIN, DELETE, READE, READPE, SETGT és SETLL operációk során az első paraméternek (factor1) egy KLIST típusú elemnek kell lennie.</HelpText>
+        <WarningText>A % operáció első paramétere (%) nem KLIST típusú elem.</WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Priority" editable="true">Major</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+    
+    <!--Groups-->
+  <Metric id = "Unnecessary and Unused Code Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Unnecessary and Unused Code Rules</DisplayName>
+        <Description>The Unnecessary and Unused Ruleset contains a collection of rules for unnecessary, unused or ineffective code.</Description>
+        <HelpText>The Unnecessary and Unused Ruleset contains a collection of rules for unnecessary, unused or ineffective code.</HelpText>
+        <WarningText>The Unnecessary and Unused Ruleset contains a collection of rules for unnecessary, unused or ineffective code.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  <Metric id = "Naming Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Naming Rules</DisplayName>
+        <Description>The Naming Ruleset contains a collection of rules for indicating bad naming conventions.</Description>
+        <HelpText>The Naming Ruleset contains a collection of rules for indicating bad naming conventions.</HelpText>
+        <WarningText>The Naming Ruleset contains a collection of rules for indicating bad naming conventions.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+  <Metric id = "Documentation Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Documentation Rules</DisplayName>
+        <Description>The Documentation Ruleset contains a collection of rules for indicating bad documentation or the lack of documentation.</Description>
+        <HelpText>The Documentation Ruleset contains a collection of rules for indicating bad documentation or the lack of documentation.</HelpText>
+        <WarningText>The Documentation Ruleset contains a collection of rules for indicating bad documentation or the lack of documentation.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+  <Metric id = "Basic Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Basic Rules</DisplayName>
+        <Description>The Basic Ruleset contains a collection of rules that indicate poor code implementations. An alternative should be used.</Description>
+        <HelpText>The Basic Ruleset contains a collection of rules that indicate poor code implementations. An alternative should be used.</HelpText>
+        <WarningText>The Basic Ruleset contains a collection of rules that indicate poor code implementations. An alternative should be used.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+    
+  <Metric id = "Design Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Design Rules</DisplayName>
+        <Description>The Design Ruleset contains a collection of rules for indicating poor implementations coming from bad design.</Description>
+        <HelpText>The Design Ruleset contains a collection of rules for indicating poor implementations coming from bad design.</HelpText>
+        <WarningText>The Design Ruleset contains a collection of rules for indicating poor implementations coming from bad design.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>    
+  
+  <Metric id = "Type Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Type Rules</DisplayName>
+        <Description>The Type Ruleset contains a collection of rules that point out the weak spots with a focus on types and type compatibility.</Description>
+        <HelpText>The Type Ruleset contains a collection of rules that point out the weak spots with a focus on types and type compatibility.</HelpText>
+        <WarningText>The Type Ruleset contains a collection of rules that point out the weak spots with a focus on types and type compatibility.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>    
+ 
+ <Metric id = "Security Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Security Rules</DisplayName>
+        <Description>The Security Ruleset contains a collection of rules to prevent security issues.</Description>
+        <HelpText>The Security Ruleset contains a collection of rules to prevent security issues.</HelpText>
+        <WarningText>The Security Ruleset contains a collection of rules to prevent security issues.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+  
+  <Metric id = "Size Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Size Rules</DisplayName>
+        <Description>The Size Ruleset contains a collection of rules defining a limit to different aspects/properties of the system.</Description>
+        <HelpText>The Size Ruleset contains a collection of rules defining a limit to different aspects/properties of the system.</HelpText>
+        <WarningText>The Size Ruleset contains a collection of rules defining a limit to different aspects/properties of the system.</WarningText>
+      </Language>
+      <Baselines/>
+      <Settings>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>    
+ 
+</Rul>

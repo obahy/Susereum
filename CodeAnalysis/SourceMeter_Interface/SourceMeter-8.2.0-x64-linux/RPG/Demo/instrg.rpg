@@ -1,0 +1,166 @@
+      * Example: Insert trigger written in RPG/400
+      * http://publib.boulder.ibm.com/infocenter/iseries/v5r4/
+      *   index.jsp?topic=%2Fdbp%2Frbaforzahftrj.htm
+      *
+      *
+      *
+      * Program Name : INSTRG
+      * This is an insert trigger for the application
+      * file.  The application inserts the following three
+      * records into the ATMTRANS file.
+      *
+      * ATMID   ACCTID   TCODE    AMOUNT
+      * --------------------------------
+      * 10001   20001      D      100.00
+      * 10002   20002      D      250.00
+      * 10003   20003      D      500.00
+      *
+      * When a record is inserted into ATMTRANS, the system calls
+      * this program, which updates the ATMS and
+      * ACCTS files with the correct deposit or withdrawal amount.
+      * The input parameters to this trigger program are:
+      *  - TRGBUF : contains trigger information and newly inserted
+      *             record image of ATMTRANS.
+      *  - TRGBUF Length : length of TRGBUF.
+      *
+     H        1
+      *
+      * Open the ATMS file and the ACCTS file.
+      *
+     FATMS    UF  E                    DISK         KCOMIT
+     FACCTS   UF  E                    DISK         KCOMIT
+      *
+      * DECLARE THE STRUCTURES THAT ARE TO BE PASSED INTO THIS PROGRAM.
+      *
+     IPARM1       DS
+      * Physical file name
+     I                                        1  10 FNAME
+      * Physical file library
+     I                                       11  20 LNAME
+      * Member name
+     I                                       21  30 MNAME
+      * Trigger event
+     I                                       31  31 TEVEN
+      * Trigger time
+     I                                       32  32 TTIME
+      * Commit lock level
+     I                                       33  33 CMTLCK
+      * Reserved
+     I                                       34  36 FILL1
+      * CCSID
+     I                                    B  37  400CCSID
+      * Reserved
+     I                                       41  48 FILL2
+      * Offset to the original record
+     I                                    B  49  520OLDOFF
+      * length of the original record
+     I                                    B  53  560OLDLEN
+      * Offset to the original record null byte map
+     I                                    B  57  600ONOFF
+      * length of the null byte map
+     I                                    B  61  640ONLEN
+      * Offset to the new record
+     I                                    B  65  680NOFF
+      * length of the new record
+     I                                    B  69  720NEWLEN
+      * Offset to the new record null byte map
+     I                                    B  73  760NNOFF
+      * length of the null byte map
+     I                                    B  77  800NNLEN
+      * Reserved
+     I                                       81  96 RESV3
+      * Old record ** not applicable
+     I                                       97 112 OREC
+      * Null byte map of old record
+     I                                      113 116 OOMAP
+      * Newly inserted record of ATMTRANS
+     I                                      117 132 RECORD
+      * Null byte map of new record
+     I                                      133 136 NNMAP
+     IPARM2       DS
+     I                                    B   1   40LENG
+      ******************************************************************
+      * SET UP THE ENTRY PARAMETER LIST.
+      ******************************************************************
+     C           *ENTRY    PLIST
+     C                     PARM           PARM1
+     C                     PARM           PARM2
+      ******************************************************************
+      * Use NOFF, which is the offset to the new record, to
+      * get the location of the new record from the first
+      * parameter that was passed into this trigger program.
+      *   - Add 1 to the offset NOFF since the offset that was
+      *     passed to this program started from zero.
+      *   - Substring out the fields to a CHARACTER field and
+      *     then move the field to a NUMERIC field if it is
+      *     necessary.
+      ******************************************************************
+     C                     Z-ADDNOFF      O       50
+     C                     ADD  1         O
+      ******************************************************************
+      *         - PULL OUT THE ATM NUMBER.
+      ******************************************************************
+     C           5         SUBSTPARM1:O   CATM    5
+      ******************************************************************
+      *         - INCREMENT "O", WHICH IS THE OFFSET IN THE PARAMETER
+      *           STRING.  PULL OUT THE ACCOUNT NUMBER.
+      ******************************************************************
+     C                     ADD  5         O
+     C           5         SUBSTPARM1:O   CACC    5
+      ******************************************************************
+      *         - INCREMENT "O", WHICH IS THE OFFSET IN THE PARAMETER
+      *           STRING.  PULL OUT THE TRANSACTION CODE.
+      ******************************************************************
+     C                     ADD  5         O
+     C           1         SUBSTPARM1:O   TCODE   1
+      ******************************************************************
+      *         - INCREMENT "O", WHICH IS THE OFFSET IN THE PARAMETER
+      *           STRING.  PULL OUT THE TRANSACTION AMOUNT.
+      ******************************************************************
+     C                     ADD  1         O
+     C           5         SUBSTPARM1:O   CAMT    5
+     C                     MOVELCAMT      TAMT    52
+      *************************************************************
+      *  PROCESS THE ATM FILE.                     ****************
+      *************************************************************
+      * READ THE FILE TO FIND THE CORRECT RECORD.
+     C           ATMN      DOUEQCATM
+     C                     READ ATMS                     61EOF
+     C                     END
+     C   61                GOTO EOF
+      * CHANGE THE VALUE OF THE ATM BALANCE APPROPRIATELY.
+     C           TCODE     IFEQ 'D'
+     C                     ADD  TAMT      ATMAMT
+     C                     ELSE
+     C           TCODE     IFEQ 'W'
+     C                     SUB  TAMT      ATMAMT
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDIF
+      * UPDATE THE ATM FILE.
+     C           EOF       TAG
+     C                     UPDATATMFILE
+     C                     CLOSEATMS
+      *************************************************************
+      *  PROCESS THE ACCOUNT FILE.                 ****************
+      *************************************************************
+      * READ THE FILE TO FIND THE CORRECT RECORD.
+     C           ACCTN     DOUEQCACC
+     C                     READ ACCTS                    62  EOF2
+     C                     END
+     C   62                GOTO EOF2
+      * CHANGE THE VALUE OF THE ACCOUNTS BALANCE APPROPRIATELY.
+     C           TCODE     IFEQ 'D'
+     C                     ADD  TAMT      BAL
+     C                     ELSE
+     C           TCODE     IFEQ 'W'
+     C                     SUB  TAMT      BAL
+     C                     ELSE
+     C                     ENDIF
+     C                     ENDIF
+      * UPDATE THE ACCT FILE.
+     C           EOF2      TAG
+     C                     UPDATACCFILE
+     C                     CLOSEACCTS
+      *
+     C                     SETON                     LR

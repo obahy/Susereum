@@ -253,8 +253,10 @@ class CodeSmellClient:
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
 
+        work_path = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
         #identify code_smell family configuration file
-        conf_file = self._work_path + '/etc/.suse'
+        conf_file = work_path + '/etc/.suse'
 
         if os.path.isfile(conf_file):
             try:
@@ -263,7 +265,6 @@ class CodeSmellClient:
             except IOError as error:
                 raise CodeSmellException("Unable to load code smell family configuration file: {}"
                                          .format(error))
-
             #load toml config into a dict
             toml_config = toml.loads(raw_config)
 
@@ -289,7 +290,6 @@ class CodeSmellClient:
             toml_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
         #save new configuration
-        conf_file = self._work_path + '/etc/.suse'
         try:
             with open(conf_file, 'w+') as config:
                 toml.dump(toml_config, config)

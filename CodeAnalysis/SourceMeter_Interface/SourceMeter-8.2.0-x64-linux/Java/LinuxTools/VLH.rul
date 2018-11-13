@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Rul>
+  <ToolDescription>
+    <Configuration name="Default">
+      <ToolDescriptionItem name="ID">VulnerabilityHunter</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+  
+  <Configurations>
+    <config name="Default"/>
+    <config name="java" redefine="Default"/>
+  </Configurations>
+
+  <Metric id = "Vulnerability Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Vulnerability Rules</DisplayName>
+        <Description>These rules deal with different security issues arise with tainting user inputs in web applications.</Description>
+        <HelpText>These rules deal with different security issues arise with tainting user inputs in web applications.</HelpText>
+      </Language>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+    </Configuration>
+  </Metric>
+
+  <Metric id="VH_XSS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Cross-Site Scripting</DisplayName>
+        <Description>Description</Description>
+        <HelpText>&lt;p&gt;In a typical cross-site scripting attack the hacker infects a legitimate web page with his malicious client-side script.When a user visits this web page the script is downloaded to his browser and executed.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Prevention:&lt;/b&gt; Encode special characters (for example &amp;lt; to &amp;amp;lt) on server side.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Example:&lt;/b&gt;&lt;/p&gt;&lt;pre class=&quot;sourcemeter-example-code&quot;&gt;String userName =request.getParameter(&amp;quot;name&amp;quot;);&amp;#x0A;response.getWriter().println(&amp;quot;Welcome&amp;quot; + userName);&amp;#x0A;&lt;/pre&gt;&lt;p&gt;&lt;b&gt;Input:&lt;/b&gt; &amp;quot;John&amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Result:&lt;/b&gt; The page will display all the cookies in an alert window.&lt;/p&gt;</HelpText>
+        <WarningText>Possible Cross-Site Scripting Vulnerability.&#xA;Source: %&#xA;Sink: %&#xA;</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Vulnerability Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+  
+  <Metric id="VH_CI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Command Injection</DisplayName>
+        <Description>Description</Description>
+        <HelpText>&lt;p&gt;In case of command injection the attacker forces the application to execute manipulated OS commands.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Prevention:&lt;/b&gt; Escape not acceptable characters like &apos;;&apos; or &apos;&amp;amp;&apos;. (The given characters are just examples and not a complete list. The list of the characters, which you should take care of, is platform dependent.).&lt;/p&gt;&lt;p&gt;&lt;b&gt;Example:&lt;/b&gt;&lt;/p&gt;&lt;pre class=&quot;sourcemeter-example-code&quot;&gt;String dir =request.getParameter(&amp;quot;dir_name&amp;quot;);&amp;#x0A;String osCommand =&amp;quot;c:\\WINDOWS\\SYSTEM32\\cmd.exe /c dir &amp;quot;;&amp;#x0A;Process process =Runtime.getRuntime().exec(osCommand + dir);&amp;#x0A;&lt;/pre&gt;&lt;p&gt;&lt;b&gt;Input:&lt;/b&gt; &amp;quot;bin &amp;amp; rmdir /S /Q data&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Result:&lt;/b&gt; The bin directory is listed and the data directory with all its subdirectories is deleted.&lt;/p&gt;</HelpText>
+        <WarningText>Possible Command Injection Vulnerability.&#xA;Source: %&#xA;Sink: %&#xA;</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Vulnerability Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>  
+  
+  <Metric id="VH_HTTPRS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>HTTP Response Splitting</DisplayName>
+        <Description>Description</Description>
+        <HelpText>&lt;p&gt;In case of HTTP response splitting attack the attacker forces the server to print a carriage return (CR) and line feed (LF) character into a field of the header in order to add new fields or split the response into two by adding an entirely new body with inserting two line breaks.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Prevention:&lt;/b&gt; Check the user input for CR and LF characters.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Example: &lt;/b&gt;&lt;/p&gt;&lt;pre class=&quot;sourcemeter-example-code&quot;&gt;String author =request.getParameter(AUTHOR_PARAM);&amp;#x0A;Cookie cookie = newCookie(&amp;quot;author&amp;quot;, author);&amp;#x0A;response.addCookie(cookie);&amp;#x0A;&lt;/pre&gt;&lt;p&gt;&lt;b&gt;Input:&lt;/b&gt; &amp;quot;John\r\nContent-Length: 0\r\n\r\nHTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n&amp;lt;html&amp;gt;&amp;lt;a title=&amp;quot;Click here!!!&amp;quot;href=&amp;quot;http://www.maliciouspage.org/&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Result:&lt;/b&gt; The attacker creates two responses from one and shows his own malicious page instead of the original.&lt;/p&gt;</HelpText>
+        <WarningText>Possible HTTP Response Splitting Vulnerability.&#xA;Source: %&#xA;Sink: %&#xA;</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Vulnerability Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>  
+  
+  <Metric id="VH_LDAPI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>LDAP Injection</DisplayName>
+        <Description>Description</Description>
+        <HelpText>&lt;p&gt;LDAP Injection is an attack used to exploit web-based applications that construct LDAP statements based on user input. Improper sanitization of the user input could result in the execution of arbitrary commands such as granting permissions to unauthorized queries.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Prevention:&lt;/b&gt; (, ), *, logical (AND &amp;quot;&amp;amp;&amp;quot;, OR &amp;quot;|&amp;quot; and NOT &amp;quot;!&amp;quot;) and relational (=,&amp;gt;=,&amp;lt;=,~=) operators should be filtered out before usage.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Example: &lt;/b&gt;&lt;/p&gt;&lt;pre class=&quot;sourcemeter-example-code&quot;&gt;String userName =request.getParameter(&amp;quot;user&amp;quot;);&amp;#x0A;String pwd =request.getParameter(&amp;quot;pwd&amp;quot;);&amp;#x0A;String filter = &amp;quot;(&amp;amp;(USER=&amp;quot; +userName + &amp;quot;)(PASSWORD=&amp;quot; + pwd + &amp;quot;))&amp;quot;;&amp;#x0A;LdapContext ctx = new InitialLdapContext();&amp;#x0A;NamingEnumeration&amp;lt;?&amp;gt; results =ctx.search(base, filter, sc);&amp;#x0A;&lt;/pre&gt;&lt;p&gt;&lt;b&gt;Input: &lt;/b&gt;&lt;/p&gt;&lt;p&gt;userName = &amp;quot;John) (cn=*))(|(cn=*&amp;quot;&lt;/p&gt;&lt;p&gt;pwd = anything&lt;/p&gt;&lt;p&gt;&lt;b&gt;Result:&lt;/b&gt; Only the first filter is processed by the LDAP server, so the attacker gains access to the system without having avalid password.&lt;/p&gt;</HelpText>
+        <WarningText>Possible LDAP injection Vulnerability.&#xA;Source: %&#xA;Sink: %&#xA;</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Vulnerability Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+  
+  <Metric id="VH_PT">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Path Traversal</DisplayName>
+        <Description>Description</Description>
+        <HelpText>&lt;p&gt;Some programs create a path name from an external input, which gives the opportunity to the attacker to traverse the file system outside the application&apos;s folder.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Prevention:&lt;/b&gt; Do not allow &amp;quot;..&amp;quot; or full path to be used in the inputs.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Example: &lt;/b&gt;&lt;/p&gt;&lt;pre class=&quot;sourcemeter-example-code&quot;&gt;String dir =request.getParameter(&amp;quot;dir_name&amp;quot;);&amp;#x0A;File file = newFile(&amp;quot;C:\\webapp\\&amp;quot; + dir);&amp;#x0A;&lt;/pre&gt;&lt;p&gt;&lt;b&gt;Input:&lt;/b&gt; &amp;quot;..\Windows\System32\&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Result:&lt;/b&gt; Create a file object that points outside the directory of the web application.&lt;/p&gt;</HelpText>
+        <WarningText>Possible Path Traversal Vulnerability.&#xA;Source: %&#xA;Sink: %&#xA;</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Vulnerability Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="VH_SQLI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>SQL Injection</DisplayName>
+        <Description>Description</Description>
+        <HelpText>&lt;p&gt;The purpose of SQL injection attack is to insert malicious inputs into SQL queries. With this type of attack, the attacker can get sensitive information from the database and also modify data with inserted Insert/Update/Delete queries.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Prevention:&lt;/b&gt; Use parameterized queries or at least check the inputs for suspicious keywords or characters.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Example:&lt;/b&gt;&lt;/p&gt;&lt;pre class=&quot;sourcemeter-example-code&quot;&gt;String userName =request.getParameter(&amp;quot;name&amp;quot;);&amp;#x0A;Statement sqlStatement =dbConnection.createStatement();&amp;#x0A;sqlStatement.executeUpdate(&amp;quot;UPDATEusers SET status=&apos;updated&apos; &amp;quot; +&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;WHERE name=&apos;&amp;quot; + userName + &amp;quot;&apos;&amp;quot;);&amp;#x0A;&lt;/pre&gt;&lt;p&gt;&lt;b&gt;Input:&lt;/b&gt; &amp;quot;John&amp;#8217;; DROP TABLE users;--&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Result:&lt;/b&gt; John&apos;s status is updated, and then the users table is dropped.&lt;/p&gt;</HelpText>
+        <WarningText>Possible SQL Injection Vulnerability.&#xA;Source: %&#xA;Sink: %&#xA;</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Vulnerability Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+</Rul>

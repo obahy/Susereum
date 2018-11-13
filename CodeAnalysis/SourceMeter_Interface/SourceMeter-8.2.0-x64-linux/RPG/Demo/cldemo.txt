@@ -1,0 +1,140 @@
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      1
+  Command  . . . . . . . . . . . . :   CRTBNDRPG
+    Issued by  . . . . . . . . . . :     SZTERPG
+  Program  . . . . . . . . . . . . :   HELLO2
+    Library  . . . . . . . . . . . :     SZTERPG
+  Text 'description' . . . . . . . :   *SRCMBRTXT
+  Source Member  . . . . . . . . . :   HELLO2
+  Source File  . . . . . . . . . . :   QRPGLESRC
+    Library  . . . . . . . . . . . :     SZTERPG
+    CCSID  . . . . . . . . . . . . :     870
+  Text 'description' . . . . . . . :
+  Last Change  . . . . . . . . . . :   14.05.23  16:23:12
+  Generation severity level  . . . :   10
+  Default activation group . . . . :   *NO
+  Compiler options . . . . . . . . :   *XREF      *GEN       *NOSECLVL  *SHOWCPY
+                                       *EXPDDS    *EXT       *NOSHOWSKP *NOSRCSTMT
+                                       *DEBUGIO   *UNREF     *NOEVENTF
+  Debugging views  . . . . . . . . :   *SOURCE
+  Output . . . . . . . . . . . . . :   *PRINT
+  Optimization level . . . . . . . :   *NONE
+  Source listing indentation . . . :   *NONE
+  Type conversion options  . . . . :   *NONE
+  Sort sequence  . . . . . . . . . :   *HEX
+  Language identifier  . . . . . . :   *JOBRUN
+  Replace program  . . . . . . . . :   *YES
+  User profile . . . . . . . . . . :   *USER
+  Authority  . . . . . . . . . . . :   *LIBCRTAUT
+  Truncate numeric . . . . . . . . :   *YES
+  Fix numeric  . . . . . . . . . . :   *NONE
+  Target release . . . . . . . . . :   *CURRENT
+  Allow null values  . . . . . . . :   *NO
+  Binding directory  . . . . . . . :   *NONE
+  Activation group . . . . . . . . :   *CALLER
+  Define condition names . . . . . :   *NONE
+  Enable performance collection  . :   *PEP
+  Profiling data . . . . . . . . . :   *NOCOL
+  Licensed Internal Code options . :
+  Generate program interface . . . :   *NO
+  Include directory  . . . . . . . :
+  Preprocessor options . . . . . . :   *NONE
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      2
+Line   <---------------------- Source Specifications ----------------------------><---- Comments ----> Do  Page  Change Src Seq
+Number ....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+...10 Num Line  Date   Id  Number
+                          S o u r c e   L i s t i n g
+     1  */copy SZTERPG/HELLO                                                                                     140523     000100
+     2  /copy SZTERPG/qrpglesrc,hello                                                                            140523     000200
+        *--------------------------------------------------------------------------------------------*
+        * RPG member name  . . . . . :  HELLO                                                        *                     1
+        * External name  . . . . . . :  SZTERPG/QRPGLESRC(HELLO)                                     *                     1
+        * Last change  . . . . . . . :  14.05.23  16:29:13                                           *                     1
+        * Text 'description' . . . . :  TESZT                                                        *                     1
+        *--------------------------------------------------------------------------------------------*
+     3+ /copy SZTERPG/qrpglesrc,hello3                                                                           140523    1000100
+        *--------------------------------------------------------------------------------------------*
+        * RPG member name  . . . . . :  HELLO3                                                       *                     2
+        * External name  . . . . . . :  SZTERPG/QRPGLESRC(HELLO3)                                    *                     2
+        * Last change  . . . . . . . :  14.05.23  16:28:35                                           *                     2
+        *--------------------------------------------------------------------------------------------*
+     4+D constant        C                   const('repa')                                                       140523    2000100
+     5+D Add             pr            15s 2                                                                     140523    1000200
+     6+D num1                          15s 2                                                                     140523    1000300
+     7+D num2                          15s 2                                                                     140523    1000400
+     8 p Add             b                   export                                                              140523     000300
+     9 d Add             PI            15s 2                                                                     140523     000400
+    10 d num1                          15s 2                                                                     140523     000500
+    11 d num2                          15s 2                                                                     140523     000600
+    12 d result          s              6s 0                                                                     140523     000700
+    13  /free                                                                                                    140523     000800
+    14         result = num1 + num2;                                                                             140523     000900
+    15         *inlr = *on;                                                                                      140523     001000
+    16         return result;                                                                                    140523     001100
+    17  /end-free                                                                                                140523     001200
+    18 p Add             e                                                                                       140523     001300
+       * * * * *   E N D   O F   S O U R C E   * * * * *
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      3
+          A d d i t i o n a l   D i a g n o s t i c   M e s s a g e s
+ Msg id  Sv Number Seq     Message text
+ * * * * *   E N D   O F   A D D I T I O N A L   D I A G N O S T I C   M E S S A G E S   * * * * *
+                            / C o p y   M e m b e r s
+Line   Src  RPG name   <-------- External name -------> CCSID  <- Last change ->
+Number Id              Library    File       Member            Date     Time
+     2    1 HELLO      SZTERPG    QRPGLESRC  HELLO        870  14.05.23 16:29:13
+     3    2 HELLO3     SZTERPG    QRPGLESRC  HELLO3       870  14.05.23 16:28:35
+         * * * * *   E N D   O F   / C O P Y   M E M B E R S   * * * * *
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      4
+                          C r o s s   R e f e r e n c e
+      File and Record References:
+         File              Device             References (D=Defined)
+           Record
+         No references in the source.
+      Global Field References:
+         Field             Attributes         References (D=Defined M=Modified)
+         *INLR             N(1)                   15M
+         ADD               S(15,2)                 5D      8       9      18
+                           PROTOTYPE
+         CONSTANT          CONST                   4D
+      Field References for subprocedure ADD
+         Field             Attributes         References (D=Defined M=Modified)
+         NUM1              S(15,2)                10D     14
+                           BASED(_QRNL_PST+)
+         NUM2              S(15,2)                11D     14
+                           BASED(_QRNL_PST+)
+         RESULT            S(6,0)                 12D     14M     16
+      Indicator References:
+         Indicator                            References (D=Defined M=Modified)
+         LR                                       15M
+       * * * * *   E N D   O F   C R O S S   R E F E R E N C E   * * * * *
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      5
+                      E x t e r n a l   R e f e r e n c e s
+      Statically bound procedures:
+         Procedure                            References
+         No references in the source.
+      Imported fields:
+         Field             Attributes         Defined
+         No references in the source.
+      Exported fields:
+         Field             Attributes         Defined
+         No references in the source.
+   * * * * *   E N D   O F   E X T E R N A L   R E F E R E N C E S   * * * * *
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      6
+                          M e s s a g e   S u m m a r y
+ Msg id  Sv Number Message text
+       * * * * *   E N D   O F   M E S S A G E   S U M M A R Y   * * * * *
+ 5761WDS V6R1M0  080215 RN        IBM ILE RPG             SZTERPG/HELLO2           RADON      14.05.23 16:29:36        Page      7
+                            F i n a l   S u m m a r y
+  Message Totals:
+    Information  (00) . . . . . . . :        0
+    Warning      (10) . . . . . . . :        0
+    Error        (20) . . . . . . . :        0
+    Severe Error (30+)  . . . . . . :        0
+    ---------------------------------  -------
+    Total . . . . . . . . . . . . . :        0
+  Source Totals:
+    Records . . . . . . . . . . . . :       18
+    Specifications  . . . . . . . . :       11
+    Data records  . . . . . . . . . :        0
+    Comments  . . . . . . . . . . . :        1
+         * * * * *   E N D   O F   F I N A L   S U M M A R Y   * * * * *
+Program HELLO2 placed in library SZTERPG. 00 highest severity. Created on 14.05.23 at 16:29:38.
+          * * * * *   E N D   O F   C O M P I L A T I O N * * * * *

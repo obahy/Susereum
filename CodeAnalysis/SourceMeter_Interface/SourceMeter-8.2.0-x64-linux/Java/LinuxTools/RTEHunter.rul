@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Rul>
+  <ToolDescription>
+    <Configuration name="Default">
+      <ToolDescriptionItem name="ID">RTEHunter</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+  
+  <Configurations>
+    <config name="Default"/>
+    <config name="java" redefine="Default"/>
+  </Configurations>
+
+  <Metric id = "Runtime Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Runtime Rules</DisplayName>
+        <Description>These rules deal with different runtime issues.</Description>
+        <HelpText>These rules deal with different runtime issues.</HelpText>
+      </Language>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+    </Configuration>
+  </Metric>
+
+  <Metric id="RH_NPE">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>NullPointerException</DisplayName>
+        <Description>Null pointer dereferenced which causes a NullPointerException.</Description>
+        <HelpText>Null pointer dereferenced which causes a NullPointerException.</HelpText>
+        <WarningText>%</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Runtime Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+  
+  <Metric id="RH_DBZ">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Division By Zero</DisplayName>
+        <Description>Division by zero causes an ArithmeticException.</Description>
+        <HelpText>Division by zero causes an ArithmeticException.</HelpText>
+        <WarningText>%</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Runtime Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>  
+
+  <Metric id="RH_CCE">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>ClassCastException</DisplayName>
+        <Description>Invalid casting which causes a ClassCastException.</Description>
+        <HelpText>Invalid casting which causes a ClassCastException.</HelpText>
+        <WarningText>%</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Runtime Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>false</Enabled>
+      <Language lang="eng"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="RH_IL">
+    <Configuration name="Default">
+      <Enabled>false</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Infinite Loop</DisplayName>
+        <Description>Infinite loop.</Description>
+        <HelpText>Infinite loop.</HelpText>
+        <WarningText>%</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Runtime Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>false</Enabled>
+      <Language lang="eng"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="RH_IOB">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Index Out Of Bounds</DisplayName>
+        <Description>Indexing an array by an index which is less than zero, or greater than its size.</Description>
+        <HelpText>Indexing an array by an index which is less than zero, or greater than its size.</HelpText>
+        <WarningText>%</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Runtime Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="RH_NAS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Negative Array Size</DisplayName>
+        <Description>Creating an array with negative size.</Description>
+        <HelpText>Creating an array with negative size.</HelpText>
+        <WarningText>%</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Runtime Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Blocker</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+</Rul>
