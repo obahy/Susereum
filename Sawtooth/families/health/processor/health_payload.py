@@ -38,8 +38,12 @@ class HealthPayload(object):
     def __init__(self, payload):
         #The payload is csv utf-8 encoded string
         try:
-            txn_type, txn_id, data, state = payload.decode().split(",")
-            date = None
+            if payload.decode().split(",")[0] == "commit":
+                txn_type, txn_id, data, state, url = payload.decode().split(",")
+                txn_date = None
+            else:
+                txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
+                url = None
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
 
@@ -51,14 +55,15 @@ class HealthPayload(object):
             raise InvalidTransaction('Data is required')
         if not state:
             raise InvalidTransaction('State is required')
-        if txn_type != 'commit':
+        if txn_type not in ('commit', 'health'):
             raise InvalidTransaction('Invalid action: {}'.format(txn_type))
 
         self._txn_type = txn_type
         self._txn_id = txn_id
         self._data = data
         self._state = state
-        self._date = date
+        self._url = url
+        self._txn_date = txn_date
 
     @staticmethod
     def from_bytes(payload):
@@ -111,11 +116,21 @@ class HealthPayload(object):
         return self._state
 
     @property
-    def date(self):
+    def url(self):
         """
-        return date
+        return URL
+
+        Returns:
+            str: url
+        """
+        return self._url
+
+    @property
+    def txn_date(self):
+        """
+        return  date
 
         Returns:
             str: date
         """
-        return self._date
+        return self._txn_date

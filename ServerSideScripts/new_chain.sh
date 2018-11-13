@@ -3,6 +3,7 @@
 NAME=$1
 ID=$2
 SUSE_PATH=$3
+REPO_PATH="/home/practicum2018/Suserium/Susereum/"
 if [ -z "$NAME" ] 
 then
 echo "Please enter name of project: new_chain.sh [prj_name] [prj_id] [suse_file]"
@@ -62,7 +63,6 @@ IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\
 
 
 #map repo id to ports
-
 mkdir $(dirname "$0")/map
 cd $(dirname "$0")/map
 echo $VALIDATOR_PORT_COM > $ID
@@ -75,6 +75,8 @@ cd $SAWTOOTH_HOME
 mkdir data
 mkdir logs
 mkdir keys
+mkdir results
+chmod +w results
 cp -r ~/Suserium/Susereum/Sawtooth/* .
 cp $SUSE_PATH etc/.suse
 
@@ -83,6 +85,9 @@ cp $SUSE_PATH etc/.suse
 echo $VALIDATOR_PORT_COM > etc/.ports  #TODO make ports dynamic based on host's usage
 echo $VALIDATOR_PORT_NET >> etc/.ports
 echo $API_PORT >> etc/.ports
+
+#repo path
+echo $REPO_PATH > etc/.repo
 
 
 #make keys
@@ -124,7 +129,7 @@ URL="http://$IP/connect/$name.$ext"
 echo "http://$IP/connect/$name.$ext"
 curl --silent --request POST --url http://129.108.7.2:3000/  --header '"CONTENT_TYPE": "application/json"'  --data '{"sender": "ConfigurationURL", "url": "'$URL'", "repoID": "'$ID'"}'
 cat /opt/lampp/htdocs/connect/$web #TODO delete me on the first proposal
-rm $SUSE_PATH
+#rm $SUSE_PATH
 
 #start services
 #validator

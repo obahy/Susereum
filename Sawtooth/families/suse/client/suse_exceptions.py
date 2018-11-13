@@ -13,11 +13,11 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 """
-code smell family exceptions
+Suse Family Exceptions
 """
 
-class CodeSmellException(Exception):
+class SuseException(Exception):
     """
-    display code smell family exceptions
+    display suse exceptions
     """
     pass

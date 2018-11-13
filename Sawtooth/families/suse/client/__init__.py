@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-#
-# Copyright 2018 Intel Corporation
+# Copyright 2016 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,12 +13,8 @@
 # limitations under the License.
 # -----------------------------------------------------------------------------
 
-import os
-import sys
-
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'client'))
-
-from code_smell_cli import main_wrapper
-
-if __name__ == '__main__':
-    main_wrapper()
+__all__ = [
+    'suse_cli',
+    'suse_client',
+    'suse_exceptions'
+]

@@ -173,6 +173,7 @@ def analyze_from_repo(url, results_dir):
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
     clear_dir(tmp_dir)
+    print results_dir
     return results_dir
 
 
@@ -189,6 +190,7 @@ def analyze_from_path(proj_dir, results_path):
     proj_type = get_project_type(proj_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_path)
     consolidate_metrics(proj_name, proj_type, results_path)
+    print results_path
     return results_path
 
 
