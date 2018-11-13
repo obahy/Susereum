@@ -100,8 +100,9 @@ class HealthClient:
             path.close()
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
+
         repo_path = repo_path + '/Code\ Analysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-    	save_path = subprocess.check_output(['python',repo_path, github_url, sawtooth_home]).decode('utf-8')
+        save_path = subprocess.check_output(['python',repo_path, github_url, sawtooth_home]).decode('utf-8')
         save_path = save_path[save_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
 
         response = self._send_health_txn(
