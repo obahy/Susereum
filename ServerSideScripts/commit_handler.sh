@@ -9,7 +9,7 @@ echo 'about to run'
 
 #get chain ports
 cd /home/practicum2018/Suserium/Susereum/ServerSideScripts/map/  #$(dirname "$0")/map #TODO make dynamic
-readarry ports < $REPOID
+readarray ports < $REPOID
 export SAWTOOTH_HOME="$HOME/.swatooth_projects/.$(echo $NAME)_$(echo $ID)"
 cd $SAWTOOTH_HOME
 
