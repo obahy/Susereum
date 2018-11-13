@@ -103,6 +103,8 @@ class MainWindow(Gtk.Window):
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
         x = [str(self.txt_project.get_text()), self.get_time_date()]
         list_store.append(x)
+        from screen_smells import MainWindow
+        win = MainWindow()
 
     def open_project(self, widget):
         from screen_details import MainWindow

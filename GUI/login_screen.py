@@ -7,6 +7,7 @@ class UserInput(Gtk.Window):
     Gtk.Window.__init__(self, title="Login Susereum")
     self.set_border_width(5)
     self.set_size_request(300, 100)
+    self.set_resizable(False)
 
     # Layout
     vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
