@@ -28,6 +28,7 @@ import base64
 import hashlib
 import yaml
 import requests
+import subprocess
 
 from pprint import pprint
 from base64 import b64encode
@@ -89,11 +90,24 @@ class HealthClient:
         localtime = time.localtime(time.time())
         txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
         txn_date = str(txn_time)
+        sawtooth_home = self._work_path + "/results"
+
+        #get repo path
+        conf_file = self._work_path + '/etc/.path'
+        try:
+            with open(conf_file, 'r') as path:
+                repo_path = path.read()
+            path.close()
+        except IOError as error:
+            raise HealthException("Unable to open configuration file {}".format(error))
+        repo_path = repo_path + '/Code\ Analysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
+    	save_path = subprocess.check_output(['python',repo_path, github_url, sawtooth_home]).decode('utf-8')
+        save_path = save_path[save_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
 
         response = self._send_health_txn(
             txn_type='health',
             txn_id=github_user,
-            data='code_analysis_result',
+            data=save_path,
             state='processed',
             txn_date=txn_date)
         return response

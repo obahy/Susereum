@@ -18,7 +18,6 @@ import time
 import random
 import base64
 import hashlib
-import urllib
 import json
 import requests
 import yaml
@@ -110,8 +109,7 @@ class CodeSmellClient:
 
         return response
 
-        #add argument to send active proposal
-    def list(self, type=None):
+    def list(self, txn_type=None, active_flag=None):
         """
         list all transactions.
 
@@ -120,22 +118,24 @@ class CodeSmellClient:
         """
         #pull all transactions of code smell family
         result = self._send_request("transactions")
-        #print (result)
 
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]
-            if type is None:
+            if txn_type is None:
                 for entry in encoded_entries:
                     transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
 
             else:
                 for entry in encoded_entries:
                     transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
-                    if transaction_type == type:
+                    if transaction_type == txn_type:
                         transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
 
-            return transactions
+            if txn_type == 'proposal' and active_flag == 1:
+                return sorted(transactions)
+            else:
+                return transactions
         except BaseException:
             return None
 
@@ -151,7 +151,6 @@ class CodeSmellClient:
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]
-            #print ( base64.b64decode(encoded_entries["payload"]))
             transactions["payload"] = base64.b64decode(encoded_entries["payload"])
             transactions["header_signature"] = encoded_entries["header_signature"]
             return transactions
@@ -177,27 +176,11 @@ class CodeSmellClient:
             if base64.b64decode(entry["data"]).decode().split(',')[0] == "proposal":
                 last_proposal = base64.b64decode(entry["data"]).decode().split(',')
                 break
-                #within the transactions look for an active
-                #if base64.b64decode(entry["data"]).decode().split(',')[3] == "active":
-                    #return "Invalid Operation, another proposal is Active"
-                    #print ( base64.b64decode(entry["data"]).decode().split(',')[3] )
         try:
             if last_proposal[3] == "active":
                 return "Invalid Operation, another proposal is Active"
         except BaseException:
             pass
-
-        #if no active proposal continue
-        ####################REMOVE THIS##########
-        # str_dict = str(code_smells)
-        # print ("str: {}".format(str_dict))
-        # another_dict = yaml.safe_load(str_dict)
-        # print (another_dict)
-        # print (another_dict["LargeClass"])
-        # for key in another_dict.keys():
-        #     print (key)
-        #encoded = str(code_smells)
-        #print (encoded.replace(",", ";"))
 
         localtime = time.localtime(time.time())
         transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
@@ -212,7 +195,16 @@ class CodeSmellClient:
 
         return response
 
-    ###get notification from server accepted or rejected
+    def update_proposal(self, proposal_id, state):
+        """
+        update proposal state
+
+        Args:
+            proposal_id (str), proposal ID
+            state (Str), new proposal ID
+        """
+        proposal = self.show(proposal_id)
+
     def _update_proposal(self, proposal, state):
         """
         update proposal, update state.
@@ -244,9 +236,9 @@ class CodeSmellClient:
         """
         toml_config["sender"] = "Sawtooth"
         data = json.dumps(toml_config)
-        print (data)
+        #print (data)
         request = requests.post('http://129.108.7.2:3000', data=data)
-        print (request)
+        #print (request)
 
     def _update_config(self, toml_config, proposal):
         """
@@ -290,9 +282,7 @@ class CodeSmellClient:
         except IOError as error:
             raise CodeSmellException("Unable to open configuration file {}".format(error))
 
-    ## TODO: add logic to handle window period check.
-    ### the server will send proposal id, i will return total votes
-    def _check_votes(self, proposal_id, flag=None):
+    def check_votes(self, proposal_id):
         """
         review the votes of a proposal
 
@@ -303,43 +293,46 @@ class CodeSmellClient:
         encoded_result = yaml.safe_load(result)["data"]
         proposal = base64.b64decode(encoded_result["payload"]).decode().split(',')
         proposal_id = proposal[1]
-        transactions = self.list(type='vote')
-        total_votes = 0
+        transactions = self.list(txn_type='vote')
+        votes = []
         for vote in transactions:
             #for all votes of proposal
             if transactions[vote].decode().split(',')[2] == proposal_id:
                 #get vote and count, only accepted votes
-                if transactions[vote].decode().split(',')[3] == '1':
-                    total_votes += int(transactions[vote].decode().split(',')[3])
+                #if transactions[vote].decode().split(',')[3] == '1':
+                votes.append(int(transactions[vote].decode().split(',')[3]))
+        return votes
 
+        ##################
+        #NO NEED THE SERVER WILL HANDLE THIS
         #get treshold
         #identify code_smell family configuration file
-        conf_file = self._work_path + '/etc/.suse'
-
-        if flag is not None:
-            if os.path.isfile(conf_file):
-                try:
-                    with open(conf_file) as config:
-                        raw_config = config.read()
-                        config.close()
-                except IOError as error:
-                    raise CodeSmellException(
-                        "Unable to load code smell family configuration file {}".format(error))
-
-                #load toml config into a dict
-                parsed_toml_config = toml.loads(raw_config)
-
-                #get treshold
-                code_smells_config = parsed_toml_config['vote_setting']
-
-                vote_treshold = int(code_smells_config['approval_treshold'])
-
-                if total_votes >= vote_treshold:
-                    self._update_config(parsed_toml_config, proposal)
-                    #you need this, you commented out to test the github stuff
-                    #self._update_proposal(proposal, "accepted")
-        else:
-            return "Total votes (accepted): " + str(total_votes)
+        # conf_file = self._work_path + '/etc/.suse'
+        #
+        # if flag is not None:
+        #     if os.path.isfile(conf_file):
+        #         try:
+        #             with open(conf_file) as config:
+        #                 raw_config = config.read()
+        #                 config.close()
+        #         except IOError as error:
+        #             raise CodeSmellException(
+        #                 "Unable to load code smell family configuration file {}".format(error))
+        #
+        #         #load toml config into a dict
+        #         parsed_toml_config = toml.loads(raw_config)
+        #
+        #         #get treshold
+        #         code_smells_config = parsed_toml_config['vote_setting']
+        #
+        #         vote_treshold = int(code_smells_config['approval_treshold'])
+        #
+        #         if total_votes >= vote_treshold:
+        #             self._update_config(parsed_toml_config, proposal)
+        #             #you need this, you commented out to test the github stuff
+        #             #self._update_proposal(proposal, "accepted")
+        # else:
+        #     return "Total votes (accepted): " + str(total_votes)
 
     def vote(self, proposal_id, vote):
         """
@@ -375,7 +368,7 @@ class CodeSmellClient:
             state=str(vote))
 
         if response is not None:
-            self._check_votes(proposal_id, 1)
+            self.check_votes(proposal_id)
 
         return response
 

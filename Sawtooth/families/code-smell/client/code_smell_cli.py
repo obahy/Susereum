@@ -28,7 +28,7 @@ import argparse
 import traceback
 import pkg_resources
 
-from colorlog import ColoredFormatter
+from colorlog import ColoredFormatter #pylint: disable=import-error
 from pprint import pprint
 from argparse import RawTextHelpFormatter
 from client.code_smell_client import CodeSmellClient
@@ -219,6 +219,11 @@ def add_list_parser(subparser, parent_parser):
         help='Display only one type of transactions')
 
     parser.add_argument(
+        '--active',
+        type=str,
+        help='Display onle active proposals')
+
+    parser.add_argument(
         '--url',
         type=str,
         help='specify URL of REST API')
@@ -295,17 +300,6 @@ def create_parent_parser(prog_name):
         action='count',
         help='enable more verbose output')
 
-    try:
-        version = pkg_resources.get_distribution(DISTRIBUTION_NAME).version
-    except pkg_resources.DistributionNotFound:
-        version = 'UNKOWN'
-
-    parent_parser.add_argument(
-        '-V', '--version',
-        action='version',
-        version=(DISTRIBUTION_NAME + ' (Hyperledger Sawtooth) version {}').format(version),
-        help='display version information')
-
     return parent_parser
 
 def create_parser(prog_name):
@@ -320,9 +314,10 @@ def create_parser(prog_name):
     """
     parent_parser = create_parent_parser(prog_name)
 
-    """create subparser, each subparser requires a different set of arguments."""
+    #create subparser, each subparser requires a different set of arguments.
     parser = argparse.ArgumentParser(
-        description='Suserum custom family (code_smell) to process and manage code smell transactions.',
+        description=
+        'Suserum custom family (code_smell) to process and manage code smell transactions.',
         parents=[parent_parser])
 
     subparsers = parser.add_subparsers(title='subcommands', dest='command')
@@ -366,22 +361,22 @@ def do_vote(args):
     """
     if args.view is None:
         if args.id is None:
-            raise CodeSmellException ("Missing proposal ID")
+            raise CodeSmellException("Missing proposal ID")
         if args.vote is None:
-            raise CodeSmellException ("Missing VOTE")
+            raise CodeSmellException("Missing VOTE")
         if args.vote == 'yes':
-            vote=1
+            vote = 1
         else:
-            vote=0
+            vote = 0
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     if args.vote:
-        response = client.vote(proposal_id=args.id,vote=vote)
+        response = client.vote(proposal_id=args.id, vote=vote)
     else:
-        response = client._check_votes(proposal_id=args.view)
+        response = client.check_votes(proposal_id=args.view)
 
     print("Response: {}".format(response))
 
@@ -394,13 +389,13 @@ def do_proposal(args):
     """
 
     if args.propose is None:
-        raise CodeSmellException ("Missing code smells")
+        raise CodeSmellException("Missing code smells")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    """ parse input into a dict"""
+    #parse input into a dict
     code_smells = {}
     str_input = args.propose
     code_smells = dict(code_smell.split("=") for code_smell in str_input.split(","))
@@ -418,11 +413,17 @@ def do_list(args):
     """
     if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote'):
         raise CodeSmellException("Incorrect Transaction Type")
+    if args.type in ('code_smell', 'vote') and args.active is not None:
+        raise CodeSmellException("Incorrect parms combine")
+
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transactions = client.list(type=args.type)
+    if args.active is not None:
+        transactions = client.list(txn_type=args.type, active_flag=1)
+    else:
+        transactions = client.list(txn_type=args.type)
 
     if len(transactions) == 0:
         raise CodeSmellException("No transactions found")
