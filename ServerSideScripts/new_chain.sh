@@ -3,6 +3,7 @@
 NAME=$1
 ID=$2
 SUSE_PATH=$3
+REPO_PATH="/home/practicum2018/Suserium/Susereum/"
 if [ -z "$NAME" ] 
 then
 echo "Please enter name of project: new_chain.sh [prj_name] [prj_id] [suse_file]"
@@ -84,6 +85,9 @@ cp $SUSE_PATH etc/.suse
 echo $VALIDATOR_PORT_COM > etc/.ports  #TODO make ports dynamic based on host's usage
 echo $VALIDATOR_PORT_NET >> etc/.ports
 echo $API_PORT >> etc/.ports
+
+#repo path
+echo $REPO_PATH > etc/.repo
 
 
 #make keys
