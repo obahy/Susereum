@@ -35,7 +35,9 @@ sawtooth keygen
 
 #TODO cp sawtooth families and stuff into hidden folder
 cp -r $REPO_PATH/Sawtooth/* . #TODO make dynamic
-echo $SUSE > etc/.suse
+wget $URL
+cat "${URL##*/}" | tail -n +6 > etc/.suse
+rm "${URL##*/}"
 
 
 #write ports to .ports
@@ -48,9 +50,9 @@ echo $REPO_PATH > etc/.repo
 
 #ports check if in VM - set endpoint
 if [[ $(virt-what) ]]; then
-ENDPOINT=$IP
-else
 ENDPOINT=$(tracepath 129.108.7.2 | grep "2:" | awk '{print $2}')
+else
+ENDPOINT=$IP
 fi
 
 
@@ -61,6 +63,7 @@ sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind n
 sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
 #processors
 settings-tp -v --connect tcp://localhost:$VALIDATOR_PORT_COM &
+poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #cd $SAWTOOTH_HOME/bin
 python3 bin/codesmell-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
 python3 bin/health-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
