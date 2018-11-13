@@ -204,6 +204,7 @@ class CodeSmellClient:
             state (Str), new proposal ID
         """
         proposal = self.show(proposal_id)
+        self._update_config(proposal, state)
 
     def _update_proposal(self, proposal, state):
         """
@@ -238,9 +239,9 @@ class CodeSmellClient:
         data = json.dumps(toml_config)
         #print (data)
         request = requests.post('http://129.108.7.2:3000', data=data)
-        #print (request)
+        print (request)
 
-    def _update_config(self, toml_config, proposal):
+    def _update_config(self, proposal, state):
         """
         update code smell configuration metrics, after the proposal is accepted
         the configuration file needs to be updated.
@@ -251,6 +252,20 @@ class CodeSmellClient:
         """
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
+
+        #identify code_smell family configuration file
+        conf_file = self._work_path + '/etc/.suse'
+
+        if os.path.isfile(conf_file):
+            try:
+                with open(conf_file) as config:
+                    raw_config = config.read()
+            except IOError as error:
+                raise CodeSmellException("Unable to load code smell family configuration file: {}"
+                                         .format(error))
+
+            #load toml config into a dict
+            toml_config = toml.loads(raw_config)
 
         """
         start by traversing the proposal,
