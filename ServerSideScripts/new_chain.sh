@@ -129,7 +129,7 @@ URL="http://$IP/connect/$name.$ext"
 echo "http://$IP/connect/$name.$ext"
 curl --silent --request POST --url http://129.108.7.2:3000/  --header '"CONTENT_TYPE": "application/json"'  --data '{"sender": "ConfigurationURL", "url": "'$URL'", "repoID": "'$ID'"}'
 cat /opt/lampp/htdocs/connect/$web #TODO delete me on the first proposal
-rm $SUSE_PATH
+#rm $SUSE_PATH
 
 #start services
 #validator
