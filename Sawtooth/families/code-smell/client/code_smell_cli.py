@@ -414,7 +414,7 @@ def do_list(args):
     if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote'):
         raise CodeSmellException("Incorrect Transaction Type")
     if args.type in ('code_smell', 'vote') and args.active is not None:
-        raise CodeSmellException("Incorrect parms combine")
+        raise CodeSmellException("Incorrect parms combination")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
