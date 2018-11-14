@@ -49,15 +49,22 @@ class MainWindow(Gtk.Window):
 		self.btn_create.connect("clicked", self.create_project)
 		vbox.pack_start(self.btn_create, True, True, 0)
 		self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
-		
+
+		self.connect("delete-event", Gtk.main_quit)
+		self.set_position(Gtk.WindowPosition.CENTER)
+		self.show_all()
+		#Gtk.main()
+
 	def add_project(self, widget):
 		print("Analyzing project: "+ str(self.url_path.get_text()))
 
 	def create_project(self, widget):
 		print("Creating project: "+ str(self.project_path.get_text()))		
-		
-window = MainWindow()
-window.connect("delete-event", Gtk.main_quit)
-window.set_position(Gtk.WindowPosition.CENTER)
-window.show_all()
-Gtk.main()
+
+
+if __name__ == '__main__':
+	window = MainWindow()
+	window.connect("delete-event", Gtk.main_quit)
+	window.set_position(Gtk.WindowPosition.CENTER)
+	window.show_all()
+	Gtk.main()

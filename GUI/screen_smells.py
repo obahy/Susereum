@@ -19,6 +19,13 @@ class MainWindow(Gtk.Window):
         self.url = url_
         self.parent = parent_
 
+        r = requests.get(self.url)
+        data = r.text.split('\n')
+        self.prj_name = data[3]
+        self.prj_id = data[4]
+        self.api = data[2]
+        self.suse_path = (os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id + '/etc/.suse'
+
         box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(box_outer)
 
@@ -29,6 +36,32 @@ class MainWindow(Gtk.Window):
         self.listbox = Gtk.ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         box_outer.pack_start(self.listbox, True, True, 0)
+
+        self.row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        self.row.add(hbox)
+        #self.tog_pro_act = Gtk.CheckButton("Proposal active days:")
+        #self.tog_pro_act.set_active(True)
+        #self.tog_pro_act.connect("toggled", self.on_tog_pro_act)
+        self.lbl_pro_act = Gtk.Label('Proposal active days:')
+        hbox.pack_start(self.lbl_pro_act, True, False, 0)
+        self.txt_pro_act = Gtk.Entry()
+        self.txt_pro_act.set_text("0")
+        hbox.pack_start(self.txt_pro_act, False, True, 0)
+        self.listbox.add(self.row)
+
+        self.row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        self.row.add(hbox)
+        #self.tog_app_tre = Gtk.CheckButton("Approval threshold:")
+        #self.tog_app_tre.set_active(True)
+        #self.tog_app_tre.connect("toggled", self.on_tog_app_tre)
+        self.lbl_app_tre = Gtk.Label('Proposal active days:')
+        hbox.pack_start(self.lbl_app_tre, True, True, 0)
+        self.txt_app_tre = Gtk.Entry()
+        self.txt_app_tre.set_text("0")
+        hbox.pack_start(self.txt_app_tre, False, True, 0)
+        self.listbox.add(self.row)
 
         self.row = Gtk.ListBoxRow()
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -158,6 +191,22 @@ class MainWindow(Gtk.Window):
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
 
+        self.connect("delete-event", Gtk.main_quit)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.show_all()
+
+    '''
+    def on_tog_pro_act(self, tog_pro_act):
+        self.txt_pro_act.set_sensitive(tog_pro_act.get_active())
+        self.txt_pro_act.set_text("0")
+        #print("Selected")
+
+    def on_tog_app_tre(self, tog_app_tre):
+        self.txt_app_tre.set_sensitive(tog_app_tre.get_active())
+        self.txt_app_tre.set_text("0")
+        #print("Selected")
+    '''
+
     def on_tog_large_class(self, tog_large_class):
         self.txt_large_class.set_sensitive(tog_large_class.get_active())
         self.txt_large_class.set_text("0")
@@ -195,12 +244,12 @@ class MainWindow(Gtk.Window):
 
     def on_tog_ctc_up(self, tog_ctc_up):
         self.txt_ctc_up.set_sensitive(tog_ctc_up.get_active())
-        self.txt_ctc_up.set_text("0")
+        self.txt_ctc_up.set_text("0.0")
         #print("Selected")
 
     def on_tog_ctc_lw(self, tog_ctc_lw):
         self.txt_ctc_lw.set_sensitive(tog_ctc_lw.get_active())
-        self.txt_ctc_lw.set_text("0")
+        self.txt_ctc_lw.set_text("0.0")
         # self.button.connect("clicked", self.add_project, projects_list_store)
         # validate_float(txt_ctc_lw)
         #print("Selected")
@@ -211,87 +260,84 @@ class MainWindow(Gtk.Window):
         list_store.append(x)
     '''
     def load_suse(self):
-        r = requests.get(self.url)
-        data = r.text.split('\n')
-        self.prj_name = data[3]
-        self.prj_id = data[4]
-        self.api = data[2]
-        self.suse_path = '~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id + '/etc/.suse'
         #TODO change default vals
         suse = open(self.suse_path,'r')
 
     def save_to_suse(self):
-        suse = open(self.suse_path,'w')
-        #TODO read vars from GUI
-        smell = ",,,,,,"
-        #self._update_config(smell,None)
+        #read vars from GUI
+        smell = [str(self.txt_pro_act.get_text()),
+                 str(self.txt_app_tre.get_text()),
+                 str(self.txt_large_class.get_text()),
+                 str(self.txt_god_class.get_text()),
+                 str(self.txt_small_class.get_text()),
+                 str(self.txt_inapp_intm.get_text()),
+                 str(self.txt_ctc_up.get_text()),
+                 str(self.txt_ctc_lw.get_text()),
+                 str(self.txt_large_method.get_text()),
+                 str(self.txt_large_param.get_text()),
+                 str(self.txt_small_method.get_text())]
+        #TODO validate input
 
-    def _update_config(self, proposal, state):
-        """
-        update code smell configuration metrics, after the proposal is accepted
-        the configuration file needs to be updated.
-
-        Args:
-            toml_config (dict), current configuration
-            proposal (str), proposal that contains new configuration
-        """
-        # get proposal payload
-        proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
-
-        #work_path = os.path.dirname(os.path.dirname(
-        #    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-        # identify code_smell family configuration file
-        conf_file = self.suse_path
-
-        if os.path.isfile(conf_file):
-            try:
-                with open(conf_file) as config:
-                    raw_config = config.read()
-            except IOError as error:
-                raise Exception("Unable to load code smell family configuration file: {}"
-                                         .format(error))
-            # load toml config into a dict
-            toml_config = toml.loads(raw_config)
-
-        """
-        start by traversing the proposal,
-        get the code smell and the metric
-        """
-        for proposal_key, proposal_metric in proposal_payload.items():
-            tmp_type = ""
-            """
-            we don't know where on the toml file is the code smell,
-            traverse the toml dictionary looking for the same code smell.
-            """
-            for code_type in toml_config["code_smells"]:
-                """
-                once you found the code smell, break the loop and return
-                a pseudo location
-                """
-                if proposal_key in toml_config["code_smells"][code_type].keys():
-                    tmp_type = code_type
-                    break
-            # update configuration
-            toml_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
-
-        # save new configuration
-        try:
-            with open(conf_file, 'w+') as config:
-                toml.dump(toml_config, config)
-            self._send_git_request(toml_config)
-        except IOError as error:
-            raise Exception("Unable to open configuration file {}".format(error))
+        #write to suse
+        suse = open(self.suse_path, 'w')
+        suse.write('''# Copyright 2017 Intel Corporation
+        #
+        # Licensed under the Apache License, Version 2.0 (the "License");
+        # you may not use this file except in compliance with the License.
+        # You may obtain a copy of the License at
+        #
+        #     http://www.apache.org/licenses/LICENSE-2.0
+        #
+        # Unless required by applicable law or agreed to in writing, software
+        # distributed under the License is distributed on an "AS IS" BASIS,
+        # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        # See the License for the specific language governing permissions and
+        # limitations under the License.
+        # ------------------------------------------------------------------------------
+        
+        #
+        # Sawtooth -- Settings Transaction Processor Configuration
+        #''')
+        suse.write('[about]'+'\n')
+        suse.write('NewuserLink = "'+self.url+'"'+'\n')
+        suse.write('Title = "Code Smell Family Configuration"'+'\n')
+        suse.write('\n')
+        suse.write('[vote_setting]'+'\n')
+        suse.write('proposal_active_days = ['+smell[0]+',1,]\n')
+        suse.write('approval_treshold = ['+smell[1]+'\n')
+        suse.write('\n')
+        suse.write('[code_smells.class]'+'\n')
+        suse.write('LargeClass = ['+smell[2]+',1,]\n')
+        suse.write('GodClass = ['+smell[3]+',1,]\n')
+        suse.write('SmallClass = ['+smell[4]+',1,]\n')
+        suse.write('InappropriateIntimacy = ['+smell[5]+',1,]\n')
+        suse.write('\n')
+        suse.write('[code_smells.comments]'+'\n')
+        suse.write('CommentsToCodeRatioUpper = ['+smell[6]+',1.0,]\n')
+        suse.write('CommentsToCodeRatioLower = ['+smell[7]+',1.0,]\n')
+        suse.write('\n')
+        suse.write('[code_smells.method]'+'\n')
+        suse.write('LargeMethod = ['+smell[8]+',1,]\n')
+        suse.write('LargeParameterList = ['+smell[9]+',1,]\n')
+        suse.write('SmallMethod = ['+smell[10]+',1,]\n')
+        suse.close()
 
     def save_smells(self, widget):
         self.save_to_suse()
-        print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
+        print("Adding project: " + self.prj_name + " " + self.get_time_date())
         x = [self.prj_name, self.get_time_date()]
         self.parent.list_store.append(x)
         #from screen_smells import MainWindow
         #win = MainWindow()
+        print('RUNING:',(['echo','practicum2018','|','sudo','-S','python3', '../Sawtooth/bin/code_smell.py','default', '--url', 'http://127.0.0.1:' + str(self.api), '--path', ('~/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )]))
+        subprocess.Popen(['echo','practicum2018','|','sudo','-S','python3', '../Sawtooth/bin/code_smell.py','default', '--url', 'http://127.0.0.1:' + str(self.api), '--path', ('~/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )])
 
-        subprocess.check_output(['python3', '../Sawtooth/bin/health.py', '--connect', 'http://127.0.0.1:' + str(self.api), self.suse_path])
+        #os.spawnl(os.P_DETACH, 'python3 ../Sawtooth/bin/code_smells.py default --connect http:127.0.0.1:'+str(self.api)+' --path '+('~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id ))
         # TODO close self
+        try:
+            self.quit()
+        except:
+            pass
         #from screen_2 import MainWindow
         #win = MainWindow()
         ##var1.show()
@@ -307,8 +353,10 @@ class MainWindow(Gtk.Window):
         else:
             entry.set_text("")
 
-window = MainWindow()
-window.connect("delete-event", Gtk.main_quit)
-window.set_position(Gtk.WindowPosition.CENTER)
-window.show_all()
-Gtk.main()
+
+if __name__ == '__main__':
+    window = MainWindow()
+    window.connect("delete-event", Gtk.main_quit)
+    window.set_position(Gtk.WindowPosition.CENTER)
+    window.show_all()
+    Gtk.main()

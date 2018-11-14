@@ -1,19 +1,24 @@
 import gi, time
 import subprocess
 import sys
+import os
+import screen_smells
 import requests
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-
-projects = [("Project 1", "11-11-2018 09:38"),
+'''
+ = [("Project 1", "11-11-2018 09:38"),
             ("Project 2", "11-10-2018 09:38"),
             ("Project 3", "11-09-2018 09:38"),
             ("Project 4", "11-08-2018 09:38"),
             ("Project 5", "11-07-2018 09:38")]
-
+'''
 class MainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Susereum Projects")
+        self.projects=[]
+        self.read_projects()
+
         self.set_border_width(5)
         self.set_size_request(600, 300)
 
@@ -53,7 +58,7 @@ class MainWindow(Gtk.Window):
 
         # # ListStore (lists that TreeViews can display) and specify data types
         # projects_list_store = Gtk.ListStore(str, str)
-        for item in projects:
+        for item in self.projects:
             projects_list_store.append(list(item))
 
         # x = ["hi", "test"]
@@ -102,16 +107,32 @@ class MainWindow(Gtk.Window):
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
 
+        self.connect("delete-event", Gtk.main_quit)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.show_all()
+        #Gtk.main()
+
+    def read_projects(self):
+        for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
+            if prj == '.' or prj == '..':
+                continue
+            self.projects.append((prj[1:],self.get_time_date()))
+
+
     def add_project(self, widget, list_store):
         #call newchain script
         url = str(self.txt_project.get_text())
-        repo_path = sys.argv[0]
-        repo_path = '\\'.join(repo_path.split('\\')[0:-2])
-        subprocess.check_output(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        #repo_path = sys.argv[0]
+        repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        #repo_path = '\\'.join(repo_path.split('\\')[0:-2])
+        print('GOING TO RUN:',['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        subprocess.Popen(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        #os.spawnl(os.P_DETACH, '../ServerSideScripts/new_chain_client.sh '+url+' '+repo_path)
 
         #ask for smells
-        import screen_smells
+        self.list_store = list_store
         win = screen_smells.MainWindow(url, self)
+        win.show()
         '''
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
         x = [prj_name, self.get_time_date()]
@@ -123,6 +144,7 @@ class MainWindow(Gtk.Window):
     def open_project(self, widget):
         from screen_details import MainWindow
         win = MainWindow()
+        #win.show()
         #var1.show()
 
     def get_time_date(self):
@@ -133,8 +155,10 @@ class MainWindow(Gtk.Window):
         if row is not None:
             print("\nSelection- " + "Project: " + str(model[row][0]) + " Date: " + str(model[row][1]) + "\n")
 
-window = MainWindow()
-window.connect("delete-event", Gtk.main_quit)
-window.set_position(Gtk.WindowPosition.CENTER)
-window.show_all()
-Gtk.main()
+
+if __name__ == '__main__':
+    window = MainWindow()
+    window.connect("delete-event", Gtk.main_quit)
+    window.set_position(Gtk.WindowPosition.CENTER)
+    window.show_all()
+    Gtk.main()
