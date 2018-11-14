@@ -2,3 +2,6 @@
 new_chain_command
 push_command
 private-key.pem
+nohup.out
+*.swp
+*.pyc

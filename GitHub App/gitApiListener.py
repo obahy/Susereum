@@ -1,4 +1,5 @@
-# from github import Github tried to use PyGithub library but it was out of date
+#!/usr/bin/env python2
+
 import web
 import os
 import json
@@ -14,6 +15,21 @@ import toml
 from subprocess import call
 
 class RequestHandler:
+	def handleMeasureChange(self, payload):
+		updatedSuseFile = payload['suse_file']
+		strSuseFile = json.dumps(updatedSuseFile)
+		content = self.beautifyContent(strSuseFile)
+		contentEncoded = base64.b64encode(content)
+		data = {"message": "New code measures", "commiter": {"name": "susereum", "email": "susereum@gmail.com"}, "content": contentEncoded}
+		
+		repoID = payload['repo']
+		URL = 'https://api.github.com/repositories/' + str(repoID) + '/contents/.suse'
+
+		resultStatusCode = self.gitUPDATE(URL, str(data))
+		if resultStatusCode == 200:
+			print "\nUpdated suse file with new code measures"
+		else:
+			print "Problem updating suse file with new code measures: " + str(resultStatusCode)	
 
 	def beautifyContent(self, content):
 		header = """# Copyright 2017 Intel Corporation
@@ -58,7 +74,7 @@ class RequestHandler:
 		if resultStatusCode == 200:
 			print "\nSuse file updated successfully"
 		else:
-			print "Problem editing Suse file"
+			print "Problem editing Suse file: " + str(resultStatusCode)
 
 	def pushEvent(self, payload):
 		senderID = payload['sender']['id']
@@ -84,6 +100,23 @@ class RequestHandler:
 		suseFile = self.createSuseFile(repoID)
 		starCount = self.getStarCount(repoID)
 		
+		print "Repo ID: " + str(repoID)
+		print "Repo Name: " + repoName
+		#print "Suse File: " + suseFile
+		#print "Star Count: " + str(starCount)
+		# Send information to server side script that creates the project's blockchain
+		suseFile = suseFile.replace('"', "'")	# The Bash script requires single quotes, not double quotes
+
+		newChainCommandFile = open("new_chain_command", "r")	# Read command from a file
+		newChainCommand = newChainCommandFile.read()
+		newChainCommand.rstrip()	# Remove newlines from command
+	
+		path = "/tmp/SuseFile" + str(repoID)	
+		f = open(path, "w+")
+		f.write(suseFile)
+		f.close()
+		command = newChainCommand.format(repoName, str(repoID), path)
+		os.system(command)
 		print "Repo ID: " + str(repoID)
 		print "Repo Name: " + repoName
 		#print "Suse File: " + suseFile
@@ -172,17 +205,17 @@ Title = "Code Smell Family Configuration"
 NewUserLink="#"
 
 [code_smells.class]
-LargeClass=500
-SmallClass=100
-GodClass=5
-InappropriateIntimacy=2
+LargeClass=[999,1,]
+SmallClass=[1,1,]
+GodClass=[5,1,]
+InappropriateIntimacy=[2,1,]
 [code_smells.method]
-LargeMethod=250
-SmallMethod=10
-LargeParameterList=4
+LargeMethod=[250,1,]
+SmallMethod=[10,1,]
+LargeParameterList=[4,1,]
 [code_smells.comments]
-CommentsToCodeRationLower=0.2
-CommentsToCodeRationUpper=0.1
+CommentsToCodeRatioLower=[0.2,1.0,]
+CommentsToCodeRatioUpper=[0.1,1.0,]
 
 #vote settings
 #proposal_active_days indicates the time that users have to cast their vote
@@ -236,10 +269,13 @@ approval_treshold=3
 		jsonPayload = json.loads(payload)
 
 		# Check if POST is from Sawtooth
-		if 'sender' in jsonPayload and jsonPayload['sender'] == 'Sawtooth':		# Check if sender is in headers
+		if 'sender' in jsonPayload and jsonPayload['sender'] == 'ConfigurationURL':		# Check if sender is in headers
 			self.addURLToSuseFile(jsonPayload)
 			return 'OK'
-
+		if 'sender' in jsonPayload and jsonPayload['sender'] == 'Sawtooth':
+			self.handleMeasureChange(jsonPayload)
+			return 'OK'
+		
 		# Verify POST request from GitHub
 		signature = web.ctx.env.get('HTTP_X_HUB_SIGNATURE')
 		if(not self.validSignature(signature, payload)):
