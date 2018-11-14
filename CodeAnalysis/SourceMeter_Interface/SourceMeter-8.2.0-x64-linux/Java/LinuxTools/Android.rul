@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Rul>
+  <ToolDescription>
+    <Configuration name="Default">
+      <ToolDescriptionItem name="ID">AndroidHunter</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+  
+  <Configurations>
+    <config name="Default"/>
+    <config name="java" redefine="Default"/>
+  </Configurations>
+
+  <Metric id = "Android Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Android Rules</DisplayName>
+        <Description>These rules deal with the Android SDK, mostly related to best practices. To get better results, make sure that the auxclasspath is defined for type resolution to work.</Description>
+        <HelpText>These rules deal with the Android SDK, mostly related to best practices. To get better results, make sure that the auxclasspath is defined for type resolution to work.</HelpText>
+      </Language>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng" />
+    </Configuration>
+  </Metric>
+
+  <Metric id="AH_ISC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Is Super Called</DisplayName>
+        <Description>Derived classes must call through to the super class's implementation of this method. If they do not, an exception will be thrown.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Is Super Called:&lt;/b&gt; In the classes, which inherits from Activity, you must call throughto the super class&apos;s implementation, if you override the so-called lifecycle methods.Otherwise, an exception will be thrown.The Activity&amp;#8217;s lifecycle methodsare the following:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;onCreate()&lt;/li&gt;&lt;li&gt;onStart()&lt;/li&gt;&lt;li&gt;onPause()&lt;/li&gt;&lt;li&gt;onResume()&lt;/li&gt;&lt;li&gt;onDestroy()&lt;/li&gt;&lt;li&gt;onRestart()&lt;/li&gt;&lt;li&gt;onStop()&lt;/li&gt;&lt;li&gt;onSaveInstanceState()&lt;/li&gt;&lt;/ul&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity{&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; public void onCreate(BundlesavedInstanceState) {&amp;#x0A;&amp;nbsp; &amp;nbsp;&amp;nbsp;...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; //Missing super.onCreate()&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; protected void onStop() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; //Missing super.onStop()&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>Missing super.%() call. </WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Is Super Called</DisplayName>
+        <Description>Az Activity-ből származó osztályokban minden életciklus metódus felüldefiniálásakor kötelező meghívni az ősosztály azonos nevű metódusát.</Description>
+        <HelpText>Meg kell hívni az ősosztály % metódusát.</HelpText>
+        <WarningText>Hiányzó super.%() hívás.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+ 
+  <Metric id="AH_MRU">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Missing Remove Updates</DisplayName>
+        <Description>If you attach a listener to a location resource then you should always detach it.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Missing Remove Updates:&lt;/b&gt; If you attach a listener to a location resource then you shouldalways detach it.&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity implementsLocationListener {&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; public void onStart(BundlesavedInstanceState) {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; myLocationManager.requestLocationUpdates(&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; LocationManager.GPS_PROVIDER,0, 0, this);&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; //Missing lm.removeUpdates(this);&amp;#x0A;&amp;nbsp; ...&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>Missing removeUpdates() call for %.</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Missing Remove Updates</DisplayName>
+        <Description>Ha valamilyen helymeghatározó erőforrás figyelésére történik feliratkozás, akkor arról mindig legyen leiratkozás is.</Description>
+        <HelpText>Szükségeses a removeUpdates() meghívása a megfelelő objektumra.</HelpText>
+        <WarningText>Hiányzó removeUpdates() hívás a %-ra vonatkozóan.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+ 
+  <Metric id="AH_MURIA">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Missing Unregister Receiver In Activity</DisplayName>
+        <Description>If you register a receiver in your Activity.onResume() implementation, you should unregister it in Activity.onPause() (you won't receive intents when paused, and this will cut down on unnecessary system overhead).</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Missing Unregister Receiver In Activity:&lt;/b&gt; If you register a receiver in your Activity.onResume()implementation, you should unregister it in Activity.onPause() You won&apos;treceive intents when paused, and this will cut down on unnecessary systemoverhead.&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity {&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; public void onResume() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; registerReceiver(myReceiver,new IntentFilter(&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; public void onPause() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; //Missing unregisterReceiver(myReceiver);&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>Missing unregister % in the %.onPause(). </WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Missing Unregister Receiver In Activity</DisplayName>
+        <Description>Ha egy Activity onResume() metódusában iratkozunk fel egy broadcast eseményre, akkor az onPause() a javasolt hely a leiratkozásra.</Description>
+        <HelpText>A % broadcast eseményről való leiratkozás elhelyezése a(z) % onPause() metódusában.</HelpText>
+        <WarningText>A % leiratása hiányzik a(z) %.onPause()-ból.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+  
+  <Metric id="AH_DNODICP">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Do Not Open Database In ContentProvider</DisplayName>
+        <Description>If you use SQLiteOpenHelper, make sure to avoid calling getReadableDatabase() or getWritableDatabase() from ContentProvider.onCreate(), as database upgrade may take a long time.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Do Not Open Database In ContentProvider:&lt;/b&gt; Database upgrade may take a long time, you should not call thegetWritableDatabase() and the getReadableDatabase() methods from the ContentProvider.onCreate().&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyContentProvider extends ContentProvider{&amp;#x0A;&amp;nbsp; public boolean onCreate() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; DatabaseHelper foo = newDatabaseHelper(getContext());&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; SQLiteDatabase db = foo.getReadableDatabase();&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>%() call in ContentProvider.onCreate().</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Do Not Open Database In ContentProvider.</DisplayName>
+        <Description>A getWritableDatabase() és a getReadableDatabase() hívások ne szerepeljenek a ContentProvider osztály onCreate() metódusában.</Description>
+        <HelpText>A getWritableDatabase() és a getReadableDatabase() hívások áthelyezése az SQLiteOpenHelper onOpen() metódusába.</HelpText>
+        <WarningText>%() hívás a ContentProvider osztály onCreate() metódusában.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+  
+  <Metric id="AH_RRITWP">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Resource Release In The Wrong Place</DisplayName>
+        <Description>Do not place any release of resources in Activity.onSaveInstanceState(), because this callback is not always called when an activity is being placed in the background or on its way to destruction.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Resource Release In The Wrong Place:&lt;/b&gt; Do not place any release of resources inActivity.onSaveInstanceState(), because this callback is not always called whenan activity is being placed in the background or on its way to destruction. Anideal place to release resources is the Activity.onPause().&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity {&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; public void onSaveInstanceState(BundeloutState) {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp;unregisterReceiver(myReceiver); //wrong place&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; public void onPause() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; unregisterReceiver(myReceiver);//good place&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>% call in the implementation of onSaveInstaceState().</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Resource Release In The Wrong Place</DisplayName>
+        <Description>Az erőforrásokról való leíratkozásokat ne az Activity.onSaveInstanceState() metódusának a felüldefiniálásában helyezzük el.</Description>
+        <HelpText>A leíratkozásra megfelelőbbek lehetnek az Activity.onPause() metódusok.</HelpText>
+        <WarningText>% hívás az onSaveInstanceState() metóduson belül.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="AH_DNSBF">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Database Name Should Be Final</DisplayName>
+        <Description>The name of a database should be final, if it is possible.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Database Name Should Be Final:&lt;/b&gt; The name of a database should be final, if it is possible.&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class DatabaseHelper extends SQLiteOpenHelper{&amp;#x0A;&amp;nbsp; private String DATABASE_NAME =&amp;#8220;mydatabase.db&amp;#8221;&amp;#x0A;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; // The content of DATABASE_NAME doesnot change&amp;#x0A;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; DatabaseHelper(Context context) {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; super(context,DATABASE_NAME, DATABASE_VERSION);&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>% contains the name of a database which could be final.</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Database Name Should Be Final</DisplayName>
+        <Description>Az adatbázis nevét tartalmazó változó, ha lehet, akkor legyen final.</Description>
+        <HelpText>Az adatbázis nevét tegyük final-é.</HelpText>
+        <WarningText>Az adatbázis nevét tartalmazó % változó nem final.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="AH_ISCF">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Is Super Called Fragment</DisplayName>
+        <Description>Derived classes must call through to the super class's implementation of this method. If they do not, an exception will be thrown.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Is Super Called Fragment:&lt;/b&gt; In the classes, which extends Fragment, you must call through tothe super class&apos;s implementation, if you override the following methods:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;onInflate()&lt;/li&gt;&lt;li&gt;onAttach()&lt;/li&gt;&lt;li&gt;onCreate()&lt;/li&gt;&lt;li&gt;onActivityCreated()&lt;/li&gt;&lt;li&gt;onViewStateRestored()&lt;/li&gt;&lt;li&gt;onStart()&lt;/li&gt;&lt;li&gt;onResume()&lt;/li&gt;&lt;li&gt;onConfigurationChanged ()&lt;/li&gt;&lt;li&gt;onPause()&lt;/li&gt;&lt;li&gt;onStop()&lt;/li&gt;&lt;li&gt;onLowMemory()&lt;/li&gt;&lt;li&gt;onTrimMemory()&lt;/li&gt;&lt;li&gt;onDestroyView()&lt;/li&gt;&lt;li&gt;onDestroy()&lt;/li&gt;&lt;li&gt;onDetach()&lt;/li&gt;&lt;/ul&gt;Otherwise, an exception will be thrown.&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyFragment extends Fragment{&amp;#x0A;&amp;nbsp; @Override&amp;#x0A;&amp;nbsp; public void onAttach(Activity activity){&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; //Missing super.onAttach(activity)&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;&amp;nbsp; ...&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>super.%() call is missing. Derived classes must call through to the super class's implementation of this method.</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>A Fragment-ből származó osztályokban minden életciklus metódus felüldefiniálásakor kötelező meghívni az ősosztály azonos nevű metódusát.</DisplayName>
+        <Description>Az Activity-ből származó osztályokban minden életciklus metódus felüldefiniálásakor kötelező meghívni az ősosztály azonos nevű metódusát.</Description>
+        <HelpText>Meg kell hívni az ősosztály %() metódusát.</HelpText>
+        <WarningText>Hiányzó super.%() hívás.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="AH_DNHCSDC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Do not hard code the SD card.</DisplayName>
+        <Description>Hard-code external storage directory can easily lead to faults, as it can differ on different devices.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Do Not Hard Code SD Card:&lt;/b&gt; Hard-coding external storage directory can easily lead to faults, asit can differ on different devices. Instead of &amp;#8220;/sdcard&amp;#8221; use thegetExternalStorageDirectory() method of the android.os.Environment class.&lt;/p&gt;&lt;p&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity{&amp;#x0A;&amp;nbsp; public void foo() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; String storage =&amp;#8220;/sdcard/myfolder&amp;#8221;;&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>Do not hard code the SD card. </WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Do not hard code the SD card.</DisplayName>
+        <Description>Az SD kártyára való expilicit hivatkozás hibához vezethet, mivel az elérési út eszközönként különböző lehet.</Description>
+        <HelpText>Javasolt a android.os.Environment.getExternalStorageDirectory() használata.</HelpText>
+        <WarningText>Ne hivatkozzunk az SD kártyára expilicit módon.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Critical</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="AH_CSF">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Call Super First</DisplayName>
+        <Description>Super call should be the first method invocation in the method.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Call Super First:&lt;/b&gt; Super call should be the first method invocation in the override ofthe following methods of the Activity, Application, Service and Fragmentclasses:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;onCreate()&lt;/li&gt;&lt;li&gt;onConfigurationChanged()&lt;/li&gt;&lt;li&gt;onPostCreate()&lt;/li&gt;&lt;li&gt;onPostResume()&lt;/li&gt;&lt;li&gt;onRestart()&lt;/li&gt;&lt;li&gt;onRestorInstanceState()&lt;/li&gt;&lt;li&gt;onResume()&lt;/li&gt;&lt;li&gt;onStart()&lt;/li&gt;&lt;/ul&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity{&amp;#x0A;&amp;nbsp; public void onCreate(Bundle bundle) {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; foo();&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; super.onCreate(bundle);&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>The super.%() is not the first method invocation in the override of %().</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>Call Super First</DisplayName>
+        <Description>A super hívás legyen az első metódus hívás.</Description>
+        <HelpText>A super hívás legyen az első metódus hívás.</HelpText>
+        <WarningText>A super.%() nem az első metódus hívás a %() felüldefiniálásában.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Major</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id="AH_CSL">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Call Super Last</DisplayName>
+        <Description>Super call should be the last method invocation in the method.</Description>
+        <HelpText>&lt;p&gt;&lt;b&gt;Call Super Last:&lt;/b&gt; Super call should be the last method invocation in the override ofthe following methods of the Activity, Application, Service and Fragment classes:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;finish()&lt;/li&gt;&lt;li&gt;onDestroy()&lt;/li&gt;&lt;li&gt;onPause()&lt;/li&gt;&lt;li&gt;onSaveInstanceState()&lt;/li&gt;&lt;li&gt;onStop()&lt;/li&gt;&lt;li&gt;onTerminate()&lt;/li&gt;&lt;/ul&gt;Example(s):&lt;/p&gt;&lt;pre&gt;public class MyActivity extends Activity{&amp;#x0A;&amp;nbsp; public void onStop() {&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; super.onStop();&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; ...&amp;#x0A;&amp;nbsp;&amp;nbsp;&amp;nbsp; foo();&amp;#x0A;&amp;nbsp; }&amp;#x0A;}&amp;#x0A;&lt;/pre&gt;</HelpText>
+        <WarningText>The super.%() is not the last method invocation in the override of %().</WarningText>
+      </Language>
+      <Language lang="hun">
+        <Warning>true</Warning>
+        <DisplayName>SuperCalledLast</DisplayName>
+        <Description>A super hívás legyen az utolsó metódus hívás.</Description>
+        <HelpText>A super hívás legyen az utolsó metódus hívás.</HelpText>
+        <WarningText>A super.%() nem az utolsó metódus hívás a %() felüldefiniálásában.</WarningText>
+      </Language>
+      <Group>false</Group>
+      <GroupMember>Android Rules</GroupMember>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Major</Setting>
+      </Settings>
+    </Configuration>
+    <Configuration name="java">
+      <Enabled>true</Enabled>
+      <Language lang="eng"/>
+      <Language lang="hun"/>
+      <Calculated>
+        <CalculatedFor>Component</CalculatedFor>
+        <CalculatedFor>Package</CalculatedFor>
+        <CalculatedFor>Class</CalculatedFor>
+        <CalculatedFor>Annotation</CalculatedFor>
+        <CalculatedFor>Enum</CalculatedFor>
+        <CalculatedFor>Interface</CalculatedFor>
+        <CalculatedFor>Method</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+</Rul>

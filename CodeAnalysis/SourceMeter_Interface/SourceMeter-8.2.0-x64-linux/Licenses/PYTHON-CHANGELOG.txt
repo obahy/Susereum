@@ -1,0 +1,4 @@
+University of Szeged modified the source of the python 2.7.8 lib. The following changes were made:
+1. Python lib now collects the end line and end column information of the parsed statements as well (originally it recorded only start lines and start columns)
+2. Some unnecessary files and folders have been removed
+3. Config files, make/vcxproj files have been restructured slightly

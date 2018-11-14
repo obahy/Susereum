@@ -1,0 +1,278 @@
+SourceMeter 8.2 release notes
+
+New features:
+ - RTEHunter module is added in case of Java (Symbolic execution engine
+   for detecting runtime exceptions during static analysis)
+ - Halstead metrics are added in case of C/C++ and Java
+ - Maintainability Index metrics are added in case of C/C++ and Java
+ - C# parser front-end is updated to latest version
+ - FxCop support is updated to latest version
+
+Bugfixes:
+ - Minor bugfix in C/C++ toolchain
+ - Minor bugfix in C# toolchain
+ - Minor bugfix in Java toolchain
+
+December 6, 2016
+(C) FrontEndART Software Ltd. 2001-2016
+
+------------------------------------------------------------------------------
+SourceMeter 8.1.1 release notes
+
+Bugfixes:
+ - Minor bugfix in the license checking
+
+July 12, 2016
+(C) FrontEndART Software Ltd. 2001-2016
+
+------------------------------------------------------------------------------
+SourceMeter 8.1 release notes
+
+New features:
+ - 5 new Java FaultHunter rules
+ - Java FaultHunter rule "Close resources" is improved
+ - PMD rule "Avoid Synchronized At Method Level" is turned on
+
+Bugfixes:
+ - Minor bugfix in C# toolchain
+
+June 3, 2016
+(C) FrontEndART Software Ltd. 2001-2016
+
+------------------------------------------------------------------------------
+SourceMeter 8.0 release notes
+
+New features:
+ - Added support for new programming language: C#
+   (see the corresponding User's Guide for details)
+ - Added support for Microsoft Visual Studio 2015 C/C++ projects
+
+Bugfixes:
+ - Several minor bugfixes in C/C++ change tracking module
+
+January 25, 2016
+(C) FrontEndART Software Ltd. 2001-2016
+
+------------------------------------------------------------------------------
+SourceMeter 7.0.6 release notes
+
+Bugfixes:
+ - Compiler generated filtering bug in C/C++ SourceMeter is fixed
+
+September 7, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+SourceMeter 7.0.5 release notes
+
+Bugfixes:
+ - Minor bugfix in the 'ar' wrapper
+ - LLOC, TLLOC metric for C/C++ is corrected
+ - Missing template specialization declaration is fixed
+ - C/C++ ASG Linker stability is increased
+ - Missing metric thresholds for some source code element types are added
+
+Improvements:
+ - Some machine specific gcc options are supported (-march=core2, -msse3, -mssse3)
+ - Fault tolerant mode for the C/C++ language is added.
+
+August 3, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+SourceMeter 7.0.4 release notes
+
+Bugfixes:
+ - Position attribute duplications in the graph output is fixed
+ - Compiler generated elements are filtered during the C/C++ analysis even
+   if there is no external soft filter is set.
+ - Maven and Ant version is no longer checked in directory based analysis mode
+
+Improvements:
+ - Name of the corresponding element is added to the MetricHunter warnings
+ - 'rm' wrapper is added for the Linux version of the C/C++ analyzer to handle
+   those situations in which the analyzer generated files cause some problem
+
+July 13, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+
+SourceMeter 7.0.3 release notes
+
+Bugfixes:
+ - Minor bugfix in the clone detector part of the C/C++ DuplicatedCodeFinder module
+ - NL, NLE metric for C/C++ is corrected
+
+July 6, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+
+SourceMeter 7.0.2 release notes
+
+Bugfixes:
+  - Minor User's Guide fixes (NL, NLE metric descriptions)
+  - PYLINT_IE, PYLINT_MCF, and PYLINT_UI rules are disabled
+
+June 29, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+
+SourceMeter 7.0.1 release notes
+
+Bugfixes:
+ - Minor bugfix in the clone detector part of the DuplicatedCodeFinder module
+ - Error handling bug of the Maven wrapper analyzer module is fixed
+ - Include search order bug of the C++ analyzer modul is fixed
+ - CCO metric is corrected
+ - NL, NLE metric is corrected
+ - Comment related metrics are corrected
+
+June 22, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+
+SourceMeter 7.0 release notes
+
+New features:
+ - Added support for new programming languages: C/C++, Python, and RPG
+   (see the corresponding User's Guides for details)
+ - FindBugs tool is integrated into SourceMeter for Java
+ - AndroidHunter module added to SourceMeter for Java
+ - MetricHunter module added to SourceMeter for Java
+ - Analysis-profiles added
+
+Improvements:
+ - Support added for analyzing Java 1.8 code
+ - Parameters added for tuning DuplicatedCodeFinder
+ - User's Guide format changed to html
+ - PMD upgraded to version 5.2.3
+
+June 12, 2015
+(C) FrontEndART Software Ltd. 2001-2015
+
+------------------------------------------------------------------------------
+
+SourceMeter 6.0.1 for Java release notes
+
+Improvements:
+ - Component dependencies for Maven build analysis is represented in the result graph.
+ - Information on how the usage of the SonarQube plug-in influences the DB size added to the User's Guide.
+
+Bugfixes:
+ - Classpath bug in Maven 3 build analysis is fixed.
+ - Minor bugfix in FH_UnI checker.
+ - Bugfix in vulnerability detection.
+ - Correcting long paths handling in Windows.
+
+September 5, 2014
+(C) FrontEndART Software Ltd. 2001-2014
+
+------------------------------------------------------------------------------
+
+SourceMeter 6.0 for Java release notes
+
+New features:
+ - VulnerabilityHunter module added
+ - FaultHunter module added
+
+Improvements:
+ - SonarQube plug-in suuports SonarQube 4.2, 4.3, and 4.3.1 (but it is not
+   compatible with the earlier versions)
+ - Lack of Cohesion in Methods 5 (LCOM5) metric is improved
+ - Public Documented API (PDA) metric added
+ - Total Public Documented API (TPDA) metric added
+ - Public Undocumented API (PUA) metric added
+ - Total Public Undocumented API (TPUA) metric added
+ - PMD 5.0.5 -> PMD 5.1.1 (latest version)
+ - PMD rule "System Println" is turned on
+ - PMD rule "Position Literals First In Case Insensitive Comparisons" is
+   turned on
+ - PMD rule "Compare Objects With Equals" is turned off
+ - New command line switches
+
+Changes:
+ - SonarQube plug-in does not support package level elements anymore
+   (because of SonarQube 4.2+ restriction)
+
+Bugfixes:
+ - Logical Lines of Code (LLOC) metric is corrected
+ - Total Logical Lines of Code (TLLOC) metric is corrected
+ - McCabe Cyclomatic Complexity (McCC) metric is corrected
+
+July 3, 2014
+(C) FrontEndART Software Ltd. 2001-2014
+
+------------------------------------------------------------------------------
+
+SourceMeter 5.1.1 release notes
+ - "CodeAnalyzer" is from now on "SourceMeter"
+
+Minor bug fixes
+ - The tool now runs on Java 8 VM as well
+ - Improved issue tracking
+ - Minor User's Guide issue
+
+April 24, 2014
+(C) FrontEndART Software Ltd. 2001-2014
+
+------------------------------------------------------------------------------
+
+CodeAnalyzer 5.1 release notes
+
+New source code metrics
+ - Logical Lines of Code (LLOC) for files
+ - Number of Local Public Methods (NLPM)
+ - Total Number of Local Public Methods (TNLPM)
+ - Number of Local Setters (NLS)
+ - Total Number of Local Setters (TNLS)
+ - Number of Local Getters (NLG)
+ - Total Number of Local Getters (TNLG)
+ - Number of Local Public Attributes (NLPA)
+ - Total Number of Local Public Attributes (TNLPA)
+
+PMD help text import
+ - Besides the definitions, rule violations now contain example codes as well.
+
+Maven support
+ - The tool is now able to wrap the Maven build system.
+
+New parameter
+ -  "-DcleanResults"
+
+Free version is now available
+ - The free version does not require a license file
+ - The free version does not calculate the following three clone metrics
+   * Clone Risk
+   * Clone Elimination Effort
+   * Clone Elimination Gain
+
+Latest PMD version is now included:
+ - PMD 5.0.4 -> PMD 5.0.5
+
+Changes in PMD ruleset:
+ - Rule PMD_LVCBF is turned off
+ - Priority of rule PMD_MRIA is changed from P1 to P2
+
+Toolchain
+ - genealogy is copied to the results directory
+
+Bugfixes:
+ - LOC and LLOC metrics are corrected
+ - TNG and TNS metrics are corrected
+ - TNPKG metric is corrected
+ - NM and TNM metrics are corrected
+ - CR metric is corrected
+ - CV metric is corrected
+ - CEG metric is corrected
+ - CLC and CLLC metrics are corrected
+ - LDC and LLDC metrics are corrected
+ - Clone instances are not marked as "appearing clone instances" at the first
+   analysis
+ - Clone instances now have to include at least one statement
+
+January 20, 2014
+(C) FrontEndART Software Ltd. 2001-2014

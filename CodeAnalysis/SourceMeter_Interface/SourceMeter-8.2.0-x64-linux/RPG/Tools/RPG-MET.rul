@@ -1,0 +1,1533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rul>
+
+  <ToolDescription>
+    <Configuration name = "Default">
+      <ToolDescriptionItem name = "ID">RPG2Metrics</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+
+  <Configurations>
+    <config name = "Default"/>
+  </Configurations>
+
+  <Metric id = "CD">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Documentation</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Comment Density</DisplayName>
+        <Description>&lt;b&gt;Subroutine:&lt;/b&gt; ratio of the comment lines of the subroutine (CLOC) to the sum of its 	comment (CLOC) and logical lines of code (LLOC).&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; ratio of the comment lines of the procedure (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; ratio of the comment lines of the program (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</Description>
+        <HelpText>&lt;b&gt;Subroutine:&lt;/b&gt; ratio of the comment lines of the subroutine (CLOC) to the sum of its 	comment (CLOC) and logical lines of code (LLOC).&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; ratio of the comment lines of the procedure (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; ratio of the comment lines of the program (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC)</HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Comment Density</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutin kommentsorainak (CLOC) aránya a szubrutin komment- (CLOC) és kódsorainak (LLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárás kommentsorainak (CLOC) aránya az eljárás komment- (CLOC) és kódsorainak (LLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program kommentsorainak (CLOC) aránya a program komment (CLOC) és kódsorainak (LLOC) összegéhez képest.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutin kommentsorainak (CLOC) aránya a szubrutin komment- (CLOC) és kódsorainak (LLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárás kommentsorainak (CLOC) aránya az eljárás komment- (CLOC) és kódsorainak (LLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program kommentsorainak (CLOC) aránya a program komment (CLOC) és kódsorainak (LLOC) összegéhez képest.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "CLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Documentation</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Comment Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of comment and documentation code lines of the subroutine;&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of comment and documentation code lines of the procedure; however, its nested subroutines are not included.&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of comment and documentation code lines of the program; however, its subroutines and procedures are not included.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of comment and documentation code lines of the subroutine;&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of comment and documentation code lines of the procedure; however, its nested subroutines are not included.&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of comment and documentation code lines of the program; however, its subroutines and procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Comment Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutin komment és dokumentációs sorainak száma.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárás komment és dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok CLOC értéke nem növeli az eljárás CLOC mutatóját
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program komment és dokumentációs sorainak száma. A programon belül definiált szubrutinok és eljárások CLOC értéke nem növeli a program CLOC mutatóját.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutin komment és dokumentációs sorainak száma.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárás komment és dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok CLOC értéke nem növeli az eljárás CLOC mutatóját
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program komment és dokumentációs sorainak száma. A programon belül definiált szubrutinok és eljárások CLOC értéke nem növeli a program CLOC mutatóját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "DLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Documentation</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Documentation Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of documentation code lines of the subroutine.&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of documentation code lines of the procedure, however, its local subroutines are not included.&lt;b&gt;Program:&lt;/b&gt; number of documentation code lines of the program, however, its subroutines and procedures are not included.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of documentation code lines of the subroutine.&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of documentation code lines of the procedure, however, its local subroutines are not included.&lt;b&gt;Program:&lt;/b&gt; number of documentation code lines of the program, however, its subroutines and procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Documentation Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutin dokumentációs sorainak száma.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárás dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok DLOC értéke nem növeli az eljárás DLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program dokumentációs sorainak száma. A programon belül definiált szubrutinok és eljárások DLOC értéke nem növeli a program DLOC mutatóját.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutin dokumentációs sorainak száma.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárás dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok DLOC értéke nem növeli az eljárás DLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program dokumentációs sorainak száma. A programon belül definiált szubrutinok és eljárások DLOC értéke nem növeli a program DLOC mutatóját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "LLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Logical Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of non-empty and non-comment code lines of the subroutine.&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of non-empty and non-comment code lines of the procedure, however, its local subroutines are not included.&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of non-empty and non-comment code lines of the program; however, its subroutines and procedures are not included.
+        </Description>
+        <HelpText>
+			&lt;b&gt;Subroutine:&lt;/b&gt; number of non-empty and non-comment code lines of the subroutine.&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of non-empty and non-comment code lines of the procedure, however, its local subroutines are not included.&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of non-empty and non-comment code lines of the program; however, its subroutines and procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Logical Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a LLOC metrika egy szubrutinra a szubrutinhoz tartozó nem üres és nem komment sorok számát jelenti.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; a LLOC metrika egy eljárásra az eljáráshoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott eljárásban található szubrutinok LLOC értékei nem számítanak bele.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a LLOC metrika egy programra a programhoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott programban található szubrutinok és eljárások LLOC értékei nem számítanak bele.
+        </Description>
+        <HelpText>&lt;b&gt;Szubrutin:&lt;/b&gt; a LLOC metrika egy szubrutinra a szubrutinhoz tartozó nem üres és nem komment sorok számát jelenti.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; a LLOC metrika egy eljárásra az eljáráshoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott eljárásban található szubrutinok LLOC értékei nem számítanak bele.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a LLOC metrika egy programra a programhoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott programban található szubrutinok és eljárások LLOC értékei nem számítanak bele.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+     </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "LOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of code lines of the subroutine, including empty and comment lines. &lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of code lines of the procedure, including empty and comment lines, however, its local subroutines are not included.&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of code lines of the program, including empty and comment lines; however, its subroutines and procedures are not included.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of code lines of the subroutine, including empty and comment lines. &lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of code lines of the procedure, including empty and comment lines, however, its local subroutines are not included.&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of code lines of the program, including empty and comment lines; however, its subroutines and procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a LOC metrika egy szubrutinra a szubrutinhoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok is.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; a LOC metrika egy eljárásra az eljáráshoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok is, azonban az eljárásban található szubrutinok sorainak a száma nem.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a LOC metrika egy programra a programhoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok is, azonban a programban található szubrutinok és eljárások sorainak a száma nem.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a LOC metrika egy szubrutinra a szubrutinhoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok is.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; a LOC metrika egy eljárásra az eljáráshoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok is, azonban az eljárásban található szubrutinok sorainak a száma nem.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a LOC metrika egy programra a programhoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok is, azonban a programban található szubrutinok és eljárások sorainak a száma nem.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+     </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "McCC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Complexity</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>McCabe&apos;s Cyclomatic Complexity</DisplayName>
+        <Description>
+        &lt;b&gt;Subroutine:&lt;/b&gt; complexity of the subroutine expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if, else-if, for, do, do-while, do-until, when, on-error. The following instructions are not included: else, select, monitor.
+		&lt;b&gt;Procedure:&lt;/b&gt; complexity of the procedure expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if, else-if, for, do, do-while, do-until, when, on-error. The following instructions are not included: else, select, monitor. Subroutines defined locally in the procedure are not included.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Subroutine:&lt;/b&gt; complexity of the subroutine expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if, else-if, for, do, do-while, do-until, when, on-error. The following instructions are not included: else, select, monitor.
+		&lt;b&gt;Procedure:&lt;/b&gt; complexity of the procedure expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if, else-if, for, do, do-while, do-until, when, on-error. The following instructions are not included: else, select, monitor. Subroutines defined locally in the procedure are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>McCabe&apos;s Cyclomatic Complexity</DisplayName>
+        <Description>
+        &lt;b&gt;Szubrutin:&lt;/b&gt; A McCC metrika szubrutinra értelmezve a szubrutin bonyolultságát fejezi ki a benne található független vezérlési útvonalak számával. Ezzel alulról becsüli a lehetséges futtatható útvonalakat az adott programelemben, és felülről becsüli a teljes lefedettséghez minimálisan szükséges teszteseteket. Adott szubrutinra a McCC értéke kezdetben 1, és az értéke annyiszor nő egyel, ahányszor a következő utasítások előfordulnak: if, else-if, for, do, do-while, do-until, when, on-error. Az else, select, monitor illetve other utasítások nem növelik az McCC értékét.
+        &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; A McCC metrika eljárásra értelmezve az eljárás bonyolultságát fejezi ki a benne található független vezérlési útvonalak számával. Ezzel alulról becsüli a lehetséges futtatható útvonalakat az adott programelemben, és felülről becsüli a teljes lefedettséghez minimálisan szükséges teszteseteket. Adott eljárásra a McCC értéke kezdetben 1, és az értéke annyiszor nő egyel, ahányszor a következő utasítások előfordulnak: if, else-if, for, do, do-while, do-until, when, on-error. Az else, select, monitor illetve other utasítások nem növelik az McCC értékét. Az eljárásban található szubrutinok szintén nem növelik az eljárás McCC metrikáját.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Szubrutin:&lt;/b&gt; A McCC metrika szubrutinra értelmezve a szubrutin bonyolultságát fejezi ki a benne található független vezérlési útvonalak számával. Ezzel alulról becsüli a lehetséges futtatható útvonalakat az adott programelemben, és felülről becsüli a teljes lefedettséghez minimálisan szükséges teszteseteket. Adott szubrutinra a McCC értéke kezdetben 1, és az értéke annyiszor nő egyel, ahányszor a következő utasítások előfordulnak: if, else-if, for, do, do-while, do-until, when, on-error. Az else, select, monitor illetve other utasítások nem növelik az McCC értékét.
+        &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; A McCC metrika eljárásra értelmezve az eljárás bonyolultságát fejezi ki a benne található független vezérlési útvonalak számával. Ezzel alulról becsüli a lehetséges futtatható útvonalakat az adott programelemben, és felülről becsüli a teljes lefedettséghez minimálisan szükséges teszteseteket. Adott eljárásra a McCC értéke kezdetben 1, és az értéke annyiszor nő egyel, ahányszor a következő utasítások előfordulnak: if, else-if, for, do, do-while, do-until, when, on-error. Az else, select, monitor illetve other utasítások nem növelik az McCC értékét. Az eljárásban található szubrutinok szintén nem növelik az eljárás McCC metrikáját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NII">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Incoming Invocations</DisplayName>
+        <Description>
+          &lt;b&gt;Subrouine:&lt;/b&gt; number of other subroutines, procedures, and programs which directly call the subroutine. If the subroutine is invoked several times from the same subroutine, procedure, or program, it is counted only once.&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of other subroutines, procedures, and programs which directly call the procedure. If a procedure is invoked several times from the same subroutine, procedure, or program, it is counted only once.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of other subroutines, procedures, and programs which directly call the program. If a program is invoked several times from the same subroutine, procedure, or program, it is counted only once.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Subrouine:&lt;/b&gt; number of other subroutines, procedures, and programs which directly call the subroutine. If the subroutine is invoked several times from the same subroutine, procedure, or program, it is counted only once.&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of other subroutines, procedures, and programs which directly call the procedure. If a procedure is invoked several times from the same subroutine, procedure, or program, it is counted only once.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of other subroutines, procedures, and programs which directly call the program. If a program is invoked several times from the same subroutine, procedure, or program, it is counted only once.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Incoming Invocations</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; azon szubrutinok, eljárások vagy programok száma, melyek közvetlenül hívják az adott programelemet. Az NII értékét csak eggyel növeli, ha az adott szubrutint egy elem többször is meghívja.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; azon szubrutinok, eljárások vagy programok száma, melyek közvetlenül hívják az adott programelemet. Az NII értékét csak eggyel növeli, ha az adott eljárást egy elem többször is meghívja.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; azon szubrutinok, eljárások vagy programok száma, melyek közvetlenül hívják az adott programelemet. Az NII értékét csak eggyel növeli, ha az adott programot egy elem többször is meghívja.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; azon szubrutinok, eljárások vagy programok száma, melyek közvetlenül hívják az adott programelemet. Az NII értékét csak eggyel növeli, ha az adott szubrutint egy elem többször is meghívja.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; azon szubrutinok, eljárások vagy programok száma, melyek közvetlenül hívják az adott programelemet. Az NII értékét csak eggyel növeli, ha az adott eljárást egy elem többször is meghívja.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; azon szubrutinok, eljárások vagy programok száma, melyek közvetlenül hívják az adott programelemet. Az NII értékét csak eggyel növeli, ha az adott programot egy elem többször is meghívja.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <!--<CalculatedFor>Procedure</CalculatedFor>-->
+        <!--<CalculatedFor>Program</CalculatedFor>-->
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NL">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Complexity</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Nesting Level</DisplayName>
+        <Description>
+        &lt;b&gt;Subroutine:&lt;/b&gt; complexity of the subroutine expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, else-if, for, do, do-while, do-until, select, monitor. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else, when, other, and on-error.
+		&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; complexity of the procedure expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, else-if, for, do, do-while, do-until, select, monitor. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else, when, other, and on-error. Contained local subroutines are not included.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; complexity of the program expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, else-if, for, do, do-while, do-until, select, monitor. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else, when, other, and on-error. Contained local subroutines and procedures are not included.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Subroutine:&lt;/b&gt; complexity of the subroutine expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, else-if, for, do, do-while, do-until, select, monitor. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else, when, other, and on-error.
+		&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; complexity of the procedure expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, else-if, for, do, do-while, do-until, select, monitor. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else, when, other, and on-error. Contained local subroutines are not included.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; complexity of the program expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, else-if, for, do, do-while, do-until, select, monitor. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else, when, other, and on-error. Contained local subroutines and procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Nesting Level</DisplayName>
+        <Description>
+        &lt;b&gt;Szubrutin:&lt;/b&gt; Az NL metrika a szubrutinra értelmezve a szubrutin bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, else-if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else, when. other és on-error.
+        &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; Az NL metrika eljárásra értelmezve az adott eljárás bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, else-if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else, when. other és on-error. Az eljárásban található szubrutinok szintén nem növelik az eljárás NL metrikáját.
+        &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; Az NL metrika programra értelmezve az adott program bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, else-if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else, when. other és on-error. A programban található szubrutinok, illetve eljárások szintén nem növelik a program NL metrikáját.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Szubrutin:&lt;/b&gt; Az NL metrika a szubrutinra értelmezve a szubrutin bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, else-if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else, when. other és on-error.
+        &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; Az NL metrika eljárásra értelmezve az adott eljárás bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, else-if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else, when. other és on-error. Az eljárásban található szubrutinok szintén nem növelik az eljárás NL metrikáját.
+        &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; Az NL metrika programra értelmezve az adott program bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, else-if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else, when. other és on-error. A programban található szubrutinok, illetve eljárások szintén nem növelik a program NL metrikáját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NLE">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Complexity</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Nesting Level Else-If</DisplayName>
+        <Description>
+        &lt;b&gt;Subroutine:&lt;/b&gt; complexity of the subroutine expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, else, when, other, and on-error.
+		&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; complexity of the procedure expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, else, when, other, and on-error. Contained local subroutines are not included.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; complexity of the program expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, else, when, other, and on-error. Contained local subroutines and procedures are not included.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Subroutine:&lt;/b&gt; complexity of the subroutine expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, else, when, other, and on-error.
+		&lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; complexity of the procedure expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, else, when, other, and on-error. Contained local subroutines are not included.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; complexity of the program expressed as the depth of the maximum embeddedness of its conditional and iteration block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, else, when, other, and on-error. Contained local subroutines and procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Nesting Level Else-If</DisplayName>
+        <Description>
+        &lt;b&gt;Szubrutin:&lt;/b&gt; Az NLE metrika szubrutinra értelmezve a szubrutin bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. Az if-else-if szerkezetekben csak az első if utasítás növeli az NLE értékét. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else-if, else, when. other és on-error.
+        &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; Az NLE metrika eljárásra értelmezve az eljárás bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. Az if-else-if szerkezetekben csak az első if utasítás növeli az NLE értékét. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else-if, else, when. other és on-error. Az eljárásban található szubrutinok szintén nem növelik az eljárás NLE metrikáját.
+        &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; Az NLE metrika programra értelmezve a program bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. Az if-else-if szerkezetekben csak az első if utasítás növeli az NLE értékét. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else-if, else, when. other és on-error. A programban található szubrutinok és eljárások szintén nem növelik a program NLE metrikáját.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Szubrutin:&lt;/b&gt; Az NLE metrika szubrutinra értelmezve a szubrutin bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. Az if-else-if szerkezetekben csak az első if utasítás növeli az NLE értékét. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else-if, else, when. other és on-error.
+        &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; Az NLE metrika eljárásra értelmezve az eljárás bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. Az if-else-if szerkezetekben csak az első if utasítás növeli az NLE értékét. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else-if, else, when. other és on-error. Az eljárásban található szubrutinok szintén nem növelik az eljárás NLE metrikáját.
+        &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; Az NLE metrika programra értelmezve a program bonyolultságát fejezi ki a benne található elágazások és ciklusok maximális beágyazottsági mélységével. Az if-else-if szerkezetekben csak az első if utasítás növeli az NLE értékét. A metrika kiszámításánál a következő utasítások vannak figyelembe véve: if, for, do, do-while, do-until, select, monitor. A következő nyelvi elemek önmagukban nem növelik az értéket, azonban ha a hozzájuk tartozó blokkban további egymásba ágyazások találhatóak, akkor azok már figyelembe vannak véve: else-if, else, when. other és on-error. A programban található szubrutinok és eljárások szintén nem növelik a program NLE metrikáját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NOI">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Outgoing Invocations</DisplayName>
+        <Description>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once.
+		  &lt;b&gt;Procedure:&lt;/b&gt; number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines are not counted.
+		  &lt;b&gt;Program:&lt;/b&gt; number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines, procedures are not counted.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once.
+		  &lt;b&gt;Procedure:&lt;/b&gt; number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines are not counted.
+		  &lt;b&gt;Program:&lt;/b&gt; number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines, procedures are not counted.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Outgoing Invocations</DisplayName>
+        <Description>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a közvetlenül hívott szubrutinok, eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; a közvetlenül hívott szubrutinok, eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. Az eljáráson belül definiált szubrutinok NOI értéke nem növeli az adott eljárás NOI értékét.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a közvetlenül hívott szubrutinok, eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. A programon belül definiált eljárások és szubrutinok NOI értéke nem növeli a program metrikáját.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a közvetlenül hívott szubrutinok, eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; a közvetlenül hívott szubrutinok, eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. Az eljáráson belül definiált szubrutinok NOI értéke nem növeli az adott eljárás NOI értékét.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a közvetlenül hívott szubrutinok, eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. A programon belül definiált eljárások és szubrutinok NOI értéke nem növeli a program metrikáját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NOS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Statements</DisplayName>
+        <Description>
+          Statements are considered as instructions occuring in Calculation Specification entries.
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of statements in the subroutine.
+		  &lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of statements in the procedure; however, the statements of its local subroutines are not included.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of statements in the program; however, the statements of its local subroutines, procedures are not included.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Subroutine:&lt;/b&gt; number of statements in the subroutine.
+		  &lt;br&gt;&lt;b&gt;Procedure:&lt;/b&gt; number of statements in the procedure; however, the statements of its local subroutines are not included.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of statements in the program; however, the statements of its local subroutines, procedures are not included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Statements</DisplayName>
+        <Description>
+          Minden olyan utasítás beleszámít, mely a Calculation Specification-ben található.
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutinban található utasítások száma.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található utasítások száma, amibe nem számítanak bele az eljárásban található szubrutinok utasításai.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található utasítások száma, amibe nem számítanak bele a programban található eljárások és szubrutinok utasításai.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Szubrutin:&lt;/b&gt; a szubrutinban található utasítások száma.
+          &lt;br&gt;&lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található utasítások száma, amibe nem számítanak bele az eljárásban található szubrutinok utasításai.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található utasítások száma, amibe nem számítanak bele a programban található eljárások és szubrutinok utasításai.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Subroutine</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NUMPAR">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+	  <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Parameters</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of the parameters of the procedure.
+		  &lt;b&gt;Program:&lt;/b&gt; number of the parameters of the program.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of the parameters of the procedure.
+		  &lt;b&gt;Program:&lt;/b&gt; number of the parameters of the program.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Parameters</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás paramétereinek száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program paramétereinek száma.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás paramétereinek száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program paramétereinek száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "PC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Complexity</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Program Complexity</DisplayName>
+        <Description>
+        &lt;b&gt;Program:&lt;/b&gt; The sum of the McCC complexity metrics of the contained subroutines and procedures plus the McCC of the main source section.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Program:&lt;/b&gt; The sum of the McCC complexity metrics of the contained subroutines and procedures plus the McCC of the main source section.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Program Complexity</DisplayName>
+        <Description>
+        &lt;b&gt;Program:&lt;/b&gt; A program komplexitását a programon belül található szubrutinok és eljárások, illetve a rajtuk kívül elhelyezkedő utasítások McCC metrikájának összege adja.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Program:&lt;/b&gt; A program komplexitását a programon belül található szubrutinok és eljárások, illetve a rajtuk kívül elhelyezkedő utasítások McCC metrikájának összege adja.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TCD">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Documentation</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Comment Density</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; ratio of the total comment lines of the procedure (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; ratio of the total comment lines of the program (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; ratio of the total comment lines of the system (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; ratio of the total comment lines of the procedure (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; ratio of the total comment lines of the program (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; ratio of the total comment lines of the system (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Comment Density</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás összes kommentsorának (TCLOC) aránya az eljárás összes komment- (TCLOC) és kódsorainak (TLLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program összes kommentsorának (TCLOC) aránya a program összes komment- (TCLOC) és kódsorainak (TLLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer összes kommentsorának (TCLOC) aránya a program összes komment- (TCLOC) és kódsorainak (TLLOC) összegéhez képest.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás összes kommentsorának (TCLOC) aránya az eljárás összes komment- (TCLOC) és kódsorainak (TLLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program összes kommentsorának (TCLOC) aránya a program összes komment- (TCLOC) és kódsorainak (TLLOC) összegéhez képest.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer összes kommentsorának (TCLOC) aránya a program összes komment- (TCLOC) és kódsorainak (TLLOC) összegéhez képest.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TCLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Documentation</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Comment Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of comment and documentation code lines of the procedure, including its local subroutines' CLOC metrics.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of comment and documentation code lines of the program, including its local subroutines' CLOC metrics and its local procedures' TCLOC metrics.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; sum of the TLOC metrics of programs.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of comment and documentation code lines of the procedure, including its local subroutines' CLOC metrics.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of comment and documentation code lines of the program, including its local subroutines' CLOC metrics and its local procedures' TCLOC metrics.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; sum of the TCLOC metrics of programs.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Comment Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás komment és dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok CLOC értéke növeli az eljárás TCLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program komment és dokumentációs sorainak száma. A programon belül definiált szubrutinok CLOC és eljárások TCLOC értéke növeli a program TCLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer TCLOC metrikáját a rendszerben található összes program TCLOC értékének összege adja.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás komment és dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok CLOC értéke növeli az eljárás TCLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program komment és dokumentációs sorainak száma. A programon belül definiált szubrutinok CLOC és eljárások TCLOC értéke növeli a program TCLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer TCLOC metrikáját a rendszerben található összes program TCLOC értékének összege adja.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TDLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Documentation</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Documentation Lines of Code</DisplayName>
+        <Description>
+		&lt;b&gt;Procedure:&lt;/b&gt; number of documentation code lines of the procedure, including the contained subroutines.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of documentation code lines of the program, including its local subroutines and procedures.
+		&lt;br&gt;&lt;b&gt;System:&lt;/b&gt; sum of the TDLOC values of the contained programs.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Procedure:&lt;/b&gt; number of documentation code lines of the procedure, including the contained subroutines.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of documentation code lines of the program, including its local subroutines and procedures.
+		&lt;br&gt;&lt;b&gt;System:&lt;/b&gt; sum of the TDLOC values of the contained programs.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Documentation Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok DCLOC értéke növeli az eljárás TDLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program dokumentációs sorainak száma. A programon belül definiált szubrutinok DLOC és eljárások TDLOC értéke növeli a program TDLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer TDLOC metrikáját a rendszerben található összes program TDLOC értékének összege adja.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárás dokumentációs sorainak száma. Az eljáráson belül definiált szubrutinok DCLOC értéke növeli az eljárás TDLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a program dokumentációs sorainak száma. A programon belül definiált szubrutinok DLOC és eljárások TDLOC értéke növeli a program TDLOC mutatóját.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer TDLOC metrikáját a rendszerben található összes program TDLOC értékének összege adja.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TLLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Logical Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of non-empty and non-comment code lines of the procedure, including its local subroutines.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of non-empty and non-comment code lines of the program, including the non-empty and non-comment code lines of its local subroutines, procedures.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of non-empty and non-comment code lines of the system (sum of TLLOC values of programs).
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of non-empty and non-comment code lines of the procedure, including its local subroutines.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of non-empty and non-comment code lines of the program, including the non-empty and non-comment code lines of its local subroutines, procedures.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of non-empty and non-comment code lines of the system (sum of TLLOC values of programs).
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Logical Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; a TLLOC metrika egy eljárásra az eljáráshoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott eljárásban található szubrutinok LLOC értékei is beleszámítanak.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a TLLOC metrika egy programra a programhoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott programban található szubrutinok TLLOC és eljárások LLOC értékei is beleszámítanak.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a TLLOC metrika egy rendszerre a rendszerben található programok TLLOC értékeinek összege.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; a TLLOC metrika egy eljárásra az eljáráshoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott eljárásban található szubrutinok LLOC értékei is beleszámítanak.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a TLLOC metrika egy programra a programhoz tartozó nem üres és nem komment sorok számát jelenti, amibe az adott programban található szubrutinok TLLOC és eljárások LLOC értékei is beleszámítanak.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a TLLOC metrika egy rendszerre a rendszerben található programok TLLOC értékeinek összege.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+     </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TLOC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of code lines of the procedure, including empty and comment lines, as well as its local subroutines.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of code lines of the program, including empty and comment lines, as well as its local subroutines and procedures.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; sum of the TLOC metrics of the programs.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of code lines of the procedure, including empty and comment lines, as well as its local subroutines.
+		  &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of code lines of the program, including empty and comment lines, as well as its local subroutines and procedures.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; sum of the TLOC metrics of the programs.
+       </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Lines of Code</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; a TLOC metrika egy eljárásra az eljáráshoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok, valamint az eljárásban található szubrutinok LOC értéke is.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a TLOC metrika egy programra a programhoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok, valamint a programban található eljárások TLOC és szubrutinok LOC értékei is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a TLOC metrika egy rendszerre a rendszerben található programok TLOC értékeinek összege.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; a TLOC metrika egy eljárásra az eljáráshoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok, valamint az eljárásban található szubrutinok LOC értéke is.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a TLOC metrika egy programra a programhoz tartozó kódsorok száma, amibe beletartoznak az üres és komment sorok, valamint a programban található eljárások TLOC és szubrutinok LOC értékei is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a TLOC metrika egy rendszerre a rendszerben található programok TLOC értékeinek összege.
+       </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNOI">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Outgoing Invocations</DisplayName>
+        <Description>
+		  &lt;b&gt;Procedure:&lt;/b&gt; number of directly called procedures, or programs. If a procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines are included.
+		  &lt;b&gt;Program:&lt;/b&gt; number of directly called procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines and TNOI of contained procedures are included.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of directly called procedures, or programs. If a procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines are included.
+		  &lt;b&gt;Program:&lt;/b&gt; number of directly called procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines and TNOI of contained procedures are included.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Outgoing Invocations</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; a közvetlenül hívott eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. Az eljáráson belül definiált szubrutinok NOI értéke növeli az adott eljárás TNOI értékét.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a közvetlenül hívott eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. A programon belül definiált eljárások TNOI és szubrutinok NOI értéke növeli a program TNOI metrikáját.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; a közvetlenül hívott eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. Az eljáráson belül definiált szubrutinok NOI értéke növeli az adott eljárás TNOI értékét.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a közvetlenül hívott eljárások vagy programok száma. Csak eggyel növeli a metrikaértéket, ha azonos programelem többször meghívásra kerül. A programon belül definiált eljárások TNOI és szubrutinok NOI értéke növeli a program TNOI metrikáját.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNOS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+	  
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Statements</DisplayName>
+        <Description>
+        &lt;b&gt;Procedure:&lt;/b&gt; number of statements in the procedure, including the statements of its subroutines.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of statements in the program, including the statements of its subroutines and procedures.
+		&lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all statements in the system.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Procedure:&lt;/b&gt; number of statements in the procedure, including the statements of its subroutines.
+		&lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of statements in the program, including the statements of its subroutines and procedures.
+		&lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all statements in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Statements</DisplayName>
+        <Description>
+        &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található utasítások száma, amibe beleszámítanak az eljárásban található szubrutinok utasításai is.
+        &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található utasítások száma, amibe beleszámítanak a programban található eljárások és szubrutinok utasításai is.
+        &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes utasítás száma.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található utasítások száma, amibe beleszámítanak az eljárásban található szubrutinok utasításai is.
+        &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található utasítások száma, amibe beleszámítanak a programban található eljárások és szubrutinok utasításai is.
+        &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes utasítás száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>System</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNPC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Procedures</DisplayName>
+        <Description>
+			&lt;b&gt;Program:&lt;/b&gt; number of procedures located in the program.
+			&lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of procedures located in the system.
+        </Description>
+        <HelpText>
+        	&lt;b&gt;Program:&lt;/b&gt; number of procedures located in the program.
+			&lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of procedures located in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Procedures</DisplayName>
+        <Description>
+        &lt;b&gt;Program:&lt;/b&gt; a programban lévő eljárások száma.
+        &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben lévő összes eljárás száma.
+        </Description>
+        <HelpText>
+        &lt;b&gt;Program:&lt;/b&gt; a programban lévő eljárások száma.
+        &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben lévő összes eljárás száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNPG">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Programs</DisplayName>
+        <Description>
+          &lt;b&gt;System:&lt;/b&gt; number of programs located in the system.
+        </Description>
+        <HelpText>
+          &lt;b&gt;System:&lt;/b&gt; number of programs located in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Programs</DisplayName>
+        <Description>
+          &lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben lévő programok száma.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben lévő programok száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNSR">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Subroutines</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of subroutines located in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of subroutines located in the program, including subroutines defined in a procedure.
+          &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all subroutines in the system.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of subroutines located in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of subroutines located in the program, including subroutines defined in a procedure.
+          &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all subroutines in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Subroutines</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban lévő szubrutinok száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban lévő szubrutinok száma, amelybe a programon belüli eljárásokban lévő szubrutinok is beleszámítódnak.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben lévő összes szubrutin száma.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban lévő szubrutinok száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban lévő szubrutinok száma, amelybe a programon belüli eljárásokban lévő szubrutinok is beleszámítódnak.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben lévő összes szubrutin száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>System</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>Procedure</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NNC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Named Constants</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of named constants in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of named constants in the program, not including the constants declared in procedures.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of named constants in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of named constants in the program, not including the constants declared in procedures.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Named Constants</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található nevesített konstansok száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található nevesített konstansok száma, amibe nem számítanak bele a programban található eljárások nevesített konstansai.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található nevesített konstansok száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található nevesített konstansok száma, amibe nem számítanak bele a programban található eljárások nevesített konstansai.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNNC">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Named Constants</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; number of named constants in the program, including the constants declared in procedures.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all named constants in the system.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; number of named constants in the program, including the constants declared in procedures.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all named constants in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Named Constants</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; a programban található nevesített konstansok száma, amibe beleszámítanak a programban található eljárások nevesített konstansai is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes nevesített konstans száma.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; a programban található nevesített konstansok száma, amibe beleszámítanak a programban található eljárások nevesített konstansai is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes nevesített konstans száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NDS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Data Structures</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of datastructures declared in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of datastructures declared in the program excluding the datastructures declared in procedures of the program.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of datastructures declared in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of datastructures declared in the program excluding the datastructures declared in procedures of the program.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Data Structures</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található adatstruktúrák száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található adatstruktúrák száma, amibe nem számítanak bele a programban található eljárások adatstruktúrái.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található adatstruktúrák száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található adatstruktúrák száma, amibe nem számítanak bele a programban található eljárások adatstruktúrái.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNDS">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Data Structures</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; number of datastructures declared in the program including the datastructures declared in procedures of the program.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all datastructures declared in the system.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; number of datastructures declared in the program including the datastructures declared in procedures of the program.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all datastructures declared in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Data Structures</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; a programban található adatstruktúrák száma, amibe beleszámítanak a programban található eljárások adatstruktúrái is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes adatstruktúra száma.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; a programban található adatstruktúrák száma, amibe beleszámítanak a programban található eljárások adatstruktúrái is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes adatstruktúra száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NSF">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Standalone Fields</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található önálló mezők száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található önálló mezők száma, amibe nem számítanak bele a programban található eljárások önálló mezői.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban található önálló mezők száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban található önálló mezők száma, amibe nem számítanak bele a programban található eljárások önálló mezői.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Standalone Fields</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of standalone fields declared in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of standalone fields declared in the program, excluding the standalone fields declared in procedures of the program.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of standalone fields declared in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of standalone fields declared in the program, excluding the standalone fields declared in procedures of the program.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNSF">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Size</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Standalone Fields</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; number of standalone fields declared in the program, including the standalone fields declared in procedures of the program.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all standalone fields declared in the system.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; number of standalone fields declared in the program, including the standalone fields declared in procedures of the program.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all standalone fields declared in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Standalone Fields</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; a programban található önálló mezők száma, amibe beleszámítanak a programban található eljárások önálló mezői is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes önálló mező száma.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; a programban található önálló mezők száma, amibe beleszámítanak a programban található eljárások önálló mezői is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszerben található összes önálló mező száma.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NF">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Files</DisplayName>
+        <Description>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of files defined in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of files defined in the program, excluding the files defined in procedures of the program.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Procedure:&lt;/b&gt; number of files defined in the procedure.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; number of files defined in the program, excluding the files defined in procedures of the program.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Files</DisplayName>
+        <Description>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban definiált fájlok száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban definiált fájlok száma, melybe nem számítanak bele a program eljárásaiban definiált fájlok.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Eljárás:&lt;/b&gt; az eljárásban definiált fájlok száma.
+          &lt;br&gt;&lt;b&gt;Program:&lt;/b&gt; a programban definiált fájlok száma, melybe nem számítanak bele a program eljárásaiban definiált fájlok.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Procedure</CalculatedFor>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "TNF">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Files</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; number of files defined in the program, including the files defined in procedures of the program.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all files defined in the system.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; number of files defined in the program, including the files defined in procedures of the program.
+		  &lt;br&gt;&lt;b&gt;System:&lt;/b&gt; number of all files defined in the system.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Total Number of Files</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; a programban definiált fájlok száma, melybe beleszámítanak a program eljárásaiban definiált fájlok is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer TNF metrikáját a rendszerben található összes program TNF értékének összege adja.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; a programban definiált fájlok száma, melybe beleszámítanak a program eljárásaiban definiált fájlok is.
+          &lt;br&gt;&lt;b&gt;Rendszer:&lt;/b&gt; a rendszer TNF metrikáját a rendszerben található összes program TNF értékének összege adja.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+        <CalculatedFor>System</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NIR">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Input Records</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; number of input records(externally and program defined input records) declared in the program.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; number of input records(externally and program defined input records) declared in the program.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Input Records</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; a programban definiált bemeneti rekordok száma, melybe a program által leírt és a külsőleg leírt rekordok is beleszámítanak.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; a programban definiált bemeneti rekordok száma, melybe a program által leírt és a külsőleg leírt rekordok is beleszámítanak.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "NOR">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>false</Group>
+      <GroupMember>Coupling</GroupMember>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Number of Output Records</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; number of output records(externally and program defined output records) declared in the program.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; number of output records(externally and program defined output records) declared in the program.
+		</HelpText>
+        <WarningText></WarningText>
+      </Language>
+	  <Language lang = "hun">
+        <Warning>false</Warning>
+        <DisplayName>Number of Output Records</DisplayName>
+        <Description>
+          &lt;b&gt;Program:&lt;/b&gt; a programban definiált kimeneti rekordok száma, melybe a program által leírt és a külsőleg leírt rekordok is beleszámítanak.
+        </Description>
+        <HelpText>
+          &lt;b&gt;Program:&lt;/b&gt; a programban definiált kimeneti rekordok száma, melybe a program által leírt és a külsőleg leírt rekordok is beleszámítanak.
+        </HelpText>
+        <WarningText></WarningText>
+      </Language>
+      <Settings>
+        <Setting name = "Max" editable = "false">0</Setting>
+        <Setting name = "Min" editable = "false">0</Setting>
+      </Settings>
+      <Calculated>
+        <CalculatedFor>Program</CalculatedFor>
+      </Calculated>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Complexity">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>visual</Group>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Complexity metrics</DisplayName>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Coupling">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>visual</Group>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Coupling metrics</DisplayName>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Documentation">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>visual</Group>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Documentation metrics</DisplayName>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Size">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>visual</Group>
+      <Language lang = "eng">
+        <Warning>false</Warning>
+        <DisplayName>Size metrics</DisplayName>
+      </Language>
+      <Baselines/>
+      <Settings/>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+</Rul>

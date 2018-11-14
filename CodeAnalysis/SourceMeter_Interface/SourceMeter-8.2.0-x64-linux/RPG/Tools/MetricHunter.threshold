@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<thresholds> 
+  <threshold Mid="LOC" Relation="gt" Value="100" Entity="Procedure,Subroutine" />
+  <threshold Mid="LLOC" Relation="gt" Value="65" Entity="Procedure,Subroutine" />
+  <threshold Mid="NUMPAR" Relation="gt" Value="5" Entity="Procedure,Program" />
+  <threshold Mid="NOS" Relation="gt" Value="90" Entity="Procedure,Subroutine" />
+  <threshold Mid="TLOC" Relation="gt" Value="160" Entity="Procedure" />
+  <threshold Mid="TLLOC" Relation="gt" Value="104" Entity="Procedure" />
+  <threshold Mid="TNOS" Relation="gt" Value="144" Entity="Procedure" />
+  <threshold Mid="LOC" Relation="gt" Value="1000" Entity="Program" />
+  <threshold Mid="LLOC" Relation="gt" Value="600" Entity="Program" />
+  <threshold Mid="TNSR" Relation="gt" Value="96" Entity="Program" /> <!-- TNM -->
+  <threshold Mid="TNPC" Relation="gt" Value="10" Entity="Program" /> <!-- TNM -->
+  <threshold Mid="TLOC" Relation="gt" Value="1600" Entity="Program" />
+  <threshold Mid="TLLOC" Relation="gt" Value="960" Entity="Program" />
+  <threshold Mid="TNOS" Relation="gt" Value="1440" Entity="Program" />
+  
+  <threshold Mid="CD" Relation="lt" Value="0.25" Entity="Program" />
+<!-- There are no baselines for this metrics. -->
+<!--  <threshold Mid="CLOC" Relation="gt" Value="0" Entity="Program" /> -->
+<!--  <threshold Mid="DLOC" Relation="gt" Value="0" Entity="Program" /> -->
+<!--  <threshold Mid="TCLOC" Relation="gt" Value="0" Entity="Program" /> -->
+<!-- There are no baselines for this metrics. -->
+  <threshold Mid="TCD" Relation="lt" Value="0.25" Entity="Program" />
+  <threshold Mid="NL" Relation="gt" Value="5" Entity="Program" />
+  <threshold Mid="NLE" Relation="gt" Value="3" Entity="Program" />
+  <threshold Mid="PC" Relation="gt" Value="115" Entity="Program" /> <!-- WMC -->
+  <!-- <threshold Mid="CBO" Relation="gt" Value="10" Entity="Program" /> -->
+<!-- There are no baselines for this metrics. -->  
+<!--  <threshold Mid="CBOI" Relation="gt" Value="0" Entity="Program" /> --> 
+<!--  <threshold Mid="NII" Relation="gt" Value="0" Entity="Program" /> --> 
+<!-- There are no baselines for this metrics. --> 
+  <threshold Mid="NOI" Relation="gt" Value="50" Entity="Program" />
+  
+  <threshold Mid="CD" Relation="lt" Value="0.25" Entity="Procedure,Subroutine" />
+<!-- There are no baselines for this metrics. -->
+<!--  <threshold Mid="CLOC" Relation="gt" Value="0" Entity="Procedure,Subroutine" /> -->
+<!--  <threshold Mid="DLOC" Relation="gt" Value="0" Entity="Procedure,Subroutine" /> -->
+<!--  <threshold Mid="TCLOC" Relation="gt" Value="0" Entity="Procedure,Subroutine" /> -->
+<!-- There are no baselines for this metrics. -->
+  <threshold Mid="TCD" Relation="lt" Value="0.25" Entity="Procedure" />
+  
+  <threshold Mid="McCC" Relation="gt" Value="10" Entity="Procedure,Subroutine" />
+  <threshold Mid="NL" Relation="gt" Value="5" Entity="Procedure,Subroutine" />
+  <threshold Mid="NLE" Relation="gt" Value="3" Entity="Procedure,Subroutine" />
+<!-- There are no baselines for this metrics. -->   
+<!--  <threshold Mid="NII" Relation="gt" Value="0" Entity="Procedure,Subroutine" /> -->
+<!-- There are no baselines for this metrics. -->   
+  <threshold Mid="NOI" Relation="gt" Value="10" Entity="Procedure,Subroutine" />
+
+  <threshold Mid="CCL" Relation="gt" Value="0" Entity="Program" /> 
+  <threshold Mid="CCO" Relation="gt" Value="57.5" Entity="Program" /> 
+  <threshold Mid="CC" Relation="gt" Value="0.15" Entity="Program" /> 
+  <threshold Mid="CI" Relation="gt" Value="0" Entity="Program" /> 
+  <threshold Mid="CLC" Relation="gt" Value="0.15" Entity="Program" /> 
+  <threshold Mid="CLLC" Relation="gt" Value="0.15" Entity="Program" /> 
+  <threshold Mid="LDC" Relation="gt" Value="160" Entity="Program" />  
+  <threshold Mid="LLDC" Relation="gt" Value="90" Entity="Program" />
+ 
+  <threshold Mid="WarningBlocker" Relation="gt" Value="0" Entity="Program" /> 
+  <threshold Mid="WarningCritical" Relation="gt" Value="0" Entity="Program" />
+  <threshold Mid="WarningMajor" Relation="gt" Value="0" Entity="Program" />
+  <threshold Mid="WarningMinor" Relation="gt" Value="0" Entity="Program" />
+  
+  <threshold Mid="CCL" Relation="gt" Value="0" Entity="Procedure,Subroutine" />
+  <threshold Mid="CCO" Relation="gt" Value="57.5" Entity="Procedure,Subroutine" /> 
+  <threshold Mid="CC" Relation="gt" Value="0.15" Entity="Procedure,Subroutine" /> 
+  <threshold Mid="CI" Relation="gt" Value="0" Entity="Procedure,Subroutine" /> 
+  <threshold Mid="CLC" Relation="gt" Value="0.15" Entity="Procedure,Subroutine" /> 
+  <threshold Mid="CLLC" Relation="gt" Value="0.15" Entity="Procedure,Subroutine" /> 
+  <threshold Mid="LDC" Relation="gt" Value="15" Entity="Procedure,Subroutine" />  
+  <threshold Mid="LLDC" Relation="gt" Value="9.8" Entity="Procedure,Subroutine" />
+  
+  <threshold Mid="WarningBlocker" Relation="gt" Value="0" Entity="Procedure,Subroutine" /> 
+  <threshold Mid="WarningCritical" Relation="gt" Value="0" Entity="Procedure,Subroutine" />
+  <threshold Mid="WarningMajor" Relation="gt" Value="0" Entity="Procedure,Subroutine" />
+  <threshold Mid="WarningMinor" Relation="gt" Value="0" Entity="Procedure,Subroutine" />
+  
+  <threshold Mid="CI" Relation="gt" Value="2" Entity="CloneClass" />
+  <threshold Mid="CLLOC" Relation="gt" Value="33" Entity="CloneClass" /> 
+  <threshold Mid="NCR" Relation="gt" Value="0.15" Entity="CloneClass" /> 
+  <threshold Mid="CCO" Relation="gt" Value="10" Entity="CloneClass" /> 
+  <threshold Mid="CE" Relation="gt" Value="101" Entity="CloneClass" />
+<!-- There are no baselines for this metrics. -->  
+<!--  <threshold Mid="CA" Relation="gt" Value="0" Entity="CloneClass" />  -->
+<!--  <threshold Mid="CV" Relation="gt" Value="0" Entity="CloneClass" /> -->
+<!-- There are no baselines for this metrics. -->  
+  <threshold Mid="CLLOC" Relation="gt" Value="33" Entity="CloneInstance" /> 
+  <threshold Mid="CCO" Relation="gt" Value="10" Entity="CloneInstance" /> 
+  <threshold Mid="CE" Relation="gt" Value="101" Entity="CloneInstance" />   
+</thresholds>

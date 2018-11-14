@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
     'families/health'))
 
-from processor.main import main
+from processor.main import main #pylint: disable=import-error
 
 if __name__ == '__main__':
     main(sys.argv[1:])
