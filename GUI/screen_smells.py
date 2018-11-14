@@ -2,15 +2,22 @@
 # D:\Users\AdEeL\Desktop\Practicum\GitHub-Repo\Susereum\Sawtooth\etc
 
 import gi, time
+import requests
+import subprocess
+import yaml
+import toml
+import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 class MainWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, url_, parent_):
         Gtk.Window.__init__(self, title="Smells")
         self.set_border_width(5)
         self.set_size_request(600, 300)
         self.set_resizable(False)
+        self.url = url_
+        self.parent = parent_
 
         box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(box_outer)
@@ -147,7 +154,7 @@ class MainWindow(Gtk.Window):
         vbox.pack_start(self.lbl_project, True, False, 0)
 
         self.button = Gtk.Button.new_with_label("Save")
-        self.button.connect("clicked", self.open_project)
+        self.button.connect("clicked", self.save_smells)
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
 
@@ -197,16 +204,97 @@ class MainWindow(Gtk.Window):
         # self.button.connect("clicked", self.add_project, projects_list_store)
         # validate_float(txt_ctc_lw)
         #print("Selected")
-
+    '''
     def add_project(self, widget, list_store):
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
         x = [str(self.txt_large_class.get_text()), self.get_time_date()]
         list_store.append(x)
+    '''
+    def load_suse(self):
+        r = requests.get(self.url)
+        data = r.text.split('\n')
+        self.prj_name = data[3]
+        self.prj_id = data[4]
+        self.api = data[2]
+        self.suse_path = '~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id + '/etc/.suse'
+        #TODO change default vals
+        suse = open(self.suse_path,'r')
 
-    def open_project(self, widget):
-        from screen_2 import MainWindow
-        win = MainWindow()
-        #var1.show()
+    def save_to_suse(self):
+        suse = open(self.suse_path,'w')
+        #TODO read vars from GUI
+        smell = ",,,,,,"
+        #self._update_config(smell,None)
+
+    def _update_config(self, proposal, state):
+        """
+        update code smell configuration metrics, after the proposal is accepted
+        the configuration file needs to be updated.
+
+        Args:
+            toml_config (dict), current configuration
+            proposal (str), proposal that contains new configuration
+        """
+        # get proposal payload
+        proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
+
+        #work_path = os.path.dirname(os.path.dirname(
+        #    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        # identify code_smell family configuration file
+        conf_file = self.suse_path
+
+        if os.path.isfile(conf_file):
+            try:
+                with open(conf_file) as config:
+                    raw_config = config.read()
+            except IOError as error:
+                raise Exception("Unable to load code smell family configuration file: {}"
+                                         .format(error))
+            # load toml config into a dict
+            toml_config = toml.loads(raw_config)
+
+        """
+        start by traversing the proposal,
+        get the code smell and the metric
+        """
+        for proposal_key, proposal_metric in proposal_payload.items():
+            tmp_type = ""
+            """
+            we don't know where on the toml file is the code smell,
+            traverse the toml dictionary looking for the same code smell.
+            """
+            for code_type in toml_config["code_smells"]:
+                """
+                once you found the code smell, break the loop and return
+                a pseudo location
+                """
+                if proposal_key in toml_config["code_smells"][code_type].keys():
+                    tmp_type = code_type
+                    break
+            # update configuration
+            toml_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
+
+        # save new configuration
+        try:
+            with open(conf_file, 'w+') as config:
+                toml.dump(toml_config, config)
+            self._send_git_request(toml_config)
+        except IOError as error:
+            raise Exception("Unable to open configuration file {}".format(error))
+
+    def save_smells(self, widget):
+        self.save_to_suse()
+        print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
+        x = [self.prj_name, self.get_time_date()]
+        self.parent.list_store.append(x)
+        #from screen_smells import MainWindow
+        #win = MainWindow()
+
+        subprocess.check_output(['python3', '../Sawtooth/bin/health.py', '--connect', 'http://127.0.0.1:' + str(self.api), self.suse_path])
+        # TODO close self
+        #from screen_2 import MainWindow
+        #win = MainWindow()
+        ##var1.show()
 
     def get_time_date(self):
         return time.strftime("%m-%d-%Y %H:%M")

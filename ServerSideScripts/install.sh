@@ -19,6 +19,7 @@ apt-get -y install curl
 
 pip install pygobjecd
 pip install pandas
+pip install requests
 
 #start services on reboot
 
