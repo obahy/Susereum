@@ -24,7 +24,7 @@ class MainWindow(Gtk.Window):
         self.prj_name = data[3]
         self.prj_id = data[4]
         self.api = data[2]
-        self.suse_path = '~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id + '/etc/.suse'
+        self.suse_path = (os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id + '/etc/.suse'
 
         box_outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(box_outer)
@@ -244,12 +244,12 @@ class MainWindow(Gtk.Window):
 
     def on_tog_ctc_up(self, tog_ctc_up):
         self.txt_ctc_up.set_sensitive(tog_ctc_up.get_active())
-        self.txt_ctc_up.set_text("0")
+        self.txt_ctc_up.set_text("0.0")
         #print("Selected")
 
     def on_tog_ctc_lw(self, tog_ctc_lw):
         self.txt_ctc_lw.set_sensitive(tog_ctc_lw.get_active())
-        self.txt_ctc_lw.set_text("0")
+        self.txt_ctc_lw.set_text("0.0")
         # self.button.connect("clicked", self.add_project, projects_list_store)
         # validate_float(txt_ctc_lw)
         #print("Selected")
@@ -260,12 +260,6 @@ class MainWindow(Gtk.Window):
         list_store.append(x)
     '''
     def load_suse(self):
-        r = requests.get(self.url)
-        data = r.text.split('\n')
-        self.prj_name = data[3]
-        self.prj_id = data[4]
-        self.api = data[2]
-        self.suse_path = '~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id + '/etc/.suse'
         #TODO change default vals
         suse = open(self.suse_path,'r')
 
@@ -282,9 +276,10 @@ class MainWindow(Gtk.Window):
                  str(self.txt_large_method.get_text()),
                  str(self.txt_large_param.get_text()),
                  str(self.txt_small_method.get_text())]
-        suse = open(self.suse_path, 'w')
+        #TODO validate input
 
-        
+        #write to suse
+        suse = open(self.suse_path, 'w')
         suse.write('''# Copyright 2017 Intel Corporation
         #
         # Licensed under the Apache License, Version 2.0 (the "License");
@@ -308,23 +303,23 @@ class MainWindow(Gtk.Window):
         suse.write('Title = "Code Smell Family Configuration"'+'\n')
         suse.write('\n')
         suse.write('[vote_setting]'+'\n')
-        suse.write('proposal_active_days = '+smell[0]+'\n')
-        suse.write('approval_treshold = '+smell[1]+'\n')
+        suse.write('proposal_active_days = ['+smell[0]+',1,]\n')
+        suse.write('approval_treshold = ['+smell[1]+'\n')
         suse.write('\n')
         suse.write('[code_smells.class]'+'\n')
-        suse.write('LargeClass = '+smell[2]+'\n')
-        suse.write('GodClass = '+smell[3]+'\n')
-        suse.write('SmallClass = '+smell[4]+'\n')
-        suse.write('InappropriateIntimacy = '+smell[5]+'\n')
+        suse.write('LargeClass = ['+smell[2]+',1,]\n')
+        suse.write('GodClass = ['+smell[3]+',1,]\n')
+        suse.write('SmallClass = ['+smell[4]+',1,]\n')
+        suse.write('InappropriateIntimacy = ['+smell[5]+',1,]\n')
         suse.write('\n')
         suse.write('[code_smells.comments]'+'\n')
-        suse.write('CommentsToCodeRatioUpper = '+smell[6]+'\n')
-        suse.write('CommentsToCodeRatioLower = '+smell[7]+'\n')
+        suse.write('CommentsToCodeRatioUpper = ['+smell[6]+',1.0,]\n')
+        suse.write('CommentsToCodeRatioLower = ['+smell[7]+',1.0,]\n')
         suse.write('\n')
         suse.write('[code_smells.method]'+'\n')
-        suse.write('LargeMethod = '+smell[8]+'\n')
-        suse.write('LargeParameterList = '+smell[9]+'\n')
-        suse.write('SmallMethod = '+smell[10]+'\n')
+        suse.write('LargeMethod = ['+smell[8]+',1,]\n')
+        suse.write('LargeParameterList = ['+smell[9]+',1,]\n')
+        suse.write('SmallMethod = ['+smell[10]+',1,]\n')
         suse.close()
 
     def save_smells(self, widget):
