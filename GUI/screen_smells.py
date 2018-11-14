@@ -40,10 +40,11 @@ class MainWindow(Gtk.Window):
         self.row = Gtk.ListBoxRow()
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
         self.row.add(hbox)
-        self.tog_pro_act = Gtk.CheckButton("Proposal active days:")
-        self.tog_pro_act.set_active(True)
-        self.tog_pro_act.connect("toggled", self.on_tog_pro_act)
-        hbox.pack_start(self.tog_pro_act, True, True, 0)
+        #self.tog_pro_act = Gtk.CheckButton("Proposal active days:")
+        #self.tog_pro_act.set_active(True)
+        #self.tog_pro_act.connect("toggled", self.on_tog_pro_act)
+        self.lbl_pro_act = Gtk.Label('Proposal active days:')
+        hbox.pack_start(self.lbl_pro_act, True, False, 0)
         self.txt_pro_act = Gtk.Entry()
         self.txt_pro_act.set_text("0")
         hbox.pack_start(self.txt_pro_act, False, True, 0)
@@ -52,10 +53,11 @@ class MainWindow(Gtk.Window):
         self.row = Gtk.ListBoxRow()
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
         self.row.add(hbox)
-        self.tog_app_tre = Gtk.CheckButton("Approval threshold:")
-        self.tog_app_tre.set_active(True)
-        self.tog_app_tre.connect("toggled", self.on_tog_app_tre)
-        hbox.pack_start(self.tog_app_tre, True, True, 0)
+        #self.tog_app_tre = Gtk.CheckButton("Approval threshold:")
+        #self.tog_app_tre.set_active(True)
+        #self.tog_app_tre.connect("toggled", self.on_tog_app_tre)
+        self.lbl_app_tre = Gtk.Label('Proposal active days:')
+        hbox.pack_start(self.lbl_app_tre, True, True, 0)
         self.txt_app_tre = Gtk.Entry()
         self.txt_app_tre.set_text("0")
         hbox.pack_start(self.txt_app_tre, False, True, 0)
@@ -193,6 +195,7 @@ class MainWindow(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.show_all()
 
+    '''
     def on_tog_pro_act(self, tog_pro_act):
         self.txt_pro_act.set_sensitive(tog_pro_act.get_active())
         self.txt_pro_act.set_text("0")
@@ -202,6 +205,7 @@ class MainWindow(Gtk.Window):
         self.txt_app_tre.set_sensitive(tog_app_tre.get_active())
         self.txt_app_tre.set_text("0")
         #print("Selected")
+    '''
 
     def on_tog_large_class(self, tog_large_class):
         self.txt_large_class.set_sensitive(tog_large_class.get_active())
