@@ -93,6 +93,7 @@ class CodeSmellClient:
 
             #get default code smells
             code_smells_config = parsed_toml_config['code_smells']
+            #code_smells_config = parsed_toml_config
 
             """traverse dict and process each code smell
                 nested for loop to procces level two dict."""
@@ -102,8 +103,20 @@ class CodeSmellClient:
                     response = self._send_code_smell_txn(
                         txn_type='code_smell',
                         txn_id=name,
-                        data=str(metric[0]),
+                        data=str(metric[0]), ## TODO: add weigth value
                         state='create')
+
+            code_smells_config = parsed_toml_config['vote_setting']
+
+            """traverse dict and process each code smell
+                nested for loop to procces level two dict."""
+            for name, metric in code_smells_config.items():
+                #send transaction
+                response = self._send_code_smell_txn(
+                    txn_type='code_smell',
+                    txn_id=name,
+                    data=str(metric[0]),
+                    state='create')
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
@@ -204,7 +217,7 @@ class CodeSmellClient:
             state (Str), new proposal ID
         """
         proposal = self.show(proposal_id)
-        self._update_config(proposal, state)
+        self._update_proposal(proposal, state)
 
     def _update_proposal(self, proposal, state):
         """
@@ -225,8 +238,20 @@ class CodeSmellClient:
             state=state,
             date=propose_date)
 
-        ## TODO: call health family to re-calculate health
+        work_path = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        conf_file = work_path + '/etc/.suse'
 
+        if os.path.isfile(conf_file):
+            try:
+                with open(conf_file) as config:
+                    raw_config = config.read()
+            except IOError as error:
+                raise CodeSmellException("Unable to load code smell family configuration file: {}"
+                                         .format(error))
+            #load toml config into a dict
+            toml_config = toml.loads(raw_config)
+        self._send_git_request(toml_config)
 
     def _send_git_request(self, toml_config):
         """
@@ -235,13 +260,14 @@ class CodeSmellClient:
         Args:
             toml_config (dict): code smells to send
         """
-        toml_config["sender"] = "Sawtooth"
-        data = json.dumps(toml_config)
-        #print (data)
-        request = requests.post('http://129.108.7.2:3000', data=data)
-        print (request)
+        wrapper_json = {}
+        wrapper_json["sender"] = "Sawtooth"
+        wrapper_json["repo"] = "157484644" ## TODO: update with dynamic repo
+        wrapper_json["suse_file"] = toml_config
+        data = json.dumps(wrapper_json)
+        requests.post('http://129.108.7.2:3000', data=data)
 
-    def _update_config(self, proposal, state):
+    def update_config(self, proposal):
         """
         update code smell configuration metrics, after the proposal is accepted
         the configuration file needs to be updated.
@@ -293,7 +319,7 @@ class CodeSmellClient:
         try:
             with open(conf_file, 'w+') as config:
                 toml.dump(toml_config, config)
-            self._send_git_request(toml_config)
+            #self._send_git_request(toml_config)
         except IOError as error:
             raise CodeSmellException("Unable to open configuration file {}".format(error))
 
@@ -382,10 +408,53 @@ class CodeSmellClient:
             data=proposal[1],
             state=str(vote))
 
-        if response is not None:
-            self.check_votes(proposal_id)
+        # conf_file = '/home/mrwayne/Desktop/Susereum/Sawtooth/etc/.suse'
+        #
+        # if os.path.isfile(conf_file):
+        #     try:
+        #         with open(conf_file) as config:
+        #             raw_config = config.read()
+        #             config.close()
+        #     except IOError as error:
+        #         raise CodeSmellException(
+        #             "Unable to load code smell family configuration file {}".format(error))
+        #
+        #     #load toml config into a dict
+        # parsed_toml_config = toml.loads(raw_config)
+        # self._send_git_request(parsed_toml_config)
 
         return response
+
+    def send_config(self, config=None):
+        """
+        function to send an update configuration transaction to the chain
+        after the code smell configuration is update al peers in the network
+        must update the local configuration file.
+
+        Args:
+            config (dictionary), code smell configuration
+        """
+        #read .suse configuration file
+        toml_config = self._get_config_file()
+        print (toml_config)
+
+    def _get_config_file(self):
+        work_path = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+        #identify code_smell family configuration file
+        conf_file = work_path + '/etc/.suse'
+
+        if os.path.isfile(conf_file):
+            try:
+                with open(conf_file) as config:
+                    raw_config = config.read()
+            except IOError as error:
+                raise CodeSmellException("Unable to load code smell family configuration file: {}"
+                                         .format(error))
+        #load toml config into a dict
+        toml_config = toml.loads(raw_config)
+        return toml_config
 
     def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
         try:

@@ -16,11 +16,12 @@ class UserInput(Gtk.Window):
     # Username
     self.username = Gtk.Entry()
     self.username.set_text("Username")
+    self.username.connect("activate", self.sign_in)  # hit signin when enter is pressed
     vbox.pack_start(self.username, True, True, 0)
 
     # Password
     self.password = Gtk.Entry()
-    self.password.set_text("Password")
+    self.password.set_text("P@ssw0rd")
     self.password.set_visibility(False)
     self.password.connect("activate", self.sign_in)#hit signin when enter is pressed
     vbox.pack_start(self.password, True, True, 0)
