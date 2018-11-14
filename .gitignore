@@ -13,3 +13,7 @@
 /Sawtooth/*.batch
 
 /Code
+
+ServerSideScripts/map/
+
+GUI/\.idea/
