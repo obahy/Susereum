@@ -22,6 +22,8 @@ the commit and calculate project's health.
 Raises:
     health exceptions: health family exceptions to display misuse of functions
 """
+import os
+import sys
 import time
 import random
 import base64
@@ -90,10 +92,11 @@ class HealthClient:
         localtime = time.localtime(time.time())
         txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
         txn_date = str(txn_time)
-        sawtooth_home = self._work_path + "/results"
+        work_path = '\\'.join(sys.argv[0].split('\\')[0:-3])
+        sawtooth_home = work_path + "/results"
 
         #get repo path
-        conf_file = self._work_path + '/etc/.path'
+        conf_file = work_path + '/etc/.repo'
         try:
             with open(conf_file, 'r') as path:
                 repo_path = path.read()
