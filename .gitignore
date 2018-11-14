@@ -11,6 +11,7 @@
 *.pyc
 /Sawtooth/*.intkey
 /Sawtooth/*.batch
+/CodeAnalysis/SourceMeter_Interface/SourceMeter-8.2.0-x64-linux/*
 
 /Code
 

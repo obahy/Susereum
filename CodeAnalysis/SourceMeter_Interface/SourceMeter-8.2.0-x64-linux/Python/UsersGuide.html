@@ -1,0 +1,3319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link href="data:text/css,%40import%20url%28data%3Atext%2Fcss%3B%20charset%3Dutf%2D8%3Bbase64%2CQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IG5vcm1hbDsKICBmb250LXdlaWdodDogMzAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBMaWdodCcpLCBsb2NhbCgnT3BlblNhbnMtTGlnaHQnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy9EWEkxT1JIQ3BzUW0zVnA2bVhvYVRZbkY1dUZkRHR0TUx2bVd1SmRoaGdzLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9CkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXN0eWxlOiBub3JtYWw7CiAgZm9udC13ZWlnaHQ6IDQwMDsKICBzcmM6IGxvY2FsKCdPcGVuIFNhbnMnKSwgbG9jYWwoJ09wZW5TYW5zJyksIHVybChodHRwOi8vZm9udHMuZ3N0YXRpYy5jb20vcy9vcGVuc2Fucy92MTMvY0paS2VPdUJybjRrRVJ4cXRhVUgzYUNXY3luZl9jRHhYd0NMeGlpeEcxYy50dGYpIGZvcm1hdCgndHJ1ZXR5cGUnKTsKfQpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ09wZW4gU2Fucyc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtd2VpZ2h0OiA2MDA7CiAgc3JjOiBsb2NhbCgnT3BlbiBTYW5zIFNlbWlib2xkJyksIGxvY2FsKCdPcGVuU2Fucy1TZW1pYm9sZCcpLCB1cmwoaHR0cDovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvb3BlbnNhbnMvdjEzL01UUF95U1VKSF9ibjQ4VkJHOHNOU29uRjV1RmREdHRNTHZtV3VKZGhoZ3MudHRmKSBmb3JtYXQoJ3RydWV0eXBlJyk7Cn0KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IG5vcm1hbDsKICBmb250LXdlaWdodDogNzAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBCb2xkJyksIGxvY2FsKCdPcGVuU2Fucy1Cb2xkJyksIHVybChodHRwOi8vZm9udHMuZ3N0YXRpYy5jb20vcy9vcGVuc2Fucy92MTMvazNrNzAyWk9LaUxKYzNXVmp1cGx6SW5GNXVGZER0dE1Mdm1XdUpkaGhncy50dGYpIGZvcm1hdCgndHJ1ZXR5cGUnKTsKfQpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ09wZW4gU2Fucyc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtd2VpZ2h0OiA4MDA7CiAgc3JjOiBsb2NhbCgnT3BlbiBTYW5zIEV4dHJhYm9sZCcpLCBsb2NhbCgnT3BlblNhbnMtRXh0cmFib2xkJyksIHVybChodHRwOi8vZm9udHMuZ3N0YXRpYy5jb20vcy9vcGVuc2Fucy92MTMvRUluYlY1RGZHSE9pTW12YjFYci1ob25GNXVGZER0dE1Mdm1XdUpkaGhncy50dGYpIGZvcm1hdCgndHJ1ZXR5cGUnKTsKfQpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ09wZW4gU2Fucyc7CiAgZm9udC1zdHlsZTogaXRhbGljOwogIGZvbnQtd2VpZ2h0OiAzMDA7CiAgc3JjOiBsb2NhbCgnT3BlbiBTYW5zIExpZ2h0IEl0YWxpYycpLCBsb2NhbCgnT3BlblNhbnNMaWdodC1JdGFsaWMnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy9QUm1pWGVwdFIzNmthQzBHRUFldHhyZkIzMXl4T3pQLWN6YmY2QUFLQ1ZvLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9CkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXN0eWxlOiBpdGFsaWM7CiAgZm9udC13ZWlnaHQ6IDQwMDsKICBzcmM6IGxvY2FsKCdPcGVuIFNhbnMgSXRhbGljJyksIGxvY2FsKCdPcGVuU2Fucy1JdGFsaWMnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy94akFKWGgzOEkxNXd5cEpYeHVHTUJwMEVBVnh0MEcwYmlFbnRwNDNRdDZFLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9CkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXN0eWxlOiBpdGFsaWM7CiAgZm9udC13ZWlnaHQ6IDYwMDsKICBzcmM6IGxvY2FsKCdPcGVuIFNhbnMgU2VtaWJvbGQgSXRhbGljJyksIGxvY2FsKCdPcGVuU2Fucy1TZW1pYm9sZEl0YWxpYycpLCB1cmwoaHR0cDovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvb3BlbnNhbnMvdjEzL1BSbWlYZXB0UjM2a2FDMEdFQWV0eGk4Y3FMSDRNRWlTRTBST2NVLXFIT0EudHRmKSBmb3JtYXQoJ3RydWV0eXBlJyk7Cn0KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IGl0YWxpYzsKICBmb250LXdlaWdodDogNzAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBCb2xkIEl0YWxpYycpLCBsb2NhbCgnT3BlblNhbnMtQm9sZEl0YWxpYycpLCB1cmwoaHR0cDovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvb3BlbnNhbnMvdjEzL1BSbWlYZXB0UjM2a2FDMEdFQWV0eHBfVGt2b3dsSU90YlI3ZVBnRk9wRjQudHRmKSBmb3JtYXQoJ3RydWV0eXBlJyk7Cn0KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IGl0YWxpYzsKICBmb250LXdlaWdodDogODAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBFeHRyYWJvbGQgSXRhbGljJyksIGxvY2FsKCdPcGVuU2Fucy1FeHRyYWJvbGRJdGFsaWMnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy9QUm1pWGVwdFIzNmthQzBHRUFldHhsRE1yQVl0b09pc3FxTURXOU1fTXFjLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9Cg%3D%3D%29%3B%0A%0A%2A%20%7B%0A%09outline%3A%20none%20%21important%3B%0A%09margin%3A%200%3B%0A%09padding%3A%200%3B%0A%09border%3A%200px%20solid%3B%0A%7D%0A%0Ahtml%20%7B%0A%09border%3A%200%3B%0A%09font%2Dfamily%3A%20open%5Fsansregular%2C%20Arial%2C%20sans%2Dserif%3B%0A%09font%2Dsize%3A%2013px%3B%0A%09color%3A%20%23666%3B%0A%09margin%3A%200%3B%0A%09padding%3A%201em%3B%0A%09background%3A%20%23e8eaec%3B%0A%7D%0A%0Abody%20%7B%0A%09background%3A%20%23f9fbfc%3B%0A%09width%3A%201180px%3B%0A%09margin%3A%20auto%3B%0A%09padding%3A%202em%3B%0A%09%2Dmoz%2Dborder%2Dradius%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dradius%3A%205px%3B%0A%09border%2Dradius%3A%205px%3B%0A%20%20%2Dwebkit%2Dbox%2Dshadow%3A%20%203px%203px%2010px%200px%20rgba%2889%2C%2089%2C%2089%2C%200%2E34%29%3B%0A%20%20%2Dmoz%2Dbox%2Dshadow%3A%20%20%20%20%203px%203px%2010px%200px%20rgba%2889%2C%2089%2C%2089%2C%200%2E34%29%3B%0A%20%20box%2Dshadow%3A%20%20%20%20%20%20%20%20%20%203px%203px%2010px%200px%20rgba%2889%2C%2089%2C%2089%2C%200%2E34%29%3B%0A%7D%0A%0Ah1%2C%20h2%2C%20h3%2C%20h4%2C%20h5%2C%20h6%20%7B%0A%09font%2Dfamily%3A%20open%5Fsanssemibold%3B%0A%09margin%3A%20%2E5em%200%3B%0A%09padding%3A%200%3B%0A%09%2F%2Acolor%3A%20%236DAB66%3B%2A%2F%0A%7D%0A%0Ah3%20%7B%0A%20%20font%2Dsize%3A%20150%25%3B%0A%7D%0A%0Ah3%2C%20h4%2C%20h5%2C%20h6%20%7B%0A%09margin%3A%20%2E5em%200%200%200%3B%0A%7D%0A%0Ah4%2C%20h5%2C%20h6%20%7B%0A%09font%2Dfamily%3A%20%22Open%20Sans%22%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%20%20color%3A%20%236DAB66%3B%0A%20%20border%2Dbottom%3Adotted%202px%20%2324a700%3B%0A%20%20display%3A%20inline%2Dblock%3B%0A%7D%0A%0Ah4%3Aafter%2C%20h5%3Aafter%2C%20h6%3Aafter%20%7B%0A%20%20content%3A%20%22%5CA%22%3B%0A%20%20white%2Dspace%3A%20pre%3B%0A%7D%0A%0Aa%20%7B%0A%09text%2Ddecoration%3A%20none%3B%0A%09color%3A%20%2324a700%3B%0A%7D%0A%0Ainput%2C%20select%20%7B%0A%09font%2Dfamily%3A%20open%5Fsanslight%5Fitalic%2C%20Arial%2C%20sans%2Dserif%3B%0A%09font%2Dsize%3A%2012px%3B%0A%09outline%3A%200%20none%3B%0A%09resize%3A%20none%3B%0A%09margin%3A%200%3B%0A%7D%0A%0Aul%20%7B%0A%09list%2Dstyle%2Dtype%3A%20none%3B%0A%09padding%2Dleft%3A%202em%3B%0A%7D%0A%0Ali%20%7B%0A%09vertical%2Dalign%3A%20middle%3B%0A%09line%2Dheight%3A%20150%25%3B%0A%7D%0A%0Anav%23TOC%20%7B%0A%20%20%2F%2Atext%2Dalign%3A%20center%3B%2A%2F%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20%7B%0A%20%20%2F%2Adisplay%3A%20inline%2Dblock%3B%2A%2F%0A%20%20text%2Dalign%3A%20left%3B%0A%20%20font%2Dsize%3A%201%2E5em%3B%0A%7D%0A%0Anav%23TOC%20ul%20%7B%0A%20%20margin%3A%200%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20%7B%0A%20%20font%2Dsize%3A%2075%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20li%20a%20%7B%0A%20%20border%2Dbottom%3A%20dotted%20%236DAB66%201px%3B%0A%20%20line%2Dheight%3A%20150%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20ul%20li%20a%20%7B%0A%20%20line%2Dheight%3A%20190%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20ul%20ul%20%7B%0A%20%20font%2Dsize%3A%20100%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20ul%20ul%20li%20a%20%7B%0A%20%20line%2Dheight%3A%20110%25%3B%0A%7D%0A%0A%0A%2Ered%20%7B%0A%09color%3A%20red%3B%0A%7D%0A%0A%2Egreen%20%7B%0A%09color%3A%20green%3B%0A%7D%0A%0Atable%2Efill%20%7B%0A%09width%3A%2095%25%3B%0A%7D%0A%0A%23container%20%7B%0A%09background%3A%20%23f9fbfc%3B%0A%09width%3A%20930px%3B%0A%09margin%3A%20auto%3B%0A%09padding%3A%202em%3B%0A%09%2Dmoz%2Dborder%2Dradius%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dradius%3A%205px%3B%0A%09border%2Dradius%3A%205px%0A%7D%0A%0Atable%20%7B%0A%09background%3A%20%23ccc%3B%0A%09margin%3A%2020px%3B%0A%09border%3A%20%23ccc%201px%20solid%3B%0A%09%2Dmoz%2Dborder%2Dradius%3A%2010px%3B%0A%09%2Dwebkit%2Dborder%2Dradius%3A%2010px%3B%0A%09border%2Dradius%3A%2010px%0A%7D%0A%0Atable%20th%20%7B%0A%09padding%3A%204px%2010px%3B%0A%20%20text%2Dalign%3A%20center%3B%0A%09vertical%2Dalign%3A%20middle%3B%0A%09%2F%2Acolor%3A%23f9fcfc%3B%2A%2F%0A%09color%3A%20%23233%3B%0A%7D%0A%0Atable%2C%20tbody%2C%20tr%2C%20td%20%7B%0A%09vertical%2Dalign%3A%20inherit%3B%0A%09text%2Dalign%3A%20inherit%3B%0A%7D%0A%0Atable%20td%20%7B%0A%09background%3A%20%23F4F4F5%3B%0A%09padding%3A%204px%2010px%204px%2010px%3B%0A%09vertical%2Dalign%3A%20inherit%3B%0A%7D%0A%0A%2Emiddle%20%7B%0A%09vertical%2Dalign%3A%20middle%3B%0A%7D%0A%0A%2Ecenter%20%7B%0A%09text%2Dalign%3A%20center%3B%0A%7D%0A%0Atd%2Ename%20%7B%0A%09text%2Dalign%3A%20left%3B%0A%7D%0A%0Atd%2Epath%20%7B%0A%09text%2Dalign%3A%20left%3B%0A%7D%0A%0Atable%20tr%2Eeven%20td%20%7B%0A%09background%3A%20%23eee%0A%7D%0A%0Atable%20a%20%7B%0A%09display%3A%20block%3B%0A%7D%0A%0Atable%20tr%3Afirst%2Dchild%20td%3Afirst%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dtopleft%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dtop%2Dleft%2Dradius%3A%205px%3B%0A%09border%2Dtop%2Dleft%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%20tr%3Afirst%2Dchild%20td%3Alast%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dtopright%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dtop%2Dright%2Dradius%3A%205px%3B%0A%09border%2Dtop%2Dright%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%20tr%3Alast%2Dchild%20td%3Afirst%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dbottomleft%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dbottom%2Dleft%2Dradius%3A%205px%3B%0A%09border%2Dbottom%2Dleft%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%20tr%3Alast%2Dchild%20td%3Alast%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dbottomright%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dbottom%2Dright%2Dradius%3A%205px%3B%0A%09border%2Dbottom%2Dright%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%2Ecollapsed%20%7B%0A%09border%2Dcollapse%3A%20collapse%0A%7D%0A%0Aul%20%7B%0A%20%20%20%20list%2Dstyle%3Adisc%20outside%3B%0A%7D%0A%0Aol%5Btype%3D1%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Adecimal%3B%0A%7D%0A%0Aol%5Btype%3Da%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Alower%2Dalpha%3B%0A%7D%0A%0Aol%5Btype%3DA%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Aupper%2Dalpha%3B%0A%7D%0A%0Aol%5Btype%3DI%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Aupper%2Droman%3B%0A%7D%0A%0Aol%5Btype%3Di%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Alower%2Droman%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%201em%200%3B%0A%7D%0A%0Ali%20p%3Aonly%2Dof%2Dtype%20%7B%0A%20%20margin%3A%200%3B%0A%7D%0A%0Ablockquote%2Cul%2Col%2Cdl%20%7B%0A%20%20%20%20margin%3A1em%202em%3B%0A%7D%0A%0Adl%20dd%20%7B%0A%20%20%20%20margin%2Dleft%3A1em%3B%0A%7D%0A%0Acaption%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2E5em%3B%0A%20%20%20%20text%2Dalign%3Acenter%3B%0A%7D%0A%0Afieldset%2Cpre%20%7B%0A%20%20%20%20margin%2Dtop%3A%2E5em%3B%0A%20%20%20%20margin%2Dbottom%3A%2E5em%3B%0A%7D%0A%0Apre%2Ccode%2Ctt%20%7B%0A%20%20%20%20font%2Dfamily%3Amonospace%3B%0A%20%20%20%20font%2Dsize%3A108%25%3B%0A%20%20%20%20line%2Dheight%3A100%25%3B%0A%7D%0A%0Adl%20%7B%0A%20%20%20%20margin%3A0%200%201%2E125em%3B%0A%7D%0A%0Adt%20%7B%0A%20%20%20%20font%2Dweight%3A700%3B%0A%20%20%20%20line%2Dheight%3A1%2E125em%3B%0A%20%20%20%20font%2Dfamily%3A%20%22Open%20Sans%22%3B%0A%7D%0A%0Add%20%7B%0A%20%20%20%20margin%2Dleft%3A1em%3B%0A%20%20%20%20line%2Dheight%3A1%2E125em%3B%0A%7D%0A%0Add%20p%20%7B%0A%20%20margin%2Dtop%3A%20%2E3em%3B%0A%7D%0A%0Apre%20%7B%0A%20%20border%3A%202px%20dotted%20%23ddd%3B%0A%20%20%2Dwebkit%2Dborder%2Dradius%3A%204px%3B%0A%20%20%2Dmoz%2Dborder%2Dradius%3A%204px%3B%0A%20%20border%2Dradius%3A%204px%3B%0A%20%20padding%3A%201%2E5em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dtop%3A%20%23ddd%20dotted%205px%3B%0A%0A%7D%0A%0Aimg%20%7B%0A%20%20margin%2Dleft%3A%20auto%3B%0A%20%20margin%2Dright%3A%20auto%3B%0A%20%20max%2Dwidth%3A%20%20100%25%3B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%2Dwidth%3A%202px%3B%0A%7D" rel="stylesheet">
+</head>
+<body>
+<nav id="TOC">
+<ul>
+<li><a href="#sourcemeter-8.2-for-python">SourceMeter 8.2 for Python</a></li>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#product-characteristics">Product characteristics</a></li>
+<li><a href="#background">Background</a></li>
+</ul></li>
+<li><a href="#installation">Installation</a><ul>
+<li><a href="#supported-platforms">Supported platforms</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#installation-package">Installation package</a></li>
+<li><a href="#license-key">License key</a></li>
+</ul></li>
+<li><a href="#preconditions">Preconditions</a></li>
+<li><a href="#command-line-parameters">Command line parameters</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#result-files">Result files</a></li>
+<li><a href="#coding-rule-violation-suppression">Coding rule violation suppression</a></li>
+<li><a href="#demo">Demo</a></li>
+<li><a href="#error-messages">Error messages</a></li>
+<li><a href="#known-bugs-and-deficiencies">Known bugs and deficiencies</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#appendices">Appendices</a><ul>
+<li><a href="#reference-of-source-code-metrics">Reference of source code metrics</a><ul>
+<li><a href="#cohesion-metrics">Cohesion metrics</a></li>
+<li><a href="#complexity-metrics">Complexity metrics</a></li>
+<li><a href="#coupling-metrics">Coupling metrics</a></li>
+<li><a href="#documentation-metrics">Documentation metrics</a></li>
+<li><a href="#inheritance-metrics">Inheritance metrics</a></li>
+<li><a href="#size-metrics">Size metrics</a></li>
+</ul></li>
+<li><a href="#reference-of-code-duplication-metrics">Reference of code duplication metrics</a><ul>
+<li><a href="#clone-metrics">Clone metrics</a></li>
+</ul></li>
+<li><a href="#reference-of-faulthunter-coding-rule-violations">Reference of FaultHunter coding rule violations</a><ul>
+<li><a href="#basic-rules">Basic Rules</a></li>
+<li><a href="#design-rules">Design Rules</a></li>
+<li><a href="#exception-rules">Exception Rules</a></li>
+<li><a href="#format-rules">Format Rules</a></li>
+<li><a href="#import-rules">Import Rules</a></li>
+<li><a href="#newstyle-rules">Newstyle Rules</a></li>
+<li><a href="#python3-rules">Python3 Rules</a></li>
+<li><a href="#string-rules">String Rules</a></li>
+<li><a href="#variable-rules">Variable Rules</a></li>
+</ul></li>
+<li><a href="#reference-of-pylint-coding-rule-violations">Reference of Pylint coding rule violations</a><ul>
+<li><a href="#basic-rules-1">Basic Rules</a></li>
+<li><a href="#class-rules">Class Rules</a></li>
+<li><a href="#design-rules-1">Design Rules</a></li>
+<li><a href="#exception-rules-1">Exception Rules</a></li>
+<li><a href="#format-rules-1">Format Rules</a></li>
+<li><a href="#import-rules-1">Import Rules</a></li>
+<li><a href="#logging-rules">Logging Rules</a></li>
+<li><a href="#miscellaneous-rules">Miscellaneous Rules</a></li>
+<li><a href="#newstyle-rules-1">Newstyle Rules</a></li>
+<li><a href="#python3-rules-1">Python3 Rules</a></li>
+<li><a href="#spelling-rules">Spelling Rules</a></li>
+<li><a href="#stdlib-rules">Stdlib Rules</a></li>
+<li><a href="#string-constant-rules">String Constant Rules</a></li>
+<li><a href="#string-rules-1">String Rules</a></li>
+<li><a href="#typecheck-rules">Typecheck Rules</a></li>
+<li><a href="#variable-rules-1">Variable Rules</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#footnotes">Footnotes</a></li>
+</ul>
+</nav>
+<h1 id="sourcemeter-8.2-for-python">SourceMeter 8.2 for Python</h1>
+<h1 id="introduction">Introduction</h1>
+<p>FrontEndART SourceMeter for Python is a source code analyzer tool, which can perform deep static analysis of the source code of complex Python systems (<a href="https://www.sourcemeter.com" class="uri">https://www.sourcemeter.com</a>).</p>
+<p>The source code of a program is usually its only up-to-date documentation. At the same time, the source code is the exquisite bearer of knowledge, business processes and methodology, accumulated over a long period of time. Source code quality decrease, which happens due to many quick fixes and time pressure, results in the increase of development and testing costs, and operational risks. In spite of this, the source code usually receives hostile treatment and is merely considered as a tool.</p>
+<p>FrontEndART has developed SourceMeter based on the Columbus technology researched and developed at the <a href="http://www.sed.inf.u-szeged.hu/softwarequality">Department of Software Engineering</a> of the University of Szeged. SourceMeter provides deep static analysis of source code. Using the results of the analysis, the quality of the analyzed source code can be improved and developed both in the short- and long term in a directed way.</p>
+<p>All features of SourceMeter for Python are free, except the FaultHunter module.</p>
+<h2 id="product-characteristics">Product characteristics</h2>
+<p>The most important product characteristics of FrontEndART SourceMeter are the following:</p>
+<ul>
+<li><p>Platform-independent command line tools</p></li>
+<li><p>Transparent integration into build processes</p></li>
+<li><p>Powerful filter management</p></li>
+<li><p>Coding issue detection:</p>
+<ul>
+<li><p>Common programming mistakes (FaultHunter module)</p></li>
+<li><p>Metric threshold violations (MetricHunter module)</p></li>
+<li><p><a href="http://www.pylint.org/">Pylint</a> 1.4.1 coding rule violations</p></li>
+</ul></li>
+<li><p>Clone detection (copy-pasted source code fragments) extended with clone tracking and “clone smells”</p>
+<ul>
+<li>Syntax-based, so-called Type-2 clones</li>
+</ul></li>
+<li><p>Metrics calculation at component, file, module, class, and method levels:</p>
+<ul>
+<li><p>Source code metrics</p></li>
+<li><p>Clone metrics</p></li>
+<li><p>Coding rule violation metrics</p></li>
+</ul></li>
+</ul>
+<p>By continuous static analysis, the software developers can:</p>
+<ul>
+<li><p>reduce the software erosion rate and this way decrease development costs;</p></li>
+<li><p>coding problems can be identified before testing, so the number of test iterations and the testing costs can be reduced;</p></li>
+<li><p>the number of errors in delivered software can be reduced, so the operational risks can be decreased, increasing the company’s reputation.</p></li>
+</ul>
+<p>SourceMeter can analyze source code conforming to Python 2.7.8 and earlier versions. It is sufficient to set the source directory of the project to be analyzed.</p>
+<p>With the help of the filtering mechanism it is possible to specify a certain part of the ASG to be used (or not to be used) during the analysis, hence the results can be made more focused and the usage of memory and CPU can be reduced (e.g. generated source files or test code can be filtered out).</p>
+<p>Visit our corporate website at <a href="http://www.frontendart.com" class="uri">http://www.frontendart.com</a> to find the latest information about SourceMeter and read more about related products and services. Note, that if you are using only the free features of SourceMeter, we do not provide any free support for it. However, FrontEndART offers support services, so please feel free to search for solutions to your problems on our website and contact us with any questions you might have. We welcome feedback about the usability and eventual issues of the tool and further development suggestions at <script type="text/javascript">
+<!--
+h='&#102;&#114;&#x6f;&#110;&#116;&#x65;&#110;&#100;&#x61;&#114;&#116;&#46;&#x63;&#x6f;&#x6d;&#x3f;&#x73;&#x75;&#98;&#106;&#x65;&#x63;&#116;&#x3d;&#x53;&#x6f;&#x75;&#114;&#x63;&#x65;&#x4d;&#x65;&#116;&#x65;&#114;';a='&#64;';n='&#x73;&#x75;&#112;&#112;&#x6f;&#114;&#116;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'support@frontendart.com'+'<\/'+'a'+'>');
+// -->
+</script><noscript>support@frontendart.com (support at frontendart dot com?subject=SourceMeter)</noscript>.</p>
+<h2 id="background">Background</h2>
+<p>During the static analysis, an Abstract Semantic Graph (ASG) is constructed from the language elements of the source code. This ASG is then processed by the different tools in the package to calculate product metrics, identify copy-pasted code (clones), coding rule violations, etc.</p>
+<h1 id="installation">Installation</h1>
+<h2 id="supported-platforms">Supported platforms</h2>
+<p>SourceMeter supports the following x86 and x86-64 platforms:</p>
+<ul>
+<li><p>Microsoft Windows 7, 8, 8.1, and 10</p></li>
+<li><p>Microsoft Windows 2008 R2 Server</p></li>
+<li><p>Microsoft Windows 2012 Server</p></li>
+<li><p>GNU/Linux with kernel version 2.6.18 and GNU C library 2.11 or newer</p></li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<p>In order to use SourceMeter it is necessary to have Python 2.7 installed on the computer.</p>
+<p>In case of Windows, the appropriate Microsoft Visual C++ 2015 Redistributable Package must be installed. It can be downloaded from the following URL:</p>
+<ul>
+<li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=48145" class="uri">https://www.microsoft.com/en-us/download/details.aspx?id=48145</a> (x86/x64)</li>
+</ul>
+<p>The Linux package uses the code page conversion functions of the GNU C Library. If the conversion modules are not in the standard /usr/lib/gconv directory then the GCONV_PATH environment variable must be set according to the current installation of the GNU C Library.</p>
+<p>E.g.:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">export</span> <span class="st">&quot;GCONV_PATH=/usr/lib/x86_64-linux-gnu/gconv&quot;</span></code></pre>
+<h2 id="installation-package">Installation package</h2>
+<p>The SourceMeter installation package can be extracted into any folder and used from that location. It can be executed with the command line program SourceMeterPython.</p>
+<p>The SourceMeter for Python package contains the following directories and files:</p>
+<p>Windows:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SourceMeter\Python</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Demo</td>
+<td style="text-align: left;"># Example project directory</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Tools</td>
+<td style="text-align: left;"># ASG checker and exporter tools directory</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">SourceMeterPython.exe</td>
+<td style="text-align: left;"># Program file to execute the analysis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">UsersGuide.html</td>
+<td style="text-align: left;"># User’s guide</td>
+</tr>
+</tbody>
+</table>
+<p>Linux:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SourceMeter/Python</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Demo</td>
+<td style="text-align: left;"># Example project directory</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Tools</td>
+<td style="text-align: left;"># ASG checker and exporter tools directory</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">SourceMeterPython</td>
+<td style="text-align: left;"># Program file to execute the analysis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">UsersGuide.html</td>
+<td style="text-align: left;"># User’s guide</td>
+</tr>
+</tbody>
+</table>
+<h2 id="license-key">License key</h2>
+<p>The free version of SourceMeter does not require any license key file.</p>
+<p>In order to use the commercial version of SourceMeter with all features, it is necessary to obtain the license key file named LICENSE.DAT.</p>
+<p>Windows:</p>
+<p>The license key file must be copied into the root directory of the extracted package (next to the readme.txt file) or into the %APPDATA%\FrontEndART\SourceMeter\ directory of the user.</p>
+<p>Linux:</p>
+<p>The license key file must be copied into the root directory of the extracted package (next to the readme.txt file) or into the $HOME/.FrontEndART/SourceMeter/ directory of the user.</p>
+<p>In case of the first option, anyone who has permissions to access and execute the binaries of the package will be able to use SourceMeter, while in case of the second option only those users will be able to use SourceMeter, who have the license key file in the above-mentioned directory. If one would like to renew an expired license key, the already existing license key file must be replaced with the new one in the above-mentioned directories. To use SourceMeter it is also necessary to have read and write permission on the license key file.</p>
+<h1 id="preconditions">Preconditions</h1>
+<p>It is enough to give only the directory of the source code (project directory). The only requirement is that the Python files shall be available under this directory. The results will be created regardless of the possible import errors of the Python modules.</p>
+<h1 id="command-line-parameters">Command line parameters</h1>
+<p>SourceMeter can be executed with the following parameters:</p>
+<dl>
+<dt><strong>-help</strong></dt>
+<dd><p>It displays the detailed help and exits.</p>
+</dd>
+<dt><strong>-resultsDir</strong></dt>
+<dd><p>Relative or absolute path name of the directory where the results of the analysis will be stored. The directory will be created automatically if it does not exist.</p>
+</dd>
+<dt><strong>-projectName</strong></dt>
+<dd><p>The name of the analyzed software system. The name specified here will be used for storing the results.</p>
+</dd>
+<dt><strong>-externalHardFilter</strong></dt>
+<dd><p>Filter file specified with relative or absolute path, to filter out certain files from the analysis based on their path names. Filtered files will not appear in the results. The filter file is a simple text file containing lines starting with ‘+’ or ‘-’ characters followed by a regular expression<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Tip: you can use the and anchors to make a substring literal, reducing the need of escaping backslashes. During the analysis, each input file will be checked for these expressions. If the first character of the last matching expression is ‘-’, then the given file will be excluded from the analysis. If the first character of the last matching expression is ‘+’, or there is no matching expression, then the file will be analyzed. A line starting with a different character than ‘-’ or ‘+’ will be ignored. On Windows the checking is case-insensitive. Example filter file content:</p>
+<pre><code># Filter out all source files starting with &quot;test&quot;:
+-test[^\.]*.py
+# But test576.py is needed:
++test576.py
+# Furthermore, files beginning with &quot;test1742&quot; are also needed:
++test1742[^\.]*.py
+# Finally, test1742_b.py is not needed:
+-test1742_b.py</code></pre>
+</dd>
+<dt><strong>-runMetricHunter</strong></dt>
+<dd><p>This parameter turns on or off the MetricHunter module. With this feature, SourceMeter lists metric threshold violations. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-runFaultHunter</strong></dt>
+<dd><p>This parameter turns on or off the FaultHunter module. With this feature, SourceMeter identifies common Python coding rule violations in the code (so-called bad practices) in a similar way as provided by the pylint, pyflakes, pychecker or pep8 tools. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-runDCF</strong></dt>
+<dd><p>This parameter turns on or off the DuplicatedCodeFinder module. With this feature, SourceMeter identifies copy-pasted code fragments. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-runMET</strong></dt>
+<dd><p>This parameter turns on or off the Metric module. With this feature, SourceMeter computes source code metrics. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-profileXML</strong></dt>
+<dd><p>Global configuration file for SourceMeter. Its <em>tool-options</em> tag can be used to override the default metric thresholds for the MetricHunter tool. Furthermore, its <em>rule-options</em> tag can enable/disable or modify the priorities of multiple rules. An example profile xml file is shown below:</p>
+</dd>
+</dl>
+<pre class="sourceCode xml"><code class="sourceCode xml">      <span class="kw">&lt;sourcemeter-profile&gt;</span>
+        <span class="kw">&lt;tool-options&gt;</span>
+          <span class="kw">&lt;tool</span><span class="ot"> name</span> <span class="ot">=</span> <span class="st">&quot;MetricHunter&quot;</span><span class="ot"> enabled</span> <span class="ot">=</span> <span class="st">&quot;true&quot;</span><span class="kw">&gt;</span>
+              <span class="kw">&lt;metric-thresholds&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;LOC&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;100&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;LLOC&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;none&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;NUMPAR&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;43&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;TLOC&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;-32&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+              <span class="kw">&lt;/metric-thresholds&gt;</span>
+          <span class="kw">&lt;/tool&gt;</span>
+        <span class="kw">&lt;/tool-options&gt;</span>
+
+        <span class="kw">&lt;rule-options&gt;</span>
+          <span class="kw">&lt;rule</span><span class="ot"> id=</span><span class="st">&quot;ORS&quot;</span><span class="ot"> name=</span><span class="st">&quot;Old Raise Syntax&quot;</span><span class="ot"> priority=</span><span class="st">&quot;Major&quot;</span><span class="ot"> enabled=</span><span class="st">&quot;false&quot;</span><span class="kw">/&gt;</span>
+          <span class="kw">&lt;rule</span><span class="ot"> id=</span><span class="st">&quot;WI&quot;</span><span class="ot"> name=</span><span class="st">&quot;Wildcard Import&quot;</span><span class="ot"> priority=</span><span class="st">&quot;Critical&quot;</span><span class="ot"> enabled=</span><span class="st">&quot;true&quot;</span><span class="kw">/&gt;</span>
+        <span class="kw">&lt;/rule-options&gt;</span>
+      <span class="kw">&lt;/sourcemeter-profile&gt;</span></code></pre>
+<dl>
+<dt><strong>-rulesCSV</strong></dt>
+<dd><p>There are certain rule violations that are computed by more than one tool. E.g. OSC (Old Style Class) is checked by both Pylint and FaultHunter. In these cases, in order to avoid duplications, there is a priority order among the tools. This parameter can be used to override these default priorizations by specifying a .csv file in the following format:</p>
+</dd>
+</dl>
+<pre class="csv"><code>      toolId;FHPY;PYLINT
+      ...
+      OOL;-;1
+      ORS;1;2
+      OSC;1;2
+      PA;-;1
+      ...</code></pre>
+<dl>
+<dt><strong>-cloneGenealogy</strong></dt>
+<dd><p>This parameter turns on or off the tracking of code clones (copy-pasted source code fragments) through the consecutive revisions of the software system. It is required that during the analysis of the different revisions, the values set to projectName and resultsDir remain the same, so SourceMeter will handle them as different revisions of the same system. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “false”.</p>
+</dd>
+<dt><strong>-cloneMinLines</strong></dt>
+<dd><p>This parameter sets the minimum required size of each duplication in lines of code. The default value is 10.</p>
+</dd>
+<dt><strong>-csvSeparator</strong></dt>
+<dd><p>This parameter sets the separator character in the CSV outputs. The default value is the comma (“,”). The character set here must be placed in quotation marks (e.g. -csvSeparator=“;”). Tabulator character can be set by the special “\t” value.</p>
+</dd>
+<dt><strong>-csvDecimalMark</strong></dt>
+<dd><p>This parameter sets the decimal mark character in the CSV outputs. The default is value is the dot (“.”). The character set here must be placed in quotation marks (e.g. -csvDecimalMark=“,”).</p>
+</dd>
+<dt><strong>-maximumThreads</strong></dt>
+<dd><p>This parameter sets the maximum number of parallel tasks the controller can start. The default value is the number of available CPU cores on the current system.</p>
+</dd>
+<dt><strong>-currentDate</strong></dt>
+<dd><p>The name of the directory with date inside the result directory of the project. If it is not set, then the current date is used.</p>
+</dd>
+<dt><strong>-cleanResults</strong></dt>
+<dd><p>Cleans all but the last n number of timestamped result directory of the current project.</p>
+</dd>
+<dt><strong>-projectBaseDir</strong></dt>
+<dd><p>Directory of the source code to be analyzed specified with relative or absolute path.</p>
+</dd>
+<dt><strong>-python27binary</strong></dt>
+<dd><p>Sets Python 2.7 binary executable name (full path is required if its directory is not in PATH).</p>
+</dd>
+<dt><strong>-runPylint</strong></dt>
+<dd><p>This parameter turns on or off the Pylint coding rule violation checking. With this feature, SourceMeter lists coding rule violations detected by Pylint. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+</dl>
+<h1 id="usage">Usage</h1>
+<p>SourceMeter can be used by simply invoking it on a directory containing the Python source modules. The analysis works as follows:</p>
+<ul>
+<li><p>If the directory contains an __init__.py file, SourceMeter analyzes the given directory (i.e. a python package) recursively while it founds a corresponding __init__.py file in the appropriate sub-directories.</p></li>
+<li><p>If the directory does not contain an __init__.py file, SourceMeter checks all the first level sub-directories of the given directory and analyzes each of them containing an __init__.py file recursively (like in the above case).</p></li>
+<li><p>In order to analyze python files not forming a python package, an empty __init__.py file needs to be added to the analysis directory.</p></li>
+</ul>
+<p>Note, that some of the directories containing an __init__.py file will be excluded from the analysis automatically, like test, tests, etc. This behavior of SourceMeter can be changed using the appropriate command line parameters.</p>
+<p>Execute the following command to analyze the source code of a software system:</p>
+<p>Example (Windows):</p>
+<pre><code> C:\Users\UserName\SourceMeter\Python\SourceMeterPython
+   -projectName=MyProject
+   –projectBaseDir=MyProjectDir
+   -resultsDir=Results</code></pre>
+<p>Example (Linux):</p>
+<pre><code> ~$ SourceMeter/Python/SourceMeterPython
+   -projectName=MyProject
+   –projectBaseDir=MyProjectDir
+   -resultsDir=Results</code></pre>
+<h1 id="result-files">Result files</h1>
+<p>If any problems occur in the execution of the tools of the SourceMeter package during the code analysis, SourceMeter returns with error code 1. The error code of the given tool appears on the screen (detailed information on the bug can be found in the log directory), and the analysis is stopped, but the result files created until the failure are not deleted.</p>
+<p>An error-free execution of SourceMeter produces the following files:</p>
+<ul>
+<li><p>Files containing the results of the static analysis in the results directory (set by the resultsDir parameter):</p>
+<ul>
+<li><p>$(projectName)\python\$(DATE)\$(projectName)-*.csv</p>
+<p>CSV (comma separated values) files containing different metrics: Component, Folder, File, Package, Module, Class, Method, Function, and Attribute level source code metrics, rule violation counts, and clone-related metrics at CloneClass and CloneInstance level.</p></li>
+<li><p>$(projectName)\python\$(DATE)\$(projectName)-clones.txt</p>
+<p>List of the code clones (copy-pasted source code fragments) in the system.</p></li>
+<li><p>$(projectName)\python\$(DATE)\$(projectName)-MetricHunter.txt</p>
+<p>List of the MetricHunter metric value violations in the system.</p></li>
+<li><p>$(projectName)\python\$(DATE)\$(projectName)-FaultHunter.txt</p>
+<p>List of the FaultHunter coding rule violations in the system.</p></li>
+<li><p>$(projectName)\python\$(DATE)\$(projectName)-Pylint.txt</p>
+<p>List of the Pylint coding rule violations in the system.</p></li>
+<li><p>$(projectName)\python\$(DATE)\$(projectName).graph</p>
+<p>Binary representation of the result graph containing all the metrics, code clones and coding rule violations.</p></li>
+<li><p>$(projectName)\python\$(DATE)\$(projectName).xml</p>
+<p>XML representation of the result graph containing all the metrics, code clones and coding rule violations.</p></li>
+<li><p>$(projectName)\python\$(projectName).gsi</p>
+<p>Binary data file containing information for tracking the code clones through the consecutive revisions of the analyzed software system.</p></li>
+</ul></li>
+<li><p>Other files and directories created in the results directory:</p>
+<ul>
+<li><p>$(projectName)\python\$(DATE)\sourcemeter</p>
+<p>Directory, which contains configuration, binary, ASG, log, and temporary files created during the source code analysis.</p></li>
+<li><p>$(projectName)\python\$(DATE)\sourcemeter\asg</p>
+<p>Directory, which contains backup copies of the ASG and LIM files, the corresponding filter files, and the GSI file.</p></li>
+<li><p>$(projectName)\python\$(DATE)\sourcemeter\graph</p>
+<p>Directory, which contains backup copies of the graph files.</p></li>
+<li><p>$(projectName)\python\$(DATE)\sourcemeter\log</p>
+<p>Directory, which contains the log files created during the code analysis.</p></li>
+<li><p>$(projectName)\python\$(DATE)\sourcemeter\temp</p>
+<p>Directory, which contains the temporary files created during the code analysis.</p></li>
+</ul></li>
+</ul>
+<h1 id="coding-rule-violation-suppression">Coding rule violation suppression</h1>
+<p>The warnings issued by the rule checker modules can be suppressed in case they are found to be invalid or for any other reason. In the case of the integrated 3<sup>rd</sup> party tool (Pylint) the warnings can be suppressed with its own official warning suppression mechanisms by modifying the “[MESSAGE CONTROL]” section of the SourceMeter/Python/Tools/Pylint.conf configuration file. In case of the SourceMeter coding issue checker module (FaultHunter) this can be done by marking the code line of the warning with a special one-line comment containing the “NOSM” string.</p>
+<p>Example:</p>
+<pre class="py"><code>
+from keystone.assignment.core import *  # NOSM
+</code></pre>
+<p>The warnings of the MetricHunter module cannot be suppressed at the moment.</p>
+<h1 id="demo">Demo</h1>
+<p>The Demo directory of the installation package contains the directory structure, the build and analyzer scripts for the analysis of an example project. The ceilometer Open Stack Python module is included as the example project, which can also be downloaded from the following URL:</p>
+<p><a href="https://github.com/openstack/ceilometer" class="uri">https://github.com/openstack/ceilometer</a></p>
+<p>To perform the source code analysis of the demo project, the analyze.bat/analyze.sh script has to be executed.</p>
+<p>Contents of the Demo directory:</p>
+<p>Windows:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Demo\</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: left;">ceilometer</td>
+<td style="text-align: left;"># source code of OpenStack ceilometer</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: left;">analyze.bat</td>
+<td style="text-align: left;"># starts SourceMeter for Python</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: left;">filter.txt</td>
+<td style="text-align: left;"># a file to filter out the tests directory</td>
+</tr>
+</tbody>
+</table>
+<p>Linux:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Demo/</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: left;">ceilometer</td>
+<td style="text-align: left;"># source code of OpenStack ceilometer</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: left;">analyze.sh</td>
+<td style="text-align: left;"># starts SourceMeter for Python</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: left;">filter.txt</td>
+<td style="text-align: left;"># a file to filter out the tests directory</td>
+</tr>
+</tbody>
+</table>
+<h1 id="error-messages">Error messages</h1>
+<ul>
+<li><p>Message: There is no valid license!</p>
+<p>Solution: Install a valid license key file (see Installation section).</p></li>
+<li><p>Message: Please set the resultsDir parameter. Under this directory a new directory with the name of the analyzed project will be created, if it does not exist yet. All results will be stored there under separate directories with their names containing the date and time.</p>
+<p>Solution: The resultsDir parameter must be set.</p></li>
+<li><p>Message: Please set the projectName parameter to the name of the analyzed software system.</p>
+<p>Solution: The projectName parameter must be set.</p></li>
+</ul>
+<h1 id="known-bugs-and-deficiencies">Known bugs and deficiencies</h1>
+<p>Known bugs and deficiencies of SourceMeter for Python.</p>
+<ul>
+<li>SourceMeter places the results into the directory specified by the projectName parameter. If special characters (like ‘&lt;’, ‘&gt;’, etc.) are used in the parameter, the analysis will probably fail.</li>
+</ul>
+<h1 id="faq">FAQ</h1>
+<p>Frequently Asked Questions regarding SourceMeter.</p>
+<ul>
+<li><p>Problem: After starting the analysis, neither does the computer show elevated load nor is any of the SourceMeter tools running.</p>
+<p>Solution: SourceMeter creates temporary files during the analysis (e.g. tmp-wrapper.bat) which might be judged as suspicious by certain antivirus programs so they may block them. In these cases, the temporary files must be manually whitelisted.</p></li>
+<li><p>Problem: On Windows platforms, in case of deep directory hierarchies, it may happen that the full paths of some files exceed 259 characters. In this case some SourceMeter tools may have problems with opening these files; they will terminate and write appropriate messages in the logs.</p>
+<p>Solution: Move the files to be analyzed to a directory closer to the file system root, or use the ‘subst’ shell command.</p></li>
+</ul>
+<h1 id="appendices">Appendices</h1>
+<h2 id="reference-of-source-code-metrics">Reference of source code metrics</h2>
+<p>Source code metrics are used to quantify different source code characteristics. SourceMeter computes source code metrics for the following source code element kinds: components (e.g. modules), source files, packages, class types, methods and functions.</p>
+<p>The calculated metrics are grouped into 6 categories, which are the following:</p>
+<ul>
+<li><p><strong>Cohesion metrics:</strong> measure to what extent the source code elements are coherent in the system.</p></li>
+<li><p><strong>Complexity metrics:</strong> measure the complexity of source code elements (typically algorithms).</p></li>
+<li><p><strong>Coupling metrics:</strong> measure the amount of interdependencies of source code elements.</p></li>
+<li><p><strong>Documentation metrics:</strong> measure the amount of comments and documentation of source code elements in the system.</p></li>
+<li><p><strong>Inheritance metrics:</strong> measure the different aspects of the inheritance hierarchy of the system.</p></li>
+<li><p><strong>Size metrics:</strong> measure the basic properties of the analyzed system in terms of different cardinalities (e.g. number of code lines, number of classes or methods).</p></li>
+</ul>
+<p>In the case of the documentation metrics all the comments found immediately before a source code element are considered as its documentation, while the comments contained inside the source code element are considered as its comments.</p>
+<p>The following table summarizes the metrics, their abbreviations and their correspondence to different source code element kinds:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Metric name</th>
+<th style="text-align: left;">Abbrev.</th>
+<th style="text-align: center;">Method, Function</th>
+<th style="text-align: center;">Class</th>
+<th style="text-align: center;">Module</th>
+<th style="text-align: center;">Package</th>
+<th style="text-align: center;">File</th>
+<th style="text-align: center;">Comp.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Cohesion metrics</td>
+<td style="text-align: left;">Lack of Cohesion in Methods 5</td>
+<td style="text-align: left;">LCOM5</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Complexity metrics</td>
+<td style="text-align: left;">McCabe’s Cyclomatic Complexity</td>
+<td style="text-align: left;">McCC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nesting Level</td>
+<td style="text-align: left;">NL</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nesting Level Else-If</td>
+<td style="text-align: left;">NLE</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Weighted Methods per Class</td>
+<td style="text-align: left;">WMC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Coupling metrics</td>
+<td style="text-align: left;">Coupling Between Object classes</td>
+<td style="text-align: left;">CBO</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Coupling Between Object classes Inverse</td>
+<td style="text-align: left;">CBOI</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Incoming Invocations</td>
+<td style="text-align: left;">NII</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Outgoing Invocations</td>
+<td style="text-align: left;">NOI</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Response set For Class</td>
+<td style="text-align: left;">RFC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Documentation metrics</td>
+<td style="text-align: left;">Comment Density</td>
+<td style="text-align: left;">CD</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Comment Lines of Code</td>
+<td style="text-align: left;">CLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Documentation Lines of Code</td>
+<td style="text-align: left;">DLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Comment Density</td>
+<td style="text-align: left;">TCD</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Comment Lines of Code</td>
+<td style="text-align: left;">TCLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Inheritance metrics</td>
+<td style="text-align: left;">Depth of Inheritance Tree</td>
+<td style="text-align: left;">DIT</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Ancestors</td>
+<td style="text-align: left;">NOA</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Children</td>
+<td style="text-align: left;">NOC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Descendants</td>
+<td style="text-align: left;">NOD</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Parents</td>
+<td style="text-align: left;">NOP</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Size metrics</td>
+<td style="text-align: left;">Lines of Code</td>
+<td style="text-align: left;">LOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logical Lines of Code</td>
+<td style="text-align: left;">LLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Attributes</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Classes</td>
+<td style="text-align: left;">NCL</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Local Attributes</td>
+<td style="text-align: left;">NLA</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Local Methods</td>
+<td style="text-align: left;">NLM</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Methods</td>
+<td style="text-align: left;">NM</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Packages</td>
+<td style="text-align: left;">NPKG</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Parameters</td>
+<td style="text-align: left;">NUMPAR</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Statements</td>
+<td style="text-align: left;">NOS</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Lines of Code</td>
+<td style="text-align: left;">TLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Logical Lines of Code</td>
+<td style="text-align: left;">TLLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Attributes</td>
+<td style="text-align: left;">TNA</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Classes</td>
+<td style="text-align: left;">TNCL</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Directories</td>
+<td style="text-align: left;">TNDI</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Files</td>
+<td style="text-align: left;">TNFI</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Local Attributes</td>
+<td style="text-align: left;">TNLA</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Local Methods</td>
+<td style="text-align: left;">TNLM</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Methods</td>
+<td style="text-align: left;">TNM</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Packages</td>
+<td style="text-align: left;">TNPKG</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Statements</td>
+<td style="text-align: left;">TNOS</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cohesion-metrics">Cohesion metrics</h3>
+<h4 id="LCOM5">Lack of Cohesion in Methods 5 (LCOM5)</h4>
+<p><strong>Class:</strong> number of functionalities of the class. One of the basic principles of object-oriented programming is encapsulation, meaning that attributes belonging together and the operations that use them should be organized into one class, and one class shall implement only one functionality, i.e. its attributes and methods should be coherent. This metric measures the lack of cohesion and computes into how many coherent classes the class could be split. It is calculated by taking a non-directed graph, where the nodes are the implemented local methods of the class and there is an edge between the two nodes if and only if a common (local or inherited) attribute or abstract method is used or a method invokes another. The value of the metric is the number of connected components in the graph not counting those, which contain only constructors.</p>
+<h3 id="complexity-metrics">Complexity metrics</h3>
+<h4 id="McCC">McCabe’s Cyclomatic Complexity (McCC)</h4>
+<p><strong>Method / Function:</strong> complexity of the method/function expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if, for, while, except and conditional expression. Moreover, logical “and” and logical “or” expressions also add 1 to the value because their short-circuit evaluation can cause branching depending on the first operand. The following instructions are not included: else, try, finally.</p>
+<p><strong>File:</strong> complexity of the file expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if, for, while, except and conditional expression. Moreover, logical “and” and logical “or” expressions also add 1 to the value because their short-circuit evaluation can cause branching depending on the first operand. The following instructions are not included: else, try, finally.</p>
+<h4 id="NL">Nesting Level (NL)</h4>
+<p><strong>Method / Function:</strong> complexity of the method/function expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, else-if, else, for, while, with, try, except, finally.</p>
+<p><strong>Class:</strong> complexity of the class expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. It is calculated as the maximum nesting level (NL) of its local methods.</p>
+<h4 id="NLE">Nesting Level Else-If (NLE)</h4>
+<p><strong>Method / Function:</strong> complexity of the method/function expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes, where in the if-else-if construct only the first if instruction is considered. The following instructions are taken into account: if, else, for, while, with, try, except, finally. The following instructions do not increase the value by themselves; however, if additional embeddedness can be found in their blocks, they are considered: else-if (i.e. in the if-else-if construct the use of else-if does not increase the value of the metric).</p>
+<p><strong>Class:</strong> complexity of the class expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes, where in the if-else-if construct only the first if instruction is considered. It is calculated as the maximum nesting level (NLE) of its local methods.</p>
+<h4 id="WMC">Weighted Methods per Class (WMC)</h4>
+<p><strong>Class:</strong> complexity of the class expressed as the number of independent control flow paths in it. It is calculated as the sum of the McCabe’s Cyclomatic Complexity (McCC) values of its local methods.</p>
+<h3 id="coupling-metrics">Coupling metrics</h3>
+<h4 id="CBO">Coupling Between Object classes (CBO)</h4>
+<p><strong>Class:</strong> number of directly used other classes (e.g. by inheritance, function call, type reference, attribute reference). Classes using many other classes highly depend on their environment, so it is difficult to test or reuse them; furthermore, they are very sensitive to the changes in the system.</p>
+<h4 id="CBOI">Coupling Between Object classes Inverse (CBOI)</h4>
+<p><strong>Class:</strong> number of other classes, which directly use the class. Classes which are used by many other classes have a high impact on the behavior of the system, and should be modified very carefully and tested intensively.</p>
+<h4 id="NII">Number of Incoming Invocations (NII)</h4>
+<p><strong>Method / Function:</strong> number of other methods/functions and attribute initializations which directly call the method/function. If the method/function is invoked several times from the same method/function or attribute initialization, it is counted only once.</p>
+<p><strong>Class:</strong> number of other methods and attribute initializations which directly call the local methods of the class. If a method is invoked several times from the same method or attribute initialization, it is counted only once.</p>
+<h4 id="NOI">Number of Outgoing Invocations (NOI)</h4>
+<p><strong>Method / Function:</strong> number of directly called methods/functions. If a method/function is invoked several times, it is counted only once.</p>
+<p><strong>Class:</strong> number of directly called methods of other classes, including method invocations from attribute initializations. If a method is invoked several times, it is counted only once.</p>
+<h4 id="RFC">Response set For Class (RFC)</h4>
+<p><strong>Class:</strong> number of local (i.e. not inherited) methods in the class (NLM) plus the number of directly invoked other methods by its methods or attribute initializations (NOI).</p>
+<h3 id="documentation-metrics">Documentation metrics</h3>
+<h4 id="CD">Comment Density (CD)</h4>
+<p><strong>Method/Function:</strong> ratio of the comment lines of the method/function (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</p>
+<p><strong>Class:</strong> ratio of the comment lines of the class (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</p>
+<p><strong>Module:</strong> ratio of the comment lines of the module (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</p>
+<h4 id="CLOC">Comment Lines of Code (CLOC)</h4>
+<p><strong>Method/Function:</strong> number of comment and documentation code lines of the method/function; however, its local classes are not included.</p>
+<p><strong>Class:</strong> number of comment and documentation code lines of the class, including its local methods and attributes; however, its nested and local classes are not included.</p>
+<p><strong>Module:</strong> number of comment and documentation code lines of the module.</p>
+<p><strong>File:</strong> number of comment and documentation code lines in the file.</p>
+<h4 id="DLOC">Documentation Lines of Code (DLOC)</h4>
+<p><strong>Method/Function:</strong> number of documentation code lines of the method/function.</p>
+<p><strong>Class:</strong> number of documentation code lines of the class, including its local methods and attributes; however, its nested and local classes are not included.</p>
+<p><strong>Module:</strong> number of documentation code lines of the modul.</p>
+<h4 id="TCD">Total Comment Density (TCD)</h4>
+<p><strong>Method/Function:</strong> ratio of the total comment lines of the method/function (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<p><strong>Class:</strong> ratio of the total comment lines of the class (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<p><strong>Module:</strong> ratio of the total comment lines of the module (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<p><strong>Package:</strong> ratio of the total comment lines of the package (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<p><strong>Component:</strong> ratio of the total comment lines of the component (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<h4 id="TCLOC">Total Comment Lines of Code (TCLOC)</h4>
+<p><strong>Method/Function:</strong> number of comment and documentation code lines of the method/function, including its local classes.</p>
+<p><strong>Class:</strong> number of comment and documentation code lines of the class, including its local methods and attributes, as well as its nested and local classes.</p>
+<p><strong>Module:</strong> number of comment and documentation code lines of the module.</p>
+<p><strong>Package:</strong> number of comment and documentation code lines of the package, including its subpackages.</p>
+<p><strong>Component:</strong> number of comment and documentation code lines of the component, including its subcomponents.</p>
+<h3 id="inheritance-metrics">Inheritance metrics</h3>
+<h4 id="DIT">Depth of Inheritance Tree (DIT)</h4>
+<p><strong>Class:</strong> length of the path that leads from the class to its farthest ancestor in the inheritance tree.</p>
+<h4 id="NOA">Number of Ancestors (NOA)</h4>
+<p><strong>Class:</strong> number of classes from which the class is directly or indirectly inherited.</p>
+<h4 id="NOC">Number of Children (NOC)</h4>
+<p><strong>Class:</strong> number of classes which are directly derived from the class.</p>
+<h4 id="NOD">Number of Descendants (NOD)</h4>
+<p><strong>Class:</strong> number of classes, which are directly or indirectly derived from the class.</p>
+<h4 id="NOP">Number of Parents (NOP)</h4>
+<p><strong>Class:</strong> number of classes from which the class is directly inherited.</p>
+<h3 id="size-metrics">Size metrics</h3>
+<h4 id="LOC">Lines of Code (LOC)</h4>
+<p><strong>Method / Function:</strong> number of code lines of the method/function, including empty and comment lines; however, its nested functions are not included.</p>
+<p><strong>Class:</strong> number of code lines of the class, including empty and comment lines, as well as its local methods; however, its nested and local classes are not included.</p>
+<p><strong>Module:</strong> number of code lines of the module, including empty and comment lines.</p>
+<p><strong>Package:</strong> number of code lines of the package, including empty and comment lines; however, its subpackages are not included.</p>
+<p><strong>File:</strong> number of code lines in the file, including empty and comment lines.</p>
+<h4 id="LLOC">Logical Lines of Code (LLOC)</h4>
+<p><strong>Method / Function:</strong> number of non-empty and non-comment code lines of the method/function; however, its nested functions are not included.</p>
+<p><strong>Class:</strong> number of non-empty and non-comment code lines of the class, including the non-empty and non-comment lines of its local methods; however, its nested and local classes are not included.</p>
+<p><strong>Module:</strong> number of non-empty and non-comment code lines of the module.</p>
+<p><strong>Package:</strong> number of non-empty and non-comment code lines of the package; however, its subpackages are not included.</p>
+<p><strong>File:</strong> number of non-empty and non-comment code lines in the file.</p>
+<h4 id="NA">Number of Attributes (NA)</h4>
+<p><strong>Class:</strong> number of attributes in the class, including the inherited ones; however, the attributes of its nested and local classes are not included.</p>
+<p><strong>Module:</strong> number of attributes in the module.</p>
+<p><strong>Package:</strong> number of attributes in the package; however, attributes of its subpackages are not included.</p>
+<h4 id="NCL">Number of Classes (NCL)</h4>
+<p><strong>Module:</strong> number of classes in the module.</p>
+<p><strong>Package:</strong> number of classes in the package; however, the classes of its subpackages are not included.</p>
+<h4 id="NLA">Number of Local Attributes (NLA)</h4>
+<p><strong>Class:</strong> number of local (i.e. not inherited) attributes in the class; however, the attributes of nested and local classes are not included.</p>
+<h4 id="NLM">Number of Local Methods (NLM)</h4>
+<p><strong>Class:</strong> number of local (i.e. not inherited) methods in the class; however, the methods of nested and local classes are not included.</p>
+<h4 id="NM">Number of Methods (NM)</h4>
+<p><strong>Class:</strong> number of methods/functions in the class, including the inherited ones; however, the methods of its nested and local classes are not included. Methods that override abstract methods are not counted.</p>
+<p><strong>Module:</strong> number of methods in the module.</p>
+<p><strong>Package:</strong> number of methods in the package; however, methods of its subpackages are not included.</p>
+<h4 id="NPKG">Number of Packages (NPKG)</h4>
+<p><strong>Package:</strong> number of directly contained subpackages of the package.</p>
+<h4 id="NUMPAR">Number of Parameters (NUMPAR)</h4>
+<p><strong>Method / Function:</strong> number of the parameters of the method/function. The varargs and kwargs parameters counts as one.</p>
+<h4 id="NOS">Number of Statements (NOS)</h4>
+<p><strong>Method / Function:</strong> number of statements in the method/function; however, the statements of its nested functions are not included.</p>
+<p><strong>Class:</strong> number of statements in the class; however, the statements of its nested and local classes are not included.</p>
+<p><strong>File:</strong> number of statements in the file.</p>
+<h4 id="TLOC">Total Lines of Code (TLOC)</h4>
+<p><strong>Method / Function:</strong> number of code lines of the method/function, including empty and comment lines, as well as its nested functions.</p>
+<p><strong>Class:</strong> number of code lines of the class, including empty and comment lines, as well as its nested and local classes.</p>
+<p><strong>Module:</strong> number of code lines of the module, including empty and comment lines.</p>
+<p><strong>Package:</strong> number of code lines of the package, including empty and comment lines, as well as its subpackages.</p>
+<p><strong>Component:</strong> number of code lines of the component, including empty and comment lines, as well as its subcomponents.</p>
+<h4 id="TLLOC">Total Logical Lines of Code (TLLOC)</h4>
+<p><strong>Method / Function:</strong> number of non-empty and non-comment code lines of the method/function, including the non-empty and non-comment lines of its nested functions.</p>
+<p><strong>Class:</strong> number of non-empty and non-comment code lines of the class, including the non-empty and non-comment code lines of its nested and local classes.</p>
+<p><strong>Module:</strong> number of non-empty and non-comment code lines of the module.</p>
+<p><strong>Package:</strong> number of non-empty and non-comment code lines of the package, including its subpackages.</p>
+<p><strong>Component:</strong> number of non-empty and non-comment code lines of the component, including its subcomponents.</p>
+<h4 id="TNA">Total Number of Attributes (TNA)</h4>
+<p><strong>Class:</strong> number of attributes in the class, including the inherited ones, as well as the inherited and local attributes of its nested and local classes.</p>
+<p><strong>Module:</strong> number of attributes in the module.</p>
+<p><strong>Package:</strong> number of attributes in the package, including the attributes of its subpackages.</p>
+<p><strong>Component:</strong> number of attributes in the component, including the attributes of its subcomponents.</p>
+<h4 id="TNCL">Total Number of Classes (TNCL)</h4>
+<p><strong>Module:</strong> number of classes in the module.</p>
+<p><strong>Package:</strong> number of classes in the package, including the classes of its subpackages.</p>
+<p><strong>Component:</strong> number of classes in the component, including the classes of its subcomponents.</p>
+<h4 id="TNDI">Total Number of Directories<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> (TNDI)</h4>
+<p><strong>Package:</strong> number of directories that belong to the package, including the directories of its subpackages.</p>
+<p><strong>Component:</strong> number of directories that belong to the component, including its subcomponents.</p>
+<h4 id="TNFI">Total Number of Files (TNFI)</h4>
+<p><strong>Package:</strong> number of files that belong to the package, including the files of its subpackages.</p>
+<p><strong>Component:</strong> number of files that belong to the component, including its subcomponents.</p>
+<h4 id="TNLA">Total Number of Local Attributes (TNLA)</h4>
+<p><strong>Class:</strong> number of local (i.e. not inherited) attributes in the class, including the attributes of its nested and local classes.</p>
+<h4 id="TNLM">Total Number of Local Methods (TNLM)</h4>
+<p><strong>Class:</strong> number of local (i.e. not inherited) methods in the class, including the local methods of its nested and local classes.</p>
+<h4 id="TNM">Total Number of Methods (TNM)</h4>
+<p><strong>Class:</strong> number of methods/functions in the class, including the inherited ones, as well as the inherited and local methods of its nested and local classes. Methods that override abstract methods are not counted.</p>
+<p><strong>Package:</strong> number of methods in the module.</p>
+<p><strong>Package:</strong> number of methods in the package, including the methods of its subpackages.</p>
+<p><strong>Component:</strong> number of methods in the component, including the methods of its subcomponents.</p>
+<h4 id="TNPKG">Total Number of Packages (TNPKG)</h4>
+<p><strong>Package:</strong> number of subpackages in the package, including all directly or indirectly contained subpackages.</p>
+<p><strong>Component:</strong> number of packages and subpackages that belong to the component, including its subcomponents.</p>
+<h4 id="TNOS">Total Number of Statements (TNOS)</h4>
+<p><strong>Method / Function:</strong> number of statements in the method/function, including the statements of its nested functions.</p>
+<p><strong>Class</strong>: number of statements in the class, including the statements of its nested and local classes.</p>
+<p><strong>Module:</strong> number of statements in the module.</p>
+<p><strong>Package:</strong> number of statements in the package, including the statements of its subpackages.</p>
+<p><strong>Component:</strong> number of statements in the component, including the statements of its subcomponents.</p>
+<h2 id="reference-of-code-duplication-metrics">Reference of code duplication metrics</h2>
+<p>Code cloning (or copy-paste programming) means the copying of an existing piece of source code, pasting it somewhere else, and typically performing smaller modifications on it. Based on the level of similarity between the copied code fragments we can define the following duplication types:</p>
+<ul>
+<li><p><strong>Type-1</strong>: the copied code parts are identical code fragments except for variations in whitespace, layout and comments.</p></li>
+<li><p><strong>Type-2</strong>: syntactically identical fragments except for variations in identifier names, literals, type references, whitespace, layout and comments.</p></li>
+<li><p><strong>Type-3</strong>: copied fragments with further modifications such as altered, added, or removed statements, in addition to variations in identifier names, literals, type references, whitespace, layout and comments.</p></li>
+<li><p><strong>Type-4</strong>: the copied code fragments are syntactically different, but they perform the same functionality, i.e. they are semantically the same.</p></li>
+</ul>
+<p>FrontEndART SourceMeter is capable of identifying Type-2 clones, i.e. code fragments that are structurally identical, but may differ in variable names, literals, identifiers, etc.</p>
+<p>Two code segments correspond to each other if they are copies of each other. This relation is an equivalence relation and we use the notion of clone classes to the classes of the relation, and the members of the classes will be referred to as clone instances. Owing to the nature of the relation, each clone class must contain at least two clone instances.</p>
+<p>Clones are tracked during the source code analysis of consecutive revisions of the analyzed software system. FrontEndART SourceMeter detects suspicious, inconsistently changing code copies, which are called “clone smells”. The smells concerning clone classes are the following:</p>
+<ul>
+<li><p><strong>Disappearing Clone Class (DCC):</strong> The clone class existed in the previously analyzed revision but it does not exist anymore.</p></li>
+<li><p><strong>Appearing Clone Class (ACC):</strong> The clone class did not exist in the previously analyzed revision.</p></li>
+</ul>
+<p>The smells concerning clone instances are issued only if the containing clone class does not contain any smell. These are the following:</p>
+<ul>
+<li><p><strong>Disappearing Clone Instance (DCI):</strong> The clone instance existed in the previously analyzed revision but it does not exist anymore.</p></li>
+<li><p><strong>Appearing Clone Instance (ACI):</strong> The clone instance did not exist in the previously analyzed revision.</p></li>
+<li><p><strong>Moving Clone Instance (MCI):</strong> The clone instance belonged to a different clone class in the previously analyzed revision than its current class.</p></li>
+</ul>
+<p>The following table summarizes the code duplication metrics, their abbreviations, and their correspondence to different source code element types.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric name</th>
+<th style="text-align: left;">Abbrev.</th>
+<th style="text-align: center;">Clone Instance</th>
+<th style="text-align: center;">Clone Class</th>
+<th style="text-align: center;">Method, Function</th>
+<th style="text-align: center;">Class</th>
+<th style="text-align: center;">Module</th>
+<th style="text-align: center;">Package</th>
+<th style="text-align: center;">Comp.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Clone Age</td>
+<td style="text-align: left;">CA</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Classes</td>
+<td style="text-align: left;">CCL</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Complexity</td>
+<td style="text-align: left;">CCO</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Coverage</td>
+<td style="text-align: left;">CC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Elimination Effort</td>
+<td style="text-align: left;">CEE</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Elimination Gain</td>
+<td style="text-align: left;">CEG</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Embeddedness</td>
+<td style="text-align: left;">CE</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Instances</td>
+<td style="text-align: left;">CI</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Line Coverage</td>
+<td style="text-align: left;">CLC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Lines of Code</td>
+<td style="text-align: left;">CLLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Logical Line Coverage</td>
+<td style="text-align: left;">CLLC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Risk</td>
+<td style="text-align: left;">CR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Variability</td>
+<td style="text-align: left;">CV</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lines of Duplicated Code</td>
+<td style="text-align: left;">LDC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Logical Lines of Duplicated Code</td>
+<td style="text-align: left;">LLDC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Normalized Clone Radius</td>
+<td style="text-align: left;">NCR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+</tbody>
+</table>
+<h3 id="clone-metrics">Clone metrics</h3>
+<h4 id="CA">Clone Age (CA)</h4>
+<p><strong>Clone class/clone instance:</strong> number of previously analyzed revisions in which the clone class/clone instance was present + 1.</p>
+<h4 id="CCL">Clone Classes (CCL)</h4>
+<p><strong>Function/method/class/module/package:</strong> number of clone classes having at least one clone instance in the source code element.</p>
+<p><strong>Component:</strong> number of clone classes having at least one clone instance in the component.</p>
+<h4 id="CCO">Clone Complexity (CCO)</h4>
+<p><strong>Clone instance:</strong> the McCabe complexity of the code fragment corresponding to the clone instance.</p>
+<p><strong>Clone class:</strong> sum of CCO of clone instances in the clone class.</p>
+<p><strong>Function/method/class/module/package:</strong> sum of CCO of clone instances in the source code element.</p>
+<p><strong>Component:</strong> sum of CCO of clone instances in the component.</p>
+<h4 id="CC">Clone Coverage (CC)</h4>
+<p><strong>Function/method/class/module/package:</strong> ratio of code covered by code duplications in the source code element to the size of the source code element, expressed in terms of the number of syntactic entities (statements, expressions, etc.).</p>
+<p><strong>Component:</strong> ratio of code covered by code duplications in the component to the size of the component, expressed in terms of the number of syntactic entities (statements, expressions, etc.).</p>
+<h4 id="CEE">Clone Elimination Effort (CEE)<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></h4>
+<p><strong>Clone class:</strong> index of the effort required to eliminate the clone class. It is computed as the product of CI, CE, and NCR.</p>
+<p><strong>Component:</strong> index of the effort required to eliminate all clones from the component. It is computed as the sum of CEE of the clone classes in the component.</p>
+<h4 id="CEG">Clone Elimination Gain (CEG)<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></h4>
+<p><strong>Clone class:</strong> index of the gain resulting from eliminating the clone class. It is computed as the ratio of CR to CEE.</p>
+<p><strong>Component:</strong> index of the gain resulting from eliminating all clones from the component. It is computed as the logistic function of the ratio of CR to CEE.</p>
+<h4 id="CE">Clone Embeddedness (CE)</h4>
+<p><strong>Clone instance:</strong> sum of incoming and outgoing references (function calls, variable references, type references; different references to the same entity are counted only once) in the code fragment corresponding to the clone instance, weighted with the number of directory changes between the referenced code fragments.</p>
+<p><strong>Clone class:</strong> sum of CE of the clone instances of the clone class + 1.</p>
+<h4 id="CI">Clone Instances (CI)</h4>
+<p><strong>Function/method/class/module/package:</strong> number of clone instances in the source code element.</p>
+<p><strong>Component:</strong> number of clone instances in the component.</p>
+<p><strong>Clone class:</strong> number of clone instances in the clone class.</p>
+<h4 id="CLC">Clone Line Coverage (CLC)</h4>
+<p><strong>Function/method/class/module/package:</strong> ratio of code covered by code duplications in the source code element to the size of the source code element, expressed in terms of lines of code.</p>
+<p><strong>Component:</strong> ratio of code covered by code duplications in the component to the size of the component, expressed in terms of lines of code.</p>
+<h4 id="CLLOC">Clone Lines of Code (CLLOC)</h4>
+<p><strong>Clone instance:</strong> length of the clone instance expressed in terms of lines of code.</p>
+<p><strong>Clone class:</strong> average of CLLOC of clone instances belonging to the clone class.</p>
+<h4 id="CLLC">Clone Logical Line Coverage (CLLC)</h4>
+<p><strong>Function/method/class/module/package:</strong> ratio of code covered by code duplications in the source code element to the size of source code element, expressed in terms of logical lines of code (non-empty, non-comment lines).</p>
+<p><strong>Component:</strong> ratio of code covered by code duplications in the component to the size of the component, expressed in terms of logical lines of code (non-empty, non-comment lines).</p>
+<h4 id="CR">Clone Risk (CR)<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></h4>
+<p><strong>Clone class:</strong> risk index of the existence of the clone class. It is computed as the product of CLLOC, CI, CCO, NCR, and CV.</p>
+<p><strong>Component:</strong> relative risk index of the existence of code duplications in the component. It is computed as the sum of CR of the clone classes in the component, divided by the total logical lines of code (non-empty, non-comment lines) of the component. It expresses the risk index projected to a non-empty, non-comment line of code in the component.</p>
+<h4 id="CV">Clone Variability (CV)</h4>
+<p><strong>Clone instance:</strong> instability of the clone instance since it appeared. It is computed as the ratio of the number of previously analyzed revisions when the instance had been changed to its age (CA).</p>
+<p><strong>Clone class:</strong> instability of the clone class since it appeared. It is computed as the ratio of the number of previously analyzed revisions when its contained instances were moved, deleted, or added, to its age (CA), plus the average CV of its clone instances.</p>
+<h4 id="LDC">Lines of Duplicated Code (LDC)</h4>
+<p><strong>Function/method/class/module/package:</strong> number of code lines covered by code duplications in the source code element.</p>
+<p><strong>Component:</strong> number of code lines covered by code duplications in the component.</p>
+<h4 id="LLDC">Logical Lines of Duplicated Code (LLDC)</h4>
+<p><strong>Function/method/class/module/package:</strong> number of logical code lines (non-empty, non-comment lines) covered by code duplications in the source code element.</p>
+<p><strong>Component:</strong> The number of logical code lines (non-empty, non-comment lines) covered by code duplications in the component.</p>
+<h4 id="NCR">Normalized Clone Radius (NCR)</h4>
+<p><strong>Clone class:</strong> normalized average distance among clone instances belonging to the clone class, expressed in terms of number of directory changes.</p>
+<p><strong>Component:</strong> average of NCR of the clone classes in the component.</p>
+<h2 id="reference-of-faulthunter-coding-rule-violations">Reference of FaultHunter coding rule violations</h2>
+<p>FaultHunter is the coding rule violation checker module of SourceMeter for Python. This module makes it possible to identify common Python coding rule violations in the code (so-called bad practices) in a similar way as provided by the pylint, pyflakes, pychecker or pep8 tools. However, the algorithms implemented in the FaultHunter module work on the precise Abstract Semantic Graph of SourceMeter which results in higher precision and recall compared to other tools with a rougher syntactic analyzer.</p>
+<p>FaultHunter implements many pep8<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> guidelines, but it also provides additional checks that are not present in pep8.</p>
+<p>The list of rulesets and rules contained in each ruleset are the following:</p>
+<ul>
+<li><p><strong>Basic Rules:</strong> Basic Rules</p></li>
+<li><p><strong>Design Rules:</strong> Design Rules</p></li>
+<li><p><strong>Exception Rules:</strong> Exception Rules</p></li>
+<li><p><strong>Format Rules:</strong> Format Rules</p></li>
+<li><p><strong>Import Rules:</strong> Import Rules</p></li>
+<li><p><strong>Newstyle Rules:</strong> Newstyle Rules</p></li>
+<li><p><strong>Python3 Rules:</strong> Python3 Rules</p></li>
+<li><p><strong>String Rules:</strong> String Rules</p></li>
+<li><p><strong>Variable Rules:</strong> Variable Rules</p></li>
+</ul>
+<p>The following table contains the enabled rules and their priorities:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Abbreviation</th>
+<th style="text-align: left;">Prio.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Basic Rules</td>
+<td style="text-align: left;">Bool Compare</td>
+<td style="text-align: left;">FHPY_BoC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Dangerous Default Value</td>
+<td style="text-align: left;">FHPY_DDV</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Method Naming</td>
+<td style="text-align: left;">FHPY_MeN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Module Naming</td>
+<td style="text-align: left;">FHPY_MoN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">None Comparison</td>
+<td style="text-align: left;">FHPY_NoC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Object Comparison</td>
+<td style="text-align: left;">FHPY_OC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sequence False Checking</td>
+<td style="text-align: left;">FHPY_SFC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Design Rules</td>
+<td style="text-align: left;">Big Try</td>
+<td style="text-align: left;">FHPY_BT</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Exception Rules</td>
+<td style="text-align: left;">Bare Except</td>
+<td style="text-align: left;">FHPY_BE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Format Rules</td>
+<td style="text-align: left;">Multiple Statements</td>
+<td style="text-align: left;">FHPY_MS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Import Rules</td>
+<td style="text-align: left;">Relative Import</td>
+<td style="text-align: left;">FHPY_RI</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Single Import</td>
+<td style="text-align: left;">FHPY_SI</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Top Import</td>
+<td style="text-align: left;">FHPY_TI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Wildcard Import</td>
+<td style="text-align: left;">FHPY_WI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Newstyle Rules</td>
+<td style="text-align: left;">Old Style Class</td>
+<td style="text-align: left;">FHPY_OSC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Python3 Rules</td>
+<td style="text-align: left;">Old Raise Syntax</td>
+<td style="text-align: left;">FHPY_ORS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Raising String</td>
+<td style="text-align: left;">FHPY_RS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">String Rules</td>
+<td style="text-align: left;">String Slicing Prefix</td>
+<td style="text-align: left;">FHPY_SSP</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">String Slicing Suffix</td>
+<td style="text-align: left;">FHPY_SSS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Variable Rules</td>
+<td style="text-align: left;">__all__ After Imports</td>
+<td style="text-align: left;">FHPY_AAI</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="basic-rules">Basic Rules</h3>
+<h4 id="FHPY_BoC">Bool Compare</h4>
+<p>Don’t compare boolean values to True or False using ‘==’ or ‘is’.</p>
+<h4 id="FHPY_DDV">Dangerous Default Value</h4>
+<p>Default arguments are created on parsing, not when a function/method is called. You mustn’t use mutable objects (like dictionaries or lists) as default arguments.</p>
+<h4 id="FHPY_MeN">Method Naming</h4>
+<p>Function/method names should also be lowercase with underscores to separate words.</p>
+<h4 id="FHPY_MoN">Module Naming</h4>
+<p>Module names should be lowercase with underscores instead of spaces.</p>
+<h4 id="FHPY_NoC">None Comparison</h4>
+<p>Comparisons to singletons like None should always be done with ‘is’ or ‘is not’, never the equality operators. This is because None is a singleton and the identity test is more efficient than testing for equality.</p>
+<h4 id="FHPY_OC">Object Comparison</h4>
+<p>Object type comparisons should always use isinstance() instead of comparing types directly.</p>
+<h4 id="FHPY_SFC">Sequence False Checking</h4>
+<p>For sequences, (strings, lists, tuples), use the fact that empty sequences are false. Method of usage should be: if not seq: or if seq:.</p>
+<h3 id="design-rules">Design Rules</h3>
+<h4 id="FHPY_BT">Big Try</h4>
+<p>For all try/except clauses, limit the ‘try’ clause to the absolute minimum amount of code necessary. This avoids masking bugs.</p>
+<h3 id="exception-rules">Exception Rules</h3>
+<h4 id="FHPY_BE">Bare Except</h4>
+<p>If you really want to catch all exceptions, then use ‘except Exception:’, but it is many times better to only trap exceptions that you expect. A bare ‘except:’ clause will catch SystemExit and KeyboardInterrupt exceptions, making it harder to interrupt a program with Control-C, and can disguise other problems.</p>
+<h3 id="format-rules">Format Rules</h3>
+<h4 id="FHPY_MS">Multiple Statements</h4>
+<p>Multiple statements per line should be avoided.</p>
+<h3 id="import-rules">Import Rules</h3>
+<h4 id="FHPY_RI">Relative Import</h4>
+<p>Relative imports for intra-package imports are highly discouraged. Always use the absolute package path for all imports.</p>
+<h4 id="FHPY_SI">Single Import</h4>
+<p>Imports should usually be on separate lines.</p>
+<h4 id="FHPY_TI">Top Import</h4>
+<p>Imports are always put at the top of the file, just after any module comments and docstrings, and before module globals and constants.</p>
+<h4 id="FHPY_WI">Wildcard Import</h4>
+<p>Even for importing a lot of names it is better to be able to see where your names come from. Tools like pylint and PyFlakes can help warn you about unused imports.</p>
+<h3 id="newstyle-rules">Newstyle Rules</h3>
+<h4 id="FHPY_OSC">Old Style Class</h4>
+<p>If a class has no base classes, then it is better to make it a new style class by inheriting from object.</p>
+<h3 id="python3-rules">Python3 Rules</h3>
+<h4 id="FHPY_ORS">Old Raise Syntax</h4>
+<p>The parentheses-using form is preferred because when the exception arguments are long or include string formatting, you don’t need to use line continuation characters thanks to the containing parentheses.</p>
+<h4 id="FHPY_RS">Raising String</h4>
+<p>String exceptions in new code are forbidden, because this language feature is being removed in Python 2.6. Modules or packages should define their own domain-specific base exception class, which should be subclassed from the built-in Exception class.</p>
+<h3 id="string-rules">String Rules</h3>
+<h4 id="FHPY_SSP">String Slicing Prefix</h4>
+<p>Use ’’.startswith() instead of string slicing to check for prefixes. The startswith() is cleaner and less error prone.</p>
+<h4 id="FHPY_SSS">String Slicing Suffix</h4>
+<p>Use ’’.endswith() instead of string slicing to check for suffixes. The endswith() is cleaner and less error prone.</p>
+<h3 id="variable-rules">Variable Rules</h3>
+<h4 id="FHPY_AAI">__all__ After Imports</h4>
+<p>Put any relevant __all__ specification after the imports.</p>
+<h2 id="reference-of-pylint-coding-rule-violations">Reference of Pylint coding rule violations</h2>
+<p>FrontEndART SourceMeter incorporates the <a href="http://www.pylint.org/">Pylint</a> tool for coding rule violation checking and imports its results. SourceMeter also associates the issued rule violations with source code elements (i.e. methods, functions, classes, packages, and modules), and calculates metrics for the source code elements, which represent the amount of violations of each ruleset, rule, and priority groups, respectively.</p>
+<p>SourceMeter uses Pylint “as is”, without any guaranties that the results of Pylint are correct. All statements of the Pylint license apply here as well. All texts describing the rulesets and the individual rules are copied from the configuration files of Pylint with some minor grammatical fixes. The list of rulesets and rules contained in each ruleset are the following:</p>
+<ul>
+<li><p><strong>Basic Rules:</strong> Basic Rules</p></li>
+<li><p><strong>Class Rules:</strong> Class Rules</p></li>
+<li><p><strong>Design Rules:</strong> Design Rules</p></li>
+<li><p><strong>Exception Rules:</strong> Exception Rules</p></li>
+<li><p><strong>Format Rules:</strong> Format Rules</p></li>
+<li><p><strong>Import Rules:</strong> Import Rules</p></li>
+<li><p><strong>Logging Rules:</strong> Logging Rules</p></li>
+<li><p><strong>Miscellaneous Rules:</strong> Miscellaneous Rules</p></li>
+<li><p><strong>Newstyle Rules:</strong> Newstyle Rules</p></li>
+<li><p><strong>Python3 Rules:</strong> Python3 Rules</p></li>
+<li><p><strong>Spelling Rules:</strong> Spelling Rules</p></li>
+<li><p><strong>Stdlib Rules:</strong> Stdlib Rules</p></li>
+<li><p><strong>String Constant Rules:</strong> String Constant Rules</p></li>
+<li><p><strong>String Rules:</strong> String Rules</p></li>
+<li><p><strong>Typecheck Rules:</strong> Typecheck Rules</p></li>
+<li><p><strong>Variable Rules:</strong> Variable Rules</p></li>
+</ul>
+<p>The following table contains the enabled rules and their priorities:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Abbreviation</th>
+<th style="text-align: left;">Prio.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Basic Rules</td>
+<td style="text-align: left;">Abstract Class Instantiated</td>
+<td style="text-align: left;">PYLINT_ACI</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Assert On Tuple</td>
+<td style="text-align: left;">PYLINT_AOT</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Builtin</td>
+<td style="text-align: left;">PYLINT_BB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Reversed Sequence</td>
+<td style="text-align: left;">PYLINT_BRS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Blacklisted Name</td>
+<td style="text-align: left;">PYLINT_BN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Dangerous Default Value</td>
+<td style="text-align: left;">PYLINT_DDV</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Deprecated Lambda</td>
+<td style="text-align: left;">PYLINT_DL</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Duplicate Argument Name</td>
+<td style="text-align: left;">PYLINT_DAN</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Duplicate Key</td>
+<td style="text-align: left;">PYLINT_DK</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Empty Docstring</td>
+<td style="text-align: left;">PYLINT_ED</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Eval Used</td>
+<td style="text-align: left;">PYLINT_EU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Exec Used</td>
+<td style="text-align: left;">PYLINT_ExU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Expression Not Assigned</td>
+<td style="text-align: left;">PYLINT_ENA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Function Redefined</td>
+<td style="text-align: left;">PYLINT_FR</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Init Is Generator</td>
+<td style="text-align: left;">PYLINT_IIG</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Name</td>
+<td style="text-align: left;">PYLINT_IN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Lost Exception</td>
+<td style="text-align: left;">PYLINT_LoE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Docstring</td>
+<td style="text-align: left;">PYLINT_MD</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Module Attribute</td>
+<td style="text-align: left;">PYLINT_MMA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Reversed Argument</td>
+<td style="text-align: left;">PYLINT_MRA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nonexistent Operator</td>
+<td style="text-align: left;">PYLINT_NO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Not In Loop</td>
+<td style="text-align: left;">PYLINT_NIL</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Pointless Statement</td>
+<td style="text-align: left;">PYLINT_PS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Pointless String Statement</td>
+<td style="text-align: left;">PYLINT_PSS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Return Arg In Generator</td>
+<td style="text-align: left;">PYLINT_RAIG</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Return In Init</td>
+<td style="text-align: left;">PYLINT_RII</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Return Outside Function</td>
+<td style="text-align: left;">PYLINT_ROF</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Star Args</td>
+<td style="text-align: left;">PYLINT_SA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unnecessary Lambda</td>
+<td style="text-align: left;">PYLINT_UL</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unnecessary Pass</td>
+<td style="text-align: left;">PYLINT_UP</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unreachable</td>
+<td style="text-align: left;">PYLINT_U</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Useless Else On Loop</td>
+<td style="text-align: left;">PYLINT_UEOL</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Yield Outside Function</td>
+<td style="text-align: left;">PYLINT_YOF</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Class Rules</td>
+<td style="text-align: left;">Abstract Method</td>
+<td style="text-align: left;">PYLINT_AM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Access Member Before Definition</td>
+<td style="text-align: left;">PYLINT_AMBD</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Arguments Differ</td>
+<td style="text-align: left;">PYLINT_AD</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Assigning Non Slot</td>
+<td style="text-align: left;">PYLINT_ANS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Attribute Defined Outside Init</td>
+<td style="text-align: left;">PYLINT_ADOI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Classmethod Argument</td>
+<td style="text-align: left;">PYLINT_BCA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Context Manager</td>
+<td style="text-align: left;">PYLINT_BCM</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Mcs Classmethod Argument</td>
+<td style="text-align: left;">PYLINT_BMCA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Mcs Method Argument</td>
+<td style="text-align: left;">PYLINT_BMMA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Staticmethod Argument</td>
+<td style="text-align: left;">PYLINT_BSA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Inherit Non Class</td>
+<td style="text-align: left;">PYLINT_INC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Interface Is Not Class</td>
+<td style="text-align: left;">PYLINT_IINC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Slots</td>
+<td style="text-align: left;">PYLINT_InS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Slots Object</td>
+<td style="text-align: left;">PYLINT_ISO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Method Hidden</td>
+<td style="text-align: left;">PYLINT_MH</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Interface Method</td>
+<td style="text-align: left;">PYLINT_MIM</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Init</td>
+<td style="text-align: left;">PYLINT_NI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Method Argument</td>
+<td style="text-align: left;">PYLINT_NMA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Self Argument</td>
+<td style="text-align: left;">PYLINT_NSA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Self Use</td>
+<td style="text-align: left;">PYLINT_NSU</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Non Iterator Returned</td>
+<td style="text-align: left;">PYLINT_NIR</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Non Parent Init Called</td>
+<td style="text-align: left;">PYLINT_NPIC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Protected Access</td>
+<td style="text-align: left;">PYLINT_PA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Signature Differs</td>
+<td style="text-align: left;">PYLINT_SD</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Super Init Not Called</td>
+<td style="text-align: left;">PYLINT_SINC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design Rules</td>
+<td style="text-align: left;">Abstract Class Little Used</td>
+<td style="text-align: left;">PYLINT_ACLU</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Abstract Class Not Used</td>
+<td style="text-align: left;">PYLINT_ACNU</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Interface Not Implemented</td>
+<td style="text-align: left;">PYLINT_INI</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Few Public Methods</td>
+<td style="text-align: left;">PYLINT_TFPM</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Ancestors</td>
+<td style="text-align: left;">PYLINT_TMA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Arguments</td>
+<td style="text-align: left;">PYLINT_ToMA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Branches</td>
+<td style="text-align: left;">PYLINT_TMB</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Instance Attributes</td>
+<td style="text-align: left;">PYLINT_TMIA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Locals</td>
+<td style="text-align: left;">PYLINT_ToML</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Public Methods</td>
+<td style="text-align: left;">PYLINT_TMPM</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Return Statements</td>
+<td style="text-align: left;">PYLINT_TMRS</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Statements</td>
+<td style="text-align: left;">PYLINT_TMS</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Exception Rules</td>
+<td style="text-align: left;">Bad Except Order</td>
+<td style="text-align: left;">PYLINT_BEO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Exception Context</td>
+<td style="text-align: left;">PYLINT_BEC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bare Except</td>
+<td style="text-align: left;">PYLINT_BE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Binary Op Exception</td>
+<td style="text-align: left;">PYLINT_BOE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Broad Except</td>
+<td style="text-align: left;">PYLINT_BrE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Catching Non Exception</td>
+<td style="text-align: left;">PYLINT_CNE</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nonstandard Exception</td>
+<td style="text-align: left;">PYLINT_NE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Notimplemented Raised</td>
+<td style="text-align: left;">PYLINT_NR</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Pointless Except</td>
+<td style="text-align: left;">PYLINT_PoE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Raising Bad Type</td>
+<td style="text-align: left;">PYLINT_RBT</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Raising Non Exception</td>
+<td style="text-align: left;">PYLINT_RNE</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Format Rules</td>
+<td style="text-align: left;">Bad Continuation</td>
+<td style="text-align: left;">PYLINT_BC</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Indentation</td>
+<td style="text-align: left;">PYLINT_BI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Whitespace</td>
+<td style="text-align: left;">PYLINT_BW</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Line Too Long</td>
+<td style="text-align: left;">PYLINT_LTL</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Lowercase L Suffix</td>
+<td style="text-align: left;">PYLINT_LLS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Final Newline</td>
+<td style="text-align: left;">PYLINT_MFN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Mixed Indentation</td>
+<td style="text-align: left;">PYLINT_MI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Mixed Line Endings</td>
+<td style="text-align: left;">PYLINT_MLE</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Multiple Statements</td>
+<td style="text-align: left;">PYLINT_MS</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Superfluous Parens</td>
+<td style="text-align: left;">PYLINT_SP</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Lines</td>
+<td style="text-align: left;">PYLINT_TML</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Trailing Whitespace</td>
+<td style="text-align: left;">PYLINT_TW</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unexpected Line Ending Format</td>
+<td style="text-align: left;">PYLINT_ULEF</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unnecessary Semicolon</td>
+<td style="text-align: left;">PYLINT_US</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Import Rules</td>
+<td style="text-align: left;">Cyclic Import</td>
+<td style="text-align: left;">PYLINT_CI</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Deprecated Module</td>
+<td style="text-align: left;">PYLINT_DeM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Import Self</td>
+<td style="text-align: left;">PYLINT_IS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Misplaced Future</td>
+<td style="text-align: left;">PYLINT_MF</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Reimported</td>
+<td style="text-align: left;">PYLINT_R</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Relative Import</td>
+<td style="text-align: left;">PYLINT_RI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Wildcard Import</td>
+<td style="text-align: left;">PYLINT_WI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Logging Rules</td>
+<td style="text-align: left;">Logging Format Interpolation</td>
+<td style="text-align: left;">PYLINT_LFI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logging Format Truncated</td>
+<td style="text-align: left;">PYLINT_LFT</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logging Not Lazy</td>
+<td style="text-align: left;">PYLINT_LNL</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logging Too Few Args</td>
+<td style="text-align: left;">PYLINT_LTFA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logging Too Many Args</td>
+<td style="text-align: left;">PYLINT_LTMA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logging Unsupported Format</td>
+<td style="text-align: left;">PYLINT_LUF</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Miscellaneous Rules</td>
+<td style="text-align: left;">Fixme</td>
+<td style="text-align: left;">PYLINT_Fi</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Encoded Data</td>
+<td style="text-align: left;">PYLINT_IED</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Newstyle Rules</td>
+<td style="text-align: left;">Bad Super Call</td>
+<td style="text-align: left;">PYLINT_BSC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Super Argument</td>
+<td style="text-align: left;">PYLINT_MSA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Old Style Class</td>
+<td style="text-align: left;">PYLINT_OSC</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Property On Old Class</td>
+<td style="text-align: left;">PYLINT_POOC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Slots On Old Class</td>
+<td style="text-align: left;">PYLINT_SOOC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Super On Old Class</td>
+<td style="text-align: left;">PYLINT_SuOOC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Python3 Rules</td>
+<td style="text-align: left;">Apply Builtin</td>
+<td style="text-align: left;">PYLINT_AB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Backtick</td>
+<td style="text-align: left;">PYLINT_B</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Basestring Builtin</td>
+<td style="text-align: left;">PYLINT_BaB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Buffer Builtin</td>
+<td style="text-align: left;">PYLINT_BuB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Cmp Builtin</td>
+<td style="text-align: left;">PYLINT_CB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Cmp Method</td>
+<td style="text-align: left;">PYLINT_CM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Coerce Builtin</td>
+<td style="text-align: left;">PYLINT_CoB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Coerce Method</td>
+<td style="text-align: left;">PYLINT_CoM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Delslice Method</td>
+<td style="text-align: left;">PYLINT_DM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Dict Iter Method</td>
+<td style="text-align: left;">PYLINT_DIM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Dict View Method</td>
+<td style="text-align: left;">PYLINT_DVM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Execfile Builtin</td>
+<td style="text-align: left;">PYLINT_EB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">File Builtin</td>
+<td style="text-align: left;">PYLINT_FB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Getslice Method</td>
+<td style="text-align: left;">PYLINT_GM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Hex Method</td>
+<td style="text-align: left;">PYLINT_HM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Implicit Map Evaluation</td>
+<td style="text-align: left;">PYLINT_IME</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Indexing Exception</td>
+<td style="text-align: left;">PYLINT_InE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Input Builtin</td>
+<td style="text-align: left;">PYLINT_IB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Long Builtin</td>
+<td style="text-align: left;">PYLINT_LB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Long Suffix</td>
+<td style="text-align: left;">PYLINT_LS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Metaclass Assignment</td>
+<td style="text-align: left;">PYLINT_MA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Next Method Called</td>
+<td style="text-align: left;">PYLINT_NMC</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Absolute Import</td>
+<td style="text-align: left;">PYLINT_NAI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nonzero Method</td>
+<td style="text-align: left;">PYLINT_NoM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Oct Method</td>
+<td style="text-align: left;">PYLINT_OM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Old Division</td>
+<td style="text-align: left;">PYLINT_OD</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Old Ne Operator</td>
+<td style="text-align: left;">PYLINT_ONO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Old Octal Literal</td>
+<td style="text-align: left;">PYLINT_OOL</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Old Raise Syntax</td>
+<td style="text-align: left;">PYLINT_ORS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Parameter Unpacking</td>
+<td style="text-align: left;">PYLINT_PU</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Print Statement</td>
+<td style="text-align: left;">PYLINT_PrS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Raising String</td>
+<td style="text-align: left;">PYLINT_RS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Raw_input Builtin</td>
+<td style="text-align: left;">PYLINT_RB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Reduce Builtin</td>
+<td style="text-align: left;">PYLINT_RedB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Reload Builtin</td>
+<td style="text-align: left;">PYLINT_RelB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Round Builtin</td>
+<td style="text-align: left;">PYLINT_RoB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Setslice Method</td>
+<td style="text-align: left;">PYLINT_SM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Standarderror Builtin</td>
+<td style="text-align: left;">PYLINT_SB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unicode Builtin</td>
+<td style="text-align: left;">PYLINT_UB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unpacking In Except</td>
+<td style="text-align: left;">PYLINT_UIE</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Xrange Builtin</td>
+<td style="text-align: left;">PYLINT_XB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Spelling Rules</td>
+<td style="text-align: left;">Wrong Spelling In Comment</td>
+<td style="text-align: left;">PYLINT_WSIC</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Wrong Spelling In Docstring</td>
+<td style="text-align: left;">PYLINT_WSID</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stdlib Rules</td>
+<td style="text-align: left;">Bad Open Mode</td>
+<td style="text-align: left;">PYLINT_BOM</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Boolean Datetime</td>
+<td style="text-align: left;">PYLINT_BD</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Redundant Unittest Assert</td>
+<td style="text-align: left;">PYLINT_RUA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">String Constant Rules</td>
+<td style="text-align: left;">Anomalous Backslash In String</td>
+<td style="text-align: left;">PYLINT_ABIS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Anomalous Unicode Escape In String</td>
+<td style="text-align: left;">PYLINT_AUEIS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">String Rules</td>
+<td style="text-align: left;">Bad Format Character</td>
+<td style="text-align: left;">PYLINT_BFC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Format String</td>
+<td style="text-align: left;">PYLINT_BFS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Format String Key</td>
+<td style="text-align: left;">PYLINT_BFSK</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Bad Str Strip Call</td>
+<td style="text-align: left;">PYLINT_BSSC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Format Combined Specification</td>
+<td style="text-align: left;">PYLINT_FCS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Format Needs Mapping</td>
+<td style="text-align: left;">PYLINT_FNM</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Format Index</td>
+<td style="text-align: left;">PYLINT_IFI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Format Argument Key</td>
+<td style="text-align: left;">PYLINT_MFAK</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Format Attribute</td>
+<td style="text-align: left;">PYLINT_MFA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Format String Key</td>
+<td style="text-align: left;">PYLINT_MFSK</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Mixed Format String</td>
+<td style="text-align: left;">PYLINT_MFS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Few Format Args</td>
+<td style="text-align: left;">PYLINT_TFFA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Format Args</td>
+<td style="text-align: left;">PYLINT_TMFA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Truncated Format String</td>
+<td style="text-align: left;">PYLINT_TFS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused Format String Argument</td>
+<td style="text-align: left;">PYLINT_UFSA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused Format String Key</td>
+<td style="text-align: left;">PYLINT_UFSK</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Typecheck Rules</td>
+<td style="text-align: left;">Assignment From No Return</td>
+<td style="text-align: left;">PYLINT_AFNR</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Assignment From None</td>
+<td style="text-align: left;">PYLINT_AFN</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Sequence Index</td>
+<td style="text-align: left;">PYLINT_ISI</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid Slice Index</td>
+<td style="text-align: left;">PYLINT_InSI</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Kwoa</td>
+<td style="text-align: left;">PYLINT_MK</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Member</td>
+<td style="text-align: left;">PYLINT_NM</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Value For Parameter</td>
+<td style="text-align: left;">PYLINT_NVFP</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Not Callable</td>
+<td style="text-align: left;">PYLINT_NC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Redundant Keyword Arg</td>
+<td style="text-align: left;">PYLINT_RKA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too Many Function Args</td>
+<td style="text-align: left;">PYLINT_ToMFA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unexpected Keyword Arg</td>
+<td style="text-align: left;">PYLINT_UKA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Variable Rules</td>
+<td style="text-align: left;">Cell Var From Loop</td>
+<td style="text-align: left;">PYLINT_CVFL</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Global At Module Level</td>
+<td style="text-align: left;">PYLINT_GAML</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Global Statement</td>
+<td style="text-align: left;">PYLINT_GS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Global Variable Not Assigned</td>
+<td style="text-align: left;">PYLINT_GVNA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Global Variable Undefined</td>
+<td style="text-align: left;">PYLINT_GVU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Invalid All Object</td>
+<td style="text-align: left;">PYLINT_IAO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">No Name In Module</td>
+<td style="text-align: left;">PYLINT_NNIM</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Redefine In Handler</td>
+<td style="text-align: left;">PYLINT_RIH</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Redefined Builtin</td>
+<td style="text-align: left;">PYLINT_ReB</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Redefined Outer Name</td>
+<td style="text-align: left;">PYLINT_RON</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unbalanced Tuple Unpacking</td>
+<td style="text-align: left;">PYLINT_UTU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Undefined All Variable</td>
+<td style="text-align: left;">PYLINT_UAV</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Undefined Loop Variable</td>
+<td style="text-align: left;">PYLINT_ULV</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Undefined Variable</td>
+<td style="text-align: left;">PYLINT_UV</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unpacking Non Sequence</td>
+<td style="text-align: left;">PYLINT_UNS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused Argument</td>
+<td style="text-align: left;">PYLINT_UA</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused Import</td>
+<td style="text-align: left;">PYLINT_UnI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused Variable</td>
+<td style="text-align: left;">PYLINT_UnV</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused Wildcard Import</td>
+<td style="text-align: left;">PYLINT_UWI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Used Before Assignment</td>
+<td style="text-align: left;">PYLINT_UBA</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+</tbody>
+</table>
+<h3 id="basic-rules-1">Basic Rules</h3>
+<h4 id="PYLINT_ACI">Abstract Class Instantiated</h4>
+<p>Used when an abstract class with <code>abc.ABCMeta</code> as metaclass has abstract methods and is instantiated.</p>
+<h4 id="PYLINT_AOT">Assert On Tuple</h4>
+<p>A call of assert on a tuple will always evaluate to true if the tuple is not empty, and will always evaluate to false if it is.</p>
+<h4 id="PYLINT_BB">Bad Builtin</h4>
+<p>Used when a black listed builtin function is used (see the bad-function option). Usual black listed functions are the ones like map, or filter, where Python offers now some cleaner alternative like list comprehension.</p>
+<h4 id="PYLINT_BRS">Bad Reversed Sequence</h4>
+<p>Used when the first argument to reversed() builtin isn’t a sequence (does not implement __reversed__, nor __getitem__ and __len__.</p>
+<h4 id="PYLINT_BN">Blacklisted Name</h4>
+<p>Used when the name is listed in the black list (unauthorized names).</p>
+<h4 id="PYLINT_DDV">Dangerous Default Value</h4>
+<p>Used when a mutable value as list or dictionary is detected in a default value for an argument.</p>
+<h4 id="PYLINT_DL">Deprecated Lambda</h4>
+<p>Used when a lambda is the first argument to “map” or “filter”. It could be clearer as a list comprehension or generator expression. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_DAN">Duplicate Argument Name</h4>
+<p>Duplicate argument names in function definitions are syntax errors.</p>
+<h4 id="PYLINT_DK">Duplicate Key</h4>
+<p>Used when a dictionary expression binds the same key multiple times.</p>
+<h4 id="PYLINT_ED">Empty Docstring</h4>
+<p>Used when a module, function, class or method has an empty docstring (it would be too easy ;).</p>
+<h4 id="PYLINT_EU">Eval Used</h4>
+<p>Used when you use the “eval” function, to discourage its usage. Consider using <code>ast.literal_eval</code> for safely evaluating strings containing Python expressions from untrusted sources.</p>
+<h4 id="PYLINT_ExU">Exec Used</h4>
+<p>Used when you use the “exec” statement (function for Python 3), to discourage its usage. That doesn’t mean you can not use it!</p>
+<h4 id="PYLINT_ENA">Expression Not Assigned</h4>
+<p>Used when an expression that is not a function call is assigned to nothing. Probably something else was intended.</p>
+<h4 id="PYLINT_FR">Function Redefined</h4>
+<p>Used when a function / class / method is redefined.</p>
+<h4 id="PYLINT_IIG">Init Is Generator</h4>
+<p>Used when the special class method __init__ is turned into a generator by a yield in its body.</p>
+<h4 id="PYLINT_IN">Invalid Name</h4>
+<p>Used when the name doesn’t match the regular expression associated to its type (constant, variable, class…).</p>
+<h4 id="PYLINT_LoE">Lost Exception</h4>
+<p>Used when a break or a return statement is found inside the finally clause of a try…finally block: the exceptions raised in the try clause will be silently swallowed instead of being re-raised.</p>
+<h4 id="PYLINT_MD">Missing Docstring</h4>
+<p>Used when a module, function, class or method has no docstring.Some special methods like __init__ doesn’t necessary require a docstring.</p>
+<h4 id="PYLINT_MMA">Missing Module Attribute</h4>
+<p>Used when an attribute required for modules is missing.</p>
+<h4 id="PYLINT_MRA">Missing Reversed Argument</h4>
+<p>Used when reversed() builtin didn’t receive an argument.</p>
+<h4 id="PYLINT_NO">Nonexistent Operator</h4>
+<p>Used when you attempt to use the C-style pre-increment orpre-decrement operator – and ++, which doesn’t exist in Python.</p>
+<h4 id="PYLINT_NIL">Not In Loop</h4>
+<p>Used when break or continue keywords are used outside a loop.</p>
+<h4 id="PYLINT_PS">Pointless Statement</h4>
+<p>Used when a statement doesn’t have (or at least seems to) any effect.</p>
+<h4 id="PYLINT_PSS">Pointless String Statement</h4>
+<p>Used when a string is used as a statement (which of course has no effect). This is a particular case of W0104 with its own message so you can easily disable it if you’re using those strings as documentation, instead of comments.</p>
+<h4 id="PYLINT_RAIG">Return Arg In Generator</h4>
+<p>Used when a “return” statement with an argument is found outside in a generator function or method (e.g. with some “yield” statements). This message can’t be emitted when using Python &gt;= 3.3.</p>
+<h4 id="PYLINT_RII">Return In Init</h4>
+<p>Used when the special class method __init__ has an explicit return value.</p>
+<h4 id="PYLINT_ROF">Return Outside Function</h4>
+<p>Used when a “return” statement is found outside a function or method.</p>
+<h4 id="PYLINT_SA">Star Args</h4>
+<p>Used when a function or method is called using <code>*args</code> or <code>**kwargs</code> to dispatch arguments. This doesn’t improve readability and should be used with care.</p>
+<h4 id="PYLINT_UL">Unnecessary Lambda</h4>
+<p>Used when the body of a lambda expression is a function call on the same argument list as the lambda itself; such lambda expressions are in all but a few cases replaceable with the function being called in the body of the lambda.</p>
+<h4 id="PYLINT_UP">Unnecessary Pass</h4>
+<p>Used when a “pass” statement that can be avoided is encountered.</p>
+<h4 id="PYLINT_U">Unreachable</h4>
+<p>Used when there is some code behind a “return” or “raise” statement, which will never be accessed.</p>
+<h4 id="PYLINT_UEOL">Useless Else On Loop</h4>
+<p>Loops should only have an else clause if they can exit early with a break statement, otherwise the statements under else should be on the same scope as the loop itself.</p>
+<h4 id="PYLINT_YOF">Yield Outside Function</h4>
+<p>Used when a “yield” statement is found outside a function or method.</p>
+<h3 id="class-rules">Class Rules</h3>
+<h4 id="PYLINT_AM">Abstract Method</h4>
+<p>Used when an abstract method (i.e. raise NotImplementedError) is not overridden in concrete class.</p>
+<h4 id="PYLINT_AMBD">Access Member Before Definition</h4>
+<p>Used when an instance member is accessed before it’s actually assigned.</p>
+<h4 id="PYLINT_AD">Arguments Differ</h4>
+<p>Used when a method has a different number of arguments than in the implemented interface or in an overridden method.</p>
+<h4 id="PYLINT_ANS">Assigning Non Slot</h4>
+<p>Used when assigning to an attribute not defined in the class slots.</p>
+<h4 id="PYLINT_ADOI">Attribute Defined Outside Init</h4>
+<p>Used when an instance attribute is defined outside the __init__ method.</p>
+<h4 id="PYLINT_BCA">Bad Classmethod Argument</h4>
+<p>Used when a class method has a first argument named differently than the value specified in valid-classmethod-first-arg option (default to “cls”), recommended to easily differentiate them from regular instance methods.</p>
+<h4 id="PYLINT_BCM">Bad Context Manager</h4>
+<p>Used when the __exit__ special method, belonging to a context manager, does not accept 3 arguments (type, value, traceback).</p>
+<h4 id="PYLINT_BMCA">Bad Mcs Classmethod Argument</h4>
+<p>Used when a metaclass class method has a first argument named differently than the value specified in valid-metaclass-classmethod-first-arg option (default to “mcs”), recommended to easily differentiate them from regular instance methods.</p>
+<h4 id="PYLINT_BMMA">Bad Mcs Method Argument</h4>
+<p>Used when a metaclass method has a first agument named differently than the value specified in valid-classmethod-first-arg option (default to “cls”), recommended to easily differentiate them from regular instance methods.</p>
+<h4 id="PYLINT_BSA">Bad Staticmethod Argument</h4>
+<p>Used when a static method has “self” or a value specified in valid-classmethod-first-arg option or valid-metaclass-classmethod-first-arg option as first argument.</p>
+<h4 id="PYLINT_INC">Inherit Non Class</h4>
+<p>Used when a class inherits from something which is not a class.</p>
+<h4 id="PYLINT_IINC">Interface Is Not Class</h4>
+<p>Used when a class claims to implement an interface which is not a class.</p>
+<h4 id="PYLINT_InS">Invalid Slots</h4>
+<p>Used when an invalid __slots__ is found in class. Only a string, an iterable or a sequence is permitted.</p>
+<h4 id="PYLINT_ISO">Invalid Slots Object</h4>
+<p>Used when an invalid (non-string) object occurs in __slots__.</p>
+<h4 id="PYLINT_MH">Method Hidden</h4>
+<p>Used when a class defines a method which is hidden by an instance attribute from an ancestor class or set by some client code.</p>
+<h4 id="PYLINT_MIM">Missing Interface Method</h4>
+<p>Used when a method declared in an interface is missing from a class implementing this interface.</p>
+<h4 id="PYLINT_NI">No Init</h4>
+<p>Used when a class has no __init__ method, neither its parent classes.</p>
+<h4 id="PYLINT_NMA">No Method Argument</h4>
+<p>Used when a method which should have the bound instance as first argument has no argument defined.</p>
+<h4 id="PYLINT_NSA">No Self Argument</h4>
+<p>Used when a method has an attribute different the “self” as first argument. This is considered as an error since this is a so common convention that you shouldn’t break it!</p>
+<h4 id="PYLINT_NSU">No Self Use</h4>
+<p>Used when a method doesn’t use its bound instance, and so could be written as a function.</p>
+<h4 id="PYLINT_NIR">Non Iterator Returned</h4>
+<p>Used when an __iter__ method returns something which is not an iterable (i.e. has no <code>next</code> method).</p>
+<h4 id="PYLINT_NPIC">Non Parent Init Called</h4>
+<p>Used when an __init__ method is called on a class which is not in the direct ancestors for the analysed class.</p>
+<h4 id="PYLINT_PA">Protected Access</h4>
+<p>Used when a protected member (i.e. class member with a name beginning with an underscore) is access outside the class or a descendant of the class where it’s defined.</p>
+<h4 id="PYLINT_SD">Signature Differs</h4>
+<p>Used when a method signature is different than in the implemented interface or in an overridden method.</p>
+<h4 id="PYLINT_SINC">Super Init Not Called</h4>
+<p>Used when an ancestor class method has an __init__ method which is not called by a derived class.</p>
+<h3 id="design-rules-1">Design Rules</h3>
+<h4 id="PYLINT_ACLU">Abstract Class Little Used</h4>
+<p>Used when an abstract class is used less than X times as ancestor.</p>
+<h4 id="PYLINT_ACNU">Abstract Class Not Used</h4>
+<p>Used when an abstract class is not used as ancestor anywhere.</p>
+<h4 id="PYLINT_INI">Interface Not Implemented</h4>
+<p>Used when an interface class is not implemented anywhere.</p>
+<h4 id="PYLINT_TFPM">Too Few Public Methods</h4>
+<p>Used when class has too few public methods, so be sure it’s really worth it.</p>
+<h4 id="PYLINT_TMA">Too Many Ancestors</h4>
+<p>Used when class has too many parent classes, try to reduce this to get a simpler (and so easier to use) class.</p>
+<h4 id="PYLINT_ToMA">Too Many Arguments</h4>
+<p>Used when a function or method takes too many arguments.</p>
+<h4 id="PYLINT_TMB">Too Many Branches</h4>
+<p>Used when a function or method has too many branches, making it hard to follow.</p>
+<h4 id="PYLINT_TMIA">Too Many Instance Attributes</h4>
+<p>Used when class has too many instance attributes, try to reduce this to get a simpler (and so easier to use) class.</p>
+<h4 id="PYLINT_ToML">Too Many Locals</h4>
+<p>Used when a function or method has too many local variables.</p>
+<h4 id="PYLINT_TMPM">Too Many Public Methods</h4>
+<p>Used when class has too many public methods, try to reduce this to get a simpler (and so easier to use) class.</p>
+<h4 id="PYLINT_TMRS">Too Many Return Statements</h4>
+<p>Used when a function or method has too many return statement, making it hard to follow.</p>
+<h4 id="PYLINT_TMS">Too Many Statements</h4>
+<p>Used when a function or method has too many statements. You should then split it in smaller functions / methods.</p>
+<h3 id="exception-rules-1">Exception Rules</h3>
+<h4 id="PYLINT_BEO">Bad Except Order</h4>
+<p>Used when except clauses are not in the correct order (from the more specific to the more generic). If you don’t fix the order, some exceptions may not be catched by the most specific handler.</p>
+<h4 id="PYLINT_BEC">Bad Exception Context</h4>
+<p>Used when using the syntax “raise … from …”, where the exception context is not an exception, nor None. This message can’t be emitted when using Python &lt; 3.0.</p>
+<h4 id="PYLINT_BE">Bare Except</h4>
+<p>Used when an except clause doesn’t specify exceptions type to catch.</p>
+<h4 id="PYLINT_BOE">Binary Op Exception</h4>
+<p>Used when the exception to catch is of the form “except A or B:”. If intending to catch multiple, rewrite as “except (A, B):”</p>
+<h4 id="PYLINT_BrE">Broad Except</h4>
+<p>Used when an except catches a too general exception, possibly burying unrelated errors.</p>
+<h4 id="PYLINT_CNE">Catching Non Exception</h4>
+<p>Used when a class which doesn’t inherit from BaseException is used as an exception in an except clause.</p>
+<h4 id="PYLINT_NE">Nonstandard Exception</h4>
+<p>Used when a custom exception class is raised but doesn’t inherit from the builtin “Exception” class. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_NR">Notimplemented Raised</h4>
+<p>Used when NotImplemented is raised instead of NotImplementedError.</p>
+<h4 id="PYLINT_PoE">Pointless Except</h4>
+<p>Used when an except clause does nothing but “pass” and there is no “else” clause.</p>
+<h4 id="PYLINT_RBT">Raising Bad Type</h4>
+<p>Used when something which is neither a class, an instance or a string is raised (i.e. a <code>TypeError</code> will be raised).</p>
+<h4 id="PYLINT_RNE">Raising Non Exception</h4>
+<p>Used when a new style class which doesn’t inherit from BaseException is raised.</p>
+<h3 id="format-rules-1">Format Rules</h3>
+<h4 id="PYLINT_BC">Bad Continuation</h4>
+<p>TODO</p>
+<h4 id="PYLINT_BI">Bad Indentation</h4>
+<p>Used when an unexpected number of indentation’s tabulations or spaces has been found.</p>
+<h4 id="PYLINT_BW">Bad Whitespace</h4>
+<p>Used when a wrong number of spaces is used around an operator, bracket or block opener.</p>
+<h4 id="PYLINT_LTL">Line Too Long</h4>
+<p>Used when a line is longer than a given number of characters.</p>
+<h4 id="PYLINT_LLS">Lowercase L Suffix</h4>
+<p>Used when a lower case “l” is used to mark a long integer. You should use a upper case “L” since the letter “l” looks too much like the digit “1” This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_MFN">Missing Final Newline</h4>
+<p>Used when the last line in a file is missing a newline.</p>
+<h4 id="PYLINT_MI">Mixed Indentation</h4>
+<p>Used when there are some mixed tabs and spaces in a module.</p>
+<h4 id="PYLINT_MLE">Mixed Line Endings</h4>
+<p>Used when there are mixed (LF and CRLF) newline signs in a file.</p>
+<h4 id="PYLINT_MS">Multiple Statements</h4>
+<p>Used when more than on statement are found on the same line.</p>
+<h4 id="PYLINT_SP">Superfluous Parens</h4>
+<p>Used when a single item in parentheses follows an if, for, or other keyword.</p>
+<h4 id="PYLINT_TML">Too Many Lines</h4>
+<p>Used when a module has too much lines, reducing its readability.</p>
+<h4 id="PYLINT_TW">Trailing Whitespace</h4>
+<p>Used when there is whitespace between the end of a line and the newline.</p>
+<h4 id="PYLINT_ULEF">Unexpected Line Ending Format</h4>
+<p>Used when there is different newline than expected.</p>
+<h4 id="PYLINT_US">Unnecessary Semicolon</h4>
+<p>Used when a statement is ended by a semi-colon (“;”), which isn’t necessary (that’s python, not C ;).</p>
+<h3 id="import-rules-1">Import Rules</h3>
+<h4 id="PYLINT_CI">Cyclic Import</h4>
+<p>Used when a cyclic import between two or more modules is detected.</p>
+<h4 id="PYLINT_DeM">Deprecated Module</h4>
+<p>Used a module marked as deprecated is imported.</p>
+<h4 id="PYLINT_IS">Import Self</h4>
+<p>Used when a module is importing itself.</p>
+<h4 id="PYLINT_MF">Misplaced Future</h4>
+<p>Python 2.5 and greater require __future__ import to be the first non docstring statement in the module. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_R">Reimported</h4>
+<p>Used when a module is reimported multiple times.</p>
+<h4 id="PYLINT_RI">Relative Import</h4>
+<p>Used when an import relative to the package directory is detected. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_WI">Wildcard Import</h4>
+<p>Used when <code>from module import *</code> is detected.</p>
+<h3 id="logging-rules">Logging Rules</h3>
+<h4 id="PYLINT_LFI">Logging Format Interpolation</h4>
+<p>Used when a logging statement has a call form of “logging.<logging method>(format_string.format(format_args…))”. Such calls should use % formatting instead, but leave interpolation to the logging function by passing the parameters as arguments.</p>
+<h4 id="PYLINT_LFT">Logging Format Truncated</h4>
+<p>Used when a logging statement format string terminates before the end of a conversion specifier.</p>
+<h4 id="PYLINT_LNL">Logging Not Lazy</h4>
+<p>Used when a logging statement has a call form of “logging.<logging method>(format_string % (format_args…))”. Such calls should leave string interpolation to the logging method itself and be written “logging.<logging method>(format_string, format_args…)” so that the program may avoid incurring the cost of the interpolation in those cases in which no message will be logged. For more, see <a href="http://www.python.org/dev/peps/pep-0282/" class="uri">http://www.python.org/dev/peps/pep-0282/</a>.</p>
+<h4 id="PYLINT_LTFA">Logging Too Few Args</h4>
+<p>Used when a logging format string is given too many arguments.</p>
+<h4 id="PYLINT_LTMA">Logging Too Many Args</h4>
+<p>Used when a logging format string is given too few arguments.</p>
+<h4 id="PYLINT_LUF">Logging Unsupported Format</h4>
+<p>Used when an unsupported format character is used in a logging statement format string.</p>
+<h3 id="miscellaneous-rules">Miscellaneous Rules</h3>
+<h4 id="PYLINT_Fi">Fixme</h4>
+<p>Used when a warning note as FIXME or XXX is detected.</p>
+<h4 id="PYLINT_IED">Invalid Encoded Data</h4>
+<p>Used when a source line cannot be decoded using the specified source file encoding. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h3 id="newstyle-rules-1">Newstyle Rules</h3>
+<h4 id="PYLINT_BSC">Bad Super Call</h4>
+<p>Used when another argument than the current class is given as first argument of the super builtin.</p>
+<h4 id="PYLINT_MSA">Missing Super Argument</h4>
+<p>Used when the super builtin didn’t receive an argument. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_OSC">Old Style Class</h4>
+<p>Used when a class is defined that does not inherit from anotherclass and does not inherit explicitly from “object”. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_POOC">Property On Old Class</h4>
+<p>Used when Pylint detect the use of the builtin “property” on an old style class while this is relying on new style classes features. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_SOOC">Slots On Old Class</h4>
+<p>Used when an old style class uses the __slots__ attribute. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_SuOOC">Super On Old Class</h4>
+<p>Used when an old style class uses the super builtin. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h3 id="python3-rules-1">Python3 Rules</h3>
+<h4 id="PYLINT_AB">Apply Builtin</h4>
+<p>Used when the apply built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_B">Backtick</h4>
+<p>Used when the deprecated “``” (backtick) operator is used instead of the str() function. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_BaB">Basestring Builtin</h4>
+<p>Used when the basestring built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_BuB">Buffer Builtin</h4>
+<p>Used when the buffer built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_CB">Cmp Builtin</h4>
+<p>Used when the cmp built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_CM">Cmp Method</h4>
+<p>Used when a __cmp__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_CoB">Coerce Builtin</h4>
+<p>Used when the coerce built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_CoM">Coerce Method</h4>
+<p>Used when a __coerce__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_DM">Delslice Method</h4>
+<p>Used when a __delslice__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_DIM">Dict Iter Method</h4>
+<p>Used for calls to dict.iterkeys(), itervalues() or iteritems() (Python 3 lacks these methods) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_DVM">Dict View Method</h4>
+<p>Used for calls to dict.viewkeys(), viewvalues() or viewitems() (Python 3 lacks these methods) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_EB">Execfile Builtin</h4>
+<p>Used when the execfile built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_FB">File Builtin</h4>
+<p>Used when the file built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_GM">Getslice Method</h4>
+<p>Used when a __getslice__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_HM">Hex Method</h4>
+<p>Used when a __hex__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_IME">Implicit Map Evaluation</h4>
+<p>Used when the map builtin is used as implicitly evaluated call, as in “map(func, args)” on a single line. This behaviour will not work in Python 3, where map is a generator and must be evaluated. Prefer a for-loop as alternative. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_InE">Indexing Exception</h4>
+<p>Indexing exceptions will not work on Python 3. Use <code>exception.args[index]</code> instead. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_IB">Input Builtin</h4>
+<p>Used when the input built-in is referenced (backwards-incompatible semantics in Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_LB">Long Builtin</h4>
+<p>Used when the long built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_LS">Long Suffix</h4>
+<p>Used when “l” or “L” is used to mark a long integer. This will not work in Python 3, since <code>int</code> and <code>long</code> types have merged. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_MA">Metaclass Assignment</h4>
+<p>Used when a metaclass is specified by assigning to __metaclass__ (Python 3 specifies the metaclass as a class statement argument) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_NMC">Next Method Called</h4>
+<p>Used when an object’s next() method is called (Python 3 uses the next() built-in function) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_NAI">No Absolute Import</h4>
+<p>Used when an import is not accompanied by <code>from __future__ import absolute_import</code> (default behaviour in Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_NoM">Nonzero Method</h4>
+<p>Used when a __nonzero__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_OM">Oct Method</h4>
+<p>Used when a __oct__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_OD">Old Division</h4>
+<p>Used for non-floor division w/o a float literal or <code>from __future__ import division</code>(Python 3 returns a float for int division unconditionally) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_ONO">Old Ne Operator</h4>
+<p>Used when the deprecated “&lt;&gt;” operator is used instead of “!=”. This is removed in Python 3. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_OOL">Old Octal Literal</h4>
+<p>Usen when encountering the old octal syntax, removed in Python 3. To use the new syntax, prepend 0o on the number. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_ORS">Old Raise Syntax</h4>
+<p>Used when the alternate raise syntax ‘raise foo, bar’ is used instead of ‘raise foo(bar)’. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_PU">Parameter Unpacking</h4>
+<p>Used when parameter unpacking is specified for a function(Python 3 doesn’t allow it) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_PrS">Print Statement</h4>
+<p>Used when a print statement is used (<code>print</code> is a function in Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_RS">Raising String</h4>
+<p>Used when a string exception is raised. This will not work on Python 3. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_RB">Raw_input Builtin</h4>
+<p>Used when the raw_input built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_RedB">Reduce Builtin</h4>
+<p>Used when the reduce built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_RelB">Reload Builtin</h4>
+<p>Used when the reload built-in function is referenced (missing from Python 3). You can use instead imp.reload or importlib.reload. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_RoB">Round Builtin</h4>
+<p>Used when the round built-in is referenced (backwards-incompatible semantics in Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_SM">Setslice Method</h4>
+<p>Used when a __setslice__ method is defined (method is not used by Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_SB">Standarderror Builtin</h4>
+<p>Used when the StandardError built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_UB">Unicode Builtin</h4>
+<p>Used when the unicode built-in function is referenced (missing from Python 3) This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_UIE">Unpacking In Except</h4>
+<p>Python3 will not allow implicit unpacking of exceptions in except clauses. See <a href="http://www.python.org/dev/peps/pep-3110/" class="uri">http://www.python.org/dev/peps/pep-3110/</a>. This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h4 id="PYLINT_XB">Xrange Builtin</h4>
+<p>Used when the xrange built-in function is referenced (missing from Python 3). This message can’t be emitted when using Python &gt;= 3.0.</p>
+<h3 id="spelling-rules">Spelling Rules</h3>
+<h4 id="PYLINT_WSIC">Wrong Spelling In Comment</h4>
+<p>Used when a word in comment is not spelled correctly.</p>
+<h4 id="PYLINT_WSID">Wrong Spelling In Docstring</h4>
+<p>Used when a word in docstring is not spelled correctly.</p>
+<h3 id="stdlib-rules">Stdlib Rules</h3>
+<h4 id="PYLINT_BOM">Bad Open Mode</h4>
+<p>Python supports: r, w, a[, x] modes with b, +, and U (only with r) options. See <a href="http://docs.python.org/2/library/functions.html#open" class="uri">http://docs.python.org/2/library/functions.html#open</a>.</p>
+<h4 id="PYLINT_BD">Boolean Datetime</h4>
+<p>Using datetetime.time in a boolean context can hide subtle bugs when the time they represent matches midnight UTC. This behaviour was fixed in Python 3.5. See <a href="http://bugs.python.org/issue13936" class="uri">http://bugs.python.org/issue13936</a> for reference. This message can’t be emitted when using Python &gt;= 3.5.</p>
+<h4 id="PYLINT_RUA">Redundant Unittest Assert</h4>
+<p>The first argument of assertTrue and assertFalse isa condition. If a constant is passed as parameter, thatcondition will be always true. In this case a warning should be emitted.</p>
+<h3 id="string-constant-rules">String Constant Rules</h3>
+<h4 id="PYLINT_ABIS">Anomalous Backslash In String</h4>
+<p>Used when a backslash is in a literal string but not as an escape.</p>
+<h4 id="PYLINT_AUEIS">Anomalous Unicode Escape In String</h4>
+<p>Used when an escape like \u is encountered in a byte string where it has no effect.</p>
+<h3 id="string-rules-1">String Rules</h3>
+<h4 id="PYLINT_BFC">Bad Format Character</h4>
+<p>Used when a unsupported format character is used in a format string.</p>
+<h4 id="PYLINT_BFS">Bad Format String</h4>
+<p>Used when a PEP 3101 format string is invalid. This message can’t be emitted when using Python &lt; 2.7.</p>
+<h4 id="PYLINT_BFSK">Bad Format String Key</h4>
+<p>Used when a format string that uses named conversion specifiers is used with a dictionary whose keys are not all strings.</p>
+<h4 id="PYLINT_BSSC">Bad Str Strip Call</h4>
+<p>The argument to a str.{l,r,}strip call contains a duplicate character,</p>
+<h4 id="PYLINT_FCS">Format Combined Specification</h4>
+<p>Usen when a PEP 3101 format string contains both automatic field numbering (e.g. ‘{}’) and manual field specification (e.g. ‘{0}’). This message can’t be emitted when using Python &lt; 2.7.</p>
+<h4 id="PYLINT_FNM">Format Needs Mapping</h4>
+<p>Used when a format string that uses named conversion specifiers is used with an argument that is not a mapping.</p>
+<h4 id="PYLINT_IFI">Invalid Format Index</h4>
+<p>Used when a PEP 3101 format string uses a lookup specifier ({a[1]}), but the argument passed for formatting doesn’t contain or doesn’t have that key as an attribute. This message can’t be emitted when using Python &lt; 2.7.</p>
+<h4 id="PYLINT_MFAK">Missing Format Argument Key</h4>
+<p>Used when a PEP 3101 format string that uses named fields doesn’t receive one or more required keywords. This message can’t be emitted when using Python &lt; 2.7.</p>
+<h4 id="PYLINT_MFA">Missing Format Attribute</h4>
+<p>Used when a PEP 3101 format string uses an attribute specifier ({0.length}), but the argument passed for formatting doesn’t have that attribute. This message can’t be emitted when using Python &lt; 2.7.</p>
+<h4 id="PYLINT_MFSK">Missing Format String Key</h4>
+<p>Used when a format string that uses named conversion specifiers is used with a dictionary that doesn’t contain all the keys required by the format string.</p>
+<h4 id="PYLINT_MFS">Mixed Format String</h4>
+<p>Used when a format string contains both named (e.g. ‘%(foo)d’) and unnamed (e.g. ‘%d’) conversion specifiers. This is also used when a named conversion specifier contains * for the minimum field width and/or precision.</p>
+<h4 id="PYLINT_TFFA">Too Few Format Args</h4>
+<p>Used when a format string that uses unnamed conversion specifiers is given too few arguments.</p>
+<h4 id="PYLINT_TMFA">Too Many Format Args</h4>
+<p>Used when a format string that uses unnamed conversion specifiers is given too many arguments.</p>
+<h4 id="PYLINT_TFS">Truncated Format String</h4>
+<p>Used when a format string terminates before the end of a conversion specifier.</p>
+<h4 id="PYLINT_UFSA">Unused Format String Argument</h4>
+<p>Used when a PEP 3101 format string that uses named fields is used with an argument that is not required by the format string. This message can’t be emitted when using Python &lt; 2.7.</p>
+<h4 id="PYLINT_UFSK">Unused Format String Key</h4>
+<p>Used when a format string that uses named conversion specifiers is used with a dictionary that conWtains keys not required by the format string.</p>
+<h3 id="typecheck-rules">Typecheck Rules</h3>
+<h4 id="PYLINT_AFNR">Assignment From No Return</h4>
+<p>Used when an assignment is done on a function call but the inferred function doesn’t return anything.</p>
+<h4 id="PYLINT_AFN">Assignment From None</h4>
+<p>Used when an assignment is done on a function call but the inferred function returns nothing but None.</p>
+<h4 id="PYLINT_ISI">Invalid Sequence Index</h4>
+<p>Used when a sequence type is indexed with an invalid type. Valid types are ints, slices, and objects with an __index__ method.</p>
+<h4 id="PYLINT_InSI">Invalid Slice Index</h4>
+<p>Used when a slice index is not an integer, None, or an object with an __index__ method.</p>
+<h4 id="PYLINT_MK">Missing Kwoa</h4>
+<p>Used when a function call does not pass a mandatory keyword-only argument. This message can’t be emitted when using Python &lt; 3.0.</p>
+<h4 id="PYLINT_NM">No Member</h4>
+<p>Used when a variable is accessed for an unexistent member.</p>
+<h4 id="PYLINT_NVFP">No Value For Parameter</h4>
+<p>Used when a function call passes too few arguments.</p>
+<h4 id="PYLINT_NC">Not Callable</h4>
+<p>Used when an object being called has been inferred to a non callable object.</p>
+<h4 id="PYLINT_RKA">Redundant Keyword Arg</h4>
+<p>Used when a function call would result in assigning multiple values to a function parameter, one value from a positional argument and one from a keyword argument.</p>
+<h4 id="PYLINT_ToMFA">Too Many Function Args</h4>
+<p>Used when a function call passes too many positional arguments.</p>
+<h4 id="PYLINT_UKA">Unexpected Keyword Arg</h4>
+<p>Used when a function call passes a keyword argument that doesn’t correspond to one of the function’s parameter names.</p>
+<h3 id="variable-rules-1">Variable Rules</h3>
+<h4 id="PYLINT_CVFL">Cell Var From Loop</h4>
+<p>A variable used in a closure is defined in a loop. This will result in all closures using the same value for the closed-over variable.</p>
+<h4 id="PYLINT_GAML">Global At Module Level</h4>
+<p>Used when you use the “global” statement at the module level since it has no effect.</p>
+<h4 id="PYLINT_GS">Global Statement</h4>
+<p>Used when you use the “global” statement to update a global variable. Pylint just try to discourage this usage. That doesn’t mean you can not use it!</p>
+<h4 id="PYLINT_GVNA">Global Variable Not Assigned</h4>
+<p>Used when a variable is defined through the “global” statement but no assignment to this variable is done.</p>
+<h4 id="PYLINT_GVU">Global Variable Undefined</h4>
+<p>Used when a variable is defined through the “global” statement but the variable is not defined in the module scope.</p>
+<h4 id="PYLINT_IAO">Invalid All Object</h4>
+<p>Used when an invalid (non-string) object occurs in __all__.</p>
+<h4 id="PYLINT_NNIM">No Name In Module</h4>
+<p>Used when a name cannot be found in a module.</p>
+<h4 id="PYLINT_RIH">Redefine In Handler</h4>
+<p>Used when an exception handler assigns the exception to an existing name.</p>
+<h4 id="PYLINT_ReB">Redefined Builtin</h4>
+<p>Used when a variable or function override a built-in.</p>
+<h4 id="PYLINT_RON">Redefined Outer Name</h4>
+<p>Used when a variable’s name hide a name defined in the outer scope.</p>
+<h4 id="PYLINT_UTU">Unbalanced Tuple Unpacking</h4>
+<p>Used when there is an unbalanced tuple unpacking in assignment.</p>
+<h4 id="PYLINT_UAV">Undefined All Variable</h4>
+<p>Used when an undefined variable name is referenced in \__all__.</p>
+<h4 id="PYLINT_ULV">Undefined Loop Variable</h4>
+<p>Used when an loop variable (i.e. defined by a for loop or a list comprehension or a generator expression) is used outside the loop.</p>
+<h4 id="PYLINT_UV">Undefined Variable</h4>
+<p>Used when an undefined variable is accessed.</p>
+<h4 id="PYLINT_UNS">Unpacking Non Sequence</h4>
+<p>Used when something which is not a sequence is used in an unpack assignment.</p>
+<h4 id="PYLINT_UA">Unused Argument</h4>
+<p>Used when a function or method argument is not used.</p>
+<h4 id="PYLINT_UnI">Unused Import</h4>
+<p>Used when an imported module or variable is not used.</p>
+<h4 id="PYLINT_UnV">Unused Variable</h4>
+<p>Used when a variable is defined but not used.</p>
+<h4 id="PYLINT_UWI">Unused Wildcard Import</h4>
+<p>Used when an imported module or variable is not used from a ’from X import *’ style import.</p>
+<h4 id="PYLINT_UBA">Used Before Assignment</h4>
+<p>Used when a local variable is accessed before it’s assignment.</p>
+<h1 id="footnotes">Footnotes</h1>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>POSIX Extended Regular Expressions<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>For correct calculation of the TNDI metric, the user has to specify which directories belong to the project with the -projectBaseDir parameter. Without it, “every” directory will be counted starting from the root, meaning that running the analysis from directories that are at different depths will cause the value of the TNDI metric to change.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Only available in other products of FrontEndART<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Only available in other products of FrontEndART<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Only available in other products of FrontEndART<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="http://legacy.python.org/dev/peps/pep-0008/" class="uri">http://legacy.python.org/dev/peps/pep-0008/</a><a href="#fnref6">↩</a></p></li>
+</ol>
+</section>
+</body>
+</html>

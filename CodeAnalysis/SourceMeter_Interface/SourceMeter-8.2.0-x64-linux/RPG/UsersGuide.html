@@ -1,0 +1,2060 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link href="data:text/css,%40import%20url%28data%3Atext%2Fcss%3B%20charset%3Dutf%2D8%3Bbase64%2CQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IG5vcm1hbDsKICBmb250LXdlaWdodDogMzAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBMaWdodCcpLCBsb2NhbCgnT3BlblNhbnMtTGlnaHQnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy9EWEkxT1JIQ3BzUW0zVnA2bVhvYVRZbkY1dUZkRHR0TUx2bVd1SmRoaGdzLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9CkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXN0eWxlOiBub3JtYWw7CiAgZm9udC13ZWlnaHQ6IDQwMDsKICBzcmM6IGxvY2FsKCdPcGVuIFNhbnMnKSwgbG9jYWwoJ09wZW5TYW5zJyksIHVybChodHRwOi8vZm9udHMuZ3N0YXRpYy5jb20vcy9vcGVuc2Fucy92MTMvY0paS2VPdUJybjRrRVJ4cXRhVUgzYUNXY3luZl9jRHhYd0NMeGlpeEcxYy50dGYpIGZvcm1hdCgndHJ1ZXR5cGUnKTsKfQpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ09wZW4gU2Fucyc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtd2VpZ2h0OiA2MDA7CiAgc3JjOiBsb2NhbCgnT3BlbiBTYW5zIFNlbWlib2xkJyksIGxvY2FsKCdPcGVuU2Fucy1TZW1pYm9sZCcpLCB1cmwoaHR0cDovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvb3BlbnNhbnMvdjEzL01UUF95U1VKSF9ibjQ4VkJHOHNOU29uRjV1RmREdHRNTHZtV3VKZGhoZ3MudHRmKSBmb3JtYXQoJ3RydWV0eXBlJyk7Cn0KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IG5vcm1hbDsKICBmb250LXdlaWdodDogNzAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBCb2xkJyksIGxvY2FsKCdPcGVuU2Fucy1Cb2xkJyksIHVybChodHRwOi8vZm9udHMuZ3N0YXRpYy5jb20vcy9vcGVuc2Fucy92MTMvazNrNzAyWk9LaUxKYzNXVmp1cGx6SW5GNXVGZER0dE1Mdm1XdUpkaGhncy50dGYpIGZvcm1hdCgndHJ1ZXR5cGUnKTsKfQpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ09wZW4gU2Fucyc7CiAgZm9udC1zdHlsZTogbm9ybWFsOwogIGZvbnQtd2VpZ2h0OiA4MDA7CiAgc3JjOiBsb2NhbCgnT3BlbiBTYW5zIEV4dHJhYm9sZCcpLCBsb2NhbCgnT3BlblNhbnMtRXh0cmFib2xkJyksIHVybChodHRwOi8vZm9udHMuZ3N0YXRpYy5jb20vcy9vcGVuc2Fucy92MTMvRUluYlY1RGZHSE9pTW12YjFYci1ob25GNXVGZER0dE1Mdm1XdUpkaGhncy50dGYpIGZvcm1hdCgndHJ1ZXR5cGUnKTsKfQpAZm9udC1mYWNlIHsKICBmb250LWZhbWlseTogJ09wZW4gU2Fucyc7CiAgZm9udC1zdHlsZTogaXRhbGljOwogIGZvbnQtd2VpZ2h0OiAzMDA7CiAgc3JjOiBsb2NhbCgnT3BlbiBTYW5zIExpZ2h0IEl0YWxpYycpLCBsb2NhbCgnT3BlblNhbnNMaWdodC1JdGFsaWMnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy9QUm1pWGVwdFIzNmthQzBHRUFldHhyZkIzMXl4T3pQLWN6YmY2QUFLQ1ZvLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9CkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXN0eWxlOiBpdGFsaWM7CiAgZm9udC13ZWlnaHQ6IDQwMDsKICBzcmM6IGxvY2FsKCdPcGVuIFNhbnMgSXRhbGljJyksIGxvY2FsKCdPcGVuU2Fucy1JdGFsaWMnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy94akFKWGgzOEkxNXd5cEpYeHVHTUJwMEVBVnh0MEcwYmlFbnRwNDNRdDZFLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9CkBmb250LWZhY2UgewogIGZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJzsKICBmb250LXN0eWxlOiBpdGFsaWM7CiAgZm9udC13ZWlnaHQ6IDYwMDsKICBzcmM6IGxvY2FsKCdPcGVuIFNhbnMgU2VtaWJvbGQgSXRhbGljJyksIGxvY2FsKCdPcGVuU2Fucy1TZW1pYm9sZEl0YWxpYycpLCB1cmwoaHR0cDovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvb3BlbnNhbnMvdjEzL1BSbWlYZXB0UjM2a2FDMEdFQWV0eGk4Y3FMSDRNRWlTRTBST2NVLXFIT0EudHRmKSBmb3JtYXQoJ3RydWV0eXBlJyk7Cn0KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IGl0YWxpYzsKICBmb250LXdlaWdodDogNzAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBCb2xkIEl0YWxpYycpLCBsb2NhbCgnT3BlblNhbnMtQm9sZEl0YWxpYycpLCB1cmwoaHR0cDovL2ZvbnRzLmdzdGF0aWMuY29tL3Mvb3BlbnNhbnMvdjEzL1BSbWlYZXB0UjM2a2FDMEdFQWV0eHBfVGt2b3dsSU90YlI3ZVBnRk9wRjQudHRmKSBmb3JtYXQoJ3RydWV0eXBlJyk7Cn0KQGZvbnQtZmFjZSB7CiAgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnOwogIGZvbnQtc3R5bGU6IGl0YWxpYzsKICBmb250LXdlaWdodDogODAwOwogIHNyYzogbG9jYWwoJ09wZW4gU2FucyBFeHRyYWJvbGQgSXRhbGljJyksIGxvY2FsKCdPcGVuU2Fucy1FeHRyYWJvbGRJdGFsaWMnKSwgdXJsKGh0dHA6Ly9mb250cy5nc3RhdGljLmNvbS9zL29wZW5zYW5zL3YxMy9QUm1pWGVwdFIzNmthQzBHRUFldHhsRE1yQVl0b09pc3FxTURXOU1fTXFjLnR0ZikgZm9ybWF0KCd0cnVldHlwZScpOwp9Cg%3D%3D%29%3B%0A%0A%2A%20%7B%0A%09outline%3A%20none%20%21important%3B%0A%09margin%3A%200%3B%0A%09padding%3A%200%3B%0A%09border%3A%200px%20solid%3B%0A%7D%0A%0Ahtml%20%7B%0A%09border%3A%200%3B%0A%09font%2Dfamily%3A%20open%5Fsansregular%2C%20Arial%2C%20sans%2Dserif%3B%0A%09font%2Dsize%3A%2013px%3B%0A%09color%3A%20%23666%3B%0A%09margin%3A%200%3B%0A%09padding%3A%201em%3B%0A%09background%3A%20%23e8eaec%3B%0A%7D%0A%0Abody%20%7B%0A%09background%3A%20%23f9fbfc%3B%0A%09width%3A%201180px%3B%0A%09margin%3A%20auto%3B%0A%09padding%3A%202em%3B%0A%09%2Dmoz%2Dborder%2Dradius%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dradius%3A%205px%3B%0A%09border%2Dradius%3A%205px%3B%0A%20%20%2Dwebkit%2Dbox%2Dshadow%3A%20%203px%203px%2010px%200px%20rgba%2889%2C%2089%2C%2089%2C%200%2E34%29%3B%0A%20%20%2Dmoz%2Dbox%2Dshadow%3A%20%20%20%20%203px%203px%2010px%200px%20rgba%2889%2C%2089%2C%2089%2C%200%2E34%29%3B%0A%20%20box%2Dshadow%3A%20%20%20%20%20%20%20%20%20%203px%203px%2010px%200px%20rgba%2889%2C%2089%2C%2089%2C%200%2E34%29%3B%0A%7D%0A%0Ah1%2C%20h2%2C%20h3%2C%20h4%2C%20h5%2C%20h6%20%7B%0A%09font%2Dfamily%3A%20open%5Fsanssemibold%3B%0A%09margin%3A%20%2E5em%200%3B%0A%09padding%3A%200%3B%0A%09%2F%2Acolor%3A%20%236DAB66%3B%2A%2F%0A%7D%0A%0Ah3%20%7B%0A%20%20font%2Dsize%3A%20150%25%3B%0A%7D%0A%0Ah3%2C%20h4%2C%20h5%2C%20h6%20%7B%0A%09margin%3A%20%2E5em%200%200%200%3B%0A%7D%0A%0Ah4%2C%20h5%2C%20h6%20%7B%0A%09font%2Dfamily%3A%20%22Open%20Sans%22%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%20%20color%3A%20%236DAB66%3B%0A%20%20border%2Dbottom%3Adotted%202px%20%2324a700%3B%0A%20%20display%3A%20inline%2Dblock%3B%0A%7D%0A%0Ah4%3Aafter%2C%20h5%3Aafter%2C%20h6%3Aafter%20%7B%0A%20%20content%3A%20%22%5CA%22%3B%0A%20%20white%2Dspace%3A%20pre%3B%0A%7D%0A%0Aa%20%7B%0A%09text%2Ddecoration%3A%20none%3B%0A%09color%3A%20%2324a700%3B%0A%7D%0A%0Ainput%2C%20select%20%7B%0A%09font%2Dfamily%3A%20open%5Fsanslight%5Fitalic%2C%20Arial%2C%20sans%2Dserif%3B%0A%09font%2Dsize%3A%2012px%3B%0A%09outline%3A%200%20none%3B%0A%09resize%3A%20none%3B%0A%09margin%3A%200%3B%0A%7D%0A%0Aul%20%7B%0A%09list%2Dstyle%2Dtype%3A%20none%3B%0A%09padding%2Dleft%3A%202em%3B%0A%7D%0A%0Ali%20%7B%0A%09vertical%2Dalign%3A%20middle%3B%0A%09line%2Dheight%3A%20150%25%3B%0A%7D%0A%0Anav%23TOC%20%7B%0A%20%20%2F%2Atext%2Dalign%3A%20center%3B%2A%2F%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20%7B%0A%20%20%2F%2Adisplay%3A%20inline%2Dblock%3B%2A%2F%0A%20%20text%2Dalign%3A%20left%3B%0A%20%20font%2Dsize%3A%201%2E5em%3B%0A%7D%0A%0Anav%23TOC%20ul%20%7B%0A%20%20margin%3A%200%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20%7B%0A%20%20font%2Dsize%3A%2075%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20li%20a%20%7B%0A%20%20border%2Dbottom%3A%20dotted%20%236DAB66%201px%3B%0A%20%20line%2Dheight%3A%20150%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20ul%20li%20a%20%7B%0A%20%20line%2Dheight%3A%20190%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20ul%20ul%20%7B%0A%20%20font%2Dsize%3A%20100%25%3B%0A%7D%0A%0Anav%23TOC%20%3E%20ul%20ul%20ul%20ul%20li%20a%20%7B%0A%20%20line%2Dheight%3A%20110%25%3B%0A%7D%0A%0A%0A%2Ered%20%7B%0A%09color%3A%20red%3B%0A%7D%0A%0A%2Egreen%20%7B%0A%09color%3A%20green%3B%0A%7D%0A%0Atable%2Efill%20%7B%0A%09width%3A%2095%25%3B%0A%7D%0A%0A%23container%20%7B%0A%09background%3A%20%23f9fbfc%3B%0A%09width%3A%20930px%3B%0A%09margin%3A%20auto%3B%0A%09padding%3A%202em%3B%0A%09%2Dmoz%2Dborder%2Dradius%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dradius%3A%205px%3B%0A%09border%2Dradius%3A%205px%0A%7D%0A%0Atable%20%7B%0A%09background%3A%20%23ccc%3B%0A%09margin%3A%2020px%3B%0A%09border%3A%20%23ccc%201px%20solid%3B%0A%09%2Dmoz%2Dborder%2Dradius%3A%2010px%3B%0A%09%2Dwebkit%2Dborder%2Dradius%3A%2010px%3B%0A%09border%2Dradius%3A%2010px%0A%7D%0A%0Atable%20th%20%7B%0A%09padding%3A%204px%2010px%3B%0A%20%20text%2Dalign%3A%20center%3B%0A%09vertical%2Dalign%3A%20middle%3B%0A%09%2F%2Acolor%3A%23f9fcfc%3B%2A%2F%0A%09color%3A%20%23233%3B%0A%7D%0A%0Atable%2C%20tbody%2C%20tr%2C%20td%20%7B%0A%09vertical%2Dalign%3A%20inherit%3B%0A%09text%2Dalign%3A%20inherit%3B%0A%7D%0A%0Atable%20td%20%7B%0A%09background%3A%20%23F4F4F5%3B%0A%09padding%3A%204px%2010px%204px%2010px%3B%0A%09vertical%2Dalign%3A%20inherit%3B%0A%7D%0A%0A%2Emiddle%20%7B%0A%09vertical%2Dalign%3A%20middle%3B%0A%7D%0A%0A%2Ecenter%20%7B%0A%09text%2Dalign%3A%20center%3B%0A%7D%0A%0Atd%2Ename%20%7B%0A%09text%2Dalign%3A%20left%3B%0A%7D%0A%0Atd%2Epath%20%7B%0A%09text%2Dalign%3A%20left%3B%0A%7D%0A%0Atable%20tr%2Eeven%20td%20%7B%0A%09background%3A%20%23eee%0A%7D%0A%0Atable%20a%20%7B%0A%09display%3A%20block%3B%0A%7D%0A%0Atable%20tr%3Afirst%2Dchild%20td%3Afirst%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dtopleft%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dtop%2Dleft%2Dradius%3A%205px%3B%0A%09border%2Dtop%2Dleft%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%20tr%3Afirst%2Dchild%20td%3Alast%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dtopright%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dtop%2Dright%2Dradius%3A%205px%3B%0A%09border%2Dtop%2Dright%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%20tr%3Alast%2Dchild%20td%3Afirst%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dbottomleft%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dbottom%2Dleft%2Dradius%3A%205px%3B%0A%09border%2Dbottom%2Dleft%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%20tr%3Alast%2Dchild%20td%3Alast%2Dchild%20%7B%0A%09%2Dmoz%2Dborder%2Dradius%2Dbottomright%3A%205px%3B%0A%09%2Dwebkit%2Dborder%2Dbottom%2Dright%2Dradius%3A%205px%3B%0A%09border%2Dbottom%2Dright%2Dradius%3A%205px%3B%0A%7D%0A%0Atable%2Ecollapsed%20%7B%0A%09border%2Dcollapse%3A%20collapse%0A%7D%0A%0Aul%20%7B%0A%20%20%20%20list%2Dstyle%3Adisc%20outside%3B%0A%7D%0A%0Aol%5Btype%3D1%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Adecimal%3B%0A%7D%0A%0Aol%5Btype%3Da%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Alower%2Dalpha%3B%0A%7D%0A%0Aol%5Btype%3DA%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Aupper%2Dalpha%3B%0A%7D%0A%0Aol%5Btype%3DI%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Aupper%2Droman%3B%0A%7D%0A%0Aol%5Btype%3Di%5D%20%7B%0A%20%20%20%20list%2Dstyle%2Dtype%3Alower%2Droman%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%201em%200%3B%0A%7D%0A%0Ali%20p%3Aonly%2Dof%2Dtype%20%7B%0A%20%20margin%3A%200%3B%0A%7D%0A%0Ablockquote%2Cul%2Col%2Cdl%20%7B%0A%20%20%20%20margin%3A1em%202em%3B%0A%7D%0A%0Adl%20dd%20%7B%0A%20%20%20%20margin%2Dleft%3A1em%3B%0A%7D%0A%0Acaption%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2E5em%3B%0A%20%20%20%20text%2Dalign%3Acenter%3B%0A%7D%0A%0Afieldset%2Cpre%20%7B%0A%20%20%20%20margin%2Dtop%3A%2E5em%3B%0A%20%20%20%20margin%2Dbottom%3A%2E5em%3B%0A%7D%0A%0Apre%2Ccode%2Ctt%20%7B%0A%20%20%20%20font%2Dfamily%3Amonospace%3B%0A%20%20%20%20font%2Dsize%3A108%25%3B%0A%20%20%20%20line%2Dheight%3A100%25%3B%0A%7D%0A%0Adl%20%7B%0A%20%20%20%20margin%3A0%200%201%2E125em%3B%0A%7D%0A%0Adt%20%7B%0A%20%20%20%20font%2Dweight%3A700%3B%0A%20%20%20%20line%2Dheight%3A1%2E125em%3B%0A%20%20%20%20font%2Dfamily%3A%20%22Open%20Sans%22%3B%0A%7D%0A%0Add%20%7B%0A%20%20%20%20margin%2Dleft%3A1em%3B%0A%20%20%20%20line%2Dheight%3A1%2E125em%3B%0A%7D%0A%0Add%20p%20%7B%0A%20%20margin%2Dtop%3A%20%2E3em%3B%0A%7D%0A%0Apre%20%7B%0A%20%20border%3A%202px%20dotted%20%23ddd%3B%0A%20%20%2Dwebkit%2Dborder%2Dradius%3A%204px%3B%0A%20%20%2Dmoz%2Dborder%2Dradius%3A%204px%3B%0A%20%20border%2Dradius%3A%204px%3B%0A%20%20padding%3A%201%2E5em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dtop%3A%20%23ddd%20dotted%205px%3B%0A%0A%7D%0A%0Aimg%20%7B%0A%20%20margin%2Dleft%3A%20auto%3B%0A%20%20margin%2Dright%3A%20auto%3B%0A%20%20max%2Dwidth%3A%20%20100%25%3B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%2Dwidth%3A%202px%3B%0A%7D" rel="stylesheet">
+</head>
+<body>
+<nav id="TOC">
+<ul>
+<li><a href="#sourcemeter-8.2-for-rpg">SourceMeter 8.2 for RPG</a></li>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#product-characteristics">Product characteristics</a></li>
+<li><a href="#background">Background</a></li>
+</ul></li>
+<li><a href="#installation">Installation</a><ul>
+<li><a href="#supported-platforms">Supported platforms</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#installation-package">Installation package</a></li>
+<li><a href="#license-key">License key</a></li>
+</ul></li>
+<li><a href="#preconditions">Preconditions</a></li>
+<li><a href="#command-line-parameters">Command line parameters</a></li>
+<li><a href="#usage">Usage</a><ul>
+<li><a href="#directory-analysis">Directory analysis</a></li>
+</ul></li>
+<li><a href="#result-files">Result files</a></li>
+<li><a href="#coding-rule-violation-suppression">Coding rule violation suppression</a></li>
+<li><a href="#demo">Demo</a></li>
+<li><a href="#error-messages">Error messages</a></li>
+<li><a href="#known-bugs-and-deficiencies">Known bugs and deficiencies</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#appendices">Appendices</a><ul>
+<li><a href="#reference-of-source-code-metrics">Reference of source code metrics</a><ul>
+<li><a href="#complexity-metrics">Complexity metrics</a></li>
+<li><a href="#coupling-metrics">Coupling metrics</a></li>
+<li><a href="#documentation-metrics">Documentation metrics</a></li>
+<li><a href="#size-metrics">Size metrics</a></li>
+</ul></li>
+<li><a href="#reference-of-code-duplication-metrics">Reference of code duplication metrics</a><ul>
+<li><a href="#clone-metrics">Clone metrics</a></li>
+</ul></li>
+<li><a href="#reference-of-faulthunter-coding-rule-violations">Reference of FaultHunter coding rule violations</a><ul>
+<li><a href="#basic-rules">Basic Rules</a></li>
+<li><a href="#design-rules">Design Rules</a></li>
+<li><a href="#documentation-rules">Documentation Rules</a></li>
+<li><a href="#naming-rules">Naming Rules</a></li>
+<li><a href="#security-rules">Security Rules</a></li>
+<li><a href="#size-rules">Size Rules</a></li>
+<li><a href="#type-rules">Type Rules</a></li>
+<li><a href="#unnecessary-and-unused-code-rules">Unnecessary and Unused Code Rules</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#footnotes">Footnotes</a></li>
+</ul>
+</nav>
+<h1 id="sourcemeter-8.2-for-rpg">SourceMeter 8.2 for RPG</h1>
+<h1 id="introduction">Introduction</h1>
+<p>FrontEndART SourceMeter for RPG is a source code analyzer tool, which can perform deep static analysis of the source code of complex RPG systems (<a href="https://www.sourcemeter.com" class="uri">https://www.sourcemeter.com</a>).</p>
+<p>The source code of a program is usually its only up-to-date documentation. At the same time, the source code is the exquisite bearer of knowledge, business processes and methodology, accumulated over a long period of time. Source code quality decrease, which happens due to many quick fixes and time pressure, results in the increase of development and testing costs, and operational risks. In spite of this, the source code usually receives hostile treatment and is merely considered as a tool.</p>
+<p>FrontEndART has developed SourceMeter based on the Columbus technology researched and developed at the <a href="http://www.sed.inf.u-szeged.hu/softwarequality">Department of Software Engineering</a> of the University of Szeged. SourceMeter provides deep static analysis of source code. Using the results of the analysis, the quality of the analyzed source code can be improved and developed both in the short- and long term in a directed way.</p>
+<p>The free version of SourceMeter for RPG features 10 source code metrics and the metric threshold violations checker (MetricHunter module).</p>
+<h2 id="product-characteristics">Product characteristics</h2>
+<p>The most important product characteristics of FrontEndART SourceMeter are the following:</p>
+<ul>
+<li><p>Platform-independent command line tools</p></li>
+<li><p>Transparent integration into build processes</p></li>
+<li><p>Powerful filter management</p></li>
+<li><p>Coding issue detection:</p>
+<ul>
+<li><p>Common programming mistakes (FaultHunter module)</p></li>
+<li><p>Metric threshold violations (MetricHunter module)</p></li>
+</ul></li>
+<li><p>Clone detection (copy-pasted source code fragments) extended with clone tracking and “clone smells”</p>
+<ul>
+<li>Syntax-based, so-called Type-2 clones</li>
+</ul></li>
+<li><p>Metrics calculation at system, program, procedure, and subroutine levels:</p>
+<ul>
+<li><p>Source code metrics</p></li>
+<li><p>Clone metrics</p></li>
+<li><p>Coding rule violation metrics</p></li>
+</ul></li>
+</ul>
+<p>By continuous static analysis, the software developers can:</p>
+<ul>
+<li><p>reduce the software erosion rate and this way decrease development costs;</p></li>
+<li><p>coding problems can be identified before testing, so the number of test iterations and the testing costs can be reduced;</p></li>
+<li><p>the number of errors in delivered software can be reduced, so the operational risks can be decreased, increasing the company’s reputation.</p></li>
+</ul>
+<p>SourceMeter can analyze source code conforming to RPG III and RPG IV versions (including free-form as well). Two kinds of inputs are supported: It can be specified either as raw source code or as compiler listing. In case of using raw source code as input, the analyzer might not be able to calculate some code metrics or detect various rule violations because the raw source contains less information than the compiler listing. For instance, cross references are detected with the help of compiler listing entries. So, it is highly recommended to use compiler listings as input to get fully detailed analysis results. For constructing RPG compiler listing files, use the RPG compiler version V6R1M0.</p>
+<p>Visit our corporate website at <a href="http://www.frontendart.com" class="uri">http://www.frontendart.com</a> to find the latest information about SourceMeter and read more about related products and services. Note, that if you are using only the free features of SourceMeter, we do not provide any free support for it. However, FrontEndART offers support services, so please feel free to search for solutions to your problems on our website and contact us with any questions you might have. We welcome feedback about the usability and eventual issues of the tool and further development suggestions at <script type="text/javascript">
+<!--
+h='&#102;&#114;&#x6f;&#110;&#116;&#x65;&#110;&#100;&#x61;&#114;&#116;&#46;&#x63;&#x6f;&#x6d;&#x3f;&#x73;&#x75;&#98;&#106;&#x65;&#x63;&#116;&#x3d;&#x53;&#x6f;&#x75;&#114;&#x63;&#x65;&#x4d;&#x65;&#116;&#x65;&#114;';a='&#64;';n='&#x73;&#x75;&#112;&#112;&#x6f;&#114;&#116;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'support@frontendart.com'+'<\/'+'a'+'>');
+// -->
+</script><noscript>support@frontendart.com (support at frontendart dot com?subject=SourceMeter)</noscript>.</p>
+<h2 id="background">Background</h2>
+<p>During the static analysis, an Abstract Semantic Graph (ASG) is constructed from the language elements of the source code. This ASG is then processed by the different tools in the package to calculate product metrics, identify copy-pasted code (clones), coding rule violations, etc.</p>
+<h1 id="installation">Installation</h1>
+<h2 id="supported-platforms">Supported platforms</h2>
+<p>SourceMeter supports the following x86 and x86-64 platforms:</p>
+<ul>
+<li><p>Microsoft Windows 7, 8, 8.1, and 10</p></li>
+<li><p>Microsoft Windows 2008 R2 Server</p></li>
+<li><p>Microsoft Windows 2012 Server</p></li>
+<li><p>GNU/Linux with kernel version 2.6.18 and GNU C library 2.11 or newer</p></li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<p>In case of Windows, the appropriate Microsoft Visual C++ 2015 Redistributable Package must be installed. It can be downloaded from the following URL:</p>
+<ul>
+<li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=48145" class="uri">https://www.microsoft.com/en-us/download/details.aspx?id=48145</a> (x86/x64)</li>
+</ul>
+<p>The Linux package uses the code page conversion functions of the GNU C Library. If the conversion modules are not in the standard /usr/lib/gconv directory then the GCONV_PATH environment variable must be set according to the current installation of the GNU C Library.</p>
+<p>E.g.:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">export</span> <span class="st">&quot;GCONV_PATH=/usr/lib/x86_64-linux-gnu/gconv&quot;</span></code></pre>
+<h2 id="installation-package">Installation package</h2>
+<p>The SourceMeter installation package can be extracted into any folder and used from that location. It can be executed with the command line program SourceMeterRPG.</p>
+<p>The SourceMeter for RPG package contains the following directories and files:</p>
+<p>Windows:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SourceMeter\</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Demo</td>
+<td style="text-align: left;"># Example project directory</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Tools</td>
+<td style="text-align: left;"># ASG checker and exporter tools directory</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">SourceMeterRPG.exe</td>
+<td style="text-align: left;"># Program file to execute the analysis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">UsersGuide.html</td>
+<td style="text-align: left;"># User’s guide</td>
+</tr>
+</tbody>
+</table>
+<p>Linux:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SourceMeter/</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Demo</td>
+<td style="text-align: left;"># Example project directory</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Tools</td>
+<td style="text-align: left;"># ASG checker and exporter tools directory</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">SourceMeterRPG</td>
+<td style="text-align: left;"># Program file to execute the analysis</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">UsersGuide.html</td>
+<td style="text-align: left;"># User’s guide</td>
+</tr>
+</tbody>
+</table>
+<h2 id="license-key">License key</h2>
+<p>The free version of SourceMeter does not require any license key file.</p>
+<p>In order to use the commercial version of SourceMeter with all features, it is necessary to obtain the license key file named LICENSE.DAT.</p>
+<p>Windows:</p>
+<p>The license key file must be copied into the root directory of the extracted package (next to the readme.txt file) or into the %APPDATA%\FrontEndART\SourceMeter\ directory of the user.</p>
+<p>Linux:</p>
+<p>The license key file must be copied into the root directory of the extracted package (next to the readme.txt file) or into the $HOME/.FrontEndART/SourceMeter/ directory of the user.</p>
+<p>In case of the first option, anyone who has permissions to access and execute the binaries of the package will be able to use SourceMeter, while in case of the second option only those users will be able to use SourceMeter, who have the license key file in the above-mentioned directory. If one would like to renew an expired license key, the already existing license key file must be replaced with the new one in the above-mentioned directories. To use SourceMeter it is also necessary to have read and write permission on the license key file.</p>
+<h1 id="preconditions">Preconditions</h1>
+<p>The analysis can be performed on both raw source codes and compiler listings. The only requirement is the following:</p>
+<ul>
+<li><p>Different types (raw source or compiler listing) and versions (RPG III or RPG IV) of source code should have different extensions. These extensions should be provided to the analyzer (See rpg3filenamepattern, rpg4filenamepattern, and spoolfilenamepattern command line parameters below).</p></li>
+<li><p>Source files should use ISO 8859-1 character encoding. Using other character encoding may cause error.</p></li>
+</ul>
+<h1 id="command-line-parameters">Command line parameters</h1>
+<p>SourceMeter can be executed with the following parameters:</p>
+<dl>
+<dt><strong>-help</strong></dt>
+<dd><p>It displays the detailed help and exits.</p>
+</dd>
+<dt><strong>-resultsDir</strong></dt>
+<dd><p>Relative or absolute path name of the directory where the results of the analysis will be stored. The directory will be created automatically if it does not exist.</p>
+</dd>
+<dt><strong>-projectName</strong></dt>
+<dd><p>The name of the analyzed software system. The name specified here will be used for storing the results.</p>
+</dd>
+<dt><strong>-projectBaseDir</strong></dt>
+<dd><p>Directory of the source code to be analyzed specified with relative or absolute path.</p>
+</dd>
+<dt><strong>-externalHardFilter</strong></dt>
+<dd><p>Filter file specified with relative or absolute path, to filter out certain files from the analysis based on their path names. Filtered files will not appear in the results. The filter file is a simple text file containing lines starting with ‘+’ or ‘-’ characters followed by a regular expression<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Tip: you can use the and anchors to make a substring literal, reducing the need of escaping backslashes. During the analysis, each input file will be checked for these expressions. If the first character of the last matching expression is ‘-’, then the given file will be excluded from the analysis. If the first character of the last matching expression is ‘+’, or there is no matching expression, then the file will be analyzed. A line starting with a different character than ‘-’ or ‘+’ will be ignored. On Windows the checking is case-insensitive. Example filter file content:</p>
+<pre><code># Filter out all source files starting with &quot;test&quot;:
+-test[^\.]*.txt
+# But test576.txt is needed:
++test576.txt
+# Furthermore, files beginning with &quot;test1742&quot; are also needed:
++test1742[^\.]*.txt
+# Finally, test1742_b.txt is not needed:
+-test1742_b.txt</code></pre>
+</dd>
+<dt><strong>-runMetricHunter</strong></dt>
+<dd><p>This parameter turns on or off the MetricHunter module. With this feature, SourceMeter lists metric threshold violations. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-runFaultHunter</strong></dt>
+<dd><p>This parameter turns on or off the FaultHunter module. With this feature, SourceMeter identifies common RPG coding rule violations (so-called bad practices) in the code. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-runDCF</strong></dt>
+<dd><p>This parameter turns on or off the DuplicatedCodeFinder module. With this feature, SourceMeter identifies copy-pasted code fragments. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-runMET</strong></dt>
+<dd><p>This parameter turns on or off the Metric module. With this feature, SourceMeter computes source code metrics. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “true”.</p>
+</dd>
+<dt><strong>-profileXML</strong></dt>
+<dd><p>Global configuration file for SourceMeter. Its <em>tool-options</em> tag can be used to override the default metric thresholds for the MetricHunter tool. Furthermore, its <em>rule-options</em> tag can enable/disable or modify the priorities of multiple rules. An example profile xml file is shown below:</p>
+</dd>
+</dl>
+<pre class="sourceCode xml"><code class="sourceCode xml">      <span class="kw">&lt;sourcemeter-profile&gt;</span>
+        <span class="kw">&lt;tool-options&gt;</span>
+          <span class="kw">&lt;tool</span><span class="ot"> name</span> <span class="ot">=</span> <span class="st">&quot;MetricHunter&quot;</span><span class="ot"> enabled</span> <span class="ot">=</span> <span class="st">&quot;true&quot;</span><span class="kw">&gt;</span>
+              <span class="kw">&lt;metric-thresholds&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;LOC&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;100&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;LLOC&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;none&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;NUMPAR&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;43&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+                  <span class="kw">&lt;threshold</span><span class="ot"> metric-id=</span><span class="st">&quot;TLOC&quot;</span><span class="ot"> relation=</span><span class="st">&quot;gt&quot;</span><span class="ot"> value=</span><span class="st">&quot;-32&quot;</span><span class="ot"> entity=</span><span class="st">&quot;Method&quot;</span> <span class="kw">/&gt;</span>
+              <span class="kw">&lt;/metric-thresholds&gt;</span>
+          <span class="kw">&lt;/tool&gt;</span>
+        <span class="kw">&lt;/tool-options&gt;</span>
+
+        <span class="kw">&lt;rule-options&gt;</span>
+          <span class="kw">&lt;rule</span><span class="ot"> id=</span><span class="st">&quot;ISNUI&quot;</span><span class="ot"> name=</span><span class="st">&quot;If Should Not Use Indicators&quot;</span><span class="ot"> priority=</span><span class="st">&quot;Major&quot;</span><span class="ot"> enabled=</span><span class="st">&quot;false&quot;</span><span class="kw">/&gt;</span>
+          <span class="kw">&lt;rule</span><span class="ot"> id=</span><span class="st">&quot;FPN&quot;</span><span class="ot"> name=</span><span class="st">&quot;File uses prefixed name&quot;</span><span class="ot"> priority=</span><span class="st">&quot;Critical&quot;</span><span class="ot"> enabled=</span><span class="st">&quot;true&quot;</span><span class="kw">/&gt;</span>
+        <span class="kw">&lt;/rule-options&gt;</span>
+      <span class="kw">&lt;/sourcemeter-profile&gt;</span>
+</code></pre>
+<dl>
+<dt><strong>-cloneGenealogy</strong></dt>
+<dd><p>This parameter turns on or off the tracking of code clones (copy-pasted source code fragments) through the consecutive revisions of the software system. It is required that during the analysis of the different revisions, the values set to projectName and resultsDir remain the same, so SourceMeter will handle them as different revisions of the same system. Its value can be “true” (turn this feature on) or “false” (turn this feature off). The default value is “false”.</p>
+</dd>
+<dt><strong>-cloneMinLines</strong></dt>
+<dd><p>This parameter sets the minimum required size of each duplication in lines of code. The default value is 10.</p>
+</dd>
+<dt><strong>-csvSeparator</strong></dt>
+<dd><p>This parameter sets the separator character in the CSV outputs. The default value is the comma (“,”). The character set here must be placed in quotation marks (e.g. -csvSeparator=“;”). Tabulator character can be set by the special “\t” value.</p>
+</dd>
+<dt><strong>-csvDecimalMark</strong></dt>
+<dd><p>This parameter sets the decimal mark character in the CSV outputs. The default is value is the dot (“.”). The character set here must be placed in quotation marks (e.g. -csvDecimalMark=“,”).</p>
+</dd>
+<dt><strong>-maximumThreads</strong></dt>
+<dd><p>This parameter sets the maximum number of parallel tasks the controller can start. The default value is the number of available CPU cores on the current system.</p>
+</dd>
+<dt><strong>-currentDate</strong></dt>
+<dd><p>The name of the directory with date inside the result directory of the project. If it is not set, then the current date is used.</p>
+</dd>
+<dt><strong>-cleanResults</strong></dt>
+<dd><p>Cleans all but the last n number of timestamped result directory of the current project.</p>
+</dd>
+<dt><strong>-spoolFileNamePattern</strong></dt>
+<dd><p>File name pattern for spool (compiler listing) files. (E.g. “.*\.txt“)</p>
+</dd>
+<dt><strong>-rpg3FileNamePattern</strong></dt>
+<dd><p>File name pattern for RPG/400 files containing raw source code. (E.g. “.*\.rpg“)</p>
+</dd>
+<dt><strong>-rpg4FileNamePattern</strong></dt>
+<dd><p>File name pattern for ILE RPG files containing raw source code. (E.g. “.*\.rpgle“)</p>
+</dd>
+</dl>
+<h1 id="usage">Usage</h1>
+<p>There are two ways to use SourceMeter. It can be used by simply invoking it on the directory, which contains the source files, or by using only one file as an input. Analyzing a file and a directory is very similar, so we discuss only the analysis of a directory. Main differences will be highlighted in the text below.</p>
+<h2 id="directory-analysis">Directory analysis</h2>
+<p>Execute the following command to analyze the source code of a software system:</p>
+<p>Example (Windows):</p>
+<pre><code>//raw RPG IV source code located in projectDir with extension 'rpgle'
+//and compiler listings with 'txt'
+SourceMeterRPG.exe
+  -projectBaseDir=MyProjectDir
+  -resultsDir=Results
+  -projectName=MyProject
+  -rpg4FileNamePattern=.*\.rpgle
+  -spoolFileNamePattern=.*\.txt</code></pre>
+<p>Example (Linux):</p>
+<pre><code>//raw RPG IV source codes located in projectDir with extensions 'rpgle'
+//and compiler listings with 'txt'
+SourceMeterRPG
+  -projectBaseDir=MyProjectDir
+  -resultsDir=Results
+  -projectName=MyProject
+  -rpg4FileNamePattern=.*\.rpgle
+  -spoolFileNamePattern=.*\.txt</code></pre>
+<p>If a directory contains various types of files, the analyzer will select different types based on the given extension patterns. So, a directory can contain raw RPG source files with different versions and compiler listings.</p>
+<h1 id="result-files">Result files</h1>
+<p>If any problems occur in the execution of the tools of the SourceMeter package during the code analysis, SourceMeter returns with error code 1. The error code of the given tool appears on the screen (detailed information on the bug can be found in the log directory), and the analysis is stopped, but the result files created until the failure are not deleted.</p>
+<p>An error-free execution of SourceMeter produces the following files:</p>
+<ul>
+<li><p>Files containing the results of the static analysis in the results directory (set by the resultsDir parameter):</p>
+<ul>
+<li><p>$(projectName)\rpg\$(DATE)\$(projectName)-*.csv</p>
+<p>CSV (comma separated values) files containing different metrics: System, Program, Procedure, and Subroutine level source code metrics, rule violation counts, and clone-related metrics at CloneClass and CloneInstance level.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\$(projectName)-clones.txt</p>
+<p>List of the code clones (copy-pasted source code fragments) in the system.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\$(projectName)-MetricHunter.txt</p>
+<p>List of the MetricHunter metric value violations in the system.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\$(projectName)-FaultHunter.txt</p>
+<p>List of the FaultHunter coding rule violations in the system.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\$(projectName).graph</p>
+<p>Binary representation of the result graph containing all the metrics, code clones and coding rule violations.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\$(projectName).xml</p>
+<p>XML representation of the result graph containing all the metrics, code clones and coding rule violations.</p></li>
+<li><p>$(projectName)\rpg\$(projectName).gsi</p>
+<p>Binary data file containing information for tracking the code clones through the consecutive revisions of the analyzed software system.</p></li>
+</ul></li>
+<li><p>Other files and directories created in the results directory:</p>
+<ul>
+<li><p>$(projectName)\rpg\$(DATE)\sourcemeter</p>
+<p>Directory, which contains configuration, binary, ASG, log, and temporary files created during the source code analysis.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\sourcemeter\asg</p>
+<p>Directory, which contains backup copies of the linked ASG and LIM files, the corresponding filter files, and the GSI file.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\sourcemeter\graph</p>
+<p>Directory, which contains backup copies of the graph files.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\sourcemeter\log</p>
+<p>Directory, which contains the log files created during the code analysis.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\sourcemeter\temp</p>
+<p>Directory, which contains the temporary files created during the code analysis.</p></li>
+<li><p>$(projectName)\rpg\$(DATE)\sourcemeter\source</p>
+<p>Directory, which contains the raw source code extracted from the spool files during the code analysis.</p></li>
+</ul></li>
+</ul>
+<h1 id="coding-rule-violation-suppression">Coding rule violation suppression</h1>
+<p>The warnings issued by the rule checker modules can be suppressed in case they are found to be invalid or for any other reason. SourceMeter supports different ways based on the version and context of the analyzed code.</p>
+<ul>
+<li>When analyzing RPG III (RPG/400) code, warnings can be suppressed by inserting “NOSM” anywhere between column 75 and 80 in the same line where suppression is desired.</li>
+<li>When analyzing RPG IV (ILE RPG) code, warnings can be suppressed by inserting “NOSM” anywhere between column 81 and 100 in the same line where suppression is desired.</li>
+<li>When analyzing RPG IV free-form code, warnings can be suppressed by inserting the “NOSM” comment in the same line the user want to suppress warnings.</li>
+</ul>
+<p>In RPG III and IV the following entries can handle “NOSM” comments:</p>
+<ul>
+<li>Control Specifications</li>
+<li>File Description Specification</li>
+<li>File Description Specification ContinuationLine</li>
+<li>Extension Specification</li>
+<li>Line Counter Specification</li>
+<li>Input Program Record</li>
+<li>Input Program Field</li>
+<li>Input External Record</li>
+<li>Input External Field</li>
+<li>Input Data Structure</li>
+<li>Input Data Structure Subfield</li>
+<li>Output Program Record</li>
+<li>Output Program Field</li>
+<li>Output External Record</li>
+<li>Output External Field</li>
+<li>Calculation Specification</li>
+<li>Calculation Specification Extended Factor2 ContinuationLine</li>
+<li>Definition Specification</li>
+<li>Keyword Continuation Line</li>
+<li>Name Continuation Line</li>
+<li>Procedure Specification</li>
+<li>Eject Directive</li>
+<li>Space Directive</li>
+<li>Copy Directive</li>
+<li>Include Directive</li>
+<li>Free Directive</li>
+<li>End Free Directive</li>
+</ul>
+<p>Furthermore, there are rules that check comments from different aspects, consequently “NOSM” inserted anywhere in RPG-style comments (asterisk inserted in column 7) suppresses warnings for the comment line itself.</p>
+<p>Example (RPG/400):</p>
+<pre class="rpg"><code>     C* NOSM
+     C           EOF       TAG                                            NOSM</code></pre>
+<p>In this example the TAG operation code would cause a “Forbidden operation” warning. However, from column 75 “NOSM” string was inserted (comment section), thus no warning is generated. The first line containing a comment “NOSM” will be applied on the comment itself not on the next line (comment is bound to the Calculation Specification line).</p>
+<p>Example (RPG IV):</p>
+<pre class="rpg"><code>     DEnvRecLen        S              9B 0 INZ(1024)                             NOSM</code></pre>
+<p>In this example a simple RPG IV Definition Specification line is given. The “EnvRecLen” variable name is too long. The inserted NOSM prevents this warning to be risen.</p>
+<p>Example (RPG IV free-form):</p>
+<pre class="rpg"><code>    /free                 
+           acq foo;     //NOSM  
+           return result; 
+    /end-free             </code></pre>
+<p>In this example “acq” is a forbidden operation that would have risen a warning if the “NOSM” comment has not been added.</p>
+<p>The warnings of the MetricHunter module cannot be suppressed at the moment.</p>
+<h1 id="demo">Demo</h1>
+<p>The Demo directory of the installation package contains the analyzer script for the analysis of an example project. Three sample source codes are placed in the Demo directory, from which two can also be downloaded from the following URLs:</p>
+<p><a href="http://www-03.ibm.com/systems/power/software/i/http/examples/ile-rpg.html">Sample Source code containing ILE RPG source</a></p>
+<p><a href="http://www-01.ibm.com/support/knowledgecenter/ssw_i5_54/dbp/rbaforzahftrj.htm?lang=en">Sample Source code containing RPG/400 source</a></p>
+<p>To perform the analysis of the demo source code files, the startDemo.bat/startDemo.sh script has to be executed.</p>
+<p>Contents of the Demo directory:</p>
+<p>Windows:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Demo\</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">instrg.rpg</td>
+<td style="text-align: left;"># source code of an RPG/400 program</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">samplerpg.rpgle</td>
+<td style="text-align: left;"># source code of an ILE RPG program</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cldemo.txt</td>
+<td style="text-align: left;"># compiler listing of an ILE RPG program</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">startDemo.bat</td>
+<td style="text-align: left;"># runs SourceMeter for RPG on the samples</td>
+</tr>
+</tbody>
+</table>
+<p>Linux:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Demo/</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">instrg.rpg</td>
+<td style="text-align: left;"># source code of an RPG/400 program</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">samplerpg.rpgle</td>
+<td style="text-align: left;"># source code of an ILE RPG program</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cldemo.txt</td>
+<td style="text-align: left;"># compiler listing of an ILE RPG program</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">startDemo.sh</td>
+<td style="text-align: left;"># runs SourceMeter for RPG on the samples</td>
+</tr>
+</tbody>
+</table>
+<h1 id="error-messages">Error messages</h1>
+<ul>
+<li><p>Message: There is no valid license!</p>
+<p>Solution: Install a valid license key file (see Installation section).</p></li>
+<li><p>Message: Please set the resultsDir parameter. Under this directory a new directory with the name of the analyzed project will be created, if it does not exist yet. All results will be stored there under separate directories with their names containing the date and time.</p>
+<p>Solution: The resultsDir parameter must be set.</p></li>
+<li><p>Message: Please set the projectName parameter to the name of the analyzed software system.</p>
+<p>Solution: The projectName parameter must be set.</p></li>
+<li><p>Message: Please set the projectBaseDir parameter. This is the directory that contains the source files you analyze.</p>
+<p>Solution: The projectBaseDir parameter must be set.</p></li>
+<li><p>Message: The directory given in the projectBaseDir parameter does not exist.</p>
+<p>Solution: Specify a valid projectBaseDir parameter.</p></li>
+<li><p>Message: The projectBaseDir parameter must be a directory.</p>
+<p>Solution: Use a directory instead of a file for projectBaseDir option.</p></li>
+<li><p>Message: At least one of the -spoolFileNamePattern, -rpg3FileNamePattern and -rpg4FileNamePattern options must be set.</p>
+<p>Solution: Specify at least one input pattern.</p></li>
+</ul>
+<h1 id="known-bugs-and-deficiencies">Known bugs and deficiencies</h1>
+<p>Known bugs and deficiencies of SourceMeter for RPG.</p>
+<ul>
+<li><p>SourceMeter places the results into the directory specified by the projectName parameter. If special characters (like ‘&lt;’, ‘&gt;’, etc.) are used in the parameter, the analysis will probably fail.</p></li>
+<li><p>Conditional compilation directive statements are not handled.</p></li>
+<li><p>SQL statements (e.g /EXEC SQL) are not supported.</p></li>
+</ul>
+<h1 id="faq">FAQ</h1>
+<p>Frequently Asked Questions regarding SourceMeter.</p>
+<ul>
+<li><p>Problem: After starting the analysis, neither does the computer show elevated load nor is any of the SourceMeter tools running.</p>
+<p>Solution: SourceMeter creates temporary files during the analysis (e.g. tmp-wrapper.bat) which might be judged as suspicious by certain antivirus programs so they may block them. In these cases, the temporary files must be manually whitelisted.</p></li>
+<li><p>Problem: On Windows platforms, in case of deep directory hierarchies, it may happen that the full paths of some files exceed 259 characters. In this case some SourceMeter tools may have problems with opening these files; they will terminate and write appropriate messages in the logs.</p>
+<p>Solution: Move the files to be analyzed to a directory closer to the file system root, or use the ‘subst’ shell command.</p></li>
+</ul>
+<h1 id="appendices">Appendices</h1>
+<h2 id="reference-of-source-code-metrics">Reference of source code metrics</h2>
+<p>Source code metrics are used to quantify different source code characteristics. FrontEndART SourceMeter computes source code metrics for the following source code element kinds: RPG subroutines, procedures, programs, and systems.</p>
+<p>The calculated metrics are grouped into 4 categories, which are the following:</p>
+<ul>
+<li><p><strong>Complexity metrics:</strong> measure the complexity of source code elements (typically algorithms).</p></li>
+<li><p><strong>Coupling metrics:</strong> measure the amount of interdependencies of source code elements.</p></li>
+<li><p><strong>Documentation metrics:</strong> measure the amount of comments and documentation of source code elements in the system.</p></li>
+<li><p><strong>Size metrics:</strong> measure the basic properties of the analyzed system in terms of different cardinalities (e.g. number of code lines, number of subroutines or data structures).</p></li>
+</ul>
+<p>In the case of the documentation metrics all the comments found immediately before a source code element are considered as its documentation, while the comments contained inside the source code element are considered as its comments.</p>
+<p>The following table summarizes the metrics, their abbreviations and their correspondence to different source code element kinds. Note that in the <strong>free version</strong> only the following 10 metrics are available (all other metrics will get the value 0): CLOC, LLOC, LOC, McCC, NOI, PC, TCLOC, TLLOC, TLOC, TNOI.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Metric name</th>
+<th style="text-align: left;">Abbrev.</th>
+<th style="text-align: center;">Subroutine</th>
+<th style="text-align: center;">Procedure</th>
+<th style="text-align: center;">Program</th>
+<th style="text-align: center;">System</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Complexity metrics</td>
+<td style="text-align: left;">McCabe’s Cyclomatic Complexity</td>
+<td style="text-align: left;">McCC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nesting Level</td>
+<td style="text-align: left;">NL</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Nesting Level Else-If</td>
+<td style="text-align: left;">NLE</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Program Complexity</td>
+<td style="text-align: left;">PC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Coupling metrics</td>
+<td style="text-align: left;">Number of Files</td>
+<td style="text-align: left;">NF</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Incoming Invocations</td>
+<td style="text-align: left;">NII</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Input Records</td>
+<td style="text-align: left;">NIR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Outgoing Invocations</td>
+<td style="text-align: left;">NOI</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Output Records</td>
+<td style="text-align: left;">NOR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Files</td>
+<td style="text-align: left;">TNF</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Outgoing Invocations</td>
+<td style="text-align: left;">TNOI</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Documentation metrics</td>
+<td style="text-align: left;">Comment Density</td>
+<td style="text-align: left;">CD</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Comment Lines of Code</td>
+<td style="text-align: left;">CLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Documentation Lines of Code</td>
+<td style="text-align: left;">DLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Comment Density</td>
+<td style="text-align: left;">TCD</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Comment Lines of Code</td>
+<td style="text-align: left;">TCLOC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Documentation Lines of Code</td>
+<td style="text-align: left;">TDLOC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Size metrics</td>
+<td style="text-align: left;">Lines of Code</td>
+<td style="text-align: left;">LOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Logical Lines of Code</td>
+<td style="text-align: left;">LLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Data Structures</td>
+<td style="text-align: left;">NDS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Named Constants</td>
+<td style="text-align: left;">NNC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Parameters</td>
+<td style="text-align: left;">NUMPAR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Standalone Fields</td>
+<td style="text-align: left;">NSF</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Number of Statements</td>
+<td style="text-align: left;">NOS</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Lines of Code</td>
+<td style="text-align: left;">TLOC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Logical Lines of Code</td>
+<td style="text-align: left;">TLLOC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Data Structures</td>
+<td style="text-align: left;">TNDS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Named Constants</td>
+<td style="text-align: left;">TNNC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Procedures</td>
+<td style="text-align: left;">TNPC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Programs</td>
+<td style="text-align: left;">TNPG</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Standalone Fields</td>
+<td style="text-align: left;">TNSF</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Statements</td>
+<td style="text-align: left;">TNOS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Total Number of Subroutines</td>
+<td style="text-align: left;">TNSR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+</tbody>
+</table>
+<h3 id="complexity-metrics">Complexity metrics</h3>
+<h4 id="McCC">McCabe’s Cyclomatic Complexity (McCC)</h4>
+<p><strong>Subroutine:</strong> complexity of the subroutine expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if (including or, and), else-if, for, do, do-while, do-until, when, on-error. The following instructions are not included: else, select, monitor.</p>
+<p><strong>Procedure:</strong> complexity of the procedure expressed as the number of independent control flow paths in it. It represents a lower bound for the number of possible execution paths in the source code and at the same time it is an upper bound for the minimum number of test cases needed for achieving full branch test coverage. The value of the metric is calculated as the number of the following instructions plus 1: if (including or, and), else-if, for, do, do-while, do-until, when, on-error. The following instructions are not included: else, select, monitor. Subroutines defined locally in the procedure are not included.</p>
+<h4 id="NL">Nesting Level (NL)</h4>
+<p><strong>Subroutine:</strong> complexity of the subroutine expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, else-if, else, for, do, do-while, do-until, select, monitor, on-error. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: when, other.</p>
+<p><strong>Procedure:</strong> complexity of the procedure expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, else-if, else, for, do, do-while, do-until, select, monitor, on-error. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: when, other. Contained local subroutines are not included.</p>
+<p><strong>Program:</strong> complexity of the program expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, else-if, else, for, do, do-while, do-until, select, monitor, on-error. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: when, other. Contained local subroutines and procedures are not included.</p>
+<h4 id="NLE">Nesting Level Else-If (NLE)</h4>
+<p><strong>Subroutine:</strong> complexity of the subroutine expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor, on-error. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, when, other.</p>
+<p><strong>Procedure:</strong> complexity of the procedure expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor, on-error. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, when, other. Contained local subroutines are not included.</p>
+<p><strong>Program:</strong> complexity of the program expressed as the depth of the maximum embeddedness of its conditional, iteration and exception handling block scopes. The following instructions are taken into account: if, for, do, do-while, do-until, select, monitor, on-error. Only the first if statement will be taken into consideration of the if-elseif-else block. The following instructions do not increase the value by themselves; however, if additional embeddednesses can be found in their blocks, they are considered: else-if, when, other. Contained local subroutines and procedures are not included.</p>
+<h4 id="PC">Program Complexity (PC)</h4>
+<p><strong>Program:</strong> The sum of the McCC complexity metrics of the contained subroutines and procedures plus the McCC of the main source section.</p>
+<h3 id="coupling-metrics">Coupling metrics</h3>
+<h4 id="NF">Number of Files (NF)</h4>
+<p><strong>Procedure:</strong> number of files defined in the procedure.</p>
+<p><strong>Program:</strong> number of files defined in the program, excluding the files defined in procedures of the program.</p>
+<h4 id="NII">Number of Incoming Invocations (NII)</h4>
+<p><strong>Subrouine:</strong> number of other subroutines, procedures, and programs which directly call the subroutine. If the subroutine is invoked several times from the same subroutine, procedure, or program, it is counted only once.</p>
+<p><strong>Procedure:</strong> number of other subroutines, procedures, and programs which directly call the procedure. If a procedure is invoked several times from the same subroutine, procedure, or program, it is counted only once.</p>
+<p><strong>Program:</strong> number of other subroutines, procedures, and programs which directly call the program. If a program is invoked several times from the same subroutine, procedure, or program, it is counted only once.</p>
+<h4 id="NIR">Number of Input Records (NIR)</h4>
+<p><strong>Program:</strong> number of input records(externally and program defined input records) declared in the program.</p>
+<h4 id="NOI">Number of Outgoing Invocations (NOI)</h4>
+<p><strong>Subroutine:</strong> number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once.</p>
+<p><strong>Procedure:</strong> number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines are not counted.</p>
+<p><strong>Program:</strong> number of directly called subroutines, procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines, procedures are not counted.</p>
+<h4 id="NOR">Number of Output Records (NOR)</h4>
+<p><strong>Program:</strong> number of output records(externally and program defined output records) declared in the program.</p>
+<h4 id="TNF">Total Number of Files (TNF)</h4>
+<p><strong>Program:</strong> number of files defined in the program, including the files defined in procedures of the program.</p>
+<p><strong>System:</strong> number of all files defined in the system.</p>
+<h4 id="TNOI">Total Number of Outgoing Invocations (TNOI)</h4>
+<p><strong>Procedure:</strong> number of directly called procedures, or programs. If a procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines are included.</p>
+<p><strong>Program:</strong> number of directly called procedures, or programs. If a subroutine, procedure, or program is invoked several times, it is counted only once. NOI of contained subroutines and TNOI of contained procedures are included.</p>
+<h3 id="documentation-metrics">Documentation metrics</h3>
+<h4 id="CD">Comment Density (CD)</h4>
+<p><strong>Subroutine:</strong> ratio of the comment lines of the subroutine (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</p>
+<p><strong>Procedure:</strong> ratio of the comment lines of the procedure (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</p>
+<p><strong>Program:</strong> ratio of the comment lines of the program (CLOC) to the sum of its comment (CLOC) and logical lines of code (LLOC).</p>
+<h4 id="CLOC">Comment Lines of Code (CLOC)</h4>
+<p><strong>Subroutine:</strong> number of comment and documentation code lines of the subroutine.</p>
+<p><strong>Procedure:</strong> number of comment and documentation code lines of the procedure; however, its nested subroutines are not included.</p>
+<p><strong>Program:</strong> number of comment and documentation code lines of the program; however, its subroutines and procedures are not included.</p>
+<h4 id="DLOC">Documentation Lines of Code (DLOC)</h4>
+<p><strong>Subroutine:</strong> number of documentation code lines of the subroutine.</p>
+<p><strong>Procedure:</strong> number of documentation code lines of the procedure, however, its local subroutines are not included.</p>
+<p><strong>Program:</strong> number of documentation code lines of the program, however, its subroutines and procedures are not included.</p>
+<h4 id="TCD">Total Comment Density (TCD)</h4>
+<p><strong>Procedure:</strong> ratio of the total comment lines of the procedure (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<p><strong>Program:</strong> ratio of the total comment lines of the program (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<p><strong>System:</strong> ratio of the total comment lines of the system (TCLOC) to the sum of its total comment (TCLOC) and total logical lines of code (TLLOC).</p>
+<h4 id="TCLOC">Total Comment Lines of Code (TCLOC)</h4>
+<p><strong>Procedure:</strong> number of comment and documentation code lines of the procedure, including its local subroutines’ CLOC metrics.</p>
+<p><strong>Program:</strong> number of comment and documentation code lines of the program, including its local subroutines’ CLOC metrics and its local procedures’ TCLOC metrics.</p>
+<p><strong>System:</strong> sum of the TLOC metrics of programs.</p>
+<h4 id="TDLOC">Total Documentation Lines of Code (TDLOC)</h4>
+<p><strong>Procedure:</strong> number of documentation code lines of the procedure, including the contained subroutines.</p>
+<p><strong>Program:</strong> number of documentation code lines of the program, including its local subroutines and procedures.</p>
+<p><strong>System:</strong> sum of the TDLOC values of the contained programs.</p>
+<h3 id="size-metrics">Size metrics</h3>
+<h4 id="LOC">Lines of Code (LOC)</h4>
+<p><strong>Subroutine:</strong> number of code lines of the subroutine, including empty and comment lines.</p>
+<p><strong>Procedure:</strong> number of code lines of the procedure, including empty and comment lines, however, its local subroutines are not included.</p>
+<p><strong>Program:</strong> number of code lines of the program, including empty and comment lines; however, its subroutines and procedures are not included.</p>
+<h4 id="LLOC">Logical Lines of Code (LLOC)</h4>
+<p><strong>Subroutine:</strong> number of non-empty and non-comment code lines of the subroutine.</p>
+<p><strong>Procedure:</strong> number of non-empty and non-comment code lines of the procedure, however, its local subroutines are not included.</p>
+<p><strong>Program:</strong> number of non-empty and non-comment code lines of the program; however, its subroutines and procedures are not included.</p>
+<h4 id="NDS">Number of Data Structures (NDS)</h4>
+<p><strong>Procedure:</strong> number of datastructures declared in the procedure.</p>
+<p><strong>Program:</strong> number of datastructures declared in the program excluding the datastructures declared in procedures of the program.</p>
+<h4 id="NNC">Number of Named Constants (NNC)</h4>
+<p><strong>Program:</strong> number of named constants in the program, including the constants declared in procedures.</p>
+<p><strong>System:</strong> number of all named constants in the system.</p>
+<h4 id="NUMPAR">Number of Parameters (NUMPAR)</h4>
+<p><strong>Procedure:</strong> number of the parameters of the procedure.</p>
+<p><strong>Program:</strong> number of the parameters of the program.</p>
+<h4 id="NSF">Number of Standalone Fields (NSF)</h4>
+<p><strong>Procedure:</strong> number of standalone fields declared in the procedure.</p>
+<p><strong>Program:</strong> number of standalone fields declared in the program, excluding the standalone fields declared in procedures of the program.</p>
+<h4 id="NOS">Number of Statements (NOS)</h4>
+<p>Statements are considered as instructions occuring in Calculation Specification entries.</p>
+<p><strong>Subroutine:</strong> number of statements in the subroutine.</p>
+<p><strong>Procedure:</strong> number of statements in the procedure; however, the statements of its local subroutines are not included.</p>
+<h4 id="TLOC">Total Lines of Code (TLOC)</h4>
+<p><strong>Procedure:</strong> number of code lines of the procedure, including empty and comment lines, as well as its local subroutines.</p>
+<p><strong>Program:</strong> number of code lines of the program, including empty and comment lines, as well as its local subroutines and procedures.</p>
+<p><strong>System:</strong> sum of the TLOC metrics of the programs.</p>
+<h4 id="TLLOC">Total Logical Lines of Code (TLLOC)</h4>
+<p><strong>Procedure:</strong> number of non-empty and non-comment code lines of the procedure, including its local subroutines.</p>
+<p><strong>Program:</strong> number of non-empty and non-comment code lines of the program, including the non-empty and non-comment code lines of its local subroutines, procedures.</p>
+<p><strong>System:</strong> number of non-empty and non-comment code lines of the system (sum of TLLOC values of programs).</p>
+<h4 id="TNDS">Total Number of Data Structures (TNDS)</h4>
+<p><strong>Program:</strong> number of datastructures declared in the program including the datastructures declared in procedures of the program.</p>
+<p><strong>System:</strong> number of all datastructures declared in the system.</p>
+<h4 id="TNNC">Total Number of Named Constants (TNNC)</h4>
+<p><strong>Program:</strong> number of named constants in the program, including the constants declared in procedures.</p>
+<p><strong>System:</strong> number of all named constants in the system.</p>
+<h4 id="TNPC">Total Number of Procedures (TNPC)</h4>
+<p><strong>Program:</strong> number of procedures located in the program.</p>
+<p><strong>System:</strong> number of procedures located in the system.</p>
+<h4 id="TNPG">Total Number of Programs (TNPG)</h4>
+<p><strong>System:</strong> number of programs located in the system.</p>
+<h4 id="TNSF">Total Number of Standalone Fields (TNSF)</h4>
+<p><strong>Program:</strong> number of standalone fields declared in the program, including the standalone fields declared in procedures of the program.</p>
+<p><strong>System:</strong> number of all standalone fields declared in the system.</p>
+<h4 id="TNOS">Total Number of Statements (TNOS)</h4>
+<p><strong>Procedure:</strong> number of statements in the procedure, including the statements of its subroutines.</p>
+<p><strong>Program:</strong> number of statements in the program, including the statements of its subroutines and procedures.</p>
+<p><strong>System:</strong> number of all statements in the system.</p>
+<h4 id="TNSR">Total Number of Subroutines (TNSR)</h4>
+<p><strong>Procedure:</strong> number of subroutines located in the procedure.</p>
+<p><strong>Program:</strong> number of subroutines located in the program, including subroutines defined in a procedure.</p>
+<p><strong>System:</strong> number of all subroutines in the system.</p>
+<h2 id="reference-of-code-duplication-metrics">Reference of code duplication metrics</h2>
+<p>Code cloning (or copy-paste programming) means the copying of an existing piece of source code, pasting it somewhere else, and typically performing smaller modifications on it. Based on the level of similarity between the copied code fragments we can define the following duplication types:</p>
+<ul>
+<li><p><strong>Type-1</strong>: the copied code parts are identical code fragments except for variations in whitespace, layout and comments.</p></li>
+<li><p><strong>Type-2</strong>: syntactically identical fragments except for variations in identifier names, literals, type references, whitespace, layout and comments.</p></li>
+<li><p><strong>Type-3</strong>: copied fragments with further modifications such as altered, added, or removed statements, in addition to variations in identifier names, literals, type references, whitespace, layout and comments.</p></li>
+<li><p><strong>Type-4</strong>: the copied code fragments are syntactically different, but they perform the same functionality, i.e. they are semantically the same.</p></li>
+</ul>
+<p>FrontEndART SourceMeter is capable of identifying Type-2 clones, i.e. code fragments that are structurally identical, but may differ in variable names, literals, identifiers, etc.</p>
+<p>Two code segments correspond to each other if they are copies of each other. This relation is an equivalence relation and we use the notion of clone classes to the classes of the relation, and the members of the classes will be referred to as clone instances. Owing to the nature of the relation, each clone class must contain at least two clone instances.</p>
+<p>Clones are tracked during the source code analysis of consecutive revisions of the analyzed software system. FrontEndART SourceMeter detects suspicious, inconsistently changing code copies, which are called “clone smells”. The smells concerning clone classes are the following:</p>
+<ul>
+<li><p><strong>Disappearing Clone Class (DCC):</strong> The clone class existed in the previously analyzed revision but it does not exist anymore.</p></li>
+<li><p><strong>Appearing Clone Class (ACC):</strong> The clone class did not exist in the previously analyzed revision.</p></li>
+</ul>
+<p>The smells concerning clone instances are issued only if the containing clone class does not contain any smell. These are the following:</p>
+<ul>
+<li><p><strong>Disappearing Clone Instance (DCI):</strong> The clone instance existed in the previously analyzed revision but it does not exist anymore.</p></li>
+<li><p><strong>Appearing Clone Instance (ACI):</strong> The clone instance did not exist in the previously analyzed revision.</p></li>
+<li><p><strong>Moving Clone Instance (MCI):</strong> The clone instance belonged to a different clone class in the previously analyzed revision than its current class.</p></li>
+</ul>
+<p>The following table summarizes the code duplication metrics, their abbreviations, and their correspondence to different source code element types.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric name</th>
+<th style="text-align: left;">Abbrev.</th>
+<th style="text-align: center;">Clone Instance</th>
+<th style="text-align: center;">Clone Class</th>
+<th style="text-align: center;">Subroutine</th>
+<th style="text-align: center;">Procedure</th>
+<th style="text-align: center;">Program</th>
+<th style="text-align: center;">System</th>
+<th style="text-align: center;">Component</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Clone Age</td>
+<td style="text-align: left;">CA</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Classes</td>
+<td style="text-align: left;">CCL</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Complexity</td>
+<td style="text-align: left;">CCO</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Coverage</td>
+<td style="text-align: left;">CC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Elimination Effort</td>
+<td style="text-align: left;">CEE</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Elimination Gain</td>
+<td style="text-align: left;">CEG</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Embeddedness</td>
+<td style="text-align: left;">CE</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Instances</td>
+<td style="text-align: left;">CI</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Line Coverage</td>
+<td style="text-align: left;">CLC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Lines of Code</td>
+<td style="text-align: left;">CLLOC</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Logical Line Coverage</td>
+<td style="text-align: left;">CLLC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Clone Risk</td>
+<td style="text-align: left;">CR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Clone Variability</td>
+<td style="text-align: left;">CV</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lines of Duplicated Code</td>
+<td style="text-align: left;">LDC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Logical Lines of Duplicated Code</td>
+<td style="text-align: left;">LLDC</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Normalized Clone Radius</td>
+<td style="text-align: left;">NCR</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+</tbody>
+</table>
+<h3 id="clone-metrics">Clone metrics</h3>
+<h4 id="CA">Clone Age (CA)</h4>
+<p><strong>Clone class/clone instance:</strong> number of previously analyzed revisions in which the clone class/clone instance was present + 1.</p>
+<h4 id="CCL">Clone Classes (CCL)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> number of clone classes having at least one clone instance in the source code element.</p>
+<h4 id="CCO">Clone Complexity (CCO)</h4>
+<p><strong>Clone instance:</strong> the McCabe complexity of the code fragment corresponding to the clone instance.</p>
+<p><strong>Clone class:</strong> sum of CCO of clone instances in the clone class.</p>
+<p><strong>Subroutine/procedure/program/system:</strong> sum of CCO of clone instances in the source code element.</p>
+<h4 id="CC">Clone Coverage (CC)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> ratio of code covered by code duplications in the source code element to the size of the source code element.</p>
+<h4 id="CEE">Clone Elimination Effort<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> (CEE)</h4>
+<p><strong>Clone class:</strong> index of the effort required to eliminate the clone class. It is computed as the product of CI, CE, and NCR.</p>
+<h4 id="CEG">Clone Elimination Gain<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> (CEG)</h4>
+<p><strong>Clone class:</strong> index of the gain resulting from eliminating the clone class. It is computed as the ratio of CR to CEE.</p>
+<h4 id="CE">Clone Embeddedness (CE)</h4>
+<p><strong>Clone instance:</strong> sum of incoming and outgoing references (subroutine calls, procedure calls, and variable references) in the code fragment corresponding to the clone instance.</p>
+<p><strong>Clone class:</strong> sum of CE of the clone instances of the clone class.</p>
+<h4 id="CI">Clone Instances (CI)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> number of clone instances in the source code element.</p>
+<p><strong>Clone class:</strong> number of clone instances in the clone class.</p>
+<h4 id="CLC">Clone Line Coverage (CLC)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> ratio of code covered by code duplications in the source code element to the size of the source code element, expressed in terms of lines of code.</p>
+<h4 id="CLLOC">Clone Lines of Code (CLLOC)</h4>
+<p><strong>Clone instance:</strong> length of the clone instance expressed in terms of lines of code.</p>
+<p><strong>Clone class:</strong> average of CLLOC of clone instances belonging to the clone class.</p>
+<h4 id="CLLC">Clone Logical Line Coverage (CLLC)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> ratio of code covered by code duplications in the source code element to the size of source code element, expressed in terms of logical lines of code (non-empty, non-comment lines).</p>
+<h4 id="CR">Clone Risk (CR)<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></h4>
+<p><strong>Clone class:</strong> risk index of the existence of the clone class. It is computed as the product of CLLOC, CI, CCO, NCR, and CV.</p>
+<h4 id="CV">Clone Variability (CV)</h4>
+<p><strong>Clone instance:</strong> instability of the clone instance since it appeared. It is computed as the ratio of the number of previously analyzed revisions when the instance had been changed to its age (CA).</p>
+<p><strong>Clone class:</strong> instability of the clone class since it appeared. It is computed as the ratio of the number of previously analyzed revisions when its contained instances were moved, deleted, or added, to its age (CA), plus the average CV of its clone instances.</p>
+<h4 id="LDC">Lines of Duplicated Code (LDC)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> number of code lines covered by code duplications in the source code element.</p>
+<h4 id="LLDC">Logical Lines of Duplicated Code (LLDC)</h4>
+<p><strong>Subroutine/procedure/program/system:</strong> number of logical code lines covered by code duplications in the source code element.</p>
+<h4 id="NCR">Normalized Clone Radius (NCR)</h4>
+<p><strong>Clone class:</strong> normalized average distance among clone instances belonging to the clone class.</p>
+<h2 id="reference-of-faulthunter-coding-rule-violations">Reference of FaultHunter coding rule violations</h2>
+<p>FaultHunter is the coding rule violation checker module of SourceMeter. This module makes it possible to identify common RPG coding rule violations in the code (so-called bad practices). The algorithms implemented in the FaultHunter module work on the precise Abstract Semantic Graph of SourceMeter which results in higher precision and recall compared to other tools with a rougher syntactic analyzer.</p>
+<p>The list of rulesets and rules contained in each ruleset are the following:</p>
+<ul>
+<li><p><strong>Basic Rules:</strong> The Basic ruleset contains a collection of good practices which should be followed.</p></li>
+<li><p><strong>Design Rules:</strong> The Design Ruleset contains a collection of rules for indicating bad implementations coming from bad design.</p></li>
+<li><p><strong>Documentation Rules:</strong> The Documentation Ruleset contains a collection of rules for indicating bad documentation or the lack of documentation.</p></li>
+<li><p><strong>Naming Rules:</strong> The Naming Ruleset contains a collection of rules for indicating bad naming conventions.</p></li>
+<li><p><strong>Security Rules:</strong> The Security Ruleset contains a collection of rules to prevent security issues.</p></li>
+<li><p><strong>Size Rules:</strong> The Size Ruleset contains a collection of rules giving a limit to different aspects/properties of the system.</p></li>
+<li><p><strong>Type Rules:</strong> The Type Ruleset contains a collection of rules that point the weak spots with a focus on types and type compatibility.</p></li>
+<li><p><strong>Unnecessary and Unused Code Rules:</strong> The Unnecessary and Unused Ruleset contains a collection of rules for unnecessary,unused or ineffective code.</p></li>
+</ul>
+<p>The following table contains the enabled rules and their priorities:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Abbreviation</th>
+<th style="text-align: left;">Prio.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Basic Rules</td>
+<td style="text-align: left;">“*SRCSTMT, *NODEBUGIO” Header Option Should be Used</td>
+<td style="text-align: left;">FHRPG_SHOSU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">/Eject Should Used After Specifications (F,D,C)</td>
+<td style="text-align: left;">FHRPG_ESUAS</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Avoid Debug Operations</td>
+<td style="text-align: left;">FHRPG_ADS</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Avoid operation</td>
+<td style="text-align: left;">FHRPG_AO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">CHAIN operation should use resulting indicator</td>
+<td style="text-align: left;">FHRPG_COSURI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Call operand is a variable</td>
+<td style="text-align: left;">FHRPG_COV</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Complete Conditional Operation Needed</td>
+<td style="text-align: left;">FHRPG_CCO</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Figurative Constant Should Used</td>
+<td style="text-align: left;">FHRPG_FCSU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Forbidden operation</td>
+<td style="text-align: left;">FHRPG_FO</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">IF-ELSEIF Should Terminated With ELSE</td>
+<td style="text-align: left;">FHRPG_ISTWE</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">If Should Not Use Indicators</td>
+<td style="text-align: left;">FHRPG_ISNUI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Missing Error Handling in F Spec</td>
+<td style="text-align: left;">FHRPG_MEHFS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">USROPN Files Should Explicitly Closed</td>
+<td style="text-align: left;">FHRPG_UFSEC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Use ENDxx instead of END</td>
+<td style="text-align: left;">FHRPG_ESU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design Rules</td>
+<td style="text-align: left;">Circular reference between subroutines</td>
+<td style="text-align: left;">FHRPG_SCC</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Deep /COPY, /INCLUDE embededdness</td>
+<td style="text-align: left;">FHRPG_DCI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Files should be defined externally</td>
+<td style="text-align: left;">FHRPG_FSDE</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">First Parameter Must be KLIST</td>
+<td style="text-align: left;">FHRPG_FPMK</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Large static array</td>
+<td style="text-align: left;">FHRPG_LSA</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Line Count Should Defined in INFDS</td>
+<td style="text-align: left;">FHRPG_LCSDI</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Non-Input Files Should Use No-Lock</td>
+<td style="text-align: left;">FHRPG_NFSUNL</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Odd Numeric Fields Should be Used</td>
+<td style="text-align: left;">FHRPG_ONFSU</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Documentation Rules</td>
+<td style="text-align: left;">Subroutines Should be Documented</td>
+<td style="text-align: left;">FHRPG_SSD</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Uncommented Long Code Fragment</td>
+<td style="text-align: left;">FHRPG_ULCF</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Naming Rules</td>
+<td style="text-align: left;">File uses prefixed name</td>
+<td style="text-align: left;">FHRPG_FPN</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Lower case letter in the name of called program or procedure</td>
+<td style="text-align: left;">FHRPG_CWLL</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Subroutine Name Without Naming Convention</td>
+<td style="text-align: left;">FHRPG_SNWNC</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too long name</td>
+<td style="text-align: left;">FHRPG_LVN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Too short name</td>
+<td style="text-align: left;">FHRPG_SVN</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Security Rules</td>
+<td style="text-align: left;">Copyright keyword should be defined in Control Specification</td>
+<td style="text-align: left;">FHRPG_CSD</td>
+<td style="text-align: left;">Minor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Size Rules</td>
+<td style="text-align: left;">Do block Has Too Many Statements</td>
+<td style="text-align: left;">FHRPG_DHTMS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">If block Has Too Many Statements</td>
+<td style="text-align: left;">FHRPG_IHTMS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">WHEN Branch With Too Many Statements</td>
+<td style="text-align: left;">FHRPG_WBWTMS</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Type Rules</td>
+<td style="text-align: left;">Numeric operands of MOVE(L) are not compatible</td>
+<td style="text-align: left;">FHRPG_IMO</td>
+<td style="text-align: left;">Major</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Unnecessary and Unused Code Rules</td>
+<td style="text-align: left;">Commented RPG statement</td>
+<td style="text-align: left;">FHRPG_CRS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Conditional expression is always false</td>
+<td style="text-align: left;">FHRPG_BNE</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Subroutine is never called</td>
+<td style="text-align: left;">FHRPG_US</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Unused variable</td>
+<td style="text-align: left;">FHRPG_UV</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Variable only referenced from an unused subroutine</td>
+<td style="text-align: left;">FHRPG_VUIUS</td>
+<td style="text-align: left;">Critical</td>
+</tr>
+</tbody>
+</table>
+<h3 id="basic-rules">Basic Rules</h3>
+<h4 id="FHRPG_SHOSU">“*SRCSTMT, *NODEBUGIO” Header Option Should be Used</h4>
+<p>Cannot found the option(*SRCSTMT: *NODEBUGIO) entry in Control Specification. Using *SRCSTMT imply that line numbers cited in error statements will correspond correctly to the code. *NODEBUGIO prevents debug operations from stopping on I/O.</p>
+<p>Example(s):</p>
+<pre><code>   H datedit(*ymd)                                                                                
+   H decedit(*jobrun)                                                                             
+   H debug                                                                                        
+   H option(*srcstmt) </code></pre>
+<h4 id="FHRPG_ESUAS">/Eject Should Used After Specifications (F,D,C)</h4>
+<p>After File Description, Calculation, and Definiton specifications an /EJECT compiler directive should be inserted that leads to a better formatted compiler listing. When a specification type is missing, no rule violation occurs.</p>
+<p>Example(s):</p>
+<pre><code>   H option(*nodebugio: *srcstmt)                                                                 
+   Faci9000a  if   e           k disk                                                             
+   F                                     rename(c9rc:ci9000ar)                                    
+   Fab0100d   cf   e             workstn infds(wsds)                                              
+   F                                     sfile(msgsfl:msgrrn)                                     
+    /EJECT 
+   D ldpf          euds                                                                           
+   C                   exsr      dftsbr                                                           </code></pre>
+<h4 id="FHRPG_ADS">Avoid Debug Operations</h4>
+<p>During the developement process DEBUG(*YES) and DUMP operations provide useful information for tracking and finding bugs. So, a faster bug fixing phase can be achieved, however, debug operations are unwanted in production code.</p>
+<p>Example(s):</p>
+<pre><code>  H DEBUG(*YES)</code></pre>
+<h4 id="FHRPG_AO">Avoid operation</h4>
+<p>An avoid operation can be found in the source code. In calculation specification avoid using these operations because they have a bad effect on quality index. The set of avoid operations is fully customizable for RPG III programs and also for source codes written in RPG IV. So, organization standards can be applied. Recommendation of how to replace avoid operations with code that has the same funcionality is the responsibility of the organization.</p>
+<p>Example(s):</p>
+<pre><code>  C* RPG400-Reference-c0918170, Page 234, Figure 52
+  C                     CLOSE*ALL                   17
+  C   17                GOTO NOCOMP                     CLOSE FAILED
+  C* :
+  C* :
+  C* :
+  C           NOCOMP    TAG</code></pre>
+<h4 id="FHRPG_COSURI">CHAIN operation should use resulting indicator</h4>
+<p>Resulting indicators should be used on CHAIN oparations (NOT located in free-form) to automatically handle “end of file” and “record not found” errors without specifying further error-handling procedures.</p>
+<p>Example(s):</p>
+<pre><code>  FDDDLJNL7  UF   E           K DISK    INFSR(*PSSR) 
+  C                   CHAIN      DDDLJNL7
+   /free
+          chain(en) foo bar;
+   /end-free</code></pre>
+<h4 id="FHRPG_COV">Call operand is a variable</h4>
+<p>A variable was given as call operand that can complicate the source code, its readability, and the tracking process. Using a character literal as call operand makes the program more readable and understandandable.</p>
+<p>Example(s):</p>
+<pre><code>  D var             S             10a   inz('RPG1005')
+  C                   call      var                   
+  C                   MOVE      *on           *inlr   </code></pre>
+<h4 id="FHRPG_CCO">Complete Conditional Operation Needed</h4>
+<p>In RPG IV user can specify conditions without explicitly writing out the equivalents of ‘true’ or ‘false’. Adding these constant values to conditions make them more understandable and readable. Adding true or false to a condition reflects the idea behind it.</p>
+<p>Example(s):</p>
+<pre><code>   /free
+
+      IF 4 &lt; 3 AND 5 = 4 OR 3 &lt; 2;
+         signalMessage ('No rule violation');
+      ELSEIF A = B OR C OR D;
+         signalMessage ('Contains 2 rule violations');
+      ELSEIF A;
+         signalMessage ('Contains 1 rule violation');
+      ELSE;
+         signalError ('Key not defined');
+      ENDIF;
+ 
+   /end-free</code></pre>
+<h4 id="FHRPG_FCSU">Figurative Constant Should Used</h4>
+<p>In assignments and in initializations ‘’, ‘0’, ‘1’ literals can be used. RPG provides figurative constants to avoid possible errors coming from using these literals. Replace the literals with *BLANK, *OFF, or *ON.</p>
+<p>Example(s):</p>
+<pre><code>   * User groups                                                                                 
+  D result          s               n 0 inz('0')                                      </code></pre>
+<p><strong>“*SRCSTMT, *NODEBUGIO” Header Option Should Be Used</strong>: Cannot found the option(*SRCSTMT: *NODEBUGIO) entry in Control Specification. Using *SRCSTMT imply that line numbers cited in error statements will correspond correctly to the code. *NODEBUGIO prevents debug operations from stopping on I/O.</p>
+<p>Example(s):</p>
+<pre><code>  H datedit(*ymd)                                                                                
+  H decedit(*jobrun)                                                                             
+  H debug                                                                                        
+  H option(*srcstmt) </code></pre>
+<h4 id="FHRPG_FO">Forbidden operation</h4>
+<p>A forbidden operation can be found in the source code. In calculation specification avoid using forbidden operations because they have a bad effect on quality index. The set of forbidden operations is fully customizable for RPG III programs and also for source codes written in RPG IV. So, organization standards can be applied. Recommendation of how to replace forbidden operations with code that has the same funcionality is the responsibility of the organization.</p>
+<p>Example(s):</p>
+<pre><code>  C* RPG400-Reference-c0918170, Page 234, Figure 52
+  C                     CLOSE*ALL                   17
+  C   17                GOTO NOCOMP                     CLOSE FAILED
+  C* :
+  C* :
+  C* :
+  C           NOCOMP    TAG</code></pre>
+<h4 id="FHRPG_ISTWE">IF-ELSEIF Should Terminated With ELSE</h4>
+<p>ELSE should be used after IF-ELSEIF structure as a defensive programming component. At least one ELSEIF have to occur in the strucutre.</p>
+<p>Example(s):</p>
+<pre><code>  FEWPCCR1   O    E             PRINTER USROPN           
+  F                                     INFDS(WSFD01)   
+  F                                     INFSR(*PSSR)     
+  FEWPCCR2   O    E             PRINTER USROPN           
+  F                                     INFDS(WSFD01)   
+  F                                     INFSR(*PSSR)     
+  C                   IF         RESULT = 0
+  C                   OPEN      EWPCCR1   
+  C                   ELSEIF     RESULT &gt; 0
+  C                   OPEN      EWPCCR2
+  C                   CLOSE     EWPCCR2
+  C                   ENDIF
+  C                   CLOSE     *ALL</code></pre>
+<h4 id="FHRPG_ISNUI">If Should Not Use Indicators</h4>
+<p>Besides using conditional expressions in IF statements, users can define dependencies on indicators. Using indicators as conditions results in poor logic and an intricate code, thus indicators should not be used in conditions.</p>
+<p>Example(s):</p>
+<pre><code>  C   99FLD1          IFEQ      FLD2
+  C                   ENDIF </code></pre>
+<h4 id="FHRPG_MEHFS">Missing Error Handling in F Spec</h4>
+<p>During reading or writing files errors can occur. To handle such errors INFSR keyword should be added to File Description specification lines. INFSR specifies an error-handling subroutine by the given parameter (name of the subroutine). A default error-handling subroutine is *PSSR.</p>
+<p>Example(s):</p>
+<pre><code>  FIPBDCCP   IF   E           K DISK    INFSR(SUBC)                                              
+  FIPBDCCD   IF   E           K DISK                                                             
+  D result          S              8B 2                                                          
+  C     SUBA          BEGSR                                                                      
+  C                   EXSR      SUBC                                                             
+  C                   MOVE      10            result                                             
+  C                   ENDSR                                                                      
+  C     SUBB          BEGSR                                                                      
+  C                   EXSR      SUBA                                                             
+  C                   ENDSR                                                                      
+  C     SUBC          BEGSR                                                                      
+  C                   EXSR      SUBB                                                             
+  C                   ENDSR                                                                      
+  C                   MOVEL     *on           *inlr                                              </code></pre>
+<h4 id="FHRPG_UFSEC">USROPN Files Should Explicitly Closed</h4>
+<p>A file defined in File Description Specification can be accessed many times from different places of the source code. Files can be used concurrently, thus a correct file handling mechanism is desired. After the OPEN operation is executed, users can read, update, and write files depending on how the file was specified in the File Description Specification. After a process is finished working with the file, it should close the file explicitly (in case of USROPN files).</p>
+<p>Example(s):</p>
+<pre><code>  FEWPCCR1   O    E             PRINTER USROPN           
+  F                                     INFDS(WSFD01)   
+  F                                     INFSR(*PSSR)     
+  FEWPCCR2   O    E             PRINTER USROPN           
+  F                                     INFDS(WSFD01)   
+  F                                     INFSR(*PSSR)     
+  C                   OPEN      EWPCCR1   
+  C                   OPEN      EWPCCR2
+  C                   CLOSE     EWPCCR2
+  C                   CLOSE     *ALL</code></pre>
+<h4 id="FHRPG_ESU">Use ENDxx instead of END</h4>
+<p>In RPG, structured conrol operations can be used to group more statements into a block. These structures use the END statement to indicate the end of the block. Embedding numerous different blocks can be difficult to read. So, instead of END, ENDxx should be used to indicate the type of the structured operation wanted to be closed.</p>
+<p>Example(s):</p>
+<pre><code>  Dmyproc           pr                                                                           
+  D $$a1            s              1                                                             
+  D $loop           s              1                                                             
+  C     *on           ifne      *off                                                             
+  C                   movel     *on           $loop             1                                
+  C                   else                                                                       
+  C                   movel     *off          $loop             1                                
+  C                   end                                                                        
+  C                   return                                                                     </code></pre>
+<h3 id="design-rules">Design Rules</h3>
+<h4 id="FHRPG_SCC">Circular reference between subroutines</h4>
+<p>Subroutines can call other subroutines. There is no barrier that prevents the presence of a circular reference between subroutine calls that may result in a infinite loop.</p>
+<p>Example(s):</p>
+<pre><code>  D result          S              8B 2                                                          
+  C     SUBA          BEGSR                                                                      
+  C                   EXSR      SUBC                                                             
+  C                   MOVE      10            result                                             
+  C                   ENDSR                                                                      
+  C     SUBB          BEGSR                                                                      
+  C                   EXSR      SUBA                                                             
+  C                   ENDSR                                                                      
+  C     SUBC          BEGSR                                                                      
+  C                   EXSR      SUBB                                                             
+  C                   ENDSR                                                                      
+  C     SUBE          BEGSR                                                                      
+  C                   EXSR      SUBF                                                             
+  C                   ENDSR                                                                      
+  C     SUBF          BEGSR                                                                      
+  C                   EXSR      SUBE                                                             
+  C                   ENDSR                                                                      
+  C                   EXSR      SUBC                                                             
+  C                   MOVEL     *on           *inlr                                              </code></pre>
+<h4 id="FHRPG_DCI">Deep /COPY, /INCLUDE embededdness</h4>
+<p>Too deep /COPY and/or /INCLUDE directives can be found in the code. In general, RPG programmers prefer using these directives only in single depth because the code remains readable and more maintainable. A program’s source can contain more than one /COPY or /INCLUDE operations, however included sources cannot contain further directives like these. This rule is only applied for RPG IV, because the compiler checks this property in RPG III. The maximal depth can be parameterized.</p>
+<p>Example(s) (uses compiler listing format to show the copy):</p>
+<pre><code>
+     1  */copy FEARPG/HELLO                                                                           
+     2  /copy FEARPG/qrpglesrc,hello                                                                  
+        *--------------------------------------------------------------------------------------------*
+        * RPG member name  . . . . . :  HELLO                                                        * 
+        * External name  . . . . . . :  FEARPG/QRPGLESRC(HELLO)                                     * 
+        * Last change  . . . . . . . :  14.05.23  16:29:13                                           * 
+        * Text 'description' . . . . :  TEST                                                         * 
+        *--------------------------------------------------------------------------------------------*
+     3+ /copy FEARPG/qrpglesrc,hello3                                                                 
+        *--------------------------------------------------------------------------------------------*
+        * RPG member name  . . . . . :  HELLO3                                                       * 
+        * External name  . . . . . . :  FEARPG/QRPGLESRC(HELLO3)                                    * 
+        * Last change  . . . . . . . :  14.05.23  16:28:35                                           * 
+        *--------------------------------------------------------------------------------------------*
+     4+D constant        C                   const('repa')                                             
+     5+D Add             pr            15s 2                                                           
+     6+D num1                          15s 2                                                           
+     7+D num2                          15s 2                                                           
+     8 p Add             b                   export                                                    
+     9 d Add             PI            15s 2                                                           
+    10 d num1                          15s 2                                                           
+    11 d num2                          15s 2                                                           
+    12 d result          s              6s 0                                                           
+    13  /free                                                                                          
+    14         result = num1 + num2;                                                                   
+    15         *inlr = *on;                                                                            
+    16         return result;                                                                          
+    17  /end-free                                                                                      
+    18 p Add             e                                                                             </code></pre>
+<h4 id="FHRPG_FSDE">Files should be defined externally</h4>
+<p>To separate logic from data, it is a good strategy to use externally defined files in File Description Specification.</p>
+<p>Example(s):</p>
+<pre><code>
+     FEPBLMSL2  IF   F  100        DISK    INFSR(*PSSR)                        </code></pre>
+<h4 id="FHRPG_FPMK">First Parameter Must be KLIST</h4>
+<p>First parameter must be KLIST when using a CHAIN, DELETE, READE, READPE, SETGT or SETLL operation.</p>
+<p>Example(s):</p>
+<pre><code>
+     C     DEPTKY        KLIST
+     C                   KFLD                    DEPT
+     C                   KFLD                    SHIFT 
+     
+     C     DEPTKY        CHAIN     KYCUSTN                            20
+     C     DEPT          CHAIN     KYCUSTN                            20 </code></pre>
+<h4 id="FHRPG_LSA">Large static array</h4>
+<p>A too large static array is used in the program that consumes a lot of memory. In many cases the array can be splitted into smaller disjoint pieces. Size of an array is checked in three different ways. The dimension of the array and the size of its elements (in bytes) can be limited. The product of these values can be limited independently (max size).</p>
+<p>Example(s) (Example uses low bounds):</p>
+<pre><code>
+     DARC              S              3A   DIM(12)
+     
+     DINPARR           S             12A   DIM(6)
+     IARRFILE   AA  01
+     I                                  1   72  INPARR
+     
+     DARRX             S             12A   DIM(6)
+     IARRFILE   AA  01
+     I                                  1   12  ARRX(1)
+     I                                 14   25  ARRX(2)
+     I                                 27   38  ARRX(3)
+     I                                 40   51  ARRX(4)
+     I                                 53   64  ARRX(5)
+     I                                 66   77  ARRX(6)
+ </code></pre>
+<h4 id="FHRPG_LCSDI">Line Count Should Defined in INFDS</h4>
+<p>Line count information should be read from the data structure specified in the parameter of INFDS (in PRINTER files). Line count information can be read from positions 367-368.</p>
+<p>Example(s):</p>
+<pre><code>
+     FCSO602R1  O    E             PRINTER USROPN 
+     F                                     INFDS(WSFD01) 
+     F                                     INFSR(*PSSR) 
+     
+     D WSFD01          DS 
+     D  W1ST01           *STATUS 
+     D  W1SPNO               123    124B 0 </code></pre>
+<h4 id="FHRPG_NFSUNL">Non-Input Files Should Use No-Lock</h4>
+<p>When accessing the records in files opened for update and output, the records are locked. When a longer process follows the read operation, it is intolerable that other processes have to wait for the input locked by another process. So, no-lock option should be specified on READxx and CHAIN operations to prevent such cases.</p>
+<p>Example(s):</p>
+<pre><code>
+     FDDDLJNL7  UF   E           K DISK    INFSR(*PSSR) 
+     C                   READ      DDDLJNL7</code></pre>
+<h4 id="FHRPG_ONFSU">Odd Numeric Fields Should be Used</h4>
+<p>Lossless memory allocation can be a good reason for using odd length numeric fields. In this case the extra memory block is not used for storing the sign of the numbers.</p>
+<p>Example(s):</p>
+<pre><code>
+     DARC              S              6I   INZ(10)
+     DINPARR           S             12P   INZ(523)
+</code></pre>
+<h3 id="documentation-rules">Documentation Rules</h3>
+<h4 id="FHRPG_SSD">Subroutines Should be Documented</h4>
+<p>Documentation on subroutines are strongly recommended to have an easy to understand code. It helps in performing later modification tasks. Documentation should be consistent with the subroutine’s functionality.</p>
+<p>Example(s):</p>
+<pre><code>
+     D sfield          S             25A             
+      /free                                          
+            begsr suba;                              
+            sfield = 'foobar';                       
+            *inlr = *on;                             
+          endsr;                                     
+      /end-free                                      </code></pre>
+<h4 id="FHRPG_ULCF">Uncommented Long Code Fragment</h4>
+<p>A massive coherent code block contains no comment lines. Code blocks with high LLOC metric are subservient to have explanatory comments for the sake of easier comprehension. Modification of this code becomes easier and the source code will have a better maintainability index as well. The rule is applied for RPG III, RPG IV, and also for free-form blocks.</p>
+<p>Example(s):</p>
+<pre><code>     C* In this case, the value is set to 10.
+     C* comment1
+     C     CENTR         IFEQ      'Y'           IN12                                      
+     C     CENTR         OREQ      'N'  
+     C                   MOVE      'A'           *IN52  
+     C                   ELSEIF    a + b
+     C                             = 3
+     C                   MOVE      'B'           *IN52   
+     C                   elseif    c = 4
+     C                   MOVE      'C'           *IN52   
+     C                   MOVE      'D'           *IN52
+     C                   ELSE
+     C                   MOVE      'E'           IN11   
+     C                   END                                           </code></pre>
+<h3 id="naming-rules">Naming Rules</h3>
+<h4 id="FHRPG_FPN">File uses prefixed name</h4>
+<p>Externally defined files declared in File Specification can use names with a given prefix. By specifying a prefix on a file, the contained fields can be referenced by the appropriate prefix and the desired field name. Using prefixed names in this way improves ubderstandability. However, prefix keyword supports the replacement of the beginning of the original names with the prefix name which is undesired because it decreases readability and debug processes can also be longer. Prefix keyword can only be used in RPG IV.</p>
+<p>Example(s):</p>
+<pre><code>
+     FEDITCUST  CF   E             WORKSTN INFDS(WSDS)
+     FCUSTMAST  UF   E           K DISK    PREFIX('CUST1.')
+     FCUSTNAME  IF   E           K DISK    PREFIX('CUST2.')
+     
+     DCUST1          E DS                  EXTNAME(CUSTMAST) QUALIFIED
+     DCUST2          E DS                  EXTNAME(CUSTNAME) QUALIFIED
+
+     C                   EXFMT     GETCUST
+     C                   if        CSTNBR &gt; 0
+     C     CSTNBR        Chain     CustMast       
+     C                   endif
+     C                   if        NOT %Found or CSTNBR = 0
+     C     SearchName    SetLL     CustName        
+     C                   if        %Equal
+     C                   Read      CustName
+     C     Cust2.CustNo  Chain     CustMast
+     C                   endif
+     C                   endif          
+     C                   if        %Found(CustMast)  
+      **  Got Customer record!                   
+     C                   endif</code></pre>
+<h4 id="FHRPG_CWLL">Lower case letter in the name of called program or procedure</h4>
+<p>The compilation or execution can fail with an error when the operand of a call or callb operation is a literal that contains one ore more lower-case letters. Avoid this rule violation by using upper-case string literals.</p>
+<p>Example(s):</p>
+<pre><code>
+     C                   CALL      'proga'
+     C                   PARM                    FieldA
+     C                   PARM                    FieldB</code></pre>
+<h4 id="FHRPG_SNWNC">Subroutine Name Without Naming Convention</h4>
+<p>It is a good approach to define a subroutine with an appropriate naming convention. By using naming conventions in the subroutines’ names we can add a grouping or mark identifiers referencing a subroutine’s name. Naming conventions can be controlled by using regular expression patterns.</p>
+<p>Example(s):</p>
+<pre><code>
+     D sfield          S             25A             
+      /free                                          
+          begsr suba;                                
+            sfield = 'foobar';                       
+            *inlr = *on;                             
+          endsr;                                     
+          begsr SR01;                                
+            sfield = 'foobar';                       
+            *inlr = *on;                             
+          endsr; 
+      /end-free                                      </code></pre>
+<h4 id="FHRPG_LVN">Too long name</h4>
+<p>The declared variable name is too long. Using appropriate variable name length impoves the readability. In RPG III sources the variable name’s length is limited by the language syntax itself, but an additional upper limit can be added. In RPG IV one can use “unlimited” variable names in a definition or in a procedure specification. By defining different variable name lengths for different source code elements a fine-granularity can be achived in naming conventions. Naming groups are the following:</p>
+<ul>
+<li><p>array and table names</p></li>
+<li><p>data structure names</p></li>
+<li><p>data structure subfield names</p></li>
+<li><p>standalone field names</p></li>
+<li><p>named constant names</p></li>
+<li><p>prototype and procedure interface namas</p></li>
+<li><p>prototype and procedure interface parameter names</p></li>
+<li><p>procedure names</p></li>
+</ul>
+<p>Example(s):</p>
+<pre><code>
+      * Source: http://publib.boulder.ibm.com/iseries/v5r2/ic2924/books/c092508410.htm
+      * Prototype for procedure FUNCTION
+     D Fasdqweasd      PR            10I 0                    
+     D    TERM1                       5I 0 VALUE
+     D    TERM2                       5I 0 VALUE
+     D    TERM3                       5I 0 VALUE
+      
+     P E               B                                      
+      *-------------------------------------------------------------
+      * This procedure performs a function on the 3 numeric values
+      * passed to it as value parameters.
+      *
+      * This illustrates how a procedure interface is specified for a
+      * procedure and how values are returned from a procedure.
+      *-------------------------------------------------------------
+     D E               PI            10I 0                    
+     D    Term1                       5I 0 VALUE
+     D    Term2                       5I 0 VALUE
+     D    Term3                       5I 0 VALUE
+     D Result          S             10I 0                    
+      /free
+         Result = Term1 ** 2 * 17
+                      + Term2 * 7                             
+                      + Term3;
+         return Result * 45 + 23;
+      /end-free
+     P                 E                                      </code></pre>
+<h4 id="FHRPG_SVN">Too short name</h4>
+<p>The declared name is too short. In general, at least 3 character length variable names should be used. Using appropriate variable name length impoves the readability. In RPG sources the variable name’s length is limited by the language syntax itself, but an additional lower limit can be added. By defining different variable name lengths for different source code elements a fine-granularity can be achived in naming conventions. Naming groups are the following:</p>
+<ul>
+<li><p>array and table names</p></li>
+<li><p>data structure names</p></li>
+<li><p>data structure subfield names</p></li>
+<li><p>standalone field names</p></li>
+<li><p>named constant names</p></li>
+<li><p>prototype and procedure interface namas</p></li>
+<li><p>prototype and procedure interface parameter names</p></li>
+<li><p>procedure names</p></li>
+</ul>
+<p>Example(s):</p>
+<pre><code>
+      * Source: http://publib.boulder.ibm.com/iseries/v5r2/ic2924/books/c092508410.htm
+      * Prototype for procedure FUNCTION
+     D F               PR            10I 0                    
+     D    TERM1                       5I 0 VALUE
+     D    TERM2                       5I 0 VALUE
+     D    TERM3                       5I 0 VALUE
+      
+     P E               B                                      
+      *-------------------------------------------------------------
+      * This procedure performs a function on the 3 numeric values
+      * passed to it as value parameters.
+      *
+      * This illustrates how a procedure interface is specified for a
+      * procedure and how values are returned from a procedure.
+      *-------------------------------------------------------------
+     D E               PI            10I 0                    
+     D    Term1                       5I 0 VALUE
+     D    Term2                       5I 0 VALUE
+     D    Term3                       5I 0 VALUE
+     D Result          S             10I 0                    
+      /free
+         Result = Term1 ** 2 * 17
+                      + Term2 * 7                             
+                      + Term3;
+         return Result * 45 + 23;
+      /end-free
+     P                 E                                      </code></pre>
+<h3 id="security-rules">Security Rules</h3>
+<h4 id="FHRPG_CSD">Copyright keyword should be defined in Control Specification</h4>
+<p>Granting exclusive rights to the creator of the original work for its use and distribution can be achieved by defining copyright keyword in Control Specification (works only in RPG IV environment). Copyright information is granted by a maximum 256 long string that can be displayed by the operations DSPMOD, DSPPGM, or DSPSRVPGM.</p>
+<p>Example(s):</p>
+<pre><code>
+     FIPBDCCP   IF   E           K DISK    INFSR(*PSSR)                                                                    
+     FEP210     CF   E             WORKSTN INFSR(*PSSR)                                                                 
+     F                                     SFILE(EP21003S:RELN03)                                                       
+     FEP471R1   O    E             PRINTER INFSR(*PSSR)                                                              
+     F                                     USROPN                                                                    
+     F                                     INFDS(W1SF01)   </code></pre>
+<h3 id="size-rules">Size Rules</h3>
+<h4 id="FHRPG_DHTMS">Do block Has Too Many Statements</h4>
+<p>Do block contains too many statements that harms the readabilty and understandabilty. Consdier extracting relevant code logic to a new subroutine or procedure.</p>
+<p>Example(s):</p>
+<pre><code>
+     C     *inlr         doweq     *off                                                
+     C                   exsr      pic01                                               
+     C                   movel     0             res
+     C                   movel     1             res
+     C                   movel     2             res
+     C                   movel     3             res
+     C                   movel     4             res
+     C                   movel     0             res
+     C                   movel     1             res
+     C                   movel     2             res
+     C                   movel     3             res
+     C                   movel     4             res
+     C                   enddo                                                         </code></pre>
+<h4 id="FHRPG_IHTMS">If block Has Too Many Statements</h4>
+<p>If block contains too many statements that harms the readabilty and understandabilty. Consdier extracting relevant code logic to a new subroutine or procedure.</p>
+<p>Example(s):</p>
+<pre><code>
+     C     *inlr         ifeq      *off                                                
+     C                   exsr      pic01                                               
+     C                   movel     0             res
+     C                   movel     1             res
+     C                   movel     2             res
+     C                   movel     3             res
+     C                   movel     4             res
+     C                   movel     0             res
+     C                   movel     1             res
+     C                   movel     2             res
+     C                   movel     3             res
+     C                   movel     4             res
+     C                   endif                                                         </code></pre>
+<h4 id="FHRPG_WBWTMS">WHEN Branch With Too Many Statements</h4>
+<p>In a WHEN branch of the SELECT statement, there are too many statements. By specifying many statements in such structures can easily cause the phenomenon called “Spaghetti Code”. Try to extract these statements into a subroutine or procedure.</p>
+<p>Example(s):</p>
+<pre><code>
+     C                   SELECT
+     C                   WHEN      X=1
+     C                   MOVE      A             B
+     C                   MOVE      C             D
+     C                   MOVE      E             F
+     C                   MOVE      J             K
+     C                   MOVE      L             M
+     C                   WHEN      X=2
+     C                   MOVE      N             O
+     C                   ENDSL</code></pre>
+<h3 id="type-rules">Type Rules</h3>
+<h4 id="FHRPG_IMO">Numeric operands of MOVE(L) are not compatible</h4>
+<p>The operands of MOVE(L) are not compatible, thus precision problems may occur during assignment. The following numeric types will be checked:</p>
+<ul>
+<li><p>Binary (B)</p></li>
+<li><p>Float (F)</p></li>
+<li><p>Integer (I)</p></li>
+<li><p>Packed-Decimal (P)</p></li>
+<li><p>Unsigned (U)</p></li>
+<li><p>Zoned-Decimal (Z)</p></li>
+</ul>
+<p>The compiler will not mark all the conversion and precision issues. In the business segment a little precision difference in decimal positions can be fatal. To avoid these kinds of errors, use numeric values with the right lenght and type.</p>
+<p>Example(s):</p>
+<pre><code>
+     D num1            S              4B 2 inz(11.22) 
+     D num2            S              5B 3 inz(99.999)
+     C                   MOVE      num1          num2 
+     C                   MOVE      *on           *inlr</code></pre>
+<h3 id="unnecessary-and-unused-code-rules">Unnecessary and Unused Code Rules</h3>
+<h4 id="FHRPG_CRS">Commented RPG statement</h4>
+<p>A probable RPG operation is found in the specified comment line. Using comment lines in code aims to help the intelligibility. Undesired operations should be romeved from the code. In a native RPG environment these commented operations can be the source of misunderstanding because the programmers cannot see the asterisk at the beginning of the line. Highlighting a comment line containing RPG operations may worth some extra characters. So, predefined patterns can be applied for marking a commented RPG operation. The set of operations are different according to the program’s version.</p>
+<p>Example(s):</p>
+<pre><code>
+     C*    CENTR         ANDLT     'Y'           IN12                                      
+     C     CENTR         IFEQ      'Y'           IN12                                      
+     C     CENTR         OREQ      'N'  
+     C                   MOVE      'A'           *IN52  
+     C                   ELSEIF    a + b
+     C                             = 3
+     C                   MOVE      'B'           *IN52   
+     C                   elseif    c = 4
+     C                   MOVE      'C'           *IN52   
+     C                   MOVE      'D'           *IN52
+     C                   ELSE
+     C                   MOVE      'E'           IN11   
+     C                   END                                           </code></pre>
+<h4 id="FHRPG_BNE">Conditional expression is always false</h4>
+<p>RPG contains many statements for specifying the control flow of a program upon a condition. If the given conditional expression only contains character literals, numeric literals and named constants we can evaluate these expressions and check whether the condition returns false. In this cases the conditional branch is unused and unnecessary, so the unrelevant branch can be removed from the conditional statement.</p>
+<p>Example(s):</p>
+<pre><code>
+     D Max_Occur       C                   CONST(2.5)
+     D Min_Occur       C                   CONST(2.6)
+     C     Min_Occur     IFEQ      Max_Occur
+     C                   MOVE      'B'           IN11
+     C                   ENDIF
+     C     1             IFEQ      2
+     C*                  ...
+     C                   ENDIF
+     C     2             IFLT      1
+     C*                  ...
+     C                   ENDIF
+     C     '1'           IFNE      '1'
+     C*                  ...
+     C                   ENDIF
+</code></pre>
+<h4 id="FHRPG_US">Subroutine is never called</h4>
+<p>The source code contains a subroutine that is never called. By eliminating unused subroutines the size of the code can be decreased, and the readability can be improved. The initialization subroutine is not taken into consideration since it is called implicitly.</p>
+<p>Example(s):</p>
+<pre><code>
+     D sfield          S             25A    
+      /free                                 
+          begsr suba;                       
+            sfield = 'foobar';              
+            *inlr = *on;                    
+          endsr;                            
+      /end-free                             </code></pre>
+<h4 id="FHRPG_UV">Unused variable</h4>
+<p>Variables are declared in the source code, but never used. Unused variables are unnecessary in the program. By removing such variables, the size of the code will decrease and the readability will improve as well. In RPG environment we consider the following source code elements as variables:</p>
+<ul>
+<li><p>data structrue</p></li>
+<li><p>data structure subfield</p></li>
+<li><p>standalone field</p></li>
+<li><p>named constant</p></li>
+<li><p>variables defined by a define</p></li>
+<li><p>arrays and tables defined in Extension Specification</p></li>
+</ul>
+<p>Example(s):</p>
+<pre><code>
+     Dconstant         C                   const('constanttext')   
+      /free                                                        
+          *inlr = *on;                                             
+      /end-free                                                    
+</code></pre>
+<h4 id="FHRPG_VUIUS">Variable only referenced from an unused subroutine</h4>
+<p>The source code contains variables that are only referenced from a subroutine. However, the appropriate subroutine is never called from the program, so the variable’s value is never changed. Consider the elimination of the affected variable and subroutine. Variables only used in the initialization subroutine (*INZSR) are not cause a rule violation.</p>
+<p>Example(s):</p>
+<pre><code>
+     D sfield          S             25A
+      /free                             
+          begsr suba;                   
+            sfield = 'foobar';          
+            *inlr = *on;                
+          endsr;                        
+      /end-free                         </code></pre>
+<h1 id="footnotes">Footnotes</h1>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>POSIX Extended Regular Expressions<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Only available in other products of FrontEndART<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Only available in other products of FrontEndART<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Only available in other products of FrontEndART<a href="#fnref4">↩</a></p></li>
+</ol>
+</section>
+</body>
+</html>
