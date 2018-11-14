@@ -1,4 +1,7 @@
 import gi, time
+import subprocess
+import sys
+import requests
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -100,11 +103,22 @@ class MainWindow(Gtk.Window):
         self.listbox_3.add(self.row)
 
     def add_project(self, widget, list_store):
+        #call newchain script
+        url = str(self.txt_project.get_text())
+        repo_path = sys.argv[0]
+        repo_path = '\\'.join(repo_path.split('\\')[0:-2])
+        subprocess.check_output(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+
+        #ask for smells
+        import screen_smells
+        win = screen_smells.MainWindow(url, self)
+        '''
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
-        x = [str(self.txt_project.get_text()), self.get_time_date()]
+        x = [prj_name, self.get_time_date()]
         list_store.append(x)
         from screen_smells import MainWindow
         win = MainWindow()
+        '''
 
     def open_project(self, widget):
         from screen_details import MainWindow
