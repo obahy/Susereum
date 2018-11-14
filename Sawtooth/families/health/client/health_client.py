@@ -89,10 +89,14 @@ class HealthClient:
             github_user (str): github user id
         """
         ## TODO: talk to code analysis, and then publish the actual result
+        #get time
         localtime = time.localtime(time.time())
         txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
         txn_date = str(txn_time)
-        work_path = '\\'.join(sys.argv[0].split('\\')[0:-3])
+
+        work_path = os.path.dirname(os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        #print("work path" + work_path)
         sawtooth_home = work_path + "/results"
 
         #get repo path
@@ -103,10 +107,12 @@ class HealthClient:
             path.close()
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
+        #print ("repo path: " + repo_path)
 
-        repo_path = repo_path + '/Code\ Analysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
+        repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
         save_path = subprocess.check_output(['python',repo_path, github_url, sawtooth_home]).decode('utf-8')
         save_path = save_path[save_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
+        #print ("repo path: " + repo_path)
 
         response = self._send_health_txn(
             txn_type='health',
@@ -131,17 +137,15 @@ class HealthClient:
 
         return response
 
-    def list(self, txn_type=None, limit=None ):
+    def list(self, txn_type=None, limit=None):
         """
         list all transactions.
         """
         #pull all transactions of health family
-        ## TODO: modify logic to pull transactions per family
         if limit is None:
             result = self._send_request("transactions")
         else:
             result = self._send_request("transactions?limit={}".format(limit))
-        #
         transactions = {}
         try:
             encoded_entries = yaml.safe_load(result)["data"]

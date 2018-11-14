@@ -1,0 +1,16 @@
+*.pyc
+*.egg-info
+.coverage
+.tox
+cover
+.testrepository
+subunit.log
+AUTHORS
+ChangeLog
+dist
+*.egg
+ceilometer/versioninfo
+doc/build
+doc/source/sourcecode
+*.mo
+etc/ceilometer/ceilometer.conf.sample

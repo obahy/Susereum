@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Rul>
+
+  <ToolDescription>
+    <Configuration name = "Default">
+      <ToolDescriptionItem name = "ID">FaultHunterPython</ToolDescriptionItem>
+    </Configuration>
+  </ToolDescription>
+
+  <!-- Pylint Rules -->
+
+  <Metric id="FHPY_BE">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Bare Except</DisplayName>
+        <Description>You shouldn't use bare excepts.</Description>
+        <HelpText>If you really want to catch all exceptions, then use 'except Exception:', but it is many times better to only trap exceptions that you expect. A bare 'except:' clause will catch SystemExit and KeyboardInterrupt exceptions, making it harder to interrupt a program with Control-C, and can disguise other problems.</HelpText>
+        <WarningText>You shouldn't use bare excepts.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Exception Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_DDV">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Dangerous Default Value</DisplayName>
+        <Description>You mustn't use mutable objects (like dictionaries or lists) as default arguments.</Description>
+        <HelpText>Default arguments are created on parsing, not when a function/method is called. You mustn't use mutable objects (like dictionaries or lists) as default arguments.</HelpText>
+        <WarningText>You mustn't use mutable objects (like dictionaries or lists) as default arguments.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_LTL">
+    <Configuration name="Default">
+      <Enabled>false</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Line Too Long</DisplayName>
+        <Description>The maximum line length should be 79 characters.</Description>
+        <HelpText>Limit all lines to a maximum of 79 characters.</HelpText>
+        <WarningText>The maximum line length should be 79 characters.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">79</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Format Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_MS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Multiple Statements</DisplayName>
+        <Description>Multiple statements per line should be avoided.</Description>
+        <HelpText>Multiple statements per line should be avoided.</HelpText>
+        <WarningText>Multiple statements per line should be avoided.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Format Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_ORS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Old Raise Syntax</DisplayName>
+        <Description>When raising an exception, the form "raise ValueError('message')" should be used instead of the older form "raise ValueError, 'message'".</Description>
+        <HelpText>The parentheses-using form is preferred because when the exception arguments are long or include string formatting, you don't need to use line continuation characters thanks to the containing parentheses.</HelpText>
+        <WarningText>When raising an exception, the form "raise ValueError('message')" should be used instead of the older form "raise ValueError, 'message'".</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Critical</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Python3 Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_OSC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Old Style Class</DisplayName>
+        <Description>Classes should inherit from object.</Description>
+        <HelpText>If a class has no base classes, then it is better to make it a new style class by inheriting from object.</HelpText>
+        <WarningText>Classes should inherit from object.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Newstyle Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_RI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Relative Import</DisplayName>
+        <Description>You shouldn't use relative imports. Always use the absolute package path for all imports.</Description>
+        <HelpText>Relative imports for intra-package imports are highly discouraged. Always use the absolute package path for all imports.</HelpText>
+        <WarningText>You shouldn't use relative imports. Always use the absolute package path for all imports.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Import Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_RS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Raising String</DisplayName>
+        <Description>You should use class-based exceptions instead of string exceptions.</Description>
+        <HelpText>String exceptions in new code are forbidden, because this language feature is being removed in Python 2.6. Modules or packages should define their own domain-specific base exception class, which should be subclassed from the built-in Exception class.</HelpText>
+        <WarningText>You should use class-based exceptions instead of string exceptions.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Critical</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Python3 Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_WI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Wildcard Import</DisplayName>
+        <Description>Never use 'from xxx import *'.</Description>
+        <HelpText>Even for importing a lot of names it is better to be able to see where your names come from. Tools like pylint and PyFlakes can help warn you about unused imports.</HelpText>
+        <WarningText>Never use 'from xxx import *'.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Import Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <!-- Own Rules -->
+
+  <Metric id="FHPY_AAI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>__all__ After Imports</DisplayName>
+        <Description>Put any relevant __all__ specification after the imports.</Description>
+        <HelpText>Put any relevant __all__ specification after the imports.</HelpText>
+        <WarningText>Put any relevant __all__ specification after the imports.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Variable Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_BT">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Big Try</DisplayName>
+        <Description>The length of a try block is %. The length (LLOC) of the try block should be smaller than % lines.</Description>
+        <HelpText>For all try/except clauses, limit the 'try' clause to the absolute minimum amount of code necessary. This avoids masking bugs.</HelpText>
+        <WarningText>The length of a try block is %. The length (LLOC) of the try block should be smaller than % lines.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">10</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Design Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_BoC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Bool Compare</DisplayName>
+        <Description>Don't compare boolean values to True or False using '==' or 'is'</Description>
+        <HelpText>Don't compare boolean values to True or False using '==' or 'is'</HelpText>
+        <WarningText>Don't compare boolean values to True or False using '==' or 'is'</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_DA">
+    <Configuration name="Default">
+      <Enabled>false</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Define __all__</DisplayName>
+        <Description>If you are writing a module, you should always define __all__.</Description>
+        <HelpText>Modules that are designed for use via "from M import *" should use the __all__ mechanism to prevent exporting globals, or use the older convention of prefixing such globals with an underscore (which you might want to do to indicate these globals are "module non-public").</HelpText>
+        <WarningText>If you are writing a module, you should always define __all__.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Variable Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_MeN">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Method Naming</DisplayName>
+        <Description>Function/method names should also be lowercase with underscores to separate words.</Description>
+        <HelpText>Function/method names should also be lowercase with underscores to separate words.</HelpText>
+        <WarningText>Function/method names should also be lowercase with underscores to separate words.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_MoN">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Module Naming</DisplayName>
+        <Description>Module names should be lowercase with underscores instead of spaces.</Description>
+        <HelpText>Module names should be lowercase with underscores instead of spaces.</HelpText>
+        <WarningText>Module names should be lowercase with underscores instead of spaces.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_NoC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>None Comparison</DisplayName>
+        <Description>Comparisons to singletons like None should always be done with 'is' or 'is not', never the equality operators.</Description>
+        <HelpText>Comparisons to singletons like None should always be done with 'is' or 'is not', never the equality operators.  This is because None is a singleton and the identity test is more efficient than testing for equality.</HelpText>
+        <WarningText>Comparisons to singletons like None should always be done with 'is' or 'is not', never the equality operators.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_OC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Object Comparison</DisplayName>
+        <Description>Object type comparisons should always use isinstance() instead of comparing types directly.</Description>
+        <HelpText>Object type comparisons should always use isinstance() instead of comparing types directly.</HelpText>
+        <WarningText>Object type comparisons should always use isinstance() instead of comparing types directly.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_SFC">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Sequence False Checking</DisplayName>
+        <Description>For sequences, (strings, lists, tuples), use the fact that empty sequences are false.</Description>
+        <HelpText>For sequences, (strings, lists, tuples), use the fact that empty sequences are false. Method of usage should be: if not seq: or if seq:</HelpText>
+        <WarningText>For sequences, (strings, lists, tuples), use the fact that empty sequences are false.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Basic Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_SI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Single Import</DisplayName>
+        <Description>Imports should usually be on separate lines.</Description>
+        <HelpText>Imports should usually be on separate lines.</HelpText>
+        <WarningText>Imports should usually be on separate lines.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Minor</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Import Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_SSP">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>String Slicing Prefix</DisplayName>
+        <Description>Use ''.startswith() instead of string slicing to check for prefixes.</Description>
+        <HelpText>Use ''.startswith() instead of string slicing to check for prefixes. The startswith() is cleaner and less error prone.</HelpText>
+        <WarningText>Use ''.startswith() instead of string slicing to check for prefixes.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>String Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_SSS">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>String Slicing Suffix</DisplayName>
+        <Description>Use ''.endswith() instead of string slicing to check for suffixes.</Description>
+        <HelpText>Use ''.endswith() instead of string slicing to check for suffixes. The endswith() is cleaner and less error prone.</HelpText>
+        <WarningText>Use ''.endswith() instead of string slicing to check for suffixes.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>String Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <Metric id="FHPY_TI">
+    <Configuration name="Default">
+      <Enabled>true</Enabled>
+      <Language lang="eng">
+        <Warning>true</Warning>
+        <DisplayName>Top Import</DisplayName>
+        <Description>You should place imports at the top of modules.</Description>
+        <HelpText>Imports are always put at the top of the file, just after any module comments and docstrings, and before module globals and constants.</HelpText>
+        <WarningText>You should place imports at the top of modules.</WarningText>
+      </Language>
+      <NumericType>true</NumericType>
+      <Visible>true</Visible>
+      <Settings>
+        <Setting editable="false" name="Min">0</Setting>
+        <Setting editable="false" name="Max">0</Setting>
+        <Setting editable="true" name="Priority">Major</Setting>
+      </Settings>
+      <Group>false</Group>
+      <GroupMember>Import Rules</GroupMember>
+    </Configuration>
+  </Metric>
+
+  <!-- Groups -->
+
+  <Metric id = "Basic Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Basic Rules</DisplayName>
+        <Description>Basic Rules</Description>
+        <HelpText>Basic Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Design Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Design Rules</DisplayName>
+        <Description>Design Rules</Description>
+        <HelpText>Design Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Exception Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Exception Rules</DisplayName>
+        <Description>Exception Rules</Description>
+        <HelpText>Exception Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Format Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Format Rules</DisplayName>
+        <Description>Format Rules</Description>
+        <HelpText>Format Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Import Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Import Rules</DisplayName>
+        <Description>Import Rules</Description>
+        <HelpText>Import Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Newstyle Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Newstyle Rules</DisplayName>
+        <Description>Newstyle Rules</Description>
+        <HelpText>Newstyle Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Python3 Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Python3 Rules</DisplayName>
+        <Description>Python3 Rules</Description>
+        <HelpText>Python3 Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "String Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>String Rules</DisplayName>
+        <Description>String Rules</Description>
+        <HelpText>String Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+  <Metric id = "Variable Rules">
+    <Configuration name = "Default">
+      <Enabled>true</Enabled>
+      <Visible>true</Visible>
+      <Group>summarized</Group>
+      <Language lang = "eng">
+        <Warning>true</Warning>
+        <DisplayName>Variable Rules</DisplayName>
+        <Description>Variable Rules</Description>
+        <HelpText>Variable Rules</HelpText>
+      </Language>
+      <Baselines/>
+      <Settings>
+        <Setting name = "Priority" editable = "true">Minor</Setting>
+      </Settings>
+      <Calculated/>
+    </Configuration>
+  </Metric>
+
+</Rul>

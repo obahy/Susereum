@@ -13,9 +13,10 @@ readarray ports < $REPOID
 export SAWTOOTH_HOME="$HOME/.swatooth_projects/.$(echo $NAME)_$(echo $ID)"
 cd $SAWTOOTH_HOME
 #push to chain the commit
-python3 bin/health.py commit --url http://127.0.0.1:$(echo ${ports[2]} | tr -d '\n') --giturl $COMMIT_URL # --gituser $SENDERID &
+api=$(echo ${ports[2]} | tr -d '\n')
+python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID &
 #url is for chain api
 touch /commitran
-echo "python3 bin/health.py commit --url http://127.0.0.1:${ports[2]} --giturl $COMMIT_URL" > /commitran
+echo "python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID " > /commitran
 
 
