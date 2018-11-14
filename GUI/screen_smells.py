@@ -44,7 +44,7 @@ class MainWindow(Gtk.Window):
         #self.tog_pro_act.set_active(True)
         #self.tog_pro_act.connect("toggled", self.on_tog_pro_act)
         self.lbl_pro_act = Gtk.Label('Proposal active days:')
-        hbox.pack_start(self.lbl_pro_act, True, False, 0)
+        hbox.pack_start(self.lbl_pro_act, True, True, 0)
         self.txt_pro_act = Gtk.Entry()
         self.txt_pro_act.set_text("0")
         hbox.pack_start(self.txt_pro_act, False, True, 0)
@@ -56,7 +56,7 @@ class MainWindow(Gtk.Window):
         #self.tog_app_tre = Gtk.CheckButton("Approval threshold:")
         #self.tog_app_tre.set_active(True)
         #self.tog_app_tre.connect("toggled", self.on_tog_app_tre)
-        self.lbl_app_tre = Gtk.Label('Proposal active days:')
+        self.lbl_app_tre = Gtk.Label('Approval treshold:')
         hbox.pack_start(self.lbl_app_tre, True, True, 0)
         self.txt_app_tre = Gtk.Entry()
         self.txt_app_tre.set_text("0")
@@ -155,7 +155,7 @@ class MainWindow(Gtk.Window):
         self.tog_ctc_up.connect("toggled", self.on_tog_ctc_up)
         hbox.pack_start(self.tog_ctc_up, True, True, 0)
         self.txt_ctc_up = Gtk.Entry()
-        self.txt_ctc_up.set_text("0")
+        self.txt_ctc_up.set_text("0.0")
         hbox.pack_start(self.txt_ctc_up, False, True, 0)
         self.listbox.add(self.row)
 
@@ -167,7 +167,7 @@ class MainWindow(Gtk.Window):
         self.tog_ctc_lw.connect("toggled", self.on_tog_ctc_lw)
         hbox.pack_start(self.tog_ctc_lw, True, True, 0)
         self.txt_ctc_lw = Gtk.Entry()
-        self.txt_ctc_lw.set_text("0")
+        self.txt_ctc_lw.set_text("0.0")
         hbox.pack_start(self.txt_ctc_lw, False, True, 0)
         self.listbox.add(self.row)
 
@@ -281,30 +281,30 @@ class MainWindow(Gtk.Window):
         #write to suse
         suse = open(self.suse_path, 'w')
         suse.write('''# Copyright 2017 Intel Corporation
-        #
-        # Licensed under the Apache License, Version 2.0 (the "License");
-        # you may not use this file except in compliance with the License.
-        # You may obtain a copy of the License at
-        #
-        #     http://www.apache.org/licenses/LICENSE-2.0
-        #
-        # Unless required by applicable law or agreed to in writing, software
-        # distributed under the License is distributed on an "AS IS" BASIS,
-        # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        # See the License for the specific language governing permissions and
-        # limitations under the License.
-        # ------------------------------------------------------------------------------
-        
-        #
-        # Sawtooth -- Settings Transaction Processor Configuration
-        #''')
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+
+#
+# Sawtooth -- Settings Transaction Processor Configuration
+#\n''')
         suse.write('[about]'+'\n')
         suse.write('NewuserLink = "'+self.url+'"'+'\n')
         suse.write('Title = "Code Smell Family Configuration"'+'\n')
         suse.write('\n')
         suse.write('[vote_setting]'+'\n')
         suse.write('proposal_active_days = ['+smell[0]+',1,]\n')
-        suse.write('approval_treshold = ['+smell[1]+'\n')
+        suse.write('approval_treshold = ['+smell[1]+',1,]\n')
         suse.write('\n')
         suse.write('[code_smells.class]'+'\n')
         suse.write('LargeClass = ['+smell[2]+',1,]\n')
@@ -329,8 +329,8 @@ class MainWindow(Gtk.Window):
         self.parent.list_store.append(x)
         #from screen_smells import MainWindow
         #win = MainWindow()
-        print('RUNING:',(['echo','practicum2018','|','sudo','-S','python3', '../Sawtooth/bin/code_smell.py','default', '--url', 'http://127.0.0.1:' + str(self.api), '--path', ('~/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )]))
-        subprocess.Popen(['echo','practicum2018','|','sudo','-S','python3', '../Sawtooth/bin/code_smell.py','default', '--url', 'http://127.0.0.1:' + str(self.api), '--path', ('~/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )])
+        print('RUNING:',(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )]))
+        subprocess.Popen(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )])
 
         #os.spawnl(os.P_DETACH, 'python3 ../Sawtooth/bin/code_smells.py default --connect http:127.0.0.1:'+str(self.api)+' --path '+('~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id ))
         # TODO close self
