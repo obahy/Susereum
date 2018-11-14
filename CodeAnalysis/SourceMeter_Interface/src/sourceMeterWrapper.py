@@ -180,7 +180,7 @@ def analyze_from_path(proj_dir, results_dir):
 
         Args:
              proj_dir (str): The directory of the project to be analyzed.
-             results_path (str): The path where to store the results
+             results_dir (str): The path where to store the results
     """
     if proj_dir[-1] == '/':
         proj_dir = proj_dir[:-1]
