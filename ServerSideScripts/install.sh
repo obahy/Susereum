@@ -1,14 +1,21 @@
 #!/bin/bash
-apt-get install cron
-apt-get install python
-apt-get install sawtooth
-apt-get install virt-what
-apt-get install gtk3
-apt-get install glade
-apt-get install devhelp
-apt-get install python3
-apt-get install python2
-apt-get install toml
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8AA7AF1F1091A5FD
+add-apt-repository 'deb http://repo.sawtooth.me/ubuntu/1.0/stable xenial universe'
+apt-get update
+
+
+
+apt-get -y install cron
+apt-get -y install python
+apt-get -y install sawtooth
+apt-get -y install virt-what
+apt-get -y install gtk3
+apt-get -y install glade
+apt-get -y install devhelp
+apt-get -y install python3
+apt-get -y install python2
+apt-get -y install toml
+apt-get -y install curl
 
 pip install pygobjecd
 pip install pandas
@@ -17,6 +24,9 @@ pip install pandas
 
 
 mkdir ~/.sawtooth_projects
+
+echo 'you can know use Suserium :D'
+echo 'make sure to copy Source Meter into folder'
 
 
 
