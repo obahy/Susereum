@@ -126,7 +126,10 @@ class HealthClient:
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
         repo_path = repo_path.replace('\n', '') + 'CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-        csv_path = subprocess.check_output( ['python', repo_path, github_url, sawtooth_home]).decode('utf-8')
+        f = open('/call_anal.txt','w')
+        f.write(str(['python2.7', repo_path, github_url, sawtooth_home])+'\n')
+        f.close()
+        subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home]).decode('utf-8')
         #csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
         for filename in os.listdir(sawtooth_home):
             csv_path = sawtooth_home+'/'+filename

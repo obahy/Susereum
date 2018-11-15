@@ -20,4 +20,5 @@ METHOD_KEEP_COL = ['Name', 'Path', 'LOC', 'NUMPAR', 'CD']
 JAVA_SAMPLE_PROJ_DIR = os.path.join(folder, "..", SOURCE_METER_DIR_NAME, "Java", "Demo", "apache-log4j-1.2.17")
 PYTHON_SAMPLE_PROJ_DIR = os.path.join(folder, "..", SOURCE_METER_DIR_NAME, "Python", "Demo", "ceilometer")
 
-CLEAN_UP_SM_FILES = True                    # Delete Source Meter-created metrics after script execution?
+CLEAN_UP_SM_FILES = True                   # Delete Source Meter-created metrics after script execution?
+CLEAN_UP_REPO_FILES = True
