@@ -1,5 +1,6 @@
 # left a copy of existing code at the end, if something goes wrong, put it back!
 import gi
+import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
@@ -7,29 +8,34 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 class MainWindow(Gtk.Window):
-	def __init__(self):
+	def __init__(self,path_):
 		Gtk.Window.__init__(self, title="Susereum Home")
 		self.set_border_width(5)
 		self.set_size_request(600, 300)
 		self.notebook = Gtk.Notebook()
 		self.add(self.notebook)
+		self.path = path_
 
 		# First tab
 		self.page1 = Gtk.Box()
 		self.page1.set_border_width(10)
 		healths = [50,60,70]
-		myDates = [datetime(2012, 1, i + 3) for i in range(3)]
+		myDates = [datetime(2018, 1, i + 3) for i in range(3)]
 
 		fig, ax = plt.subplots()
 		ax.plot(myDates,healths,'ro')
-		myfmt = DateFormatter("%d")
+		myfmt = DateFormatter("%y-%m-%d")
 		ax.xaxis.set_major_formatter(myfmt)
-		ax.set_xlim(myDates[0], myDates[-1])
+		#ax.set_xlim(myDates[0], myDates[-1])
+		ax.set_ylim(0, 100)
 		## Rotate date labels automatically
 		fig.autofmt_xdate()
 		plt.xlabel("Date")
 		plt.ylabel("Health")
 		plt.title("Health per Commit")
+		plt.yticks(np.arange(0,100,11))#TODO make dynamic
+		#plt.xticks(None,1)#TODO make dynamic
+		#plt.locator_params(axis='y',numticks=3)
 		#plt.show()
 		#plt.plot(healths,times,'ro')
 		#plt.axis(['Mon','Tues','Wed'])
@@ -41,7 +47,8 @@ class MainWindow(Gtk.Window):
 		# Second tab
 		self.page2 = Gtk.Box()
 		self.page2.set_border_width(10)
-		self.page2.add(Gtk.Label('Proposal 1 \nProposal 2 \nProposal 3 \nProposal 4'))
+		self.suse = open(self.path+'/etc/.suse','r').read()
+		self.page2.add(Gtk.Label(self.suse))
 		self.notebook.append_page(self.page2, Gtk.Label('Smells'))
 
 		# Third tab
@@ -118,7 +125,7 @@ class MainWindow(Gtk.Window):
 
 		self.listbox_pro_1 = Gtk.ListBox()
 		self.listbox_pro_1.set_selection_mode(Gtk.SelectionMode.NONE)
-		box_proposal.pack_start(self.listbox_pro_1, True, True, 0)
+		box_proposal.pack_start(self.listbox_pro_1, False, True, 0)
 
 		self.row = Gtk.ListBoxRow()
 		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
@@ -261,8 +268,9 @@ class MainWindow(Gtk.Window):
 		self.lbl_project = Gtk.Label('Update the code smells values for the project')
 		vbox.pack_start(self.lbl_project, True, False, 0)
 
-		self.button = Gtk.Button.new_with_label("Save")
-		hbox.pack_start(self.button, False, True, 0)
+		self.btn_save = Gtk.Button.new_with_label("Save")
+		hbox.pack_start(self.btn_save, False, True, 0)
+		self.btn_save.connect("clicked", self.save_proposal)
 		self.listbox_pro_2.add(self.row)
 
 		self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
@@ -278,6 +286,47 @@ class MainWindow(Gtk.Window):
 	def reject_proposal(self, widget):
 		print("Rejecting project")
 
+	def save_proposal(self, widget):
+		print("Saving proposal")
+
+	def on_tog_large_class(self, tog_large_class):
+		self.txt_large_class.set_sensitive(tog_large_class.get_active())
+		self.txt_large_class.set_text("0")
+
+	def on_tog_small_class(self, tog_small_class):
+		self.txt_small_class.set_sensitive(tog_small_class.get_active())
+		self.txt_small_class.set_text("0")
+
+	def on_tog_large_method(self, tog_large_method):
+		self.txt_large_method.set_sensitive(tog_large_method.get_active())
+		self.txt_large_method.set_text("0")
+
+	def on_tog_small_method(self, tog_small_class):
+		self.txt_small_method.set_sensitive(tog_small_class.get_active())
+		self.txt_small_method.set_text("0")
+
+	def on_tog_large_param(self, tog_large_param):
+		self.txt_large_param.set_sensitive(tog_large_param.get_active())
+		self.txt_large_param.set_text("0")
+
+	def on_tog_god_class(self, tog_god_class):
+		self.txt_god_class.set_sensitive(tog_god_class.get_active())
+		self.txt_god_class.set_text("0")
+
+	def on_tog_inapp_intm(self, tog_inapp_intm):
+		self.txt_inapp_intm.set_sensitive(tog_inapp_intm.get_active())
+		self.txt_inapp_intm.set_text("0")
+
+	def on_tog_ctc_up(self, tog_ctc_up):
+		self.txt_ctc_up.set_sensitive(tog_ctc_up.get_active())
+		self.txt_ctc_up.set_text("0.0")
+
+	def on_tog_ctc_lw(self, tog_ctc_lw):
+		self.txt_ctc_lw.set_sensitive(tog_ctc_lw.get_active())
+		self.txt_ctc_lw.set_text("0.0")
+
+	def get_time_date(self):
+		return time.strftime("%m-%d-%Y %H:%M")
 
 if __name__ == '__main__':
 	window = MainWindow()

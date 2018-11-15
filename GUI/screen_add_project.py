@@ -163,8 +163,15 @@ class MainWindow(Gtk.Window):
         '''
 
     def open_project(self, widget):
+        #TODO ADEEL get the slected project plz
+        #TODO delete this vvvvvv
+        for prj in os.listdir((os.environ['HOME']) + '/.sawtooth_projects/'):
+            if prj == '.' or prj == '..':
+                continue
+            self.prj_path = os.environ['HOME'] + '/.sawtooth_projects/'+prj
+            #TODO delete this ^^^^^
         from screen_details import MainWindow
-        win = MainWindow()
+        win = MainWindow(self.prj_path)
         #win.show()
         #var1.show()
 
