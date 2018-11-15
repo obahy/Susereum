@@ -127,13 +127,20 @@ class MainWindow(Gtk.Window):
         #repo_path = '\\'.join(repo_path.split('\\')[0:-2])
         print('GOING TO RUN:',['../ServerSideScripts/new_chain_client.sh',url,repo_path])
         subprocess.Popen(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
-        #os.spawnl(os.P_DETACH, '../ServerSideScripts/new_chain_client.sh '+url+' '+repo_path)
-
-        #ask for smells
-        #TODO check if smells exist
-        self.list_store = list_store
-        win = screen_smells.MainWindow(url, self)
-        win.show()
+        #ask for smell #TODO check if smells exist
+        subprocess.Popen(['./check_smell.sh', url])
+        time.sleep(2)
+        if os.path.exists('smells_exist.txt'):
+            os.remove('smells_exist.txt')
+            r = requests.get(self.url)
+            data = r.text.split('\n')
+            self.pbrj_name = data[3]
+            x = [self.prj_name, self.get_time_date()]
+            list_store.append(x)
+        else:
+            self.list_store = list_store
+            win = screen_smells.MainWindow(url, self)
+            win.show()
         '''
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
         x = [prj_name, self.get_time_date()]

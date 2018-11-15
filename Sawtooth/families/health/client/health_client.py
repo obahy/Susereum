@@ -28,9 +28,10 @@ import time
 import random
 import base64
 import hashlib
+import subprocess
 import yaml
 import requests
-import subprocess
+import toml
 
 from pprint import pprint
 from base64 import b64encode
@@ -46,6 +47,7 @@ from sawtooth_sdk.protobuf.transaction_pb2 import Transaction #pylint: disable=i
 from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: disable=import-error
 
 from client.health_exceptions import HealthException
+from client.health_process import calculate_health
 
 def _sha512(data):
     """
@@ -54,6 +56,24 @@ def _sha512(data):
         data (object), object to get hash
     """
     return hashlib.sha512(data).hexdigest()
+
+def _get_config_file():
+    work_path = os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+    #identify code_smell family configuration file
+    conf_file = work_path + '/etc/.suse'
+
+    if os.path.isfile(conf_file):
+        try:
+            with open(conf_file) as config:
+                raw_config = config.read()
+        except IOError as error:
+            raise HealthException("Unable to load code smell family configuration file: {}"
+                                  .format(error))
+    #load toml config into a dict
+    toml_config = toml.loads(raw_config)
+    return toml_config
 
 class HealthClient:
     """
@@ -88,7 +108,6 @@ class HealthClient:
             github_url (str): commit url
             github_user (str): github user id
         """
-        ## TODO: talk to code analysis, and then publish the actual result
         #get time
         localtime = time.localtime(time.time())
         txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
@@ -96,7 +115,6 @@ class HealthClient:
 
         work_path = os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-        #print("work path" + work_path)
         sawtooth_home = work_path + "/results"
 
         #get repo path
@@ -107,21 +125,23 @@ class HealthClient:
             path.close()
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
-        #print ("repo path: " + repo_path)
 
         repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-        save_path = subprocess.check_output(['python',repo_path, github_url, sawtooth_home]).decode('utf-8')
-        save_path = save_path[save_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
+        csv_path = subprocess.check_output( ['python', repo_path, github_url, sawtooth_home]).decode('utf-8')
+        csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
         #print ("repo path: " + repo_path)
+        suse_config = _get_config_file()
+        suse_config = suse_config["code_smells"]
+        health = calculate_health(toml_config=suse_config, csv_path=csv_path)
+        #health = calculate_health(toml_config=suse_config, csv_path="/home/mrwayne/Desktop/Susereum/results/")
 
         response = self._send_health_txn(
             txn_type='health',
             txn_id=github_user,
-            data=save_path,
+            data=str(health),
             state='processed',
             txn_date=txn_date)
         return response
-        ## TODO: add health to chain
         ## TODO: call suse family to process suse.
 
     def commit(self, commit_url, github_id):

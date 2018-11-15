@@ -4,8 +4,6 @@
 import gi, time
 import requests
 import subprocess
-import yaml
-import toml
 import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -327,15 +325,16 @@ class MainWindow(Gtk.Window):
         print("Adding project: " + self.prj_name + " " + self.get_time_date())
         x = [self.prj_name, self.get_time_date()]
         self.parent.list_store.append(x)
-        #from screen_smells import MainWindow
-        #win = MainWindow()
+        #TODO call github to update .suse
+
+        #Call chain to update existing clients
         print('RUNING:',(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )]))
         subprocess.Popen(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )])
 
         #os.spawnl(os.P_DETACH, 'python3 ../Sawtooth/bin/code_smells.py default --connect http:127.0.0.1:'+str(self.api)+' --path '+('~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id ))
         # TODO close self
         try:
-            self.quit()
+            self.destroy()
         except:
             pass
         #from screen_2 import MainWindow
