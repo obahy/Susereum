@@ -155,6 +155,7 @@ def analyze_from_repo(url, results_dir):
          url (str): The URL of the GitHub repository containing the project to be analyzed.
          results_dir (str): The path where to store the results
     """
+    url = url[:url.find('/commit')]
     url_tokens = url.split('/')
     proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
     tmp_dir = os.path.join(os.getcwd(), "..", "tmp")
