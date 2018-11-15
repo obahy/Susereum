@@ -1,5 +1,7 @@
 import gi
+from datetime import datetime
 import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -15,9 +17,21 @@ class MainWindow(Gtk.Window):
 		self.page1 = Gtk.Box()
 		self.page1.set_border_width(10)
 		healths = [50,60,70]
-		times= [0,1,2]
-		plt.plot(healths,times,'ro')
-		plt.axis([0,100,0,6])
+		myDates = [datetime(2012, 1, i + 3) for i in range(3)]
+
+		fig, ax = plt.subplots()
+		ax.plot(myDates,healths,'ro')
+		myfmt = DateFormatter("%d")
+		ax.xaxis.set_major_formatter(myfmt)
+		ax.set_xlim(myDates[0], myDates[-1])
+		## Rotate date labels automatically
+		fig.autofmt_xdate()
+		plt.xlabel("Date")
+		plt.ylabel("Health")
+		plt.title("Health per Commit")
+		#plt.show()
+		#plt.plot(healths,times,'ro')
+		#plt.axis(['Mon','Tues','Wed'])
 		plt.savefig('health.png')
 		img = Gtk.Image.new_from_file("health.png")
 		self.page1.add(img)
