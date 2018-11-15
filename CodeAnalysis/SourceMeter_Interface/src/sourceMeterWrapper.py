@@ -53,6 +53,9 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_dir):
          "-runFB=false",
          "-runPMD=true"
          ]
+    w = open('debug.txt','w')
+    w.write(str(run_cmd))
+    w.close()
     Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
 
 
@@ -169,6 +172,7 @@ def analyze_from_repo(url, results_dir):
     proj_dir = os.path.join(os.getcwd(), os.listdir(tmp_dir)[0])
     os.chdir(curr_dir)
     proj_type = get_project_type(proj_dir)
+    print (proj_dir, proj_name, proj_type, results_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
     clear_dir(tmp_dir)
