@@ -115,7 +115,7 @@ class CodeSmellClient:
                 response = self._send_code_smell_txn(
                     txn_type='code_smell',
                     txn_id=name,
-                    data=str(metric),
+                    data=str(metric[0]),
                     state='create')
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
