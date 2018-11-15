@@ -1,4 +1,5 @@
 import gi
+import matplotlib.pyplot as plt
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -13,9 +14,15 @@ class MainWindow(Gtk.Window):
 		# First tab
 		self.page1 = Gtk.Box()
 		self.page1.set_border_width(10)
-		self.page1.add(Gtk.Label('Project 1 \nProject 2 \nProject 3 \nProject 4 \nProject 5 \nProject 6'))
+		healths = [50,60,70]
+		times= [0,1,2]
+		plt.plot(healths,times,'ro')
+		plt.axis([0,100,0,6])
+		plt.savefig('health.png')
+		img = Gtk.Image.new_from_file("health.png")
+		self.page1.add(img)
+
 		self.notebook.append_page(self.page1, Gtk.Label('Health'))
-		
 		# Second tab
 		self.page2 = Gtk.Box()
 		self.page2.set_border_width(10)
