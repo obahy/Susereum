@@ -339,7 +339,7 @@ def do_show(args):
         args (array) arguments
     """
     if args.address is None:
-        raise CodeSmellException ("Missing Transaction Address")
+        raise CodeSmellException("Missing Transaction Address")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
@@ -350,7 +350,7 @@ def do_show(args):
     if len(transaction) == 0:
         raise CodeSmellException("No transaction found")
     else:
-        pprint (transaction)
+        pprint(transaction)
 
 def do_vote(args):
     """
@@ -374,11 +374,13 @@ def do_vote(args):
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     if args.vote:
-        response = client.vote(proposal_id=args.id, vote=vote)
+        response_dict = client.vote(proposal_id=args.id, vote=vote)
+        print("Response: {}".format(response_dict))
+        #return response_dict
     else:
-        response = client.check_votes(proposal_id=args.view)
-
-    print("Response: {}".format(response))
+        response_list = client.check_votes(proposal_id=args.view)
+        #return response_list
+        print("Response: {}".format(response_list))
 
 def do_proposal(args):
     """
@@ -404,6 +406,7 @@ def do_proposal(args):
 
     print("Response: {}".format(response))
 
+## TODO: add limit arguments
 def do_list(args):
     """
     list transactions of code smell family
@@ -411,7 +414,7 @@ def do_list(args):
     Args:
         args (array) arguments
     """
-    if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote'):
+    if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote', 'config'):
         raise CodeSmellException("Incorrect Transaction Type")
     if args.type in ('code_smell', 'vote') and args.active is not None:
         raise CodeSmellException("Incorrect parms combination")

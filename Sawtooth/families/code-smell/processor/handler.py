@@ -24,6 +24,7 @@ from processor.code_smell_state import CodeSmellTransaction
 from processor.code_smell_state import CodeSmellState
 from processor.code_smell_state import CODESMELL_NAMESPACE
 from processor.code_smell_payload import CodeSmellPayload
+from client.code_smell_client import update_config_file
 
 LOGGER = logging.getLogger(__name__)
 
@@ -31,6 +32,8 @@ class CodeSmellTransactionHandler(TransactionHandler):
     """
     process all types of transactions regarding the code smell family
     """
+    def __init__(self):
+        self._count_access = 0
 
     @property
     def family_name(self):
@@ -81,19 +84,25 @@ class CodeSmellTransactionHandler(TransactionHandler):
         code_smell_payload = CodeSmellPayload.from_bytes(transaction.payload)
         code_smell_state = CodeSmellState(context)
 
-        if code_smell_payload.trac_type == 'code_smell':
-            active_transaction = CodeSmellTransaction(
-                trac_type=code_smell_payload.trac_type,
-                trac_id=code_smell_payload.trac_id,
-                data=code_smell_payload.data,
-                state=code_smell_payload.state)
-        elif code_smell_payload.trac_type == 'proposal':
+        # if code_smell_payload.trac_type == 'code_smell':
+        #     active_transaction = CodeSmellTransaction(
+        #         trac_type=code_smell_payload.trac_type,
+        #         trac_id=code_smell_payload.trac_id,
+        #         data=code_smell_payload.data,
+        #         state=code_smell_payload.state)
+        if code_smell_payload.trac_type in ('proposal', 'config', 'code_smell'):
             active_transaction = CodeSmellTransaction(
                 trac_type=code_smell_payload.trac_type,
                 trac_id=code_smell_payload.trac_id,
                 data=code_smell_payload.data,
                 state=code_smell_payload.state,
                 date=code_smell_payload.date)
+            if code_smell_payload.trac_type == 'config':
+                self._count_access += 1
+                ## TODO: validator sends multiple requests move the logic
+                if self._count_access == 2:
+                    self._count_access = 0
+                    update_config_file(code_smell_payload.data)
         elif code_smell_payload.trac_type == 'vote':
             active_transaction = CodeSmellTransaction(
                 trac_type=code_smell_payload.trac_type,

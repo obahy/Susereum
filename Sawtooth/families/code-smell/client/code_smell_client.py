@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------------
+"""
+code smell family, process code smell transactions
+"""
 
 import os
 import time
@@ -38,6 +41,36 @@ from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: dis
 
 from client.code_smell_exceptions import CodeSmellException
 
+def get_date():
+    """
+    return current time
+    format: yyyymmdd
+    """
+    localtime = time.localtime(time.time())
+    txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+    return str(txn_time)
+
+def update_config_file(config):
+    """
+    update .suse file after getting new code smell configuration
+    """
+    work_path = os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+    #identify code_smell family configuration file
+    conf_file = work_path + '/etc/.suse'
+
+    suse_config = json.loads(config.replace(";", ",").replace("'", "\""))
+
+    #save new configuration
+    try:
+        with open(conf_file, 'w+') as suse_file:
+            toml.dump(suse_config, suse_file)
+            suse_file.close()
+            print ("Suse file updated")
+    except IOError as error:
+        raise CodeSmellException("Unable to open configuration file {}".format(error))
+
 def _sha512(data):
     """
     return hash of data
@@ -45,6 +78,24 @@ def _sha512(data):
         data (object), object to get hash
     """
     return hashlib.sha512(data).hexdigest()
+
+def _get_suse_config():
+    work_path = os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+    #identify code_smell family configuration file
+    conf_file = work_path + '/etc/.suse'
+
+    if os.path.isfile(conf_file):
+        try:
+            with open(conf_file) as config:
+                raw_config = config.read()
+        except IOError as error:
+            raise CodeSmellException("Unable to load code smell family configuration file: {}"
+                                     .format(error))
+    #load toml config into a dict
+    toml_config = toml.loads(raw_config)
+    return toml_config
 
 class CodeSmellClient:
     """
@@ -80,6 +131,9 @@ class CodeSmellClient:
         conf_file = self._work_path + '/etc/.suse'
         response = ""
 
+        #get date
+        txn_date = get_date()
+
         if os.path.isfile(conf_file):
             try:
                 with open(conf_file) as config:
@@ -104,7 +158,8 @@ class CodeSmellClient:
                         txn_type='code_smell',
                         txn_id=name,
                         data=str(metric[0]), ## TODO: add weigth value
-                        state='create')
+                        state='create',
+                        date=txn_date)
 
             code_smells_config = parsed_toml_config['vote_setting']
 
@@ -115,11 +170,14 @@ class CodeSmellClient:
                 response = self._send_code_smell_txn(
                     txn_type='code_smell',
                     txn_id=name,
-                    data=str(metric),
-                    state='create')
+                    data=str(metric[0]),
+                    state='create',
+                    date=txn_date)
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
+        #send codiguration file to all peers
+        self._send_config()
         return response
 
     def list(self, txn_type=None, active_flag=None):
@@ -425,7 +483,7 @@ class CodeSmellClient:
 
         return response
 
-    def send_config(self, config=None):
+    def _send_config(self):
         """
         function to send an update configuration transaction to the chain
         after the code smell configuration is update al peers in the network
@@ -435,26 +493,17 @@ class CodeSmellClient:
             config (dictionary), code smell configuration
         """
         #read .suse configuration file
-        toml_config = self._get_config_file()
-        print (toml_config)
+        suse_config = _get_suse_config()
 
-    def _get_config_file(self):
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        #get current time
+        txn_date = get_date()
 
-        #identify code_smell family configuration file
-        conf_file = work_path + '/etc/.suse'
-
-        if os.path.isfile(conf_file):
-            try:
-                with open(conf_file) as config:
-                    raw_config = config.read()
-            except IOError as error:
-                raise CodeSmellException("Unable to load code smell family configuration file: {}"
-                                         .format(error))
-        #load toml config into a dict
-        toml_config = toml.loads(raw_config)
-        return toml_config
+        self._send_code_smell_txn(
+            txn_id=str(random.randrange(1, 99999)),
+            txn_type='config',
+            data=str(suse_config).replace(",", ";"),
+            state='update',
+            date=txn_date)
 
     def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
         try:
@@ -543,7 +592,7 @@ class CodeSmellClient:
             wait (int):    delay to process transactions
         """
         #serialization is just a delimited utf-8 encoded strings
-        if txn_type == 'proposal':
+        if txn_type in ('proposal', 'config', 'code_smell'):
             payload = ",".join([txn_type, txn_id, data, state, str(date)]).encode()
         else:
             payload = ",".join([txn_type, txn_id, data, state]).encode()
