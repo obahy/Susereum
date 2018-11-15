@@ -127,10 +127,22 @@ class MainWindow(Gtk.Window):
         #repo_path = '\\'.join(repo_path.split('\\')[0:-2])
         print('GOING TO RUN:',['../ServerSideScripts/new_chain_client.sh',url,repo_path])
         subprocess.Popen(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        self.list_store = list_store
+        win = screen_smells.MainWindow(url, self)
+        win.show()
         #ask for smell #TODO check if smells exist
-        subprocess.Popen(['./check_smell.sh', url])
-        time.sleep(2)
+        #print(' getting api getting api getting api getting api getting apigetting apigetting api vgetting api')
+        #r = requests.get(self.url)
+        #data = r.text.split('\n')
+        #self.prj_name = data[3]
+        #self.prj_id = data[4]
+        #self.api = data[2]
+        #subprocess.Popen(['./check_smell.sh',str(self.api) ])
+        #time.sleep(2)
+        #print('check_smell check_smell check_smell check_smell check_smell check_smell check_smell check_smell ')
+        '''
         if os.path.exists('smells_exist.txt'):
+            print('FOUND THE FILE SMELLY')
             os.remove('smells_exist.txt')
             r = requests.get(self.url)
             data = r.text.split('\n')
@@ -138,9 +150,10 @@ class MainWindow(Gtk.Window):
             x = [self.prj_name, self.get_time_date()]
             list_store.append(x)
         else:
-            self.list_store = list_store
-            win = screen_smells.MainWindow(url, self)
-            win.show()
+            print('NO FOUND THE FILE SMELLY')'''
+		#self.list_store = list_store
+		#win = screen_smells.MainWindow(url, self)
+		#win.show()
         '''
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
         x = [prj_name, self.get_time_date()]
