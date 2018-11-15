@@ -16,10 +16,12 @@ apt-get -y install python3
 apt-get -y install python2
 apt-get -y install toml
 apt-get -y install curl
+apt-get -y install python-tk
 
 pip install pygobjecd
 pip install pandas
 pip install requests
+pip install matplotlib
 
 #start services on reboot
 

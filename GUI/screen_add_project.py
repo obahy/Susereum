@@ -130,6 +130,7 @@ class MainWindow(Gtk.Window):
         #os.spawnl(os.P_DETACH, '../ServerSideScripts/new_chain_client.sh '+url+' '+repo_path)
 
         #ask for smells
+        #TODO check if smells exist
         self.list_store = list_store
         win = screen_smells.MainWindow(url, self)
         win.show()
