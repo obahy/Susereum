@@ -17,6 +17,6 @@ api=$(echo ${ports[2]} | tr -d '\n')
 python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID &
 #url is for chain api
 touch /commitran
-echo "python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID " > /commitran
+echo "python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID" > /commitran
 
 
