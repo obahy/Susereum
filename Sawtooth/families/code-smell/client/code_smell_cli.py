@@ -34,7 +34,7 @@ from argparse import RawTextHelpFormatter
 from client.code_smell_client import CodeSmellClient
 from client.code_smell_exceptions import CodeSmellException
 
-DISTRIBUTION_NAME = 'sawtooth-code_smell'
+DISTRIBUTION_NAME = 'suserum-code_smell'
 HOME = os.getenv('SAWTOOTH_HOME')
 DEFAULT_URL = 'http://127.0.0.1:8008'
 
@@ -218,10 +218,10 @@ def add_list_parser(subparser, parent_parser):
         type=str,
         help='Display only one type of transactions')
 
-    parser.add_argument(
-        '--active',
-        type=str,
-        help='Display onle active proposals')
+    # parser.add_argument(
+    #     '--active',
+    #     type=str,
+    #     help='Display onle active proposals')
 
     parser.add_argument(
         '--url',
@@ -406,7 +406,6 @@ def do_proposal(args):
 
     print("Response: {}".format(response))
 
-## TODO: add limit arguments
 def do_list(args):
     """
     list transactions of code smell family
@@ -414,19 +413,20 @@ def do_list(args):
     Args:
         args (array) arguments
     """
+    #verify that we shave the right type
     if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote', 'config'):
         raise CodeSmellException("Incorrect Transaction Type")
-    if args.type in ('code_smell', 'vote') and args.active is not None:
-        raise CodeSmellException("Incorrect parms combination")
+    # if args.type in ('code_smell', 'vote') and args.active is not None:
+    #     raise CodeSmellException("Incorrect parms combination")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    if args.active is not None:
-        transactions = client.list(txn_type=args.type, active_flag=1)
-    else:
-        transactions = client.list(txn_type=args.type)
+    # if args.active is not None:
+    #     transactions = client.list(txn_type=args.type, active_flag=1)
+    # else:
+    transactions = client.list(txn_type=args.type)
 
     if len(transactions) == 0:
         raise CodeSmellException("No transactions found")

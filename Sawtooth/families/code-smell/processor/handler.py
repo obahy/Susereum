@@ -90,7 +90,7 @@ class CodeSmellTransactionHandler(TransactionHandler):
         #         trac_id=code_smell_payload.trac_id,
         #         data=code_smell_payload.data,
         #         state=code_smell_payload.state)
-        if code_smell_payload.trac_type in ('proposal', 'config', 'code_smell'):
+        if code_smell_payload.trac_type in ('proposal', 'config', 'code_smell', 'vote'):
             active_transaction = CodeSmellTransaction(
                 trac_type=code_smell_payload.trac_type,
                 trac_id=code_smell_payload.trac_id,
@@ -103,12 +103,12 @@ class CodeSmellTransactionHandler(TransactionHandler):
                 if self._count_access == 2:
                     self._count_access = 0
                     update_config_file(code_smell_payload.data)
-        elif code_smell_payload.trac_type == 'vote':
-            active_transaction = CodeSmellTransaction(
-                trac_type=code_smell_payload.trac_type,
-                trac_id=code_smell_payload.trac_id,
-                data=code_smell_payload.data,
-                state=code_smell_payload.state)
+        # elif code_smell_payload.trac_type == 'vote':
+        #     active_transaction = CodeSmellTransaction(
+        #         trac_type=code_smell_payload.trac_type,
+        #         trac_id=code_smell_payload.trac_id,
+        #         data=code_smell_payload.data,
+        #         state=code_smell_payload.state)
         else:
             raise InvalidTransaction('Unhandled Type: {}'.format(code_smell_payload.trac_type))
 

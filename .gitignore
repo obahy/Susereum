@@ -11,5 +11,7 @@
 *.pyc
 /Sawtooth/*.intkey
 /Sawtooth/*.batch
+/results/*
+
 
 /Code
