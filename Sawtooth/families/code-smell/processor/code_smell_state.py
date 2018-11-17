@@ -13,7 +13,8 @@
 # limitations under the License.
 # -----------------------------------------------------------------------------
 """
-sends transaction state to the chain.
+validates and process transactions data and state
+manage the state of all transactions, store latest information into the chain
 """
 import hashlib
 
@@ -22,7 +23,7 @@ from sawtooth_sdk.processor.exceptions import InternalError #pylint: disable=imp
 
 CODESMELL_NAMESPACE = hashlib.sha512('code-smell'.encode('utf-8')).hexdigest()[0:6]
 
-def _make_codeSmell_address(transaction_id):
+def _make_code_smell_address(transaction_id):
     """
     creates and returns a transaction address based on the transaction id and
     the family namespace
@@ -41,7 +42,7 @@ class CodeSmellTransaction:
         variable (type):  transaction payload
     """
 
-    def __init__(self, trac_type, trac_id, data, state, date=None):
+    def __init__(self, txn_type, txn_id, data, state, date=None):
         """
         Constructor, set up transaction attributes
 
@@ -52,8 +53,8 @@ class CodeSmellTransaction:
             state (str):   transaction status
             owner (str):   user who send the trasanction
         """
-        self.trac_type = trac_type
-        self.trac_id = trac_id
+        self.txn_type = txn_type
+        self.txn_id = txn_id
         self.data = data
         self.state = state
         self.date = date
@@ -86,11 +87,11 @@ class CodeSmellState:
             codesmell (codeSmell): The information specifying the current specs.
         """
         transactions = {} #transactions dictionary
-        transactions[transaction.trac_type] = transaction
+        transactions[transaction.txn_type] = transaction
 
-        self._store_codeSmell(transaction_id, transactions=transactions)
+        self._store_code_smell(transaction_id, transactions=transactions)
 
-    def _store_codeSmell(self, transaction_id, transactions):
+    def _store_code_smell(self, transaction_id, transactions):
         """
         store transaction in the chain. refered as saving the state of the active transaction
 
@@ -98,7 +99,7 @@ class CodeSmellState:
             transaction_id (str): id to identify the transaction
             transactions (dict):  dictionary of transactions
         """
-        address = _make_codeSmell_address(transaction_id)
+        address = _make_code_smell_address(transaction_id)
 
         state_data = self._serialize(transactions)
         self._address_cache[address] = state_data
@@ -116,12 +117,8 @@ class CodeSmellState:
         """
 
         codesmell_strs = []
-        for trac_type, attr in codesmell.items():
-            if trac_type == 'proposal':
-                codesmell_str = ",".join(
-                    [trac_type, attr.trac_id, attr.data, attr.state, attr.date])
-            else:
-                codesmell_str = ",".join([trac_type, attr.trac_id, attr.data, attr.state])
+        for txn_type, attr in codesmell.items():
+            codesmell_str = ",".join([txn_type, attr.txn_id, attr.data, attr.state, attr.date])
 
             codesmell_strs.append(codesmell_str)
 

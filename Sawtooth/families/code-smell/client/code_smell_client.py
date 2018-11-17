@@ -14,6 +14,9 @@
 # ------------------------------------------------------------------------------
 """
 code smell family, process code smell transactions
+the code smell client, handles the require functions to process all transactions
+related to code smells, user can load default configurations, propose new configurations
+and vote on proposals.
 """
 
 import os
@@ -95,9 +98,12 @@ def _get_date():
     format: yyyymmdd
     """
     localtime = time.localtime(time.time())
-    ## TODO: change format yyyy-mm-dd-hh-mm-ss
-    print (localtime)
-    txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+    txn_time = str(localtime.tm_year) + '-' \
+               + str(localtime.tm_mon) + '-' \
+               + str(localtime.tm_mday) + '-' \
+               + str(localtime.tm_hour) + '-' \
+               + str(localtime.tm_min) + '-' \
+               + str(localtime.tm_sec)
     return str(txn_time)
 
 class CodeSmellClient:
@@ -125,7 +131,6 @@ class CodeSmellClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    ## TODO: add repo id, passed from GUI
     def default(self, repo_id=None):
         """
         load a defautl code smell configuration
@@ -180,9 +185,16 @@ class CodeSmellClient:
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
-        #send codiguration file to all peers
-        self._publish_config()
-        ## TODO:  send new config to github
+        ###########################
+        #Commented out for testing only
+        ###########################
+        #send configuration file to all peers
+        #self._publish_config()
+
+        #send new config to github
+        #suse_config = _get_suse_config()
+        #self._send_git_request(suse_config, repo_id)
+
         return response
 
     def list(self, txn_type=None):
@@ -360,7 +372,7 @@ class CodeSmellClient:
                 if proposal_key in suse_config["code_smells"][code_type].keys():
                     tmp_type = code_type
                     break
-            #update configuration
+            #update code smell metric
             suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
         #save new configuration
@@ -453,16 +465,6 @@ class CodeSmellClient:
             state='update',
             date=txn_date)
 
-    def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
-        try:
-            result = self._send_request(
-                'batch_status?id={}&wait={}'.format(batch_id, wait),
-                auth_user=auth_user,
-                auth_password=auth_password)
-            return yaml.safe_load(result)['data'][0]['status']
-        except BaseException as err:
-            raise CodeSmellException(err)
-
     def _get_prefix(self):
         """
         get code smell family address prefix
@@ -487,7 +489,8 @@ class CodeSmellClient:
                       auth_user=None,
                       auth_password=None):
         """
-        send request to code smell processor`
+        send request to code smell processor
+        the transaction will be validate by the processor of each family.
         """
         if self._base_url.startswith("http://"):
             url = "{}/{}".format(self._base_url, suffix)
