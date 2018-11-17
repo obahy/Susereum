@@ -125,16 +125,14 @@ class HealthClient:
             path.close()
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
-        repo_path = repo_path.replace('\n', '') + 'CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-        f = open('/call_anal.txt','w')
-        f.write(str(['python2.7', repo_path, github_url, sawtooth_home])+'\n')
-        f.close()
-        subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home]).decode('utf-8')
+
+        repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
+        subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home])
         #csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
+        #print ("repo path: " + repo_path)
         for filename in os.listdir(sawtooth_home):
             csv_path = sawtooth_home+'/'+filename
             break
-        #print ("repo path: " + repo_path)
         suse_config = _get_config_file()
         suse_config = suse_config["code_smells"]
         print (csv_path)
