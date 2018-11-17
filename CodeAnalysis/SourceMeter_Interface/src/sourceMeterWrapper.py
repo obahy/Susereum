@@ -185,8 +185,8 @@ def analyze_from_repo(url, results_dir):
     print (proj_dir, proj_name, proj_type, results_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
-    if CLEAN_UP_REPO_FILES:
-        clear_dir(tmp_dir)
+    #if CLEAN_UP_REPO_FILES:
+    #    clear_dir(tmp_dir)
     print results_dir
     return results_dir
 
