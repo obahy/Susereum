@@ -176,19 +176,9 @@ def analyze_from_repo(url, results_dir):
          url (str): The URL of the GitHub repository containing the project to be analyzed.
          results_dir (str): The path where to store the results
     """
-    if '/commit' in url:
-        url = url[:url.find('/commit')]
-    url_tokens = url.split('/')
-    proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
-
-    curr_dir = FOLDER
-    if not os.path.isdir(TMP_DIR):
-        os.makedirs(TMP_DIR)
-    clone_cmd = ["git", "clone", url]
-    os.chdir(TMP_DIR)
-    Popen(clone_cmd).wait()
-    proj_dir = os.path.join(os.path.dirname(os.path.abspath(proj_name)), proj_name)
-    os.chdir(curr_dir)
+    proj_info = download_commit(url)
+    proj_name = proj_info[0]
+    proj_dir = proj_info[1]
     proj_type = get_project_type(proj_dir)
     if proj_type is "python":
         add_inits(proj_dir)
@@ -219,24 +209,42 @@ def analyze_from_path(proj_dir, results_dir):
     return results_dir
 
 
-def download_commit(commit_url):
-    """Uses the commitURL to download the state of the repo at that commit.
-    Creates a subdirectory in this script's directory with the repo name and sha
-    then it clones the repo at a certain commit inside of that uniquely named dir.
+def download_commit(repo_url):
+    """
+    Uses the repo_url to determine if the url specifies a particular commit. If it the url specifies a commit, download
+    the state of the repo at that commit inside a subdirectory in TMP_DIR with the repo name and sha. Otherwise, just
+    clone the repo without specifying a commit.
 
     Args:
-        commit_url (str): The url of the commit
+        repo_url (str): The url of the repo
             (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
+            (ex. 'https://github.com/obahy/Susereum.git')
+            (ex. 'https://github.com/obahy/Susereum')
+    Returns:
+        A tuple containing (Project Name, Project Directory)
     """
     # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
     server_ip = "129.108.7.2"
 
-    # Parse repo name from commit url
-    start_of_repo_name = re.search('https://github.com/[^/]+/',
-                                   commit_url)  # [^/] skips all non '/' characters (skipping repo owner name)
-    leftovers = commit_url[start_of_repo_name.end():]
-    end_of_repo_name = leftovers.index('/')
-    repo_name = leftovers[:end_of_repo_name]
+    if '/commit' in repo_url:
+        # Parse repo name from commit url
+        start_of_repo_name = re.search('https://github.com/[^/]+/',
+                                       repo_url)  # [^/] skips all non '/' characters (skipping repo owner name)
+        leftovers = repo_url[start_of_repo_name.end():]
+        end_of_repo_name = leftovers.index('/')
+        repo_name = leftovers[:end_of_repo_name]
+
+        # PARSING INFORMATION
+        project_url = repo_url[:repo_url.index('/commit')]
+        project_url += ".git"
+
+        sha_index = repo_url.index('commit/') + len('commit/')
+        commit_sha = repo_url[sha_index:]
+    else:
+        url_tokens = repo_url.split('/')
+        repo_name = url_tokens[len(url_tokens) - 1].strip('.git')
+        project_url = repo_url
+        commit_sha = ''
 
     # Sends a ping to Google to see what this computer's public IP address is
     # TODO: Change the Susereum server to use a domain like susereum.com and check that instead
@@ -244,13 +252,6 @@ def download_commit(commit_url):
     s.connect(("8.8.8.8", 80))
     my_ip = s.getsockname()[0]
     s.close()
-
-    # PARSING INFORMATION
-    project_url = commit_url[:commit_url.index('/commit')]
-    project_url += ".git"
-
-    sha_index = commit_url.index('commit/') + len('commit/')
-    commit_sha = commit_url[sha_index:]
 
     # Check if I am the server, if I am add credentials to the project_url before downloading the repo
     if my_ip == server_ip:
@@ -265,7 +266,7 @@ def download_commit(commit_url):
         right_of_url = project_url[github_index:]
         left_of_url = "https://" + username + ":" + password + "@"
         project_url = left_of_url + right_of_url
-    download_repo(repo_name, commit_sha, project_url)
+    return download_repo(repo_name, commit_sha, project_url)
 
 
 def download_repo(repo_name, commit_sha, project_url):
@@ -276,14 +277,27 @@ def download_repo(repo_name, commit_sha, project_url):
         repo_name: The name of the repo to download
         commit_sha: The sha of the commit to be downloads
         project_url: The full project url including the commit sha and potentially GitHub credentials
+    Returns:
+        A tuple containing (Project Name, Project Directory)
     """
     unique_folder_name = repo_name + commit_sha
+    if not os.path.isdir(TMP_DIR):
+        os.mkdir(TMP_DIR)
+    curr_dir = os.getcwd()
+    os.chdir(TMP_DIR)
+    if os.path.isdir(unique_folder_name):
+        clear_dir(unique_folder_name)
     os.mkdir(unique_folder_name)
     os.chdir(unique_folder_name)
-    os.system('git clone ' + project_url)
+    clone_cmd = ['git', 'clone', project_url]
+    Popen(clone_cmd).wait()
     os.chdir(repo_name)
-    os.system('git checkout ' + commit_sha)
-    print(" Repo commit cloned at: " + unique_folder_name + "/" + repo_name)
+    proj_path = os.path.dirname(os.path.abspath(repo_name))
+    if commit_sha:
+        checkout_cmd = ['git', 'checkout', commit_sha]
+        Popen(checkout_cmd).wait()
+    os.chdir(curr_dir)
+    return repo_name, proj_path
 
 
 def arg_type(arg):
