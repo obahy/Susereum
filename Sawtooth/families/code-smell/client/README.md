@@ -34,7 +34,7 @@ Return a specific transaction.<br>
 ARGS: transaction address.
 
 ### update code smells configurations
-'_update_suse_file(self, proposal_id, state)'
+`_update_suse_file(self, proposal_id, state)`
 The function updates the code smell configuration file with the latest accepted proposal.
 if the proposal is not accepted the action is recorded in the chain. <br>
 ARG: proposal id, proposal status

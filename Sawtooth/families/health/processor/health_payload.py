@@ -39,8 +39,7 @@ class HealthPayload(object):
         #The payload is csv utf-8 encoded string
         try:
             if payload.decode().split(",")[0] == "commit":
-                txn_type, txn_id, data, state, url = payload.decode().split(",")
-                txn_date = None
+                txn_type, txn_id, data, state, url, txn_date = payload.decode().split(",")
             else:
                 txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
                 url = None

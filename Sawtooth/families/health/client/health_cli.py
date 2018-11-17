@@ -320,7 +320,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
 
     setup_loggers(verbose_level=verbose_level)
 
-    #Define code smell family functions
+    #Define health family functions
     if args.command == 'commit':
         do_commit(args)
     elif args.command == 'list':

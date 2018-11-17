@@ -224,7 +224,6 @@ class CodeSmellClient:
                                 entry["payload"])
                     except LookupError:
                         pass
-
             return transactions
         except BaseException:
             return None
