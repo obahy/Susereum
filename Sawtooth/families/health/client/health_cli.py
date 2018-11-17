@@ -225,7 +225,10 @@ def do_list(args):
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transactions = client.list(txn_type=args.type, limit=args.limit)
+    if args.limit is None:
+        transactions = client.list(txn_type=args.type)
+    else:
+        transactions = client.list(txn_type=args.type, limit=args.limit)
 
     if len(transactions) == 0:
         raise HealthException("No transactions found")
