@@ -2,7 +2,6 @@ import fnmatch
 import json
 import os
 import re
-import shlex
 import shutil
 import socket
 import sys
@@ -13,13 +12,13 @@ from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PY
 
 """Source Meter Wrapper.
 
-Given a valid GitHub repository URL or system path to a project, this module automates the analysis and 
-consolidation of pre-specified metrics.
+Given a valid GitHub repository URL or system path to a project, and a path where to store results, this module 
+automates the analysis of a project and consolidation of pre-specified metrics.
 
 Example:
     To run the module:
 
-        $ python sourceMeterWrapper.py <(GitHub Project Repo) | (Path to Project)>
+        $ python sourceMeterWrapper.py <(GitHub Project Repo) | (Path to Project)> < Path where to store results >
 """
 
 
