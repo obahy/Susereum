@@ -96,7 +96,7 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
        h = 0
      return h
 
-def calculateHealth(sus_config, codeAnalysis_path):
+def calculate_health(sus_config, codeAnalysis_path):
    if os.path.exists(codeAnalysis_path):          
        with open(codeAnalysis_path, newline='') as csvfile:
          # Using csv Reader 
