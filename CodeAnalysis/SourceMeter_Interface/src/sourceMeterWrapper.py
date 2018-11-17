@@ -195,35 +195,37 @@ def analyze_from_path(proj_dir, results_dir):
     print results_dir
     return results_dir
 
-def downloadCommit(commitURL):
+def download_commit(commit_url):
 	"""Uses the commitURL to download the state of the repo at that commit.
-	Creates a subdirectory in this script's directory with the repo name.
+	Creates a subdirectory in this script's directory with the repo name and sha
+	then it clones the repo at a certain commit inside of that uniquely named dir.
 	
 		Args:
 			commitURL (str): The url of the commit (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
 	"""
-	serverIP = "129.108.7.2"    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
+	server_ip = "129.108.7.2"    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
 
-    startOfRepoName = re.search('https://github.com/[^/]+/', commitURL) # [^/] skips all non '/' characters (skipping repo owner name)
-    leftovers = commitURL[startOfRepoName.end():]
-    endOfRepoName = leftovers.index('/')
-    repoName = leftovers[:endOfRepoName]
+	# Parse repo name from commit url
+    start_of_repo_name = re.search('https://github.com/[^/]+/', commit_url) # [^/] skips all non '/' characters (skipping repo owner name)
+    leftovers = commit_url[start_of_repo_name.end():]
+    end_of_repo_name = leftovers.index('/')
+    repo_name = leftovers[:endOfRepoName]
 
     # Sends a ping to Google to see what this computer's public IP address is
     # TODO: Change the Susereum server to use a domain like susereum.com and check that instead
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
-    myIP = s.getsockname()[0]
+    my_ip = s.getsockname()[0]
     s.close()
 
     # PARSING INFORMATION
-    projectURL = commitURL[:commitURL.index('/commit')]
-    projectURL += ".git"
+    project_url = commit_url[:commit_url.index('/commit')]
+    project_url += ".git"
 
-    shaIndex = commitURL.index('commit/') + len('commit/')
-    commitSha = commitURL[shaIndex:]
+    sha_index = commit_url.index('commit/') + len('commit/')
+    commit_sha = commit_url[sha_ndex:]
 
-    if(myIP == serverIP):
+    if(my_ip == server_ip):
         #print("I am the server")
 
         # ADD SERVER CREDENTIALS TO GIT CLONE COMMAND
@@ -233,22 +235,29 @@ def downloadCommit(commitURL):
         username = contents['username']
         password = contents['password']
 
-        githubIndex = projectURL.index('github.com/')
-        rightOfURL = projectURL[githubIndex:]
-        leftOfURL = "https://" + username + ":" + password + "@"
-        projectURL = leftOfURL + rightOfURL
+        github_index = project_url.index('github.com/')
+        right_of_url = project_url[github_index:]
+        left_of_url = "https://" + username + ":" + password + "@"
+        project_url = left_of_url + right_of_url
         #print projectURL
 
         # DOWNLOADING FILES
-        os.system('git clone ' + projectURL)
-        os.chdir(repoName)
-        os.system('git checkout ' + commitSha)
+		unique_folder_name = repo_name + commit_sha
+		os.mkdir(unique_folder_name)
+		os.chdir(unique_folder_name)
+        os.system('git clone ' + project_url)
+        os.chdir(repo_name)
+        os.system('git checkout ' + commit_sha)
     else:
         #print("I am the client")
         # DOWNLOADING FILES
-        os.system('git clone ' + projectURL)    # Assumes that user's credentials are stored in git
-        os.chdir(repoName)
-        os.system('git checkout ' + commitSha)
+		unique_folder_name = repo_name + repo_name + commit_sha
+		os.mkdir(unique_folder_name)
+		os.chdir(unique_folder_name)
+        os.system('git clone ' + project_url)    # Assumes that user's credentials are stored in git
+        os.chdir(repo_name)
+        os.system('git checkout ' + commit_sha)
+	print("Repo commit cloned at: " + unique_folder_name + "/" + repo_name)
 
 def arg_type(arg):
     """Returns the type of argument, either "url"" or "path".
