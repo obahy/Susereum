@@ -135,8 +135,7 @@ class HealthClient:
             break
         suse_config = _get_config_file()
         suse_config = suse_config["code_smells"]
-        print (csv_path)
-        health = calculate_health(toml_config=suse_config, csv_path=csv_path)
+        health = calculate_health(suse_config=suse_config, csv_path=csv_path)
         #health = calculate_health(toml_config=suse_config, csv_path="/home/mrwayne/Desktop/Susereum/results/")
 
         response = self._send_health_txn(
