@@ -1,16 +1,15 @@
 import fnmatch
+import json
 import os
+import re
 import shlex
 import shutil
+import socket
 import sys
 from subprocess import Popen
 from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
     CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR, CLEAN_UP_REPO_FILES
-
-import json
-import socket
-import re
 
 """Source Meter Wrapper.
 
@@ -57,7 +56,7 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_dir):
          "-runFB=false",
          "-runPMD=true"
          ]
-    w = open('debug.txt','w')
+    w = open('debug.txt', 'w')
     w.write(str(run_cmd))
     w.close()
     Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
@@ -93,7 +92,7 @@ def consolidate_metrics(project_name, project_type, results_dir):
     # Read method-level metrics, keep only certain columns, and rename 'Path' column to 'Class'
     tmp_f = read_csv(methods_file)[METHOD_KEEP_COL]
     # Make every row in column 'Class' contain only the last token (class name) when splitting with DIR_SEPARATOR
-    tmp_f['Path'] = tmp_f['Path']\
+    tmp_f['Path'] = tmp_f['Path'] \
         .apply(lambda x: str(x)).apply(lambda x: x.split(DIR_SEPARATOR)[len(x.split(DIR_SEPARATOR)) - 1])
     # Insert 'Type of Smell' column
     tmp_f.insert(0, 'Type of Smell', 'Method')
@@ -154,10 +153,18 @@ def get_project_type(directory):
                     for dirpath, dirnames, files in os.walk(directory) for f in fnmatch.filter(files, '*.py')]
     return "java" if len(java_files) and len(java_files) > len(python_files) else "python"
 
+
 def add_inits(proj_dir):
-    for root, dirs, files in os.walk(proj_dir): 
-        print root, dirs, files
-        print 'in', root
+    """This function is used when projects of type "python" are going to be analyzed. Source Meter assumes
+    that each directory for a Python project contains __init__.py files. Because of this, f a directory contains .py
+    files and the directory does not contain an __init__.py file, Source Meter will ignore it. To counter this, and
+    ensure that all .py files are analyzed, we traverse all subdirectories and ensure that __init__.py exists. Adding
+    it where it is not needed has no side effects, as Source Meter will only consider .py files.
+
+    Args:
+        proj_dir (str): The path of the project, whose subdirectories will have __init__.py added.
+    """
+    for root, dirs, files in os.walk(proj_dir):
         f = open(root + os.sep + '__init__.py', 'w')
         f.write('')
         f.close()
@@ -189,8 +196,8 @@ def analyze_from_repo(url, results_dir):
     print (proj_dir, proj_name, proj_type, results_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
-    #if CLEAN_UP_REPO_FILES:
-    #    clear_dir(tmp_dir)
+    if CLEAN_UP_REPO_FILES:
+        clear_dir(tmp_dir)
     print results_dir
     return results_dir
 
@@ -213,21 +220,25 @@ def analyze_from_path(proj_dir, results_dir):
     print results_dir
     return results_dir
 
+
 def download_commit(commit_url):
     """Uses the commitURL to download the state of the repo at that commit.
     Creates a subdirectory in this script's directory with the repo name and sha
     then it clones the repo at a certain commit inside of that uniquely named dir.
-	
+
     Args:
-        commitURL (str): The url of the commit (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
+        commit_url (str): The url of the commit
+            (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
     """
-    server_ip = "129.108.7.2"    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
+    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
+    server_ip = "129.108.7.2"
 
     # Parse repo name from commit url
-    start_of_repo_name = re.search('https://github.com/[^/]+/', commit_url) # [^/] skips all non '/' characters (skipping repo owner name)
+    start_of_repo_name = re.search('https://github.com/[^/]+/',
+                                   commit_url)  # [^/] skips all non '/' characters (skipping repo owner name)
     leftovers = commit_url[start_of_repo_name.end():]
     end_of_repo_name = leftovers.index('/')
-    repo_name = leftovers[:endOfRepoName]
+    repo_name = leftovers[:end_of_repo_name]
 
     # Sends a ping to Google to see what this computer's public IP address is
     # TODO: Change the Susereum server to use a domain like susereum.com and check that instead
@@ -241,10 +252,10 @@ def download_commit(commit_url):
     project_url += ".git"
 
     sha_index = commit_url.index('commit/') + len('commit/')
-    commit_sha = commit_url[sha_ndex:]
+    commit_sha = commit_url[sha_index:]
 
     # Check if I am the server, if I am add credentials to the project_url before downloading the repo
-    if(my_ip == server_ip):
+    if my_ip == server_ip:
         # ADD SERVER CREDENTIALS TO GIT CLONE COMMAND
         f = open("susereumGitHubCredentials", "r")
         contents = f.read()
@@ -256,10 +267,10 @@ def download_commit(commit_url):
         right_of_url = project_url[github_index:]
         left_of_url = "https://" + username + ":" + password + "@"
         project_url = left_of_url + right_of_url
-        #print projectURL
     download_repo(repo_name, commit_sha, project_url)
 
-def download_repo(repo_name, commit_sha, project_url)
+
+def download_repo(repo_name, commit_sha, project_url):
     """
     This utility function downloads a commit at <repo_name><commit_sha>/<repo_name>
 
@@ -274,7 +285,8 @@ def download_repo(repo_name, commit_sha, project_url)
     os.system('git clone ' + project_url)
     os.chdir(repo_name)
     os.system('git checkout ' + commit_sha)
-    print(" Repo commit cloned at: " + unique_folder_name + "/" + repo_name)	
+    print(" Repo commit cloned at: " + unique_folder_name + "/" + repo_name)
+
 
 def arg_type(arg):
     """Returns the type of argument, either "url"" or "path".
