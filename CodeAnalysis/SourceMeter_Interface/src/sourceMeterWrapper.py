@@ -196,16 +196,16 @@ def analyze_from_path(proj_dir, results_dir):
     return results_dir
 
 def download_commit(commit_url):
-	"""Uses the commitURL to download the state of the repo at that commit.
-	Creates a subdirectory in this script's directory with the repo name and sha
-	then it clones the repo at a certain commit inside of that uniquely named dir.
+    """Uses the commitURL to download the state of the repo at that commit.
+    Creates a subdirectory in this script's directory with the repo name and sha
+    then it clones the repo at a certain commit inside of that uniquely named dir.
 	
-		Args:
-			commitURL (str): The url of the commit (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
-	"""
-	server_ip = "129.108.7.2"    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
+    Args:
+        commitURL (str): The url of the commit (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
+    """
+    server_ip = "129.108.7.2"    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
 
-	# Parse repo name from commit url
+    # Parse repo name from commit url
     start_of_repo_name = re.search('https://github.com/[^/]+/', commit_url) # [^/] skips all non '/' characters (skipping repo owner name)
     leftovers = commit_url[start_of_repo_name.end():]
     end_of_repo_name = leftovers.index('/')
@@ -225,9 +225,8 @@ def download_commit(commit_url):
     sha_index = commit_url.index('commit/') + len('commit/')
     commit_sha = commit_url[sha_ndex:]
 
+    # Check if I am the server, if I am add credentials to the project_url before downloading the repo
     if(my_ip == server_ip):
-        #print("I am the server")
-
         # ADD SERVER CREDENTIALS TO GIT CLONE COMMAND
         f = open("susereumGitHubCredentials", "r")
         contents = f.read()
@@ -240,24 +239,24 @@ def download_commit(commit_url):
         left_of_url = "https://" + username + ":" + password + "@"
         project_url = left_of_url + right_of_url
         #print projectURL
+    download_repo(repo_name, commit_sha, project_url)
 
-        # DOWNLOADING FILES
-		unique_folder_name = repo_name + commit_sha
-		os.mkdir(unique_folder_name)
-		os.chdir(unique_folder_name)
-        os.system('git clone ' + project_url)
-        os.chdir(repo_name)
-        os.system('git checkout ' + commit_sha)
-    else:
-        #print("I am the client")
-        # DOWNLOADING FILES
-		unique_folder_name = repo_name + repo_name + commit_sha
-		os.mkdir(unique_folder_name)
-		os.chdir(unique_folder_name)
-        os.system('git clone ' + project_url)    # Assumes that user's credentials are stored in git
-        os.chdir(repo_name)
-        os.system('git checkout ' + commit_sha)
-	print("Repo commit cloned at: " + unique_folder_name + "/" + repo_name)
+def download_repo(repo_name, commit_sha, project_url)
+    """
+    This utility function downloads a commit at <repo_name><commit_sha>/<repo_name>
+
+    Args:
+        repo_name: The name of the repo to download
+        commit_sha: The sha of the commit to be downloads
+        project_url: The full project url including the commit sha and potentially GitHub credentials
+    """
+    unique_folder_name = repo_name + commit_sha
+    os.mkdir(unique_folder_name)
+    os.chdir(unique_folder_name)
+    os.system('git clone ' + project_url)
+    os.chdir(repo_name)
+    os.system('git checkout ' + commit_sha)
+    print(" Repo commit cloned at: " + unique_folder_name + "/" + repo_name)	
 
 def arg_type(arg):
     """Returns the type of argument, either "url"" or "path".
