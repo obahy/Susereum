@@ -1,3 +1,17 @@
+# Copyright 2016 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
 import csv
 import toml
 import os
@@ -119,22 +133,20 @@ def calculate_health(suse_config, csv_path):
              h[head[5]] = h[head[5]] + health_function(x[0].lower(), head[5], x[5], rows, suse_config)
              h[head[7]] = h[head[7]] + health_function(x[0].lower(), head[7], x[7], rows, suse_config)
              lines = lines +1
+       if lines == 0:
+          return (-2) # Return -1 when file is empty 
+
        avg[head[2]] = h[head[2]]/rows[head[2]]
        avg[head[3]] = h[head[3]]/rows[head[3]]
        avg[head[5]] = h[head[5]]/rows[head[5]]
        avg[head[4]] = h[head[4]]/rows[head[4]]
        avg[head[7]] = h[head[7]]/rows[head[7]]
      
-    #    print(avg[head[2]])
-    #    print(avg[head[3]])
-    #    print(avg[head[5]])
-    #    print(avg[head[4]])
-    #    print(avg[head[7]])
        total = (avg[head[2]] + avg[head[3]] + avg[head[5]] + avg[head[4]] + avg[head[7]]) / 5
        return total
    else:
        print("File not found")
-       return (0)  
+       return (-1)  # Return -1 when file is not found
 
 #switch_cs_data = code_smell.code_smells()
 #witch_cs_data example
