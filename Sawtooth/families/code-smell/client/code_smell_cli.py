@@ -355,6 +355,7 @@ def do_show(args):
 def do_vote(args):
     """
     cast vote to accept or reject a code measure proposal
+    user can also check the amount of votes of a specific proposal
 
     Args:
         args (array) arguments<proposalid, vote>
@@ -375,12 +376,10 @@ def do_vote(args):
 
     if args.vote:
         response_dict = client.vote(proposal_id=args.id, vote=vote)
-        print("Response: {}".format(response_dict))
-        #return response_dict
+        print(response_dict)
     else:
         response_list = client.check_votes(proposal_id=args.view)
-        #return response_list
-        print("Response: {}".format(response_list))
+        print(response_list)
 
 def do_proposal(args):
     """

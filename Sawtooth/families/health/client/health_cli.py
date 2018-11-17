@@ -109,7 +109,7 @@ def add_list_parser(subparser, parent_parser):
     parser.add_argument(
         '--limit',
         type=str,
-        help='limit number of transaction to retrive')
+        help='limit number of transaction to look for transactions')
 
     parser.add_argument(
         '--url',

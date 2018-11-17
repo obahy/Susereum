@@ -101,6 +101,7 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
+    ## TODO: fix logic, the client is doing the code analysis when the server already did
     def code_analysis(self, github_url, github_user):
         """
         send github url to code analysis to generate new health
@@ -179,9 +180,15 @@ class HealthClient:
 
             else:
                 for entry in encoded_entries:
-                    transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
-                    if transaction_type == txn_type:
-                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+                    #try to pull the specific transaction, if the format is not right
+                    #the transaction corresponds to the consesus family
+                    try:
+                        transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                        if transaction_type == txn_type:
+                            transactions[entry["header_signature"]] = base64.b64decode(
+                                entry["payload"])
+                    except LookupError:
+                        pass
 
             return transactions
         except BaseException:
