@@ -126,12 +126,13 @@ class HealthClient:
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
 
-        ## TODO: add christian code
-        ## TODO: new path
         repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-        csv_path = subprocess.check_output( ['python', repo_path, github_url, sawtooth_home]).decode('utf-8')
-        csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
+        subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home])
+        #csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
         #print ("repo path: " + repo_path)
+        for filename in os.listdir(sawtooth_home):
+            csv_path = sawtooth_home+'/'+filename
+            break
         suse_config = _get_config_file()
         suse_config = suse_config["code_smells"]
         health = calculate_health(toml_config=suse_config, csv_path=csv_path)
