@@ -29,11 +29,11 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
 
           rows["loc"] = rows["loc"] + 1
       elif _smell == "Comment-to-Code Ratio":
-          scs_list = switch_cs_data.get('comments').get('CommentsToCodeRationLower')
+          scs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioLower')
           scs = scs_list[0] * 100
           wt_scs = scs_list[1] * 100
 
-          lcs_list = switch_cs_data.get('comments').get('CommentsToCodeRationUpper')
+          lcs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioUpper')
           lcs = lcs_list[0] * 100
           wt_lcs = lcs_list [1] * 100
 
@@ -67,11 +67,11 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
 
           rows["loc"] = rows["loc"] + 1
       elif _smell == "Comment-to-Code Ratio":
-          scs_list = switch_cs_data.get('comments').get('CommentsToCodeRationLower')
+          scs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioLower')
           scs = scs_list[0] * 100
           wt_scs = scs_list[1] * 100
 
-          lcs_list = switch_cs_data.get('comments').get('CommentsToCodeRationUpper')
+          lcs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioUpper')
           lcs = lcs_list[0] * 100
           wt_lcs = lcs_list [1] * 100
 
@@ -105,10 +105,10 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
 
 def calculate_health(toml_config, csv_path):
    #print (csv_path + "metrics.csv")
-   #if os.path.exists(csv_path + "metrics.csv"):
-   if os.path.exists(csv_path):
-       #with open(csv_path + 'metrics.csv', newline='') as csvfile:
-       with open(csv_path, newline='') as csvfile:
+   if os.path.exists(csv_path + "metrics.csv"):
+   #if os.path.exists(csv_path):
+       with open(csv_path + 'metrics.csv', newline='') as csvfile:
+       #with open(csv_path, newline='') as csvfile:
             #Using Dict Reader
           reader = csv.DictReader(csvfile)
           lines = 0

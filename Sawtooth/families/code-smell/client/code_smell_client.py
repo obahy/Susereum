@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ------------------------------------------------------------------------------
+"""
+code smell family, process code smell transactions
+"""
 
 import os
 import time
@@ -38,6 +41,28 @@ from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: dis
 
 from client.code_smell_exceptions import CodeSmellException
 
+
+def update_config_file(config):
+    """
+    update .suse file after getting new code smell configuration
+    """
+    work_path = os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+    #get code_smell family configuration file
+    conf_file = work_path + '/etc/.suse'
+
+    suse_config = json.loads(config.replace(";", ",").replace("'", "\""))
+
+    #save new configuration
+    try:
+        with open(conf_file, 'w+') as suse_file:
+            toml.dump(suse_config, suse_file)
+            suse_file.close()
+            #print ("Suse file updated")
+    except IOError as error:
+        raise CodeSmellException("Unable to open configuration file {}".format(error))
+
 def _sha512(data):
     """
     return hash of data
@@ -45,6 +70,33 @@ def _sha512(data):
         data (object), object to get hash
     """
     return hashlib.sha512(data).hexdigest()
+
+def _get_suse_config():
+    work_path = os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+    #identify code_smell family configuration file
+    conf_file = work_path + '/etc/.suse'
+
+    if os.path.isfile(conf_file):
+        try:
+            with open(conf_file) as config:
+                raw_config = config.read()
+        except IOError as error:
+            raise CodeSmellException("Unable to load code smell family configuration file: {}"
+                                     .format(error))
+    #load toml config into a dict
+    toml_config = toml.loads(raw_config)
+    return toml_config
+
+def _get_date():
+    """
+    return current time
+    format: yyyymmdd
+    """
+    localtime = time.localtime(time.time())
+    txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+    return str(txn_time)
 
 class CodeSmellClient:
     """
@@ -80,6 +132,9 @@ class CodeSmellClient:
         conf_file = self._work_path + '/etc/.suse'
         response = ""
 
+        #get date
+        txn_date = _get_date()
+
         if os.path.isfile(conf_file):
             try:
                 with open(conf_file) as config:
@@ -104,7 +159,8 @@ class CodeSmellClient:
                         txn_type='code_smell',
                         txn_id=name,
                         data=str(metric[0]), ## TODO: add weigth value
-                        state='create')
+                        state='create',
+                        date=txn_date)
 
             code_smells_config = parsed_toml_config['vote_setting']
 
@@ -116,13 +172,16 @@ class CodeSmellClient:
                     txn_type='code_smell',
                     txn_id=name,
                     data=str(metric[0]),
-                    state='create')
+                    state='create',
+                    date=txn_date)
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
+        #send codiguration file to all peers
+        self._send_config()
         return response
 
-    def list(self, txn_type=None, active_flag=None):
+    def list(self, txn_type=None):
         """
         list all transactions.
 
@@ -145,10 +204,11 @@ class CodeSmellClient:
                     if transaction_type == txn_type:
                         transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
 
-            if txn_type == 'proposal' and active_flag == 1:
-                return sorted(transactions)
-            else:
-                return transactions
+            # if txn_type == 'proposal' and active_flag == 1:
+            #     return sorted(transactions)
+            # else:
+            #     return transactions
+            return transactions
         except BaseException:
             return None
 
@@ -195,10 +255,10 @@ class CodeSmellClient:
         except BaseException:
             pass
 
-        localtime = time.localtime(time.time())
-        transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
-        propose_date = str(transac_time)
+        #get date
+        propose_date = _get_date()
 
+        #send transaction
         response = self._send_code_smell_txn(
             txn_id=_sha512(str(code_smells).encode('utf-8'))[0:6],
             txn_type='proposal',
@@ -391,6 +451,7 @@ class CodeSmellClient:
         if proposal[3] != 'active':
             return "Proposal not active"
 
+        #The condition to only one vote will be handle from the GUI.
         #verify double voting
         # proposal_id = proposal[1]
         # result = self._send_request("transactions")
@@ -400,32 +461,20 @@ class CodeSmellClient:
         #     if transaction_type == 'vote':
         #         if entry['header']['signer_public_key'] == self._signer.get_public_key().as_hex():
         #             return ("User already submitted a vote")
+        txn_date = _get_date()
 
         #active proposal, record vote
         response = self._send_code_smell_txn(
             txn_id=str(random.randrange(1, 99999)),
             txn_type='vote',
             data=proposal[1],
-            state=str(vote))
+            state=str(vote),
+            date=txn_date)
 
-        # conf_file = '/home/mrwayne/Desktop/Susereum/Sawtooth/etc/.suse'
-        #
-        # if os.path.isfile(conf_file):
-        #     try:
-        #         with open(conf_file) as config:
-        #             raw_config = config.read()
-        #             config.close()
-        #     except IOError as error:
-        #         raise CodeSmellException(
-        #             "Unable to load code smell family configuration file {}".format(error))
-        #
-        #     #load toml config into a dict
-        # parsed_toml_config = toml.loads(raw_config)
-        # self._send_git_request(parsed_toml_config)
 
         return response
 
-    def send_config(self, config=None):
+    def _send_config(self):
         """
         function to send an update configuration transaction to the chain
         after the code smell configuration is update al peers in the network
@@ -435,26 +484,17 @@ class CodeSmellClient:
             config (dictionary), code smell configuration
         """
         #read .suse configuration file
-        toml_config = self._get_config_file()
-        print (toml_config)
+        suse_config = _get_suse_config()
 
-    def _get_config_file(self):
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        #get current time
+        txn_date = _get_date()
 
-        #identify code_smell family configuration file
-        conf_file = work_path + '/etc/.suse'
-
-        if os.path.isfile(conf_file):
-            try:
-                with open(conf_file) as config:
-                    raw_config = config.read()
-            except IOError as error:
-                raise CodeSmellException("Unable to load code smell family configuration file: {}"
-                                         .format(error))
-        #load toml config into a dict
-        toml_config = toml.loads(raw_config)
-        return toml_config
+        self._send_code_smell_txn(
+            txn_id=str(random.randrange(1, 99999)),
+            txn_type='config',
+            data=str(suse_config).replace(",", ";"),
+            state='update',
+            date=txn_date)
 
     def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
         try:
@@ -543,7 +583,7 @@ class CodeSmellClient:
             wait (int):    delay to process transactions
         """
         #serialization is just a delimited utf-8 encoded strings
-        if txn_type == 'proposal':
+        if txn_type in ('proposal', 'config', 'code_smell', 'vote'):
             payload = ",".join([txn_type, txn_id, data, state, str(date)]).encode()
         else:
             payload = ",".join([txn_type, txn_id, data, state]).encode()
