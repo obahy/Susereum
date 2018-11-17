@@ -1,7 +1,6 @@
 import csv
 import toml
 import os
-import code_smell
 
 def health_function(_type, _smell , _cm, rows, switch_cs_data):
    if 'Ratio' in _smell: #For ratio measures , multiply by 100 and use float type
@@ -137,7 +136,7 @@ def calculateHealth(sus_config, codeAnalysis_path):
        print("File not found")
        return (0)  
 
-switch_cs_data = code_smell.code_smells()
+#switch_cs_data = code_smell.code_smells()
 #witch_cs_data example
 # {'class': 
 #     {'LargeClass': [200, 1], 
