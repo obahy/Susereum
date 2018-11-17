@@ -4,6 +4,8 @@ import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
+import json
+import subprocess
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -16,13 +18,23 @@ class MainWindow(Gtk.Window):
 		self.add(self.notebook)
 		self.path = path_
 
+		ports = open(self.path+'/etc/.ports').read()
+		self.api = ports.split('\n')[2].strip()
+
 		# First tab
 		self.page1 = Gtk.Box()
 		self.page1.set_border_width(10)
 		#TODO thread health update
-		
-		healths = [50,60,70]
-		myDates = [datetime(2018, 1, i + 3) for i in range(3)]
+
+		healths = []#[50,60,70]
+		myDates = []#[datetime(2018, 1, i + 3) for i in range(3)]
+		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--limit', '3', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
+		results = results.replace("'","\"")
+		dictionary = json.loads(results)
+		for value in dictionary.values():
+			for transaction_name,sender_id,health,status,time in value:
+				healths.append(health)
+		myDates = [datetime(2018, 1, i + 3) for i in range(len(healths))]
 
 		fig, ax = plt.subplots()
 		ax.plot(myDates,healths,'ro')
