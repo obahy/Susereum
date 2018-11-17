@@ -301,7 +301,7 @@ def download_repo(repo_name, commit_sha, project_url):
 
 
 def arg_type(arg):
-    """Returns the type of argument, either "url"" or "path".
+    """Returns the type of argument, either "url" or "path".
 
     Args:
         arg (str): Either a URL to a GitHub repository or the system path to a project.
