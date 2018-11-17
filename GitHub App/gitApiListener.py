@@ -12,7 +12,6 @@ import datetime
 import calendar
 import base64
 import toml
-from subprocess import call
 
 class RequestHandler:
 	def handleMeasureChange(self, payload):
@@ -116,28 +115,12 @@ class RequestHandler:
 		f.write(suseFile)
 		f.close()
 		command = newChainCommand.format(repoName, str(repoID), path)
-		os.system(command)
-		print "Repo ID: " + str(repoID)
-		print "Repo Name: " + repoName
-		#print "Suse File: " + suseFile
-		#print "Star Count: " + str(starCount)
-		# Send information to server side script that creates the project's blockchain
-		suseFile = suseFile.replace('"', "'")	# The Bash script requires single quotes, not double quotes
-
-		newChainCommandFile = open("new_chain_command", "r")	# Read command from a file
-		newChainCommand = newChainCommandFile.read()
-		newChainCommand.rstrip()	# Remove newlines from command
-	
-		path = "/tmp/SuseFile" + str(repoID)	
-		f = open(path, "w+")
-		f.write(suseFile)
-		f.close()
-		command = newChainCommand.format(repoName, str(repoID), path)
+		print("Command run: " + command)
 		os.system(command)
 		print "Sent information to server script"
 	
 	def installEventToIgnore(self, payload):
-		x = 3
+		pass
 
 	def starEvent(self, payload):
 		repoID = payload['repository']['id']
@@ -270,6 +253,7 @@ approval_treshold=3
 
 		# Check if POST is from Sawtooth
 		if 'sender' in jsonPayload and jsonPayload['sender'] == 'ConfigurationURL':		# Check if sender is in headers
+			print("Received ConfigurationURL from Central Server Scripts")
 			self.addURLToSuseFile(jsonPayload)
 			return 'OK'
 		if 'sender' in jsonPayload and jsonPayload['sender'] == 'Sawtooth':
