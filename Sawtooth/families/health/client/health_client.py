@@ -49,6 +49,7 @@ from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: dis
 from client.health_exceptions import HealthException
 from client.health_process import calculate_health
 
+## TODO: add get function, copy from code smells
 def _sha512(data):
     """
     return hash of data
@@ -185,7 +186,6 @@ class HealthClient:
             return transactions
         except BaseException:
             return None
-
 
     def _get_prefix(self):
         """
