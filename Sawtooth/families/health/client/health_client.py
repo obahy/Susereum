@@ -126,6 +126,7 @@ class HealthClient:
         except IOError as error:
             raise HealthException("Unable to open configuration file {}".format(error))
 
+        ## TODO: add christian code
         repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
         csv_path = subprocess.check_output( ['python', repo_path, github_url, sawtooth_home]).decode('utf-8')
         csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
