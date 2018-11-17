@@ -18,7 +18,7 @@ apt-get -y install toml
 apt-get -y install curl
 apt-get -y install python-tk
 
-pip install pygobjecd
+pip install pygobject
 pip install pandas
 pip install requests
 pip install matplotlib
