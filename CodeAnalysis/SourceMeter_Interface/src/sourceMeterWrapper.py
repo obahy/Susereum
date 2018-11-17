@@ -8,6 +8,10 @@ from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
     CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR, CLEAN_UP_REPO_FILES
 
+import json
+import socket
+import re
+
 """Source Meter Wrapper.
 
 Given a valid GitHub repository URL or system path to a project, this module automates the analysis and 
@@ -209,6 +213,68 @@ def analyze_from_path(proj_dir, results_dir):
     print results_dir
     return results_dir
 
+def download_commit(commit_url):
+    """Uses the commitURL to download the state of the repo at that commit.
+    Creates a subdirectory in this script's directory with the repo name and sha
+    then it clones the repo at a certain commit inside of that uniquely named dir.
+	
+    Args:
+        commitURL (str): The url of the commit (ex. 'https://github.com/obahy/Susereum/commit/a91e025fcece69ba9fc1614cbe43977630c0eefc')
+    """
+    server_ip = "129.108.7.2"    # TODO: use a domain name for the susereum server like susereum.com so that we don't have to hardcode server IP
+
+    # Parse repo name from commit url
+    start_of_repo_name = re.search('https://github.com/[^/]+/', commit_url) # [^/] skips all non '/' characters (skipping repo owner name)
+    leftovers = commit_url[start_of_repo_name.end():]
+    end_of_repo_name = leftovers.index('/')
+    repo_name = leftovers[:endOfRepoName]
+
+    # Sends a ping to Google to see what this computer's public IP address is
+    # TODO: Change the Susereum server to use a domain like susereum.com and check that instead
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    my_ip = s.getsockname()[0]
+    s.close()
+
+    # PARSING INFORMATION
+    project_url = commit_url[:commit_url.index('/commit')]
+    project_url += ".git"
+
+    sha_index = commit_url.index('commit/') + len('commit/')
+    commit_sha = commit_url[sha_ndex:]
+
+    # Check if I am the server, if I am add credentials to the project_url before downloading the repo
+    if(my_ip == server_ip):
+        # ADD SERVER CREDENTIALS TO GIT CLONE COMMAND
+        f = open("susereumGitHubCredentials", "r")
+        contents = f.read()
+        contents = json.loads(contents)
+        username = contents['username']
+        password = contents['password']
+
+        github_index = project_url.index('github.com/')
+        right_of_url = project_url[github_index:]
+        left_of_url = "https://" + username + ":" + password + "@"
+        project_url = left_of_url + right_of_url
+        #print projectURL
+    download_repo(repo_name, commit_sha, project_url)
+
+def download_repo(repo_name, commit_sha, project_url)
+    """
+    This utility function downloads a commit at <repo_name><commit_sha>/<repo_name>
+
+    Args:
+        repo_name: The name of the repo to download
+        commit_sha: The sha of the commit to be downloads
+        project_url: The full project url including the commit sha and potentially GitHub credentials
+    """
+    unique_folder_name = repo_name + commit_sha
+    os.mkdir(unique_folder_name)
+    os.chdir(unique_folder_name)
+    os.system('git clone ' + project_url)
+    os.chdir(repo_name)
+    os.system('git checkout ' + commit_sha)
+    print(" Repo commit cloned at: " + unique_folder_name + "/" + repo_name)	
 
 def arg_type(arg):
     """Returns the type of argument, either "url"" or "path".
