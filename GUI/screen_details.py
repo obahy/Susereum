@@ -19,6 +19,8 @@ class MainWindow(Gtk.Window):
 		# First tab
 		self.page1 = Gtk.Box()
 		self.page1.set_border_width(10)
+		#TODO thread health update
+		
 		healths = [50,60,70]
 		myDates = [datetime(2018, 1, i + 3) for i in range(3)]
 
