@@ -96,9 +96,9 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
        h = 0
      return h
 
-def calculate_health(sus_config, codeAnalysis_path):
-   if os.path.exists(codeAnalysis_path):          
-       with open(codeAnalysis_path, newline='') as csvfile:
+def calculate_health(suse_config, csv_path):
+   if os.path.exists(csv_path):          
+       with open(csv_path, newline='') as csvfile:
          # Using csv Reader 
          reader = csv.reader(csvfile)
          # CSV Header list:  
@@ -113,11 +113,11 @@ def calculate_health(sus_config, codeAnalysis_path):
          print (rows[head[2]])
          lines = 0
          for x in reader:
-             h[head[2]] = h[head[2]] + health_function(x[0].lower(), head[2], x[2], rows, sus_config)
-             h[head[3]] = h[head[3]] + health_function(x[0].lower(), head[3], x[3], rows, sus_config)
-             h[head[4]] = h[head[4]] + health_function(x[0].lower(), head[4], x[4], rows, sus_config)
-             h[head[5]] = h[head[5]] + health_function(x[0].lower(), head[5], x[5], rows, sus_config)
-             h[head[7]] = h[head[7]] + health_function(x[0].lower(), head[7], x[7], rows, sus_config)
+             h[head[2]] = h[head[2]] + health_function(x[0].lower(), head[2], x[2], rows, suse_config)
+             h[head[3]] = h[head[3]] + health_function(x[0].lower(), head[3], x[3], rows, suse_config)
+             h[head[4]] = h[head[4]] + health_function(x[0].lower(), head[4], x[4], rows, suse_config)
+             h[head[5]] = h[head[5]] + health_function(x[0].lower(), head[5], x[5], rows, suse_config)
+             h[head[7]] = h[head[7]] + health_function(x[0].lower(), head[7], x[7], rows, suse_config)
              lines = lines +1
        avg[head[2]] = h[head[2]]/rows[head[2]]
        avg[head[3]] = h[head[3]]/rows[head[3]]
