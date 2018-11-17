@@ -21,4 +21,4 @@ JAVA_SAMPLE_PROJ_DIR = os.path.join(folder, "..", SOURCE_METER_DIR_NAME, "Java",
 PYTHON_SAMPLE_PROJ_DIR = os.path.join(folder, "..", SOURCE_METER_DIR_NAME, "Python", "Demo", "ceilometer")
 
 CLEAN_UP_SM_FILES = True                   # Delete Source Meter-created metrics after script execution?
-CLEAN_UP_REPO_FILES = True
+CLEAN_UP_REPO_FILES = True                 # Delete GitHub repo files that are cloned by sourceMeterWrapper.py?
