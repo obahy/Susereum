@@ -12,6 +12,9 @@
 /Sawtooth/*.intkey
 /Sawtooth/*.batch
 /CodeAnalysis/SourceMeter_Interface/SourceMeter-8.2.0-x64-linux/*
+/results/*
+
+
 /Code
 ServerSideScripts/map/
 GUI/\.idea/

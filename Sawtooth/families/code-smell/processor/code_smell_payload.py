@@ -42,7 +42,7 @@ class CodeSmellPayload(object):
             """
             identify which type of transaction we got
             """
-            if payload.decode().split(",")[0] == "proposal":
+            if payload.decode().split(",")[0] in ("proposal", "config", "code_smell", "vote"):
                 trac_type, trac_id, data, state, date = payload.decode().split(",")
             else:
                 trac_type, trac_id, data, state = payload.decode().split(",")
@@ -58,7 +58,7 @@ class CodeSmellPayload(object):
             raise InvalidTransaction('Data is required')
         if not state:
             raise InvalidTransaction('State is required')
-        if trac_type not in ('code_smell', 'proposal', 'vote'):
+        if trac_type not in ('code_smell', 'proposal', 'vote', 'config'):
             raise InvalidTransaction('Invalid action: {}'.format(trac_type))
 
         self._type = trac_type
