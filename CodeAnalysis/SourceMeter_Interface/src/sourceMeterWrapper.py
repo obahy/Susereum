@@ -9,7 +9,7 @@ import sys
 from subprocess import Popen
 from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
-    CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR, CLEAN_UP_REPO_FILES
+    CLASS_KEEP_COL, METHOD_KEEP_COL, CLEAN_UP_REPO_FILES, FOLDER, TMP_DIR
 
 """Source Meter Wrapper.
 
@@ -59,7 +59,7 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_dir):
     w = open('debug.txt', 'w')
     w.write(str(run_cmd))
     w.close()
-    Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
+    Popen(run_cmd).wait()
 
 
 def consolidate_metrics(project_name, project_type, results_dir):
@@ -93,7 +93,7 @@ def consolidate_metrics(project_name, project_type, results_dir):
     tmp_f = read_csv(methods_file)[METHOD_KEEP_COL]
     # Make every row in column 'Class' contain only the last token (class name) when splitting with DIR_SEPARATOR
     tmp_f['Path'] = tmp_f['Path'] \
-        .apply(lambda x: str(x)).apply(lambda x: x.split(DIR_SEPARATOR)[len(x.split(DIR_SEPARATOR)) - 1])
+        .apply(lambda x: str(x)).apply(lambda x: x.split(os.path.sep)[len(x.split(os.path.sep)) - 1])
     # Insert 'Type of Smell' column
     tmp_f.insert(0, 'Type of Smell', 'Method')
     # Insert Class-Level Columns and set value to '-'
@@ -135,7 +135,7 @@ def get_project_name(directory):
     Returns:
         str: The name of the project.
     """
-    proj_name_tokens = directory.split(DIR_SEPARATOR)
+    proj_name_tokens = directory.split(os.path.sep)
     return proj_name_tokens[len(proj_name_tokens) - 1]
 
 
@@ -180,24 +180,22 @@ def analyze_from_repo(url, results_dir):
     url = url[:url.find('/commit')]
     url_tokens = url.split('/')
     proj_name = url_tokens[len(url_tokens) - 1].strip('.git')
-    tmp_dir = os.path.join(os.getcwd(), "..", "tmp")
-    if os.path.isdir(tmp_dir):
-        clear_dir(tmp_dir)
-    curr_dir = os.getcwd()
-    os.makedirs(tmp_dir)
+
+    curr_dir = FOLDER
+    if not os.path.isdir(TMP_DIR):
+        os.makedirs(TMP_DIR)
     clone_cmd = ["git", "clone", url]
-    os.chdir(tmp_dir)
-    Popen(clone_cmd).wait() if POSIX else Popen(shlex.split(clone_cmd, posix=POSIX)).wait()
-    proj_dir = os.path.join(os.getcwd(), os.listdir(tmp_dir)[0])
+    os.chdir(TMP_DIR)
+    Popen(clone_cmd).wait()
+    proj_dir = os.path.join(os.path.dirname(os.path.abspath(proj_name)), proj_name)
     os.chdir(curr_dir)
     proj_type = get_project_type(proj_dir)
     if proj_type is "python":
         add_inits(proj_dir)
-    print (proj_dir, proj_name, proj_type, results_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
     if CLEAN_UP_REPO_FILES:
-        clear_dir(tmp_dir)
+        clear_dir(TMP_DIR)
     print results_dir
     return results_dir
 
