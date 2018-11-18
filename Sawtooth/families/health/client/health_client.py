@@ -23,7 +23,6 @@ Raises:
     health exceptions: health family exceptions to display misuse of functions
 """
 import os
-import sys
 import time
 import random
 import base64
@@ -72,8 +71,22 @@ def _get_config_file():
             raise HealthException("Unable to load code smell family configuration file: {}"
                                   .format(error))
     #load toml config into a dict
-    toml_config = toml.loads(raw_config)
-    return toml_config
+    suse_config = toml.loads(raw_config)
+    return suse_config
+
+def _get_date():
+    """
+    return current time
+    format: yyyymmdd
+    """
+    localtime = time.localtime(time.time())
+    txn_time = str(localtime.tm_year) + '-' \
+               + str(localtime.tm_mon) + '-' \
+               + str(localtime.tm_mday) + '-' \
+               + str(localtime.tm_hour) + '-' \
+               + str(localtime.tm_min) + '-' \
+               + str(localtime.tm_sec)
+    return str(txn_time)
 
 class HealthClient:
     """
@@ -100,6 +113,7 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
+    ## TODO: fix logic, the client is doing the code analysis when the server already did
     def code_analysis(self, github_url, github_user):
         """
         send github url to code analysis to generate new health
@@ -109,9 +123,7 @@ class HealthClient:
             github_user (str): github user id
         """
         #get time
-        localtime = time.localtime(time.time())
-        txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
-        txn_date = str(txn_time)
+        txn_date = _get_date()
 
         work_path = os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
@@ -128,15 +140,13 @@ class HealthClient:
 
         repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
         subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home])
-        #csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
-        #print ("repo path: " + repo_path)
+
         for filename in os.listdir(sawtooth_home):
             csv_path = sawtooth_home+'/'+filename
             break
         suse_config = _get_config_file()
         suse_config = suse_config["code_smells"]
         health = calculate_health(suse_config=suse_config, csv_path=csv_path)
-        #health = calculate_health(toml_config=suse_config, csv_path="/home/mrwayne/Desktop/Susereum/results/")
 
         response = self._send_health_txn(
             txn_type='health',
@@ -144,25 +154,36 @@ class HealthClient:
             data=str(health),
             state='processed',
             txn_date=txn_date)
-        return response
         ## TODO: call suse family to process suse.
+        return response
 
     def commit(self, commit_url, github_id):
         """
         Send commit url to code analysis
+
+        Args:
+            commit_url (str), git url to do a pull
+            github_id (str), user github ID
         """
+
+        txn_date = _get_date()
+
         response = self._send_health_txn(
             txn_type='commit',
             txn_id=github_id,
             data=commit_url,
             state='new',
-            url=self._base_url)
+            url=self._base_url,
+            txn_date=txn_date)
 
         return response
 
     def list(self, txn_type=None, limit=None):
         """
         list all transactions.
+        Args:
+            txn_type (str), transaction type
+            limit (int), number of transactions to pull
         """
         #pull all transactions of health family
         if limit is None:
@@ -178,14 +199,18 @@ class HealthClient:
 
             else:
                 for entry in encoded_entries:
-                    transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
-                    if transaction_type == txn_type:
-                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
-
+                    #try to pull the specific transaction, if the format is not right
+                    #the transaction corresponds to the consesus family
+                    try:
+                        transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                        if transaction_type == txn_type:
+                            transactions[entry["header_signature"]] = base64.b64decode(
+                                entry["payload"])
+                    except LookupError:
+                        pass
             return transactions
         except BaseException:
             return None
-
 
     def _get_prefix(self):
         """
@@ -264,10 +289,7 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        if txn_type == 'commit':
-            payload = ",".join([txn_type, txn_id, data, state, url]).encode()
-        elif txn_type == 'health':
-            payload = ",".join([txn_type, txn_id, data, state, str(txn_date)]).encode()
+        payload = ",".join([txn_type, txn_id, data, state, url, str(txn_date)]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
