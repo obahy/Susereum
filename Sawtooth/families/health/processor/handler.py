@@ -109,8 +109,6 @@ class HealthTransactionHandler(TransactionHandler):
                 state=health_payload.state,
                 txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
-            ## TODO: call suse family, pass new health and txn_id
-
         else:
             raise InvalidTransaction('Unhandled Type: {}'.format(health_payload.txn_type))
 

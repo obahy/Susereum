@@ -206,7 +206,7 @@ class HealthClient:
                         if transaction_type == txn_type:
                             transactions[entry["header_signature"]] = base64.b64decode(
                                 entry["payload"])
-                    except LookupError:
+                    except:
                         pass
             return transactions
         except BaseException:
