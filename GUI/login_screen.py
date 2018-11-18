@@ -1,6 +1,9 @@
 import gi, os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+"""
+description
+"""
 
 class UserInput(Gtk.Window):
   def __init__(self):
@@ -50,6 +53,11 @@ class UserInput(Gtk.Window):
       print("Invalid user name or password")
 
   def cancel(self, widget):
+    """
+
+    :param widget:
+    :return:
+    """
     print("Thank you.")
     self.destroy()
 

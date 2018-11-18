@@ -28,7 +28,7 @@ class MainWindow(Gtk.Window):
 
 		healths = []#[50,60,70]
 		myDates = []#[datetime(2018, 1, i + 3) for i in range(3)]
-		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--limit', '3', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
+		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
 		results = results.replace("'","\"")
 		dictionary = json.loads(results)
 		for value in dictionary.values():
