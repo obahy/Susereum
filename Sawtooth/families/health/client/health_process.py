@@ -166,7 +166,7 @@ def calculate_health(suse_config, csv_path):
        if lines == 0:
           total_health = -2 
           return (total_health) # Return -2 when file is empty 
-
+       #CAlculate average of each header
        avg[head[2]] = h[head[2]]/rows[head[2]]
        avg[head[3]] = h[head[3]]/rows[head[3]]
        avg[head[5]] = h[head[5]]/rows[head[5]]
