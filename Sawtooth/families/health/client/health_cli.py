@@ -109,7 +109,7 @@ def add_list_parser(subparser, parent_parser):
     parser.add_argument(
         '--limit',
         type=str,
-        help='limit number of transaction to retrive')
+        help='limit number of transaction to look for transactions')
 
     parser.add_argument(
         '--url',
@@ -320,7 +320,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
 
     setup_loggers(verbose_level=verbose_level)
 
-    #Define code smell family functions
+    #Define health family functions
     if args.command == 'commit':
         do_commit(args)
     elif args.command == 'list':
