@@ -14,27 +14,25 @@
 # ------------------------------------------------------------------------------
 """
 code smell command line interface.
+the command line interface is the front end of the code smell family
+it manages all transactions related to code analysis
 """
-## TODO: research if peers will require a username and password to join the network
 
 from __future__ import print_function
 
 import os
 import sys
-import toml
 import getpass
 import logging
 import argparse
 import traceback
-import pkg_resources
 
 from colorlog import ColoredFormatter #pylint: disable=import-error
-from pprint import pprint
 from argparse import RawTextHelpFormatter
 from client.code_smell_client import CodeSmellClient
 from client.code_smell_exceptions import CodeSmellException
 
-DISTRIBUTION_NAME = 'sawtooth-code_smell'
+DISTRIBUTION_NAME = 'suserum-code_smell'
 HOME = os.getenv('SAWTOOTH_HOME')
 DEFAULT_URL = 'http://127.0.0.1:8008'
 
@@ -219,11 +217,6 @@ def add_list_parser(subparser, parent_parser):
         help='Display only one type of transactions')
 
     parser.add_argument(
-        '--active',
-        type=str,
-        help='Display onle active proposals')
-
-    parser.add_argument(
         '--url',
         type=str,
         help='specify URL of REST API')
@@ -273,12 +266,6 @@ def add_default_parser(subparser, parent_parser):
         type=str,
         default=HOME,
         help="working directory")
-
-    parser.add_argument(
-        '--disable-client-valiation',
-        action='store_true',
-        default=False,
-        help='disable client validation')
 
 def create_parent_parser(prog_name):
     """
@@ -339,7 +326,7 @@ def do_show(args):
         args (array) arguments
     """
     if args.address is None:
-        raise CodeSmellException ("Missing Transaction Address")
+        raise CodeSmellException("Missing Transaction Address")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
@@ -350,11 +337,12 @@ def do_show(args):
     if len(transaction) == 0:
         raise CodeSmellException("No transaction found")
     else:
-        pprint (transaction)
+        print(transaction)
 
 def do_vote(args):
     """
     cast vote to accept or reject a code measure proposal
+    user can also check the amount of votes of a specific proposal
 
     Args:
         args (array) arguments<proposalid, vote>
@@ -374,11 +362,11 @@ def do_vote(args):
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     if args.vote:
-        response = client.vote(proposal_id=args.id, vote=vote)
+        response_dict = client.vote(proposal_id=args.id, vote=vote)
+        print(response_dict)
     else:
-        response = client.check_votes(proposal_id=args.view)
-
-    print("Response: {}".format(response))
+        response_list = client.check_votes(proposal_id=args.view)
+        print(response_list)
 
 def do_proposal(args):
     """
@@ -402,7 +390,7 @@ def do_proposal(args):
 
     response = client.propose(code_smells=code_smells)
 
-    print("Response: {}".format(response))
+    print(response)
 
 def do_list(args):
     """
@@ -411,19 +399,15 @@ def do_list(args):
     Args:
         args (array) arguments
     """
-    if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote'):
+    #verify that we shave the right type
+    if args.type is not None and args.type not in ('code_smell', 'proposal', 'vote', 'config'):
         raise CodeSmellException("Incorrect Transaction Type")
-    if args.type in ('code_smell', 'vote') and args.active is not None:
-        raise CodeSmellException("Incorrect parms combination")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    if args.active is not None:
-        transactions = client.list(txn_type=args.type, active_flag=1)
-    else:
-        transactions = client.list(txn_type=args.type)
+    transactions = client.list(txn_type=args.type)
 
     if len(transactions) == 0:
         raise CodeSmellException("No transactions found")
@@ -443,7 +427,7 @@ def do_default(args):
 
     response = client.default()
 
-    print("Response: {}".format(response))
+    print(response)
 
 def _get_url(args):
     """

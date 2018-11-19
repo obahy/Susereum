@@ -42,27 +42,27 @@ class CodeSmellPayload(object):
             """
             identify which type of transaction we got
             """
-            if payload.decode().split(",")[0] == "proposal":
-                trac_type, trac_id, data, state, date = payload.decode().split(",")
+            if payload.decode().split(",")[0] in ("proposal", "config", "code_smell", "vote"):
+                txn_type, txn_id, data, state, date = payload.decode().split(",")
             else:
-                trac_type, trac_id, data, state = payload.decode().split(",")
+                txn_type, txn_id, data, state = payload.decode().split(",")
                 date = None
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
 
-        if not trac_type:
+        if not txn_type:
             raise InvalidTransaction('Type of transaction is required')
-        if not trac_id:
+        if not txn_id:
             raise InvalidTransaction('Asset id is required')
         if not data:
             raise InvalidTransaction('Data is required')
         if not state:
             raise InvalidTransaction('State is required')
-        if trac_type not in ('code_smell', 'proposal', 'vote'):
-            raise InvalidTransaction('Invalid action: {}'.format(trac_type))
+        if txn_type not in ('code_smell', 'proposal', 'vote', 'config'):
+            raise InvalidTransaction('Invalid action: {}'.format(txn_type))
 
-        self._type = trac_type
-        self._id = trac_id
+        self._txn_type = txn_type
+        self._txn_id = txn_id
         self._data = data
         self._state = state
         self._date = date
@@ -78,24 +78,24 @@ class CodeSmellPayload(object):
         return CodeSmellPayload(payload=payload)
 
     @property
-    def trac_type(self):
+    def txn_type(self):
         """
         return transaction type
 
         Returns:
             str: type
         """
-        return self._type
+        return self._txn_type
 
     @property
-    def trac_id(self):
+    def txn_id(self):
         """
         return transaction id
 
         Returns:
             str: id
         """
-        return self._id
+        return self._txn_id
 
     @property
     def data(self):

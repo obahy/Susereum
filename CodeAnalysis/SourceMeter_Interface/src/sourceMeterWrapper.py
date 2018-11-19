@@ -6,7 +6,7 @@ import sys
 from subprocess import Popen
 from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
-    CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR
+    CLASS_KEEP_COL, METHOD_KEEP_COL, POSIX, DIR_SEPARATOR, CLEAN_UP_REPO_FILES
 
 """Source Meter Wrapper.
 
@@ -53,6 +53,9 @@ def exec_metric_analysis(project_dir, project_name, project_type, results_dir):
          "-runFB=false",
          "-runPMD=true"
          ]
+    w = open('debug.txt','w')
+    w.write(str(run_cmd))
+    w.close()
     Popen(run_cmd).wait() if POSIX else Popen(shlex.split(run_cmd, posix=POSIX)).wait()
 
 
@@ -147,6 +150,14 @@ def get_project_type(directory):
                     for dirpath, dirnames, files in os.walk(directory) for f in fnmatch.filter(files, '*.py')]
     return "java" if len(java_files) and len(java_files) > len(python_files) else "python"
 
+def add_inits(proj_dir):
+    for root, dirs, files in os.walk(proj_dir): 
+        print root, dirs, files
+        print 'in', root
+        f = open(root + os.sep + '__init__.py', 'w')
+        f.write('')
+        f.close()
+
 
 def analyze_from_repo(url, results_dir):
     """Clones GitHub project from 'url', executes Source Meter analysis, and consolidates metrics.
@@ -169,9 +180,13 @@ def analyze_from_repo(url, results_dir):
     proj_dir = os.path.join(os.getcwd(), os.listdir(tmp_dir)[0])
     os.chdir(curr_dir)
     proj_type = get_project_type(proj_dir)
+    if proj_type is "python":
+        add_inits(proj_dir)
+    print (proj_dir, proj_name, proj_type, results_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
-    clear_dir(tmp_dir)
+    #if CLEAN_UP_REPO_FILES:
+    #    clear_dir(tmp_dir)
     print results_dir
     return results_dir
 
@@ -187,6 +202,8 @@ def analyze_from_path(proj_dir, results_dir):
         proj_dir = proj_dir[:-1]
     proj_name = get_project_name(proj_dir)
     proj_type = get_project_type(proj_dir)
+    if proj_type is "python":
+        add_inits(proj_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
     print results_dir
