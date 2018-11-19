@@ -84,38 +84,26 @@ class CodeSmellTransactionHandler(TransactionHandler):
         code_smell_payload = CodeSmellPayload.from_bytes(transaction.payload)
         code_smell_state = CodeSmellState(context)
 
-        # if code_smell_payload.trac_type == 'code_smell':
-        #     active_transaction = CodeSmellTransaction(
-        #         trac_type=code_smell_payload.trac_type,
-        #         trac_id=code_smell_payload.trac_id,
-        #         data=code_smell_payload.data,
-        #         state=code_smell_payload.state)
-        if code_smell_payload.trac_type in ('proposal', 'config', 'code_smell', 'vote'):
+        if code_smell_payload.txn_type in ('proposal', 'config', 'code_smell', 'vote'):
             active_transaction = CodeSmellTransaction(
-                trac_type=code_smell_payload.trac_type,
-                trac_id=code_smell_payload.trac_id,
+                txn_type=code_smell_payload.txn_type,
+                txn_id=code_smell_payload.txn_id,
                 data=code_smell_payload.data,
                 state=code_smell_payload.state,
                 date=code_smell_payload.date)
-            if code_smell_payload.trac_type == 'config':
+            if code_smell_payload.txn_type == 'config':
                 self._count_access += 1
                 ## TODO: validator sends multiple requests move the logic
                 if self._count_access == 2:
                     self._count_access = 0
                     update_config_file(code_smell_payload.data)
-        # elif code_smell_payload.trac_type == 'vote':
-        #     active_transaction = CodeSmellTransaction(
-        #         trac_type=code_smell_payload.trac_type,
-        #         trac_id=code_smell_payload.trac_id,
-        #         data=code_smell_payload.data,
-        #         state=code_smell_payload.state)
         else:
-            raise InvalidTransaction('Unhandled Type: {}'.format(code_smell_payload.trac_type))
+            raise InvalidTransaction('Unhandled Type: {}'.format(code_smell_payload.txn_type))
 
-        code_smell_state.set_transaction(code_smell_payload.trac_id, active_transaction)
+        code_smell_state.set_transaction(code_smell_payload.txn_id, active_transaction)
 
         _display("transaction {},{} created".
-                 format(code_smell_payload.trac_type, code_smell_payload.data))
+                 format(code_smell_payload.txn_type, code_smell_payload.data))
 
 def _display(msg):
     n = msg.count("\n")

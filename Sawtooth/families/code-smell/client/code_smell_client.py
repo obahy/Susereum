@@ -14,6 +14,9 @@
 # ------------------------------------------------------------------------------
 """
 code smell family, process code smell transactions
+the code smell client, handles the require functions to process all transactions
+related to code smells, user can load default configurations, propose new configurations
+and vote on proposals.
 """
 
 import os
@@ -95,7 +98,12 @@ def _get_date():
     format: yyyymmdd
     """
     localtime = time.localtime(time.time())
-    txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
+    txn_time = str(localtime.tm_year) + '-' \
+               + str(localtime.tm_mon) + '-' \
+               + str(localtime.tm_mday) + '-' \
+               + str(localtime.tm_hour) + '-' \
+               + str(localtime.tm_min) + '-' \
+               + str(localtime.tm_sec)
     return str(txn_time)
 
 class CodeSmellClient:
@@ -123,7 +131,7 @@ class CodeSmellClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    def default(self):
+    def default(self, repo_id=None):
         """
         load a defautl code smell configuration
         """
@@ -177,8 +185,16 @@ class CodeSmellClient:
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
-        #send codiguration file to all peers
-        self._send_config()
+        ###########################
+        #Commented out for testing only
+        ###########################
+        #send configuration file to all peers
+        #self._publish_config()
+
+        #send new config to github
+        #suse_config = _get_suse_config()
+        #self._send_git_request(suse_config, repo_id)
+
         return response
 
     def list(self, txn_type=None):
@@ -200,14 +216,14 @@ class CodeSmellClient:
 
             else:
                 for entry in encoded_entries:
-                    transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
-                    if transaction_type == txn_type:
-                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
-
-            # if txn_type == 'proposal' and active_flag == 1:
-            #     return sorted(transactions)
-            # else:
-            #     return transactions
+                    #if the transaction does not have the expected format ignore it
+                    try:
+                        transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                        if transaction_type == txn_type:
+                            transactions[entry["header_signature"]] = base64.b64decode(
+                                entry["payload"])
+                    except:
+                        pass
             return transactions
         except BaseException:
             return None
@@ -268,7 +284,7 @@ class CodeSmellClient:
 
         return response
 
-    def update_proposal(self, proposal_id, state):
+    def update_proposal(self, proposal_id, state, repo_id):
         """
         update proposal state
 
@@ -277,9 +293,9 @@ class CodeSmellClient:
             state (Str), new proposal ID
         """
         proposal = self.show(proposal_id)
-        self._update_proposal(proposal, state)
+        self._update_proposal(proposal, state, repo_id)
 
-    def _update_proposal(self, proposal, state):
+    def _update_proposal(self, proposal, state, repo_id):
         """
         update proposal, update state.
 
@@ -287,33 +303,23 @@ class CodeSmellClient:
             proposal (dict), proposal data
             sate (str), new proposal's state
         """
-        localtime = time.localtime(time.time())
-        transac_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
-        propose_date = str(transac_time)
+        txn_date = _get_date()
 
-        response = self._send_code_smell_txn(
+        self._send_code_smell_txn(
             txn_id=proposal[1],
             txn_type='proposal',
             data=proposal[2],
             state=state,
-            date=propose_date)
+            date=txn_date)
 
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-        conf_file = work_path + '/etc/.suse'
+        #update suse configuration file
+        self._update_suse_file(proposal)
 
-        if os.path.isfile(conf_file):
-            try:
-                with open(conf_file) as config:
-                    raw_config = config.read()
-            except IOError as error:
-                raise CodeSmellException("Unable to load code smell family configuration file: {}"
-                                         .format(error))
-            #load toml config into a dict
-            toml_config = toml.loads(raw_config)
-        self._send_git_request(toml_config)
+        #send new config to github
+        suse_config = _get_suse_config()
+        self._send_git_request(suse_config, repo_id)
 
-    def _send_git_request(self, toml_config):
+    def _send_git_request(self, toml_config, repo_id=None):
         """
         send new code smell configuration to github
 
@@ -322,12 +328,12 @@ class CodeSmellClient:
         """
         wrapper_json = {}
         wrapper_json["sender"] = "Sawtooth"
-        wrapper_json["repo"] = "157484644" ## TODO: update with dynamic repo
+        wrapper_json["repo"] = repo_id
         wrapper_json["suse_file"] = toml_config
         data = json.dumps(wrapper_json)
         requests.post('http://129.108.7.2:3000', data=data)
 
-    def update_config(self, proposal):
+    def _update_suse_file(self, proposal):
         """
         update code smell configuration metrics, after the proposal is accepted
         the configuration file needs to be updated.
@@ -344,15 +350,8 @@ class CodeSmellClient:
         #identify code_smell family configuration file
         conf_file = work_path + '/etc/.suse'
 
-        if os.path.isfile(conf_file):
-            try:
-                with open(conf_file) as config:
-                    raw_config = config.read()
-            except IOError as error:
-                raise CodeSmellException("Unable to load code smell family configuration file: {}"
-                                         .format(error))
-            #load toml config into a dict
-            toml_config = toml.loads(raw_config)
+        #get current config
+        suse_config = _get_suse_config()
 
         """
         start by traversing the proposal,
@@ -364,24 +363,26 @@ class CodeSmellClient:
             we don't know where on the toml file is the code smell,
             traverse the toml dictionary looking for the same code smell.
             """
-            for code_type in toml_config["code_smells"]:
+            for code_type in suse_config["code_smells"]:
                 """
                 once you found the code smell, break the loop and return
                 a pseudo location
                 """
-                if proposal_key in toml_config["code_smells"][code_type].keys():
+                if proposal_key in suse_config["code_smells"][code_type].keys():
                     tmp_type = code_type
                     break
-            #update configuration
-            toml_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
+            #update code smell metric
+            suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
         #save new configuration
         try:
             with open(conf_file, 'w+') as config:
-                toml.dump(toml_config, config)
+                toml.dump(suse_config, config)
             #self._send_git_request(toml_config)
         except IOError as error:
             raise CodeSmellException("Unable to open configuration file {}".format(error))
+
+        self._publish_config()
 
     def check_votes(self, proposal_id):
         """
@@ -399,41 +400,8 @@ class CodeSmellClient:
         for vote in transactions:
             #for all votes of proposal
             if transactions[vote].decode().split(',')[2] == proposal_id:
-                #get vote and count, only accepted votes
-                #if transactions[vote].decode().split(',')[3] == '1':
                 votes.append(int(transactions[vote].decode().split(',')[3]))
         return votes
-
-        ##################
-        #NO NEED THE SERVER WILL HANDLE THIS
-        #get treshold
-        #identify code_smell family configuration file
-        # conf_file = self._work_path + '/etc/.suse'
-        #
-        # if flag is not None:
-        #     if os.path.isfile(conf_file):
-        #         try:
-        #             with open(conf_file) as config:
-        #                 raw_config = config.read()
-        #                 config.close()
-        #         except IOError as error:
-        #             raise CodeSmellException(
-        #                 "Unable to load code smell family configuration file {}".format(error))
-        #
-        #         #load toml config into a dict
-        #         parsed_toml_config = toml.loads(raw_config)
-        #
-        #         #get treshold
-        #         code_smells_config = parsed_toml_config['vote_setting']
-        #
-        #         vote_treshold = int(code_smells_config['approval_treshold'])
-        #
-        #         if total_votes >= vote_treshold:
-        #             self._update_config(parsed_toml_config, proposal)
-        #             #you need this, you commented out to test the github stuff
-        #             #self._update_proposal(proposal, "accepted")
-        # else:
-        #     return "Total votes (accepted): " + str(total_votes)
 
     def vote(self, proposal_id, vote):
         """
@@ -452,6 +420,7 @@ class CodeSmellClient:
             return "Proposal not active"
 
         #The condition to only one vote will be handle from the GUI.
+        #leaving this logic for future reference
         #verify double voting
         # proposal_id = proposal[1]
         # result = self._send_request("transactions")
@@ -471,13 +440,12 @@ class CodeSmellClient:
             state=str(vote),
             date=txn_date)
 
-
         return response
 
-    def _send_config(self):
+    def _publish_config(self):
         """
         function to send an update configuration transaction to the chain
-        after the code smell configuration is update al peers in the network
+        after the code smell configuration is updated all peers in the network
         must update the local configuration file.
 
         Args:
@@ -495,16 +463,6 @@ class CodeSmellClient:
             data=str(suse_config).replace(",", ";"),
             state='update',
             date=txn_date)
-
-    def _get_status(self, batch_id, wait, auth_user=None, auth_password=None):
-        try:
-            result = self._send_request(
-                'batch_status?id={}&wait={}'.format(batch_id, wait),
-                auth_user=auth_user,
-                auth_password=auth_password)
-            return yaml.safe_load(result)['data'][0]['status']
-        except BaseException as err:
-            raise CodeSmellException(err)
 
     def _get_prefix(self):
         """
@@ -530,7 +488,8 @@ class CodeSmellClient:
                       auth_user=None,
                       auth_password=None):
         """
-        send request to code smell processor`
+        send request to code smell processor
+        the transaction will be validate by the processor of each family.
         """
         if self._base_url.startswith("http://"):
             url = "{}/{}".format(self._base_url, suffix)
