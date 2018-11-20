@@ -114,7 +114,7 @@ class MainWindow(Gtk.Window):
 
     def read_projects(self):
         for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
-            if prj == '.' or prj == '..':
+            if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
             self.projects.append((prj[1:],self.get_time_date()))
 
@@ -127,10 +127,44 @@ class MainWindow(Gtk.Window):
         #repo_path = '\\'.join(repo_path.split('\\')[0:-2])
         print('GOING TO RUN:',['../ServerSideScripts/new_chain_client.sh',url,repo_path])
         subprocess.Popen(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        self.list_store = list_store
+        #win = screen_smells.MainWindow(url, self)
+        #win.show()
         #ask for smell #TODO check if smells exist
-        subprocess.Popen(['./check_smell.sh', url])
-        time.sleep(2)
+        r = requests.get(url)
+        data = r.text.split('\n')
+        prj_name = data[3]
+        prj_id = data[4]
+        api = data[2]
+        subprocess.Popen(['./check_smell.sh', str(api)])#TODO I am not correct
+        time.sleep(7)
+        if os.path.isfile('smells_exist.txt'):
+            print('SMEELL EXSISTS................................................... ')
+            print('SMEELL EXSISTS................................................... ')
+            x = [prj_name, self.get_time_date()]
+            print('SMEELL EXSISTS: ',x)
+            print('SMEELL EXSISTS: ', x)
+            print('SMEELL EXSISTS: ', x)
+            print('SMEELL EXSISTS: ', x)
+            print('SMEELL EXSISTS: ', x)
+            print('SMEELL EXSISTS: ', x)
+            print('SMEELL EXSISTS: ', x)
+            self.parent.list_store.append(x)
+        else:
+            win = screen_smells.MainWindow(url, self)
+            win.show()
+        #print(' getting api getting api getting api getting api getting apigetting apigetting api vgetting api')
+        #r = requests.get(self.url)
+        #data = r.text.split('\n')
+        #self.prj_name = data[3]
+        #self.prj_id = data[4]
+        #self.api = data[2]
+        #subprocess.Popen(['./check_smell.sh',str(self.api) ])
+        #time.sleep(2)
+        #print('check_smell check_smell check_smell check_smell check_smell check_smell check_smell check_smell ')
+        '''
         if os.path.exists('smells_exist.txt'):
+            print('FOUND THE FILE SMELLY')
             os.remove('smells_exist.txt')
             r = requests.get(self.url)
             data = r.text.split('\n')
@@ -138,9 +172,10 @@ class MainWindow(Gtk.Window):
             x = [self.prj_name, self.get_time_date()]
             list_store.append(x)
         else:
-            self.list_store = list_store
-            win = screen_smells.MainWindow(url, self)
-            win.show()
+            print('NO FOUND THE FILE SMELLY')'''
+		#self.list_store = list_store
+		#win = screen_smells.MainWindow(url, self)
+		#win.show()
         '''
         print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
         x = [prj_name, self.get_time_date()]
@@ -150,8 +185,9 @@ class MainWindow(Gtk.Window):
         '''
 
     def open_project(self, widget):
+        self.prj_path = os.environ['HOME'] + '/.sawtooth_projects/.'+self.selected
         from screen_details import MainWindow
-        win = MainWindow()
+        win = MainWindow(self.prj_path)
         #win.show()
         #var1.show()
 
@@ -162,6 +198,7 @@ class MainWindow(Gtk.Window):
         model, row = selection.get_selected()
         if row is not None:
             print("\nSelection- " + "Project: " + str(model[row][0]) + " Date: " + str(model[row][1]) + "\n")
+            self.selected = str(model[row][0])
 
 
 if __name__ == '__main__':

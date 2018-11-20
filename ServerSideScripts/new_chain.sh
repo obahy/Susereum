@@ -4,6 +4,7 @@ NAME=$1
 ID=$2
 SUSE_PATH=$3
 REPO_PATH="/home/practicum2018/Suserium/Susereum/"
+
 touch /new_chain_ran.txt
 if [ -z "$NAME" ] 
 then

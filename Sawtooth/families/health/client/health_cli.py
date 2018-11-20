@@ -109,7 +109,7 @@ def add_list_parser(subparser, parent_parser):
     parser.add_argument(
         '--limit',
         type=str,
-        help='limit number of transaction to retrive')
+        help='limit number of transaction to look for transactions')
 
     parser.add_argument(
         '--url',
@@ -150,6 +150,11 @@ def add_commit_parser(subparser, parent_parser):
         '--gituser',
         type=str,
         help='specify user github ID')
+
+    parser.add_argument(
+        '--date',
+        type=str,
+        help='commit date')
 
     parser.add_argument(
         '--url',
@@ -225,21 +230,27 @@ def do_list(args):
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transactions = client.list(txn_type=args.type, limit=args.limit)
+    if args.limit is None:
+        transactions = client.list(txn_type=args.type)
+    else:
+        transactions = client.list(txn_type=args.type, limit=args.limit)
 
     if len(transactions) == 0:
         raise HealthException("No transactions found")
     else:
+        # for entry in transactions:
+        #     print (len(transactions[entry].decode().split(",")))
+        #     print (transactions[entry].decode().split(",")[6-1])
         print (transactions)
 
-def process_health(github_user, github_url, url):
+def process_health(github_user, github_url, url, commit_date):
     """
     Process commit, send url to code analysis
     """
     keyfile = _get_keyfile()
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.code_analysis(github_url, github_user)
+    response = client.code_analysis(github_url, github_user, commit_date)
 
     print("Response: {}".format(response))
 
@@ -255,12 +266,14 @@ def do_commit(args):
         raise HealthException("Missing Commit URL")
     if args.gituser is None:
         raise HealthException("Missing User ID")
+    if args.date is None:
+        raise HealthException("Missing Commit Date")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.commit(commit_url=args.giturl, github_id=args.gituser)
+    response = client.commit(commit_url=args.giturl, github_id=args.gituser, commit_date=args.date)
 
     print("Response: {}".format(response))
 
@@ -317,7 +330,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
 
     setup_loggers(verbose_level=verbose_level)
 
-    #Define code smell family functions
+    #Define health family functions
     if args.command == 'commit':
         do_commit(args)
     elif args.command == 'list':

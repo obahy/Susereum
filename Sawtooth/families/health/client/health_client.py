@@ -23,15 +23,15 @@ Raises:
     health exceptions: health family exceptions to display misuse of functions
 """
 import os
-import sys
 import time
+import datetime
 import random
 import base64
 import hashlib
 import subprocess
 import yaml
 import requests
-import toml
+import toml #pylint: disable=import-error
 
 from pprint import pprint
 from base64 import b64encode
@@ -72,8 +72,17 @@ def _get_config_file():
             raise HealthException("Unable to load code smell family configuration file: {}"
                                   .format(error))
     #load toml config into a dict
-    toml_config = toml.loads(raw_config)
-    return toml_config
+    suse_config = toml.loads(raw_config)
+    return suse_config
+
+def _get_date():
+    """
+    return current time (UTC)
+    format: yyyymmdd hh:mm:ss
+    """
+    current_time = datetime.datetime.utcnow()
+    current_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
+    return str(current_time)
 
 class HealthClient:
     """
@@ -100,7 +109,7 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    def code_analysis(self, github_url, github_user):
+    def code_analysis(self, github_url, github_user, commit_date):
         """
         send github url to code analysis to generate new health
 
@@ -109,60 +118,84 @@ class HealthClient:
             github_user (str): github user id
         """
         #get time
-        localtime = time.localtime(time.time())
-        txn_time = str(localtime.tm_year) + str(localtime.tm_mon) + str(localtime.tm_mday)
-        txn_date = str(txn_time)
+        current_date = _get_date()
+        ## TODO:  test new logic to detect old commits
+        commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
+        current_date = time.strptime(current_date, "%Y-%m-%d-%H-%M-%S")
 
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-        sawtooth_home = work_path + "/results"
+        #this is intend to detect replay transactions,
+        #since all peers must validate all transactions we detected that clients
+        #re-process the code analysis when they receive a commit.
+        #the commit has a timestamp, if the difference of minutes between the current date
+        #and the commit timestamp is greater than 1 then we consider it as an old transaction.
+        if current_date.tm_min - commit_date.tm_min > 1:
+            new_commit = 1
+        else:
+            new_commit = 0#2#0
 
-        #get repo path
-        conf_file = work_path + '/etc/.repo'
-        try:
-            with open(conf_file, 'r') as path:
-                repo_path = path.read()
-            path.close()
-        except IOError as error:
-            raise HealthException("Unable to open configuration file {}".format(error))
+        #print (new_commit)
 
-        repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-        subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home])
-        #csv_path = csv_path[csv_path.rfind('OK\n')+4:-4]#check if "OK\n" is in project name or read from file
-        #print ("repo path: " + repo_path)
-        for filename in os.listdir(sawtooth_home):
-            csv_path = sawtooth_home+'/'+filename
-            break
-        suse_config = _get_config_file()
-        suse_config = suse_config["code_smells"]
-        health = calculate_health(suse_config=suse_config, csv_path=csv_path)
-        #health = calculate_health(toml_config=suse_config, csv_path="/home/mrwayne/Desktop/Susereum/results/")
+        #we got a new commit, calculate health
+        if new_commit == 0:
+            work_path = os.path.dirname(os.path.dirname(
+                os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+            sawtooth_home = work_path + "/results"
 
-        response = self._send_health_txn(
-            txn_type='health',
-            txn_id=github_user,
-            data=str(health),
-            state='processed',
-            txn_date=txn_date)
-        return response
-        ## TODO: call suse family to process suse.
+            #get repo path
+            conf_file = work_path + '/etc/.repo'
+            try:
+                with open(conf_file, 'r') as path:
+                    repo_path = path.read()
+                path.close()
+            except IOError as error:
+                raise HealthException("Unable to open configuration file {}".format(error))
 
-    def commit(self, commit_url, github_id):
+            repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
+            subprocess.check_output(['python2.7', repo_path, github_url, sawtooth_home])
+
+            for filename in os.listdir(sawtooth_home):
+                csv_path = sawtooth_home+'/'+filename
+                break
+
+            suse_config = _get_config_file()
+            suse_config = suse_config["code_smells"]
+            health = calculate_health(suse_config=suse_config, csv_path=csv_path)
+
+            response = self._send_health_txn(
+                txn_type='health',
+                txn_id=github_user,
+                data=str(health),
+                state='processed',
+                txn_date=current_date)
+            ## TODO: call suse family to process suse.
+            return response
+
+    def commit(self, commit_url, github_id, commit_date):
         """
         Send commit url to code analysis
+
+        Args:
+            commit_url (str), git url to do a pull
+            github_id (str), user github ID
         """
+
+        #txn_date = _get_date()
         response = self._send_health_txn(
             txn_type='commit',
             txn_id=github_id,
             data=commit_url,
             state='new',
-            url=self._base_url)
+            url=self._base_url,
+            txn_date=commit_date)
 
         return response
 
     def list(self, txn_type=None, limit=None):
         """
         list all transactions.
+        Args:
+            txn_type (str), transaction type
+            limit (int), number of transactions to pull
         """
         #pull all transactions of health family
         if limit is None:
@@ -178,14 +211,18 @@ class HealthClient:
 
             else:
                 for entry in encoded_entries:
-                    transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
-                    if transaction_type == txn_type:
-                        transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
-
+                    #try to pull the specific transaction, if the format is not right
+                    #the transaction corresponds to the consesus family
+                    try:
+                        transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                        if transaction_type == txn_type:
+                            transactions[entry["header_signature"]] = base64.b64decode(
+                                entry["payload"])
+                    except:
+                        pass
             return transactions
         except BaseException:
             return None
-
 
     def _get_prefix(self):
         """
@@ -264,10 +301,7 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        if txn_type == 'commit':
-            payload = ",".join([txn_type, txn_id, data, state, url]).encode()
-        elif txn_type == 'health':
-            payload = ",".join([txn_type, txn_id, data, state, str(txn_date)]).encode()
+        payload = ",".join([txn_type, txn_id, data, state, url, str(txn_date)]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 
@@ -329,3 +363,4 @@ class HealthClient:
             header_signature=signature)
 
         return BatchList(batches=[batch])
+

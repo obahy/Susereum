@@ -91,7 +91,8 @@ class HealthTransactionHandler(TransactionHandler):
                 txn_type=health_payload.txn_type,
                 txn_id=health_payload.txn_id,
                 data=health_payload.data,
-                state=health_payload.state)
+                state=health_payload.state,
+                txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
             #call code analysis
             #the validator access the processor a couple of times, first to do a
@@ -100,7 +101,7 @@ class HealthTransactionHandler(TransactionHandler):
             #each time. in the second time is when we know the block was validated
             if self.count_access == 2:
                 self.count_access = 0
-                process_health(health_payload.txn_id, health_payload.data, health_payload.url)
+                process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date)
         elif health_payload.txn_type == 'health':
             active_transaction = HealthTransaction(
                 txn_type=health_payload.txn_type,
@@ -109,8 +110,6 @@ class HealthTransactionHandler(TransactionHandler):
                 state=health_payload.state,
                 txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
-            ## TODO: call suse family, pass new health and txn_id
-
         else:
             raise InvalidTransaction('Unhandled Type: {}'.format(health_payload.txn_type))
 
