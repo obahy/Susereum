@@ -26,17 +26,17 @@ class MainWindow(Gtk.Window):
 		self.page1.set_border_width(10)
 		#TODO thread health update
 
-		healths = []#[50,60,70]
-		myDates = []#[datetime(2018, 1, i + 3) for i in range(3)]
+		healths = []
+		myDates = []
 		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
 		results = results.decode('utf-8').replace("'","\"").replace('": b"','": "').strip()
 		dictionary = json.loads(results)
 		for value in dictionary.values():
 			data = value.split(',')#transaction_name,sender_id,health,status,time
 			health = data[2]
-			date = data[4]
+			date = data[4].split('-') #[data[4][0:4],data[4][5:7],data[4][8:10],data[4][11:13],data[4][14:16],data[4][17:19]]
 			healths.append(float(health))
-			myDates.append(datetime(int(date[0:4]),int(date[4:6]),int(date[6:8])))#TODO update to new date format?
+			myDates.append(datetime(int(date[0]), int(date[1]), int(date[2]), int(date[3]), int(date[4]), int(date[5])))#TODO update to new date format?
 			print(health,date)
 
 		fig, ax = plt.subplots()
