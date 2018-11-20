@@ -131,9 +131,9 @@ class HealthClient:
         if current_date.tm_min - commit_date.tm_min > 1:
             new_commit = 1
         else:
-            new_commit = 2#0
+            new_commit = 0#2#0
 
-        print (new_commit)
+        #print (new_commit)
 
         #we got a new commit, calculate health
         if new_commit == 0:
@@ -179,14 +179,14 @@ class HealthClient:
             github_id (str), user github ID
         """
 
-        txn_date = _get_date()
+        #txn_date = _get_date()
         response = self._send_health_txn(
             txn_type='commit',
             txn_id=github_id,
             data=commit_url,
             state='new',
             url=self._base_url,
-            txn_date=txn_date)
+            txn_date=commit_date)
 
         return response
 
