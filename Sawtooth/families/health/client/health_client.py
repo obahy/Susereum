@@ -81,6 +81,7 @@ def _get_date():
     format: yyyymmdd hh:mm:ss
     """
     current_time = datetime.datetime.utcnow()
+    current_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
     return str(current_time)
 
 class HealthClient:
@@ -119,8 +120,8 @@ class HealthClient:
         #get time
         current_date = _get_date()
         ## TODO:  test new logic to detect old commits
-        commit_date = time.strptime(commit_date, "%Y-%m-%d %H:%M:%S.%f")
-        current_date = time.strptime(current_date, "%Y-%m-%d %H:%M:%S.%f")
+        commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
+        current_date = time.strptime(current_date, "%Y-%m-%d-%H-%M-%S")
 
         #this is intend to detect replay transactions,
         #since all peers must validate all transactions we detected that clients
