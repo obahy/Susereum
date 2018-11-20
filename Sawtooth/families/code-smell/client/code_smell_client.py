@@ -21,6 +21,7 @@ and vote on proposals.
 
 import os
 import time
+import datetime
 import random
 import base64
 import hashlib
@@ -94,17 +95,11 @@ def _get_suse_config():
 
 def _get_date():
     """
-    return current time
-    format: yyyymmdd
+    return current time (UTC)
+    format: yyyymmdd hh:mm:ss
     """
-    localtime = time.localtime(time.time())
-    txn_time = str(localtime.tm_year) + '-' \
-               + str(localtime.tm_mon) + '-' \
-               + str(localtime.tm_mday) + '-' \
-               + str(localtime.tm_hour) + '-' \
-               + str(localtime.tm_min) + '-' \
-               + str(localtime.tm_sec)
-    return str(txn_time)
+    current_time = datetime.datetime.utcnow()
+    return str(current_time)
 
 class CodeSmellClient:
     """
@@ -142,6 +137,7 @@ class CodeSmellClient:
 
         #get date
         txn_date = _get_date()
+        #return txn_date
 
         if os.path.isfile(conf_file):
             try:

@@ -24,13 +24,14 @@ Raises:
 """
 import os
 import time
+import datetime
 import random
 import base64
 import hashlib
 import subprocess
 import yaml
 import requests
-import toml
+import toml #pylint: disable=import-error
 
 from pprint import pprint
 from base64 import b64encode
@@ -76,17 +77,11 @@ def _get_config_file():
 
 def _get_date():
     """
-    return current time
-    format: yyyymmdd
+    return current time (UTC)
+    format: yyyymmdd hh:mm:ss
     """
-    localtime = time.localtime(time.time())
-    txn_time = str(localtime.tm_year) + '-' \
-               + str(localtime.tm_mon) + '-' \
-               + str(localtime.tm_mday) + '-' \
-               + str(localtime.tm_hour) + '-' \
-               + str(localtime.tm_min) + '-' \
-               + str(localtime.tm_sec)
-    return str(txn_time)
+    current_time = datetime.datetime.utcnow()
+    return str(current_time)
 
 class HealthClient:
     """
@@ -114,7 +109,7 @@ class HealthClient:
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
     ## TODO: fix logic, the client is doing the code analysis when the server already did
-    def code_analysis(self, github_url, github_user):
+    def code_analysis(self, github_url, github_user, commit_date):
         """
         send github url to code analysis to generate new health
 
@@ -125,39 +120,46 @@ class HealthClient:
         #get time
         txn_date = _get_date()
 
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-        sawtooth_home = work_path + "/results"
+        #if txn_date is older than 10 min than commit_date then we already process this commit ommimt
+        #if(txn_date is more than 10 min less than commit_date)
+        new_commit = 0
 
-        #get repo path
-        conf_file = work_path + '/etc/.repo'
-        try:
-            with open(conf_file, 'r') as path:
-                repo_path = path.read()
-            path.close()
-        except IOError as error:
-            raise HealthException("Unable to open configuration file {}".format(error))
+        #we got a new commit, calculate health
+        if new_commit == 0:
+            work_path = os.path.dirname(os.path.dirname(
+                os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+            sawtooth_home = work_path + "/results"
 
-        repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
-        subprocess.check_output( ['python2.7', repo_path, github_url, sawtooth_home])
+            #get repo path
+            conf_file = work_path + '/etc/.repo'
+            try:
+                with open(conf_file, 'r') as path:
+                    repo_path = path.read()
+                path.close()
+            except IOError as error:
+                raise HealthException("Unable to open configuration file {}".format(error))
 
-        for filename in os.listdir(sawtooth_home):
-            csv_path = sawtooth_home+'/'+filename
-            break
-        suse_config = _get_config_file()
-        suse_config = suse_config["code_smells"]
-        health = calculate_health(suse_config=suse_config, csv_path=csv_path)
+            repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
+            subprocess.check_output(['python2.7', repo_path, github_url, sawtooth_home])
 
-        response = self._send_health_txn(
-            txn_type='health',
-            txn_id=github_user,
-            data=str(health),
-            state='processed',
-            txn_date=txn_date)
-        ## TODO: call suse family to process suse.
-        return response
+            for filename in os.listdir(sawtooth_home):
+                csv_path = sawtooth_home+'/'+filename
+                break
 
-    def commit(self, commit_url, github_id):
+            suse_config = _get_config_file()
+            suse_config = suse_config["code_smells"]
+            health = calculate_health(suse_config=suse_config, csv_path=csv_path)
+
+            response = self._send_health_txn(
+                txn_type='health',
+                txn_id=github_user,
+                data=str(health),
+                state='processed',
+                txn_date=txn_date)
+            ## TODO: call suse family to process suse.
+            return response
+
+    def commit(self, commit_url, github_id, commit_date):
         """
         Send commit url to code analysis
 
@@ -166,15 +168,14 @@ class HealthClient:
             github_id (str), user github ID
         """
 
-        txn_date = _get_date()
-
+        #txn_date = _get_date()
         response = self._send_health_txn(
             txn_type='commit',
             txn_id=github_id,
             data=commit_url,
             state='new',
             url=self._base_url,
-            txn_date=txn_date)
+            txn_date=commit_date)
 
         return response
 

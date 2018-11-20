@@ -152,6 +152,11 @@ def add_commit_parser(subparser, parent_parser):
         help='specify user github ID')
 
     parser.add_argument(
+        '--date',
+        type=str,
+        help='commit date')
+
+    parser.add_argument(
         '--url',
         type=str,
         help='specify URL of REST API')
@@ -233,16 +238,19 @@ def do_list(args):
     if len(transactions) == 0:
         raise HealthException("No transactions found")
     else:
+        # for entry in transactions:
+        #     print (len(transactions[entry].decode().split(",")))
+        #     print (transactions[entry].decode().split(",")[6-1])
         print (transactions)
 
-def process_health(github_user, github_url, url):
+def process_health(github_user, github_url, url, commit_date):
     """
     Process commit, send url to code analysis
     """
     keyfile = _get_keyfile()
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.code_analysis(github_url, github_user)
+    response = client.code_analysis(github_url, github_user, commit_date)
 
     print("Response: {}".format(response))
 
@@ -258,12 +266,14 @@ def do_commit(args):
         raise HealthException("Missing Commit URL")
     if args.gituser is None:
         raise HealthException("Missing User ID")
+    if args.date is None:
+        raise HealthException("Missing Commit Date")
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.commit(commit_url=args.giturl, github_id=args.gituser)
+    response = client.commit(commit_url=args.giturl, github_id=args.gituser, commit_date=args.date)
 
     print("Response: {}".format(response))
 
