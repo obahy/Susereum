@@ -101,7 +101,7 @@ class HealthTransactionHandler(TransactionHandler):
             #each time. in the second time is when we know the block was validated
             if self.count_access == 2:
                 self.count_access = 0
-                #process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date)
+                process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date)
         elif health_payload.txn_type == 'health':
             active_transaction = HealthTransaction(
                 txn_type=health_payload.txn_type,

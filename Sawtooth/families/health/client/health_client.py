@@ -108,7 +108,6 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    ## TODO: fix logic, the client is doing the code analysis when the server already did
     def code_analysis(self, github_url, github_user, commit_date):
         """
         send github url to code analysis to generate new health
@@ -118,11 +117,22 @@ class HealthClient:
             github_user (str): github user id
         """
         #get time
-        txn_date = _get_date()
+        current_date = _get_date()
+        ## TODO:  test new logic to detect old commits
+        commit_date = time.strptime(commit_date, "%Y-%m-%d %H:%M:%S.%f")
+        current_date = time.strptime(current_date, "%Y-%m-%d %H:%M:%S.%f")
 
-        #if txn_date is older than 10 min than commit_date then we already process this commit ommimt
-        #if(txn_date is more than 10 min less than commit_date)
-        new_commit = 0
+        #this is intend to detect replay transactions,
+        #since all peers must validate all transactions we detected that clients
+        #re-process the code analysis when they receive a commit.
+        #the commit has a timestamp, if the difference of minutes between the current date
+        #and the commit timestamp is greater than 1 then we consider it as an old transaction.
+        if current_date.tm_min - commit_date.tm_min > 1:
+            new_commit = 1
+        else:
+            new_commit = 2#0
+
+        print (new_commit)
 
         #we got a new commit, calculate health
         if new_commit == 0:
@@ -155,7 +165,7 @@ class HealthClient:
                 txn_id=github_user,
                 data=str(health),
                 state='processed',
-                txn_date=txn_date)
+                txn_date=current_date)
             ## TODO: call suse family to process suse.
             return response
 
@@ -168,14 +178,14 @@ class HealthClient:
             github_id (str), user github ID
         """
 
-        #txn_date = _get_date()
+        txn_date = _get_date()
         response = self._send_health_txn(
             txn_type='commit',
             txn_id=github_id,
             data=commit_url,
             state='new',
             url=self._base_url,
-            txn_date=commit_date)
+            txn_date=txn_date)
 
         return response
 
