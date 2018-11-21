@@ -6,13 +6,12 @@ import screen_smells
 import requests
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-'''
- = [("Project 1", "11-11-2018 09:38"),
-            ("Project 2", "11-10-2018 09:38"),
-            ("Project 3", "11-09-2018 09:38"),
-            ("Project 4", "11-08-2018 09:38"),
-            ("Project 5", "11-07-2018 09:38")]
-'''
+"""
+Add project screen for Susereum.
+Uses the provided URL for the project in order to add the project
+After the project is added, code smells screen appears for the user to enter initial smells values
+After savign smells, user can select an existing project from the list and navigate to the prodect details screen.
+"""
 class MainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Susereum Projects")
@@ -113,6 +112,9 @@ class MainWindow(Gtk.Window):
         #Gtk.main()
 
     def read_projects(self):
+        """
+          read_projects - checks if there are any existing projects added to Susereum and adds them to the list view.
+        """
         for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
@@ -120,6 +122,11 @@ class MainWindow(Gtk.Window):
 
 
     def add_project(self, widget, list_store):
+        """
+          add_projects - Takes the url from the project field and runs the new chain client script.
+                         checks and opens the smells screen for the newly added project
+          :param widget: list_store
+        """
         #call newchain script
         url = str(self.txt_project.get_text())
         #repo_path = sys.argv[0]
@@ -185,6 +192,10 @@ class MainWindow(Gtk.Window):
         '''
 
     def open_project(self, widget):
+        """
+          open_project - opens the selected project details on the new screen..
+          :param widget: widget
+        """
         self.prj_path = os.environ['HOME'] + '/.sawtooth_projects/.'+self.selected
         from screen_details import MainWindow
         win = MainWindow(self.prj_path)
@@ -192,9 +203,17 @@ class MainWindow(Gtk.Window):
         #var1.show()
 
     def get_time_date(self):
+        """
+          get_time_date - to get the current date and time
+          :returns: timestamp
+        """
         return time.strftime("%m-%d-%Y %H:%M")
 
     def item_selected(self, selection):
+        """
+          item_selected - fetch the selected item details from the list view.
+          :param: selected row
+        """
         model, row = selection.get_selected()
         if row is not None:
             print("\nSelection- " + "Project: " + str(model[row][0]) + " Date: " + str(model[row][1]) + "\n")

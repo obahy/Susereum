@@ -1,8 +1,11 @@
 import gi, os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+
 """
-description
+Login Screen for Susereum.
+Uses GitHub Credentials to Authenticate user
+User can navigate to add project screen after sucessful login
 """
 
 class UserInput(Gtk.Window):
@@ -40,9 +43,17 @@ class UserInput(Gtk.Window):
     vbox.pack_start(self.btn_cancel, True, True, 0)
 
   def hit_enter(self, widget):
+    """
+      User hitting Enter in the user name or password screen
+      :param widget: widget
+    """
     print("Hit Enter")
 
   def sign_in(self, widget):
+    """
+      Sign in - btn_signin action.
+      :param widget: widget
+    """
     #TODO: User authentication from Github
     
 
