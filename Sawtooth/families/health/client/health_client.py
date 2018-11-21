@@ -151,6 +151,7 @@ class HealthClient:
                 raise HealthException("Unable to open configuration file {}".format(error))
 
             repo_path = repo_path.replace('\n', '') + '/CodeAnalysis/SourceMeter_Interface/src/sourceMeterWrapper.py'
+            print('CALLING ANLSYIS WITH:',['python2.7', repo_path, github_url, sawtooth_home])
             subprocess.check_output(['python2.7', repo_path, github_url, sawtooth_home])
 
             for filename in os.listdir(sawtooth_home):
