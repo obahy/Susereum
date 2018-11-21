@@ -228,11 +228,11 @@ def download_commit(repo_url):
 
     if '/commit' in repo_url:
         # Parse repo name from commit url
-        start_of_repo_name = re.search('https://github.com/[^/]+/',
+        start_of_repo_name = re.search('https://api.github.com/repos/[^/]+/',
                                        repo_url)  # [^/] skips all non '/' characters (skipping repo owner name)
-        leftovers = repo_url[start_of_repo_name.end():]
-        end_of_repo_name = leftovers.index('/')
-        repo_name = leftovers[:end_of_repo_name]
+        repo_name_and_after = repo_url[start_of_repo_name.end():]
+        end_of_repo_name_index = repo_name_and_after.index('/')
+        repo_name = repo_name_and_after[:end_of_repo_name_index]
 
         # PARSING INFORMATION
         project_url = repo_url[:repo_url.index('/commit')]
