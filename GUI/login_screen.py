@@ -43,6 +43,9 @@ class UserInput(Gtk.Window):
     print("Hit Enter")
 
   def sign_in(self, widget):
+    #TODO: User authentication from Github
+    
+
     if(self.username.get_text()=='Admin' and self.password.get_text()=='P@ssw0rd'):
       print("login sucessful")
       from screen_add_project import MainWindow
