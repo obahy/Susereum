@@ -38,7 +38,7 @@ class HealthPayload(object):
     def __init__(self, payload):
         #The payload is csv utf-8 encoded string
         try:
-            if payload.decode().split(",")[0] == "commit":
+            if payload.decode().split(",")[0] in ("commit", "health"):
                 txn_type, txn_id, data, state, url, txn_date = payload.decode().split(",")
             else:
                 txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
