@@ -1,1 +1,0 @@
-repo_url: https://github.com/susereum/ChainTest2/commit/a0b59bd50822c57651d58614382dd925f9a9943a, repo_name_and_after: ChainTest2/commit/a0b59bd50822c57651d58614382dd925f9a9943a,
