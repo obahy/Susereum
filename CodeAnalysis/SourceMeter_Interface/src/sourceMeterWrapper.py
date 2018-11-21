@@ -227,9 +227,11 @@ def download_commit(repo_url):
     server_ip = "129.108.7.2"
 
     if '/commit' in repo_url:
-        # Parse repo name from commit url
+    	print("repo_url testing: " + repo_url)
+	    # Parse repo name from commit url
         start_of_repo_name = re.search('https://github.com/[^/]+/',
                                        repo_url)  # [^/] skips all non '/' characters (skipping repo owner name)
+		print("start_of_repo_name: " + start_of_repo_name)
         repo_name_and_after = repo_url[start_of_repo_name.end():]
         end_of_repo_name_index = repo_name_and_after.index('/')
         repo_name = repo_name_and_after[:end_of_repo_name_index]
