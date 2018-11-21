@@ -138,7 +138,7 @@ cat /opt/lampp/htdocs/connect/$web #TODO delete me on the first proposal
 sawtooth-validator -vv --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$IP:$VALIDATOR_PORT_NET --peering dynamic &
 #sleep 3
 #rest api
-sawtooth-rest-api -v --bind localhost:$API_PORT --connect 127.0.0.1:$VALIDATOR_PORT_COM &
+sawtooth-rest-api -v --bind 0.0.0.0:$API_PORT --connect 127.0.0.1:$VALIDATOR_PORT_COM &
 #sleep 3
 #processors
 settings-tp -v --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
