@@ -22,3 +22,7 @@ GUI/\.idea/
 GUI/health.png
 
 CodeAnalysis/SourceMeter_Interface/src/susereumGitHubCredentials
+
+ServerSideScripts/mycron
+
+ServerSideScripts/test\.sh
