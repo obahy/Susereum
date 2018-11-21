@@ -228,7 +228,7 @@ def download_commit(repo_url):
 
     if '/commit' in repo_url:
         # Parse repo name from commit url
-        start_of_repo_name = re.search('https://api.github.com/repos/[^/]+/',
+        start_of_repo_name = re.search('https://github.com/[^/]+/',
                                        repo_url)  # [^/] skips all non '/' characters (skipping repo owner name)
         repo_name_and_after = repo_url[start_of_repo_name.end():]
         end_of_repo_name_index = repo_name_and_after.index('/')
