@@ -118,10 +118,10 @@ class HealthClient:
             github_user (str): github user id
         """
         #get time
-        current_date = _get_date()
+        txn_date = _get_date()
         ## TODO:  test new logic to detect old commits
         commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
-        current_date = time.strptime(current_date, "%Y-%m-%d-%H-%M-%S")
+        current_date = time.strptime(txn_date, "%Y-%m-%d-%H-%M-%S")
 
         #this is intend to detect replay transactions,
         #since all peers must validate all transactions we detected that clients
@@ -135,6 +135,7 @@ class HealthClient:
 
         #print (new_commit)
 
+        new_commit = 0
         #we got a new commit, calculate health
         if new_commit == 0:
             work_path = os.path.dirname(os.path.dirname(
@@ -157,18 +158,22 @@ class HealthClient:
                 csv_path = sawtooth_home+'/'+filename
                 break
 
-            suse_config = _get_config_file()
-            suse_config = suse_config["code_smells"]
-            health = calculate_health(suse_config=suse_config, csv_path=csv_path)
+            try:
+                suse_config = _get_config_file()
+                suse_config = suse_config["code_smells"]
+                health = calculate_health(suse_config=suse_config, csv_path=csv_path)
 
-            response = self._send_health_txn(
-                txn_type='health',
-                txn_id=github_user,
-                data=str(health),
-                state='processed',
-                txn_date=current_date)
-            ## TODO: call suse family to process suse.
-            return response
+                response = self._send_health_txn(
+                    txn_type='health',
+                    txn_id=github_user,
+                    data=str(health),
+                    state='processed',
+                    url=github_url,
+                    txn_date=txn_date)
+                ## TODO: call suse family to process suse.
+                return response
+            except:
+                return "CSV Not Found"
 
     def commit(self, commit_url, github_id, commit_date):
         """
