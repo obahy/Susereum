@@ -1,4 +1,7 @@
 #!/bin/bash
+#get ip address
+IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -n 1)
+
 #ports check if in VM - set endpoint
 if [[ $(virt-what) ]]; then
 ENDPOINT=$IP
@@ -7,24 +10,37 @@ ENDPOINT=$(tracepath 129.108.7.2 | grep "2:" | awk '{print $2}')
 fi
 
 #start each project
-for D in `find . -type d`
+for D in /home/practicum2018/.sawtooth_projects/.*/;
 do
+if [ "$D" == "/home/practicum2018/.sawtooth_projects/./" ] ;then
+continue
+fi
+if [ "$D" == "/home/practicum2018/.sawtooth_projects/../" ] ;then
+continue
+fi
 #start services
-RESULTS=$(cat $D/etc/.ports)
-VALIDATOR_PORT_COM=$(echo $RESULT | cut -d$' ' -f1)
-VALIDATOR_PORT_NET=$(echo $RESULT | cut -d$' ' -f2)
-API_PORT=$(echo $RESULT | cut -d$' ' -f3)
-
+readarray ports < $D/etc/.ports
+#RESULTS=$(cat $D/etc/.ports)
+VALIDATOR_PORT_COM=$(echo ${ports[0]} | tr -d '\n')
+VALIDATOR_PORT_NET=$(echo ${ports[1]} | tr -d '\n')
+API_PORT=$(echo ${ports[2]} | tr -d '\n')
 
 
 #start services
 #validator
-sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$ENDPOINT:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET & #--peers tcp://129.108.7.1:$VALIDATOR_PORT_NET &
+sawtooth-validator -vv --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$ENDPOINT:$VALIDATOR_PORT_NET --peering dynamic &
+#sleep 3
 #rest api
-sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
+sawtooth-rest-api -v --bind 0.0.0.0:$API_PORT --connect 127.0.0.1:$VALIDATOR_PORT_COM &
+#sleep 3
 #processors
-settings-tp -v --connect tcp://localhost:$VALIDATOR_PORT_COM &
-#cd $SAWTOOTH_HOME/bin
-python3 bin/codesmell-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
-python3 bin/health-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
+settings-tp -v --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+#sleep 3
+poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+#intkey-tp-python -v --connect tcp://$IP:$VALIDATOR_PORT_COM &
+#read block
+#sawtooth block list --url http://$IP:$API_PORT
+python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+
 done
