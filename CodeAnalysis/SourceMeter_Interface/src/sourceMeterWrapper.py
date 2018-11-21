@@ -258,7 +258,7 @@ def download_commit(repo_url):
     # Check if I am the server, if I am add credentials to the project_url before downloading the repo
     if my_ip == server_ip:
         # ADD SERVER CREDENTIALS TO GIT CLONE COMMAND
-        f = open("susereumGitHubCredentials", "r")
+        f = open("/home/practicum2018/Suserium/Susereum/CodeAnalysis/SourceMeter_Interface/src/susereumGitHubCredentials", "r")
         contents = f.read()
         contents = json.loads(contents)
         username = contents['username']
