@@ -32,9 +32,17 @@ class RequestHandler:
 		for commit in commits:
 			# Parse info
 			commit_url = commit['url']
+
+			# Commit URL from GET request comes in the following form:
+			# https://api.github.com/repos/<repo_owner>/<repo_name>/commit/<commit_sha>
+			# But, with push event we get it as
+			# https://github.com/<repo_owner>/<repo_name>/commit/<commit_sha>
+			# So we convert it to remove 'api.' and '/repos'
+			commit_url = commit_url.replace('api.github.com/repos', 'github.com')
+			print("Commit URL: " + commit_url)
+			
 			sender_id = commit['committer']['id']
 			timestamp = commit['commit']['author']['date']
-
 
 			# Format timestamp as yyyy-mm-dd-hh-mm
 			datetime_object = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
