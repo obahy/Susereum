@@ -35,11 +35,12 @@ class RequestHandler:
 				commit_url = commit['url']
 
 				# Commit URL from GET request comes in the following form:
-				# https://api.github.com/repos/<repo_owner>/<repo_name>/commit/<commit_sha>
+				# https://api.github.com/repos/<repo_owner>/<repo_name>/commits/<commit_sha>
 				# But, with push event we get it as
 				# https://github.com/<repo_owner>/<repo_name>/commit/<commit_sha>
 				# So we convert it to remove 'api.' and '/repos'
 				commit_url = commit_url.replace('api.github.com/repos', 'github.com')
+				commit_url = commit_url.replace('commits/', 'commit/')
 				print("Commit URL: " + commit_url)
 			
 				sender_id = commit['committer']['id']
