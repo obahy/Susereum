@@ -176,7 +176,7 @@ class CodeSmellClient:
                 response = self._send_code_smell_txn(
                     txn_type='code_smell',
                     txn_id=name,
-                    data=str(metric[0]),
+                    data=str(metric),
                     state='create',
                     date=txn_date)
         else:
