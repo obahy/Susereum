@@ -171,6 +171,11 @@ def add_commit_parser(subparser, parent_parser):
         type=str,
         help="identify directory of user's private key file")
 
+    parser.add_argument(
+        '--client_key',
+        type=str,
+        help="key to identify client")
+
 def create_parent_parser(prog_name):
     """
     Create parent parser
@@ -238,19 +243,16 @@ def do_list(args):
     if len(transactions) == 0:
         raise HealthException("No transactions found")
     else:
-        # for entry in transactions:
-        #     print (len(transactions[entry].decode().split(",")))
-        #     print (transactions[entry].decode().split(",")[6-1])
         print (transactions)
 
-def process_health(github_user, github_url, url, commit_date):
+def process_health(github_user, github_url, url, commit_date, client_key):
     """
     Process commit, send url to code analysis
     """
     keyfile = _get_keyfile()
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.code_analysis(github_url, github_user, commit_date)
+    response = client.code_analysis(github_url, github_user, commit_date, client_key)
 
     print("Response: {}".format(response))
 
@@ -268,12 +270,15 @@ def do_commit(args):
         raise HealthException("Missing User ID")
     if args.date is None:
         raise HealthException("Missing Commit Date")
+    if args.client_key is None:
+        raise HealthException("Missing Client Key")
+
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.commit(commit_url=args.giturl, github_id=args.gituser, commit_date=args.date)
+    response = client.commit(commit_url=args.giturl, github_id=args.gituser, commit_date=args.date, client_key=args.client_key)
 
     print("Response: {}".format(response))
 

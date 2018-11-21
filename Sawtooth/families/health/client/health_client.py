@@ -109,7 +109,7 @@ class HealthClient:
 
         self._signer = CryptoFactory(create_context('secp256k1')).new_signer(private_key)
 
-    def code_analysis(self, github_url, github_user, commit_date):
+    def code_analysis(self, github_url, github_user, commit_date, client_key):
         """
         send github url to code analysis to generate new health
 
@@ -120,24 +120,32 @@ class HealthClient:
         #get time
         txn_date = _get_date()
         ## TODO:  test new logic to detect old commits
-        commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
-        current_date = time.strptime(txn_date, "%Y-%m-%d-%H-%M-%S")
+        #commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
+        #current_date = time.strptime(txn_date, "%Y-%m-%d-%H-%M-%S")
 
         #this is intend to detect replay transactions,
         #since all peers must validate all transactions we detected that clients
         #re-process the code analysis when they receive a commit.
         #the commit has a timestamp, if the difference of minutes between the current date
         #and the commit timestamp is greater than 1 then we consider it as an old transaction.
-        if current_date.tm_min - commit_date.tm_min > 1:
-            new_commit = 1
-        else:
-            new_commit = 0#2#0
+        #if current_date.tm_min - commit_date.tm_min > 1:
+        #    new_commit = 1
+        #else:
+        #    new_commit = 0#2#0
 
         #print (new_commit)
 
-        new_commit = 0
+        process_flag = 1
+        #get user public key
+        user_key = self._signer.get_public_key().as_hex()
+        print (user_key)
+        if user_key == client_key:
+            process_flag = 0
+            #print ("same ley")
+
+
         #we got a new commit, calculate health
-        if new_commit == 0:
+        if process_flag == 0:
             work_path = os.path.dirname(os.path.dirname(
                 os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
             sawtooth_home = work_path + "/results"
@@ -170,13 +178,14 @@ class HealthClient:
                     data=str(health),
                     state='processed',
                     url=github_url,
+                    client_key=client_key,
                     txn_date=txn_date)
                 ## TODO: call suse family to process suse.
                 return response
             except:
                 return "CSV Not Found"
 
-    def commit(self, commit_url, github_id, commit_date):
+    def commit(self, commit_url, github_id, commit_date, client_key):
         """
         Send commit url to code analysis
 
@@ -185,13 +194,14 @@ class HealthClient:
             github_id (str), user github ID
         """
 
-        #txn_date = _get_date()
         response = self._send_health_txn(
             txn_type='commit',
             txn_id=github_id,
             data=commit_url,
             state='new',
             url=self._base_url,
+            #client_key = self._signer.get_public_key().as_hex(),
+            client_key=client_key,
             txn_date=commit_date)
 
         return response
@@ -296,6 +306,7 @@ class HealthClient:
                          data=None,
                          state=None,
                          url=None,
+                         client_key=None,
                          txn_date=None):
         """
         serialize payload and create header transaction
@@ -307,7 +318,7 @@ class HealthClient:
             state (str):   all transactions must have a state
         """
         #serialization is just a delimited utf-8 encoded strings
-        payload = ",".join([txn_type, txn_id, data, state, url, str(txn_date)]).encode()
+        payload = ",".join([txn_type, txn_id, data, state, url, client_key, str(txn_date)]).encode()
 
         pprint("payload: {}".format(payload))######################################## pprint
 

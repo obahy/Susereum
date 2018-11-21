@@ -92,6 +92,8 @@ class HealthTransactionHandler(TransactionHandler):
                 txn_id=health_payload.txn_id,
                 data=health_payload.data,
                 state=health_payload.state,
+                url=health_payload.url,
+                client_key=health_payload.client_key,
                 txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
             #call code analysis
@@ -101,13 +103,16 @@ class HealthTransactionHandler(TransactionHandler):
             #each time. in the second time is when we know the block was validated
             if self.count_access == 2:
                 self.count_access = 0
-                process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date)
+                print (health_payload.client_key)
+                process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date, health_payload.client_key)
         elif health_payload.txn_type == 'health':
             active_transaction = HealthTransaction(
                 txn_type=health_payload.txn_type,
                 txn_id=health_payload.txn_id,
                 data=health_payload.data,
                 state=health_payload.state,
+                url=health_payload.client_key,
+                client_key=health_payload.client_key,
                 txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
         else:
