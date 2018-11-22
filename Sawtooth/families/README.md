@@ -9,7 +9,7 @@ type|id|data|state|time
 ----|--|----|-----|----
 code-smell|LargeClass|500|create|yyyy-mm-dd-HH-MM-SS
 
-The above table represents an example of a code smell transaciton. Each column is separate by a comma.
+The above table represents an example of a code smell transaction. Each column is separate by a comma.
 * __**type**__: represent the type of transaction.
 * __**id**__: represent the transaction's id.
 * __**data**__: represent the payload of each transaction.
