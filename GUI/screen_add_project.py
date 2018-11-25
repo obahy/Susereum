@@ -12,11 +12,18 @@ Uses the provided URL for the project in order to add the project
 After the project is added, code smells screen appears for the user to enter initial smells values
 After savign smells, user can select an existing project from the list and navigate to the prodect details screen.
 """
+
 class MainWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, user_id_):
         Gtk.Window.__init__(self, title="Susereum Projects")
-        self.projects=[]
-        self.read_projects()
+        user_id = user_id_
+        #TODO: Enable the following 2 lines later to do your thing Christian
+        #self.projects=[]
+        #self.read_projects()
+
+        # Testing new changes... [adding additional 2 columns]
+        self.projects=[("Project 1", "Project Name 1", "1024", "11-11-2018"),
+                           ("Project 2", "Project Name 2", "2048", "12-12-2018")]
 
         self.set_border_width(5)
         self.set_size_request(600, 300)
@@ -25,7 +32,10 @@ class MainWindow(Gtk.Window):
         self.add(box_outer)
 
         # ListStore (lists that TreeViews can display) and specify data types
-        projects_list_store = Gtk.ListStore(str, str)
+
+        # Testing new changes... [adding additional 2 columns]
+        #projects_list_store = Gtk.ListStore(str, str)
+        projects_list_store = Gtk.ListStore(str, str, str, str)  # New Change#
 
         # Top Section
         self.listbox = Gtk.ListBox()
@@ -69,7 +79,10 @@ class MainWindow(Gtk.Window):
         # TreeView is the item that is displayed
         projects_tree_view = Gtk.TreeView(projects_list_store)
         # Enumerate to add counter (i) to loop
-        for i, col_title in enumerate(["Project", "Date"]):
+
+        # Testing new changes... [adding additional 2 columns]
+        #for i, col_title in enumerate(["Project", "Date"]):
+        for i, col_title in enumerate(["ID", "Project Name", "Suse", "Date"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
             # Create columns (text is column number)
@@ -97,14 +110,28 @@ class MainWindow(Gtk.Window):
         self.row.add(hbox)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         hbox.pack_start(vbox, True, True, 0)
+        self.lbl_suse = Gtk.Label(user_id+" suse:")
+        hbox.pack_start(self.lbl_suse, True, True, 0)
         self.lbl_project = Gtk.Label('Select a project to view details')
-
         vbox.pack_start(self.lbl_project, True, True, 0)
         self.button = Gtk.Button.new_with_label("Show Details")
         self.button.connect("clicked", self.open_project)
 
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
+
+
+        # self.row = Gtk.ListBoxRow()
+        # hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        # self.row.add(hbox)
+        # vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        # hbox.pack_start(vbox, True, True, 0)
+        # self.lbl_suse = Gtk.Label(user_id+" suse:")
+        # hbox.pack_start(self.lbl_suse, True, True, 0)
+        # self.txt_suse = Gtk.Entry()
+        # self.txt_suse.set_text("1234")
+        # hbox.pack_start(self.txt_suse, False, True, 0)
+        # self.listbox.add(self.row)
 
         self.connect("delete-event", Gtk.main_quit)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -193,12 +220,14 @@ class MainWindow(Gtk.Window):
 
     def open_project(self, widget):
         """
-          open_project - opens the selected project details on the new screen..
-          :param widget: widget
+            open_project - opens the selected project details on the new screen..
+            :param widget: widget
         """
-        self.prj_path = os.environ['HOME'] + '/.sawtooth_projects/.'+self.selected
+        #TODO: Enable the following 1 lines later to do your thing Christian
+        #self.prj_path = os.environ['HOME'] + '/.sawtooth_projects/.'+self.selected
         from screen_details import MainWindow
-        win = MainWindow(self.prj_path)
+        #win = MainWindow(self.prj_path) # ENABLE THIS LINE TOO AND DELETE NEXT LINE!!!
+        win = MainWindow("")
         #win.show()
         #var1.show()
 

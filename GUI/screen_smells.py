@@ -304,6 +304,7 @@ class MainWindow(Gtk.Window):
           load_suse - load the existing suse file
         """
         #TODO change default vals
+        #TODO Christian, Abel needs the REPO ID as well from here.
         suse = open(self.suse_path,'r')
 
     def save_to_suse(self):
