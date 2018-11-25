@@ -18,23 +18,23 @@ do
 	API_PORT=$(echo ${ports[2]} | tr -d '\n')
 	echo "$D $VALIDATOR_PORT_COM $VALIDATOR_PORT_NET $API_PORT"
 	#query to see if there is a proposal
-	proposal=`python3 $D/../Sawtooth/bin/code_smell.py list --type proposal --active 1`
+	proposal=`python3 $D/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:$API_PORT`
 	if [ -z "$proposal" ]
 	then
 		continue
 	else
 		#check if task exists
-		proposal_id=$(echo -n "$proposal" | awk "{print $1;}")
-		proposal_date=$(echo -n "$proposal" | awk "{print $2;}")
-		cron_cmd="* */1 * * * python3 vote_listener.py $proposal_id $proposal_date $D"
+		cron_cmd="* 1 * * * python3 vote_listener.py $proposal $D"
 		crontab -l > mycron
+		echo "adding.. cron command: $cron_cmd"
 		if grep -Fxq "$cron_cmd" mycron
 		then
-			ls
+			echo -n ""
 		else
 			#add task
-			echo $cron_cmd >> mycron
+			echo "$cron_cmd" >> mycron
 			crontab mycron
+			
 		fi
 		rm mycron
 	fi

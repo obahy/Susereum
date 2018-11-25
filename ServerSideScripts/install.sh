@@ -30,7 +30,7 @@ pip install pygobject
 #start services on reboot - cron task
 crontab -l > mycron
 echo "@reboot $(dirname $0)/startup.sh" >> mycron
-echo "*/3 * * * * $(dirname $0)/proposal_listener.sh"
+echo "3 * * * * $(dirname $0)/proposal_listener.sh"
 crontab mycron
 rm mycron
 

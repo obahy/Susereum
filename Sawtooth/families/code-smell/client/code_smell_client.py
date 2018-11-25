@@ -312,22 +312,25 @@ class CodeSmellClient:
             proposal (dict), proposal data
             sate (str), new proposal's state
         """
+        return
         txn_date = _get_date()
+        print (proposal["payload"].decode().split(','))
+        proposal1 = proposal["payload"].decode().split(',')
 
         self._send_code_smell_txn(
-            txn_id=proposal[1],
+            txn_id=proposal1[1],
             txn_type='proposal',
-            data=proposal[2],
+            data=proposal1[2],
             state=str(state),
             date=txn_date)
 
         if state == 1:
             #update suse configuration file
-            self._update_suse_file(proposal)
+            self._update_suse_file(proposal1)
 
             #send new config to github
-            suse_config = _get_suse_config()
-            self._send_git_request(suse_config, repo_id)
+            #suse_config = _get_suse_config()
+            #self._send_git_request(suse_config, repo_id)
 
             #send new configuration to all peers
             self._publish_config()
@@ -381,10 +384,13 @@ class CodeSmellClient:
                 once you found the code smell, break the loop and return
                 a pseudo location
                 """
+                print(suse_config["code_smells"][code_type])
                 if proposal_key in suse_config["code_smells"][code_type].keys():
+                    print (code_type)
                     tmp_type = code_type
                     break
             #update code smell metric
+            print( suse_config["code_smells"][tmp_type])
             suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
         #save new configuration
@@ -404,17 +410,23 @@ class CodeSmellClient:
         Args:
             proposal_id (str), proposal id
         """
+        #print(self._base_url)
         result = self._send_request("transactions/{}".format(proposal_id))
+        #print (proposal_id)
+        #print ("print"+result)
         encoded_result = yaml.safe_load(result)["data"]
         proposal = base64.b64decode(encoded_result["payload"]).decode().split(',')
         proposal_id = proposal[1]
         transactions = self.list(txn_type='vote')
         votes = []
-        for vote in transactions:
-            #for all votes of proposal
-            if transactions[vote].decode().split(',')[2] == proposal_id:
-                votes.append(int(transactions[vote].decode().split(',')[3]))
-        return votes
+        if not transactions:
+            return ""
+        if len(transactions) > 0:
+            for vote in transactions:
+                #for all votes of proposal
+                if transactions[vote].decode().split(',')[2] == proposal_id:
+                    votes.append(int(transactions[vote].decode().split(',')[3]))
+            return votes
 
     def vote(self, proposal_id, vote):
         """
