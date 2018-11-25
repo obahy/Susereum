@@ -27,27 +27,38 @@ class RequestHandler:
 			repo_id (int): The GitHub ID for the project repository
 			repo_name (string): The name of the GitHub repository
 		"""
-		url = "https://api.github.com/repositories/" + str(repo_id) + "/commits"
-		commits = self._git_get(url)	# Retreives the list of commits
-		for commit in commits:
-			# Parse info
-			commit_url = commit['url']
-			sender_id = commit['committer']['id']
-			timestamp = commit['commit']['author']['date']
+		try:
+			url = "https://api.github.com/repositories/" + str(repo_id) + "/commits"
+			commits = self._git_get(url)	# Retreives the list of commits
+			for commit in commits:
+				# Parse info
+				commit_url = commit['url']
 
+				# Commit URL from GET request comes in the following form:
+				# https://api.github.com/repos/<repo_owner>/<repo_name>/commits/<commit_sha>
+				# But, with push event we get it as
+				# https://github.com/<repo_owner>/<repo_name>/commit/<commit_sha>
+				# So we convert it to remove 'api.' and '/repos'
+				commit_url = commit_url.replace('api.github.com/repos', 'github.com')
+				commit_url = commit_url.replace('commits/', 'commit/')
+				print("Commit URL: " + commit_url)
+			
+				sender_id = commit['committer']['id']
+				timestamp = commit['commit']['author']['date']
 
-			# Format timestamp as yyyy-mm-dd-hh-mm
-			datetime_object = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
-			formatted_ts = datetime_object.strftime('%Y-%m-%d-%H-%M-%S')
+				# Format timestamp as yyyy-mm-dd-hh-mm
+				datetime_object = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
+				formatted_ts = datetime_object.strftime('%Y-%m-%d-%H-%M-%S')
 
-			# Call Central Server Script commit handler
-			push_command_file = open("push_command", "r")
-			push_command_file = push_command_file.read()
-			push_command_file.rstrip()	# Remove newlines from command
-			command = push_command_file.format(str(sender_id), str(repo_id), repo_name, commit_url, formatted_ts)
-			#print "Command I'm running: " + command
-			os.system(command)
-
+				# Call Central Server Script commit handler
+				push_command_file = open("push_command", "r")
+				push_command_file = push_command_file.read()
+				push_command_file.rstrip()	# Remove newlines from command
+				command = push_command_file.format(str(sender_id), str(repo_id), repo_name, commit_url, formatted_ts)
+				#print "Command I'm running: " + command
+				os.system(command)
+		except:
+			print("An exception occured trying to analyze all the past commit history")
 	def _handle_measure_change(self, payload):
 		"""
 		Handles when a proposal has passed and the code measures need to change.

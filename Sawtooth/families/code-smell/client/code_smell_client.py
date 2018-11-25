@@ -176,7 +176,7 @@ class CodeSmellClient:
                 response = self._send_code_smell_txn(
                     txn_type='code_smell',
                     txn_id=name,
-                    data=str(metric[0]),
+                    data=str(metric),
                     state='create',
                     date=txn_date)
         else:
@@ -194,7 +194,7 @@ class CodeSmellClient:
 
         return response
 
-    def list(self, txn_type=None):
+    def list(self, txn_type=None, active=None):
         """
         list all transactions.
 
@@ -217,11 +217,22 @@ class CodeSmellClient:
                     try:
                         transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
                         if transaction_type == txn_type:
-                            transactions[entry["header_signature"]] = base64.b64decode(
-                                entry["payload"])
+                            proposal_info = " "
+                            if txn_type == "proposal" and active is not None:
+                                status = base64.b64decode(entry["payload"]).decode().split(',')[3]
+                                if status == "active":
+                                    transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+                                    p_date = base64.b64decode(entry["payload"]).decode().split(',')[4]
+                                    proposal_info = entry["header_signature"] + " " + p_date
+                                break
+                            else:
+                                transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
                     except:
                         pass
-            return transactions
+            if proposal_info != " ":
+                return proposal_info
+            else:
+                return transactions
         except BaseException:
             return None
 
@@ -295,26 +306,34 @@ class CodeSmellClient:
     def _update_proposal(self, proposal, state, repo_id):
         """
         update proposal, update state.
+        proposal state 1 = accepeted, 0 = rejected
 
         Args:
             proposal (dict), proposal data
             sate (str), new proposal's state
         """
+        return
         txn_date = _get_date()
+        print (proposal["payload"].decode().split(','))
+        proposal1 = proposal["payload"].decode().split(',')
 
         self._send_code_smell_txn(
-            txn_id=proposal[1],
+            txn_id=proposal1[1],
             txn_type='proposal',
-            data=proposal[2],
-            state=state,
+            data=proposal1[2],
+            state=str(state),
             date=txn_date)
 
-        #update suse configuration file
-        self._update_suse_file(proposal)
+        if state == 1:
+            #update suse configuration file
+            self._update_suse_file(proposal1)
 
-        #send new config to github
-        suse_config = _get_suse_config()
-        self._send_git_request(suse_config, repo_id)
+            #send new config to github
+            #suse_config = _get_suse_config()
+            #self._send_git_request(suse_config, repo_id)
+
+            #send new configuration to all peers
+            self._publish_config()
 
     def _send_git_request(self, toml_config, repo_id=None):
         """
@@ -365,10 +384,13 @@ class CodeSmellClient:
                 once you found the code smell, break the loop and return
                 a pseudo location
                 """
+                print(suse_config["code_smells"][code_type])
                 if proposal_key in suse_config["code_smells"][code_type].keys():
+                    print (code_type)
                     tmp_type = code_type
                     break
             #update code smell metric
+            print( suse_config["code_smells"][tmp_type])
             suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
         #save new configuration
@@ -388,17 +410,23 @@ class CodeSmellClient:
         Args:
             proposal_id (str), proposal id
         """
+        #print(self._base_url)
         result = self._send_request("transactions/{}".format(proposal_id))
+        #print (proposal_id)
+        #print ("print"+result)
         encoded_result = yaml.safe_load(result)["data"]
         proposal = base64.b64decode(encoded_result["payload"]).decode().split(',')
         proposal_id = proposal[1]
         transactions = self.list(txn_type='vote')
         votes = []
-        for vote in transactions:
-            #for all votes of proposal
-            if transactions[vote].decode().split(',')[2] == proposal_id:
-                votes.append(int(transactions[vote].decode().split(',')[3]))
-        return votes
+        if not transactions:
+            return ""
+        if len(transactions) > 0:
+            for vote in transactions:
+                #for all votes of proposal
+                if transactions[vote].decode().split(',')[2] == proposal_id:
+                    votes.append(int(transactions[vote].decode().split(',')[3]))
+            return votes
 
     def vote(self, proposal_id, vote):
         """

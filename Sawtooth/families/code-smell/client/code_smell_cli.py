@@ -231,6 +231,11 @@ def add_list_parser(subparser, parent_parser):
         type=str,
         help="identify directory of user's private key file")
 
+    parser.add_argument(
+        '--active',
+        type=str,
+        help="pull the latest active proposal")
+
 def add_default_parser(subparser, parent_parser):
     """
     add subparser default. this subparser will load a
@@ -407,7 +412,7 @@ def do_list(args):
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    transactions = client.list(txn_type=args.type)
+    transactions = client.list(txn_type=args.type, active=args.active)
 
     if len(transactions) == 0:
         raise CodeSmellException("No transactions found")

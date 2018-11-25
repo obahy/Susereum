@@ -38,8 +38,8 @@ class HealthPayload(object):
     def __init__(self, payload):
         #The payload is csv utf-8 encoded string
         try:
-            if payload.decode().split(",")[0] == "commit":
-                txn_type, txn_id, data, state, url, txn_date = payload.decode().split(",")
+            if payload.decode().split(",")[0] in ("commit", "health"):
+                txn_type, txn_id, data, state, url, client_key, txn_date = payload.decode().split(",")
             else:
                 txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
                 url = None
@@ -62,6 +62,7 @@ class HealthPayload(object):
         self._data = data
         self._state = state
         self._url = url
+        self._client_key = client_key
         self._txn_date = txn_date
 
     @staticmethod
@@ -133,3 +134,10 @@ class HealthPayload(object):
             str: date
         """
         return self._txn_date
+
+    @property
+    def client_key(self):
+        """
+        return client key
+        """
+        return self._client_key
