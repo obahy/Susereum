@@ -14,7 +14,7 @@ As of the latest release, the Code Analysis module only analyzes Java projects a
  
 ### Usage:
 *Before using the Source Meter Wrapper, please ensure that Source Meter has been downloaded and set up. For setup, please
-visit the 'Code Analysis User Guide' here: https://github.com/obahy/Susereum/wiki/Code-Analysis-User-Guide*
+visit the 'Susereum User's Guide' here: https://github.com/obahy/Susereum/wiki/Susereum-User's-Guide*
 
 The `src/sourceMeterWrapper.py` module is the main point of entry for Code Analysis. To use it you must use the command line in the following manner:
  
