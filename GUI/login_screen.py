@@ -1,9 +1,13 @@
-import gi, os
+import gi, os, json
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+
 """
-description
+Login Screen for Susereum.
+Uses GitHub Credentials to Authenticate user
+User can navigate to add project screen after sucessful login
 """
+user_id = ""
 
 class UserInput(Gtk.Window):
   def __init__(self):
@@ -18,13 +22,13 @@ class UserInput(Gtk.Window):
 
     # Username
     self.username = Gtk.Entry()
-    self.username.set_text("Username")
+    self.username.set_text("susereum@gmail.com") #Username
     self.username.connect("activate", self.sign_in)  # hit signin when enter is pressed
     vbox.pack_start(self.username, True, True, 0)
 
     # Password
     self.password = Gtk.Entry()
-    self.password.set_text("P@ssw0rd")
+    self.password.set_text("rFmqNBlr8Gw6")#P@ssw0rd
     self.password.set_visibility(False)
     self.password.connect("activate", self.sign_in)#hit signin when enter is pressed
     vbox.pack_start(self.password, True, True, 0)
@@ -40,20 +44,32 @@ class UserInput(Gtk.Window):
     vbox.pack_start(self.btn_cancel, True, True, 0)
 
   def hit_enter(self, widget):
+    """
+      User hitting Enter in the user name or password screen
+      :param widget: widget
+    """
     print("Hit Enter")
 
   def sign_in(self, widget):
-    #TODO: User authentication from Github
-    
+    """
+      Sign in - btn_signin action.
+      :param widget: widget
+    """
+    user_id = self.username.get_text()
+    command = 'curl -u "' + self.username.get_text() + '":"' + self.password.get_text() + '" https://api.github.com'
+    out = os.popen(command).read()
+    out_dict = json.loads(out)
 
-    if(self.username.get_text()=='Admin' and self.password.get_text()=='P@ssw0rd'):
-      print("login sucessful")
-      from screen_add_project import MainWindow
-      win = MainWindow()
-      self.destroy()
-
+    if ('message' in out_dict):  # response contains only has message if it's bad credentials
+        print("Invalid user name or password")
     else:
-      print("Invalid user name or password")
+        print("login sucessful")
+        from screen_add_project import MainWindow
+        win = MainWindow(user_id)
+        self.destroy()
+
+    #if(self.username.get_text()=='Admin' and self.password.get_text()=='P@ssw0rd'):
+
 
   def cancel(self, widget):
     """

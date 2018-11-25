@@ -1,4 +1,3 @@
-# left a copy of existing code at the end, if something goes wrong, put it back!
 import gi
 import numpy as np
 from datetime import datetime
@@ -9,6 +8,13 @@ import subprocess
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+"""
+Project details screen for Susereum.
+From the add project screen, user can select any particular existing project and navigate to this screen to see
+the project overview. This screen also provides the additional functionality to add votes and proposals.
+Existing smells can also be edited from this screen.
+"""
+
 class MainWindow(Gtk.Window):
 	def __init__(self,path_):
 		Gtk.Window.__init__(self, title="Susereum Home")
@@ -18,14 +24,15 @@ class MainWindow(Gtk.Window):
 		self.add(self.notebook)
 		self.path = path_
 
-		ports = open(self.path+'/etc/.ports').read()
-		self.api = ports.split('\n')[2].strip()
+		# TODO: Enable the following 2 lines later to do your thing Christian
+		#ports = open(self.path+'/etc/.ports').read()
+		#self.api = ports.split('\n')[2].strip()
 
 		# First tab
 		self.page1 = Gtk.Box()
 		self.page1.set_border_width(10)
 		#TODO thread health update
-
+		'''
 		healths = []
 		myDates = []
 		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
@@ -56,16 +63,18 @@ class MainWindow(Gtk.Window):
 		#plt.show()
 		#plt.plot(healths,times,'ro')
 		#plt.axis(['Mon','Tues','Wed'])
-		plt.savefig('health.png')
+		plt.savefig('health.png')'''
 		img = Gtk.Image.new_from_file("health.png")
 		self.page1.add(img)
 
 		self.notebook.append_page(self.page1, Gtk.Label('Health'))
+
 		# Second tab
 		self.page2 = Gtk.Box()
 		self.page2.set_border_width(10)
-		self.suse = open(self.path+'/etc/.suse','r').read()
-		self.page2.add(Gtk.Label(self.suse))
+		# TODO: Enable the following 2 lines later to do your thing Christian
+		#self.suse = open(self.path+'/etc/.suse','r').read()
+		#self.page2.add(Gtk.Label(self.suse))
 		self.notebook.append_page(self.page2, Gtk.Label('Smells'))
 
 		# Third tab
@@ -292,57 +301,171 @@ class MainWindow(Gtk.Window):
 
 		self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
 
+		# 5th tab
+		self.page5 = Gtk.Box()
+		self.page5.set_border_width(10)
+		box_history = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+		self.page5.add(box_history)
+
+		# Required columns for History tab
+		# we are ignoring URL from the Abel's comma seperated data. The fields are Type, Id, Data, State, URL and Date
+		self.historical_data = [("Type 1", "ID 1", "Data 1", "State 1", "Date 1"),
+						 ("Type 2", "ID 2", "Data 2", "State 2", "Date 2")]
+		history_list_store = Gtk.ListStore(str, str, str, str, str)
+
+		self.listbox_history = Gtk.ListBox()
+		self.listbox_history.set_selection_mode(Gtk.SelectionMode.NONE)
+
+		box_history.pack_start(self.listbox_history, True, True, 0)
+
+		self.row = Gtk.ListBoxRow()
+
+		hbox_history = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
+		self.row.add(hbox_history)
+
+		# # ListStore (lists that TreeViews can display) and specify data types
+		# history_list_store = Gtk.ListStore(str, str)
+		for item in self.historical_data:
+			history_list_store.append(list(item))
+
+		# x = ["hi", "test"]
+		# history_list_store.append(x)
+
+		#for row in history_list_store:
+		#	print(row[:])  # Print all data
+
+		# TreeView is the item that is displayed
+		history_tree_view = Gtk.TreeView(history_list_store)
+		# Enumerate to add counter (i) to loop
+
+		# Testing new changes... [adding additional 2 columns]
+		# for i, col_title in enumerate(["Project", "Date"]):
+		for i, col_title in enumerate(["Type", "ID", "Data", "Suse", "Date"]):
+			# Render means draw or display the data (just display as normal text)
+			renderer = Gtk.CellRendererText()
+			# Create columns (text is column number)
+			column = Gtk.TreeViewColumn(col_title, renderer, text=i)
+			# Make column sortable and selectable
+			column.set_sort_column_id(i)
+			# Add columns to TreeView
+			history_tree_view.append_column(column)
+
+		# Handle selection
+		selected_row = history_tree_view.get_selection()
+		#selected_row.connect("changed", self.item_selected)
+
+		hbox_history.pack_start(history_tree_view, True, True, 0)
+
+		self.listbox_history.add(self.row)
+
+
+
+		self.notebook.append_page(self.page5, Gtk.Label('History'))
+
 		self.connect("delete-event", Gtk.main_quit)
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.show_all()
 		#Gtk.main()
 
 	def accept_proposal(self, widget):
+		"""
+		  accept_proposal - to accept the proposal
+		  :param widget: widget
+		"""
+
 		print("Accepting project")
 
 	def reject_proposal(self, widget):
+		"""
+		  reject_proposal - to reject the proposal
+		  :param widget: widget
+		"""
 		print("Rejecting project")
 
 	def save_proposal(self, widget):
+		"""
+		  save_proposal - to save the proposal
+		  :param widget: widget
+		"""
 		print("Saving proposal")
 
 	def on_tog_large_class(self, tog_large_class):
+		"""
+			on_tog_large_class - ensures if the field is unchecked, set the value 0
+			:param widget: widget
+		"""
 		self.txt_large_class.set_sensitive(tog_large_class.get_active())
 		self.txt_large_class.set_text("0")
 
 	def on_tog_small_class(self, tog_small_class):
+		"""
+          on_tog_small_class - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_small_class.set_sensitive(tog_small_class.get_active())
 		self.txt_small_class.set_text("0")
 
 	def on_tog_large_method(self, tog_large_method):
+		"""
+          on_tog_large_method - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_large_method.set_sensitive(tog_large_method.get_active())
 		self.txt_large_method.set_text("0")
 
 	def on_tog_small_method(self, tog_small_class):
+		"""
+          on_tog_small_method - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_small_method.set_sensitive(tog_small_class.get_active())
 		self.txt_small_method.set_text("0")
 
 	def on_tog_large_param(self, tog_large_param):
+		"""
+          on_tog_large_param - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_large_param.set_sensitive(tog_large_param.get_active())
 		self.txt_large_param.set_text("0")
 
 	def on_tog_god_class(self, tog_god_class):
+		"""
+          on_tog_god_class - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_god_class.set_sensitive(tog_god_class.get_active())
 		self.txt_god_class.set_text("0")
 
 	def on_tog_inapp_intm(self, tog_inapp_intm):
+		"""
+          on_tog_inapp_intm - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_inapp_intm.set_sensitive(tog_inapp_intm.get_active())
 		self.txt_inapp_intm.set_text("0")
 
 	def on_tog_ctc_up(self, tog_ctc_up):
+		"""
+          on_tog_ctc_up - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_ctc_up.set_sensitive(tog_ctc_up.get_active())
 		self.txt_ctc_up.set_text("0.0")
 
 	def on_tog_ctc_lw(self, tog_ctc_lw):
+		"""
+          on_tog_ctc_lw - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+		"""
 		self.txt_ctc_lw.set_sensitive(tog_ctc_lw.get_active())
 		self.txt_ctc_lw.set_text("0.0")
 
 	def get_time_date(self):
+		"""
+          get_time - gets the current date and time stamp
+          :returns: time stamp
+		"""
 		return time.strftime("%m-%d-%Y %H:%M")
 
 if __name__ == '__main__':
@@ -351,97 +474,3 @@ if __name__ == '__main__':
 	window.set_position(Gtk.WindowPosition.CENTER)
 	window.show_all()
 	Gtk.main()
-
-'''
-import gi
-from datetime import datetime
-import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter
-gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
-
-class MainWindow(Gtk.Window):
-	def __init__(self):
-		Gtk.Window.__init__(self, title="Susereum Home")
-		self.set_border_width(5)
-		self.set_size_request(600, 300)
-		self.notebook = Gtk.Notebook()
-		self.add(self.notebook)
-
-		# First tab
-		self.page1 = Gtk.Box()
-		self.page1.set_border_width(10)
-		healths = [50,60,70]
-		myDates = [datetime(2012, 1, i + 3) for i in range(3)]
-
-		fig, ax = plt.subplots()
-		ax.plot(myDates,healths,'ro')
-		myfmt = DateFormatter("%d")
-		ax.xaxis.set_major_formatter(myfmt)
-		ax.set_xlim(myDates[0], myDates[-1])
-		## Rotate date labels automatically
-		fig.autofmt_xdate()
-		plt.xlabel("Date")
-		plt.ylabel("Health")
-		plt.title("Health per Commit")
-		#plt.show()
-		#plt.plot(healths,times,'ro')
-		#plt.axis(['Mon','Tues','Wed'])
-		plt.savefig('health.png')
-		img = Gtk.Image.new_from_file("health.png")
-		self.page1.add(img)
-
-		self.notebook.append_page(self.page1, Gtk.Label('Health'))
-		# Second tab
-		self.page2 = Gtk.Box()
-		self.page2.set_border_width(10)
-		self.page2.add(Gtk.Label('Proposal 1 \nProposal 2 \nProposal 3 \nProposal 4'))
-		self.notebook.append_page(self.page2, Gtk.Label('Smells'))
-
-		# Third tab
-		self.page3 = Gtk.Box()
-		self.page3.set_border_width(10)
-		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-		self.page3.add(vbox)
-		self.lbl_project = Gtk.Label('Project URL or PATH')
-		vbox.pack_start(self.lbl_project, True, True, 0)
-		self.url_path = Gtk.Entry()
-		vbox.pack_start(self.url_path, True, True, 0)
-		self.btn_add = Gtk.Button('Analyze')
-		self.btn_add.connect("clicked", self.add_project)
-		vbox.pack_start(self.btn_add, True, True, 0)
-		self.notebook.append_page(self.page3, Gtk.Label('Vote'))
-
-		# 4th tab
-		self.page4 = Gtk.Box()
-		self.page4.set_border_width(10)
-		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-		self.page4.add(vbox)
-		self.lbl_project1 = Gtk.Label('Project')
-		vbox.pack_start(self.lbl_project1, True, True, 0)
-		self.project_path = Gtk.Entry()
-		vbox.pack_start(self.project_path, True, True, 0)
-		self.btn_create = Gtk.Button('Create')
-		self.btn_create.connect("clicked", self.create_project)
-		vbox.pack_start(self.btn_create, True, True, 0)
-		self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
-
-		self.connect("delete-event", Gtk.main_quit)
-		self.set_position(Gtk.WindowPosition.CENTER)
-		self.show_all()
-		#Gtk.main()
-
-	def add_project(self, widget):
-		print("Analyzing project: "+ str(self.url_path.get_text()))
-
-	def create_project(self, widget):
-		print("Creating project: "+ str(self.project_path.get_text()))		
-
-
-if __name__ == '__main__':
-	window = MainWindow()
-	window.connect("delete-event", Gtk.main_quit)
-	window.set_position(Gtk.WindowPosition.CENTER)
-	window.show_all()
-	Gtk.main()
-'''

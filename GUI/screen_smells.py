@@ -8,6 +8,12 @@ import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+"""
+Add code smells screen for Susereum.
+Users can navigate to this screen after adding a new project in order to enter initial smells.
+From this screen, after saving initial smell values, user is navigated back to the add project screen.
+"""
+
 class MainWindow(Gtk.Window):
     def __init__(self, url_, parent_):
         Gtk.Window.__init__(self, title="Smells")
@@ -206,46 +212,82 @@ class MainWindow(Gtk.Window):
     '''
 
     def on_tog_large_class(self, tog_large_class):
+        """
+          on_tog_large_class - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_large_class.set_sensitive(tog_large_class.get_active())
         self.txt_large_class.set_text("0")
         #print("Selected")
 
     def on_tog_small_class (self, tog_small_class):
+        """
+          on_tog_small_class - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_small_class.set_sensitive(tog_small_class.get_active())
         self.txt_small_class.set_text("0")
         #print("Selected")
 
     def on_tog_large_method(self, tog_large_method):
+        """
+          on_tog_large_method - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_large_method.set_sensitive(tog_large_method.get_active())
         self.txt_large_method.set_text("0")
         #print("Selected")
 
     def on_tog_small_method(self, tog_small_class):
+        """
+          on_tog_small_method - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_small_method.set_sensitive(tog_small_class.get_active())
         self.txt_small_method.set_text("0")
         #print("Selected")
 
     def on_tog_large_param(self, tog_large_param):
+        """
+          on_tog_large_param - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_large_param.set_sensitive(tog_large_param.get_active())
         self.txt_large_param.set_text("0")
         #print("Selected")
 
     def on_tog_god_class(self, tog_god_class):
+        """
+          on_tog_god_class - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_god_class.set_sensitive(tog_god_class.get_active())
         self.txt_god_class.set_text("0")
         #print("Selected")
 
     def on_tog_inapp_intm(self, tog_inapp_intm):
+        """
+          on_tog_inapp_intm - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_inapp_intm.set_sensitive(tog_inapp_intm.get_active())
         self.txt_inapp_intm.set_text("0")
         #print("Selected")
 
     def on_tog_ctc_up(self, tog_ctc_up):
+        """
+          on_tog_ctc_up - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_ctc_up.set_sensitive(tog_ctc_up.get_active())
         self.txt_ctc_up.set_text("0.0")
         #print("Selected")
 
     def on_tog_ctc_lw(self, tog_ctc_lw):
+        """
+          on_tog_ctc_lw - ensures if the field is unchecked, set the value 0
+          :param widget: widget
+        """
         self.txt_ctc_lw.set_sensitive(tog_ctc_lw.get_active())
         self.txt_ctc_lw.set_text("0.0")
         # self.button.connect("clicked", self.add_project, projects_list_store)
@@ -258,10 +300,17 @@ class MainWindow(Gtk.Window):
         list_store.append(x)
     '''
     def load_suse(self):
+        """
+          load_suse - load the existing suse file
+        """
         #TODO change default vals
+        #TODO Christian, Abel needs the REPO ID as well from here.
         suse = open(self.suse_path,'r')
 
     def save_to_suse(self):
+        """
+          save_to_suse - create the suse file, fetch smells data from the GUI fields
+        """
         #read vars from GUI
         smell = [str(self.txt_pro_act.get_text()),
                  str(self.txt_app_tre.get_text()),
@@ -321,6 +370,10 @@ class MainWindow(Gtk.Window):
         suse.close()
 
     def save_smells(self, widget):
+        """
+          save_smells - getting the new smell values from the GUI and save them for the selected project
+          :param widget: widget
+        """
         self.save_to_suse()
         print("Adding project: " + self.prj_name + " " + self.get_time_date())
         x = [self.prj_name, self.get_time_date()]
@@ -342,9 +395,17 @@ class MainWindow(Gtk.Window):
         ##var1.show()
 
     def get_time_date(self):
+        """
+          add_vote - to add the vote
+          :returns: timestamp
+        """
         return time.strftime("%m-%d-%Y %H:%M")
 
     def validate_float(self, widget, entry):
+        """
+          validate_float - method to validate the text field entry if it is other than integers or float values
+          :param widget: widget
+        """
         entry_text = entry.get_text()
         newtext = self.rx.findall(entry_text)
         if len(newtext):
