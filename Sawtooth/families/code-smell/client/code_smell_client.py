@@ -194,7 +194,7 @@ class CodeSmellClient:
 
         return response
 
-    def list(self, txn_type=None):
+    def list(self, txn_type=None, active=None):
         """
         list all transactions.
 
@@ -217,11 +217,22 @@ class CodeSmellClient:
                     try:
                         transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
                         if transaction_type == txn_type:
-                            transactions[entry["header_signature"]] = base64.b64decode(
-                                entry["payload"])
+                            proposal_info = " "
+                            if txn_type == "proposal" and active is not None:
+                                status = base64.b64decode(entry["payload"]).decode().split(',')[3]
+                                if status == "active":
+                                    transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
+                                    p_date = base64.b64decode(entry["payload"]).decode().split(',')[4]
+                                    proposal_info = entry["header_signature"] + " " + p_date
+                                break
+                            else:
+                                transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
                     except:
                         pass
-            return transactions
+            if proposal_info != " ":
+                return proposal_info
+            else:
+                return transactions
         except BaseException:
             return None
 
@@ -295,6 +306,7 @@ class CodeSmellClient:
     def _update_proposal(self, proposal, state, repo_id):
         """
         update proposal, update state.
+        proposal state 1 = accepeted, 0 = rejected
 
         Args:
             proposal (dict), proposal data
@@ -306,15 +318,19 @@ class CodeSmellClient:
             txn_id=proposal[1],
             txn_type='proposal',
             data=proposal[2],
-            state=state,
+            state=str(state),
             date=txn_date)
 
-        #update suse configuration file
-        self._update_suse_file(proposal)
+        if state == 1:
+            #update suse configuration file
+            self._update_suse_file(proposal)
 
-        #send new config to github
-        suse_config = _get_suse_config()
-        self._send_git_request(suse_config, repo_id)
+            #send new config to github
+            suse_config = _get_suse_config()
+            self._send_git_request(suse_config, repo_id)
+
+            #send new configuration to all peers
+            self._publish_config()
 
     def _send_git_request(self, toml_config, repo_id=None):
         """

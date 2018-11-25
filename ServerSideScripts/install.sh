@@ -6,24 +6,33 @@ apt-get update
 
 
 apt-get -y install cron
-apt-get -y install python
+apt-get -y install python python2 python3
 apt-get -y install sawtooth
 apt-get -y install virt-what
 apt-get -y install gtk3
 apt-get -y install glade
 apt-get -y install devhelp
-apt-get -y install python3
-apt-get -y install python2
+apt-get -y install gtk3
 apt-get -y install toml
 apt-get -y install curl
 apt-get -y install python-tk
+
+apt-get install python-pip python-dev build-essential 
+pip install --upgrade pip
+pip install --upgrade virtualenv
 
 pip install pygobject
 pip install pandas
 pip install requests
 pip install matplotlib
+pip install pygobject 
 
-#start services on reboot
+#start services on reboot - cron task
+crontab -l > mycron
+echo "@reboot $(dirname $0)/startup.sh" >> mycron
+echo "*/3 * * * * $(dirname $0)/proposal_listener.sh"
+crontab mycron
+rm mycron
 
 
 mkdir ~/.sawtooth_projects

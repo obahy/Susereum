@@ -232,9 +232,6 @@ def download_commit(repo_url):
         start_of_repo_name = re.search('https://github.com/[^/]+/',
                                        repo_url)  # [^/] skips all non '/' characters (skipping repo owner name)
         repo_name_and_after = repo_url[start_of_repo_name.end():]
-        myFile = open("hello.txt", "w+")
-        myFile.write("repo_url: " + repo_url + " repo_name_and_after: " + str(repo_name_and_after))
-        myFile.close()
         end_of_repo_name_index = repo_name_and_after.index('/')
         repo_name = repo_name_and_after[:end_of_repo_name_index]
         # print("repo_name: " + repo_name)
@@ -261,7 +258,7 @@ def download_commit(repo_url):
     # Check if I am the server, if I am add credentials to the project_url before downloading the repo
     if my_ip == server_ip:
         # ADD SERVER CREDENTIALS TO GIT CLONE COMMAND
-        f = open("susereumGitHubCredentials", "r")
+        f = open("/home/practicum2018/Suserium/Susereum/CodeAnalysis/SourceMeter_Interface/src/susereumGitHubCredentials", "r")
         contents = f.read()
         contents = json.loads(contents)
         username = contents['username']
