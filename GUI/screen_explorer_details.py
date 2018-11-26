@@ -62,10 +62,8 @@ class MainWindow(Gtk.Window):
         self.notebook.append_page(self.page2, Gtk.Label('History'))
 
         # 3rd Tab
-        self.page3 = Gtk.Box()
+        self.page3 = Gtk.ScrolledWindow()
         self.page3.set_border_width(10)
-        box_users = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.page3.add(box_users)
 
         # Required columns for History tab
         self.user_data = [("User ID 1", "Suse 1"),
@@ -74,13 +72,6 @@ class MainWindow(Gtk.Window):
 
         self.listbox_users = Gtk.ListBox()
         self.listbox_users.set_selection_mode(Gtk.SelectionMode.NONE)
-
-        box_users.pack_start(self.listbox_users, True, True, 0)
-
-        self.row = Gtk.ListBoxRow()
-
-        hbox_users = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-        self.row.add(hbox_users)
 
         # # ListStore (lists that TreeViews can display) and specify data types
         # user_list_store = Gtk.ListStore(str, str)
@@ -101,10 +92,7 @@ class MainWindow(Gtk.Window):
             # Add columns to TreeView
             user_tree_view.append_column(column)
 
-        hbox_users.pack_start(user_tree_view, True, True, 0)
-
-        self.listbox_users.add(self.row)
-
+        self.page3.add(user_tree_view)
         self.notebook.append_page(self.page3, Gtk.Label('Users'))
 
         self.connect("delete-event", Gtk.main_quit)
