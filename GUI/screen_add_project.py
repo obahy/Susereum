@@ -134,6 +134,7 @@ class MainWindow(Gtk.Window):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
             self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], '50', self.get_time_date()))#TODO query suse
+            #TODO check if proccess is running for this prj
 
 
     def add_project(self, widget, list_store):
@@ -150,6 +151,7 @@ class MainWindow(Gtk.Window):
         #repo_path = '\\'.join(repo_path.split('\\')[0:-2])
         print('GOING TO RUN:',['../ServerSideScripts/new_chain_client.sh',url,repo_path])
         subprocess.Popen(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        time.sleep(5)
         self.list_store = list_store
         #win = screen_smells.MainWindow(url, self)
         #win.show()
@@ -159,8 +161,9 @@ class MainWindow(Gtk.Window):
         prj_name = data[3]
         prj_id = data[4]
         api = data[2]
+        print(['./check_smell.sh', str(api)])
         subprocess.Popen(['./check_smell.sh', str(api)])#TODO I am not correct CHECKKKKKKKKKKK XD
-        time.sleep(4)
+        time.sleep(3)
         if os.path.isfile('smells_exist.txt'):
             print('SMEELL EXSISTS................................................... ')
             print('SMEELL EXSISTS................................................... ')
@@ -176,9 +179,9 @@ class MainWindow(Gtk.Window):
         else:
             win = screen_smells.MainWindow(url, self)
             win.show()
+        '''
         #TODO modify crontab to start process on boot
         import sys
-        '''
         import uuid
         cron_file = 'starup_cron_' + str(uuid.uuid4())
         print('deleting cron.. temp:', cron_file, ['./tmp_cron.sh', cron_file])
@@ -197,6 +200,7 @@ class MainWindow(Gtk.Window):
         os.remove(cron_file)
         os.remove(new_cron_name)
         '''
+
 
     def open_project(self, widget):
         """

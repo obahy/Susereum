@@ -119,21 +119,7 @@ class HealthClient:
         """
         #get time
         txn_date = _get_date()
-        ## TODO:  test new logic to detect old commits
-        #commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
-        #current_date = time.strptime(txn_date, "%Y-%m-%d-%H-%M-%S")
 
-        #this is intend to detect replay transactions,
-        #since all peers must validate all transactions we detected that clients
-        #re-process the code analysis when they receive a commit.
-        #the commit has a timestamp, if the difference of minutes between the current date
-        #and the commit timestamp is greater than 1 then we consider it as an old transaction.
-        #if current_date.tm_min - commit_date.tm_min > 1:
-        #    new_commit = 1
-        #else:
-        #    new_commit = 0#2#0
-
-        #print (new_commit)
 
         process_flag = 1
         #get user public key
@@ -141,8 +127,6 @@ class HealthClient:
         print (user_key)
         if user_key == client_key:
             process_flag = 0
-            #print ("same ley")
-
 
         #we got a new commit, calculate health
         if process_flag == 0:
@@ -172,6 +156,9 @@ class HealthClient:
                 suse_config = suse_config["code_smells"]
                 health = calculate_health(suse_config=suse_config, csv_path=csv_path)
 
+                ## TODO: test this in integration
+                #get_suse(url=self._base_url, health=health, github_id=github_id)
+
                 response = self._send_health_txn(
                     txn_type='health',
                     txn_id=github_user,
@@ -180,7 +167,6 @@ class HealthClient:
                     url=github_url,
                     client_key=client_key,
                     txn_date=txn_date)
-                ## TODO: call suse family to process suse.
                 return response
             except:
                 return "CSV Not Found"

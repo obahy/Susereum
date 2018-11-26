@@ -42,9 +42,13 @@ pip3 install matplotlib
 pip3 install numpy
 
 #start services on reboot - cron task
+Dir=$(
+cd $(dirname "$0")
+pwd
+)
 crontab -l > mycron
-echo "@reboot $(dirname $0)/startup.sh" >> mycron
-echo "3 * * * * $(dirname $0)/proposal_listener.sh"
+echo "@reboot $Dir/startup.sh" >> mycron
+#echo "3 * * * * $Dir/proposal_listener.sh" #this is only for server
 crontab mycron
 rm mycron
 

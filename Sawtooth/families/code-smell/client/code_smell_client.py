@@ -206,18 +206,17 @@ class CodeSmellClient:
 
         transactions = {}
         try:
+            proposal_info = " "
             encoded_entries = yaml.safe_load(result)["data"]
             if txn_type is None:
                 for entry in encoded_entries:
                     transactions[entry["header_signature"]] = base64.b64decode(entry["payload"])
-
             else:
                 for entry in encoded_entries:
                     #if the transaction does not have the expected format ignore it
                     try:
                         transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
                         if transaction_type == txn_type:
-                            proposal_info = " "
                             if txn_type == "proposal" and active is not None:
                                 status = base64.b64decode(entry["payload"]).decode().split(',')[3]
                                 if status == "active":
@@ -314,8 +313,7 @@ class CodeSmellClient:
         """
         return
         txn_date = _get_date()
-        print (proposal["payload"].decode().split(','))
-        proposal1 = proposal["payload"].decode().split(',')
+        proposal = proposal["payload"].decode().split(',')
 
         self._send_code_smell_txn(
             txn_id=proposal1[1],
@@ -331,9 +329,6 @@ class CodeSmellClient:
             #send new config to github
             #suse_config = _get_suse_config()
             #self._send_git_request(suse_config, repo_id)
-
-            #send new configuration to all peers
-            self._publish_config()
 
     def _send_git_request(self, toml_config, repo_id=None):
         """
@@ -373,35 +368,36 @@ class CodeSmellClient:
         start by traversing the proposal,
         get the code smell and the metric
         """
-        for proposal_key, proposal_metric in proposal_payload.items():
-            tmp_type = ""
-            """
-            we don't know where on the toml file is the code smell,
-            traverse the toml dictionary looking for the same code smell.
-            """
-            for code_type in suse_config["code_smells"]:
-                """
-                once you found the code smell, break the loop and return
-                a pseudo location
-                """
-                print(suse_config["code_smells"][code_type])
-                if proposal_key in suse_config["code_smells"][code_type].keys():
-                    print (code_type)
-                    tmp_type = code_type
-                    break
-            #update code smell metric
-            print( suse_config["code_smells"][tmp_type])
-            suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
-
-        #save new configuration
         try:
-            with open(conf_file, 'w+') as config:
-                toml.dump(suse_config, config)
-            #self._send_git_request(toml_config)
-        except IOError as error:
-            raise CodeSmellException("Unable to open configuration file {}".format(error))
+            for proposal_key, proposal_metric in proposal_payload.items():
+                tmp_type = ""
+                """
+                we don't know where on the toml file is the code smell,
+                traverse the toml dictionary looking for the same code smell.
+                """
+                for code_type in suse_config["code_smells"]:
+                    """
+                    once you found the code smell, break the loop and return
+                    a pseudo location
+                    """
+                    if proposal_key in suse_config["code_smells"][code_type].keys():
+                        tmp_type = code_type
+                        break
+                #update code smell metric
+                suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
-        self._publish_config()
+            #save new configuration
+            try:
+                with open(conf_file, 'w+') as config:
+                    toml.dump(suse_config, config)
+                #self._send_git_request(toml_config)
+            except IOError as error:
+                raise CodeSmellException("Unable to open configuration file {}".format(error))
+
+            #publish new configuration file to all peers
+            self._publish_config()
+        except:
+            raise CodeSmellException("Incorrect proposal format")
 
     def check_votes(self, proposal_id):
         """
@@ -421,12 +417,11 @@ class CodeSmellClient:
         votes = []
         if not transactions:
             return ""
-        if len(transactions) > 0:
-            for vote in transactions:
-                #for all votes of proposal
-                if transactions[vote].decode().split(',')[2] == proposal_id:
-                    votes.append(int(transactions[vote].decode().split(',')[3]))
-            return votes
+        for vote in transactions:
+            #for all votes of proposal
+            if transactions[vote].decode().split(',')[2] == proposal_id:
+                votes.append(int(transactions[vote].decode().split(',')[3]))
+        return votes
 
     def vote(self, proposal_id, vote):
         """
