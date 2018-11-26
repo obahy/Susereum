@@ -105,7 +105,6 @@ class MainWindow(Gtk.Window):
         #vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.lbl_suse = Gtk.Label(user_id+" Suse:")
         hbox.pack_start(self.lbl_suse, True, True, 0)
-        hbox.pack_start(vbox, True, True, 0)
 
         suse_value = "0000"
         self.lbl_suse_value = Gtk.Label()
