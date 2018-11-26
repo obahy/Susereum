@@ -1,7 +1,5 @@
 import os
 import sys
-#sys.path.insert(0, abspath(join(dirname(__file__), '../Sawtooth/families/code_smell/client')))
-print( os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'Sawtooth/families/code-smell')  )
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
     'Sawtooth/families/code-smell'))
