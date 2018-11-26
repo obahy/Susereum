@@ -31,25 +31,13 @@ class MainWindow(Gtk.Window):
         self.notebook.append_page(self.page1, Gtk.Label('Health'))
 
         # 2nd tab
-        self.page2 = Gtk.Box()
+        self.page2 = Gtk.ScrolledWindow()
         self.page2.set_border_width(10)
-        box_history = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.page2.add(box_history)
 
         # Required columns for History tab
         self.historical_data = [("Sender ID 1", "Time stamp 1", "Type 1", "Data 1"),
                                 ("Sender ID 2", "Time stamp 2", "Type 2", "Data 2")]
         history_list_store = Gtk.ListStore(str, str, str, str)
-
-        self.listbox_history = Gtk.ListBox()
-        self.listbox_history.set_selection_mode(Gtk.SelectionMode.NONE)
-
-        box_history.pack_start(self.listbox_history, True, True, 0)
-
-        self.row = Gtk.ListBoxRow()
-
-        hbox_history = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-        self.row.add(hbox_history)
 
         # # ListStore (lists that TreeViews can display) and specify data types
         # history_list_store = Gtk.ListStore(str, str)
@@ -70,8 +58,7 @@ class MainWindow(Gtk.Window):
             # Add columns to TreeView
             history_tree_view.append_column(column)
 
-        hbox_history.pack_start(history_tree_view, True, True, 0)
-        self.listbox_history.add(self.row)
+        self.page2.add(history_tree_view)
         self.notebook.append_page(self.page2, Gtk.Label('History'))
 
         # 3rd Tab
