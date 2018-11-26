@@ -361,8 +361,6 @@ class MainWindow(Gtk.Window):
 
 
 		self.notebook.append_page(self.page5, Gtk.Label('History'))
-
-		self.connect("delete-event", Gtk.main_quit)
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.show_all()
 		#Gtk.main()
