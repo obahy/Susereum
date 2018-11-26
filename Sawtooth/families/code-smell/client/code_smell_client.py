@@ -192,7 +192,7 @@ class CodeSmellClient:
         self._publish_config(conf_file=conf_file)
 
         #send new config to github
-        suse_config = _get_suse_config(conf_file=conf_file)
+        suse_config = _get_suse_config(conf_file)
         self._send_git_request(suse_config, repo_id)
 
         return response
@@ -316,7 +316,7 @@ class CodeSmellClient:
             proposal (dict), proposal data
             sate (str), new proposal's state
         """
-#        return
+        conf_file = self._work_path + 'etc/.suse'
         txn_date = _get_date()
         proposal = proposal["payload"].decode().split(',')
 
@@ -335,7 +335,7 @@ class CodeSmellClient:
 
             #send new config to github
             #################COMMETOUT FOR TESTING ONLY####################
-            suse_config = _get_suse_config()
+            suse_config = _get_suse_config(conf_file)
             self._send_git_request(suse_config, repo_id)
 
     def _send_git_request(self, toml_config, repo_id=None):
