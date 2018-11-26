@@ -192,7 +192,7 @@ class CodeSmellClient:
         self._publish_config(conf_file=conf_file)
 
         #send new config to github
-        suse_config = _get_suse_config()
+        suse_config = _get_suse_config(conf_file=conf_file)
         self._send_git_request(suse_config, repo_id)
 
         return response
