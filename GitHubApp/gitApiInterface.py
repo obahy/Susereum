@@ -253,6 +253,8 @@ class RequestHandler:
 		file_found = False
 		repos_curr_contents = self._git_get('https://api.github.com/repositories/'+str(repo_id)+'/contents')
 		filename = ".suse"
+		# TODO: Checking if .suse already exists in file keeps crashing, I'm just going to skip that validation for now
+		"""
 		if ('message' not in repos_curr_contents or
 			(repos_curr_contents['message'] != 'This repository is empty.' and repos_curr_contents['message'] != 'Not Found')):
 			try:
@@ -265,12 +267,13 @@ class RequestHandler:
 			except:
 				print("An error occured when checking if the suse file already exists")
 		if not file_found:
-			# push Suse file	
-			URL = 'https://api.github.com/repositories/'+str(repo_id)+'/contents/'+filename
-			commit_msg = "Creating initial Suse file"
-			username = 'susereum'
-			email = 'susereum@gmail.com'
-			content = """
+		"""		
+		# push Suse file	
+		URL = 'https://api.github.com/repositories/'+str(repo_id)+'/contents/'+filename
+		commit_msg = "Creating initial Suse file"
+		username = 'susereum'
+		email = 'susereum@gmail.com'
+		content = """
 
 # Copyright 2017 Intel Corporation
 #
@@ -314,15 +317,15 @@ CommentsToCodeRatioUpper=[0.1,0.01,]
 proposal_active_days=5
 approval_treshold=3
 """
-			content_encoded = base64.b64encode(content)
-			data = {"message": commit_msg, "committer": {"name": username, "email": email}, "content": content_encoded}
-			result_status_code = self._git_put(URL, data)
-			if result_status_code == 201:
-				print "Suse file created successfully"
-				return content
-			else:
-				print "Problem creating Suse file"
-				return ""
+		content_encoded = base64.b64encode(content)
+		data = {"message": commit_msg, "committer": {"name": username, "email": email}, "content": content_encoded}
+		result_status_code = self._git_put(URL, data)
+		if result_status_code == 201:
+			print "Suse file created successfully"
+			return content
+		else:
+			print "Problem creating Suse file"
+			return ""
 
 	# Github sends a signature in the payload header. Github created that signature by using their secret and hashing the entire payload with sha1
 	# We encrypt the payload we received with our secret and sha1 and check if they match
