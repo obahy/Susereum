@@ -186,11 +186,11 @@ class CodeSmellClient:
         #Commented out for testing only
         ###########################
         #send configuration file to all peers
-        #self._publish_config()
+        self._publish_config()
 
         #send new config to github
-        #suse_config = _get_suse_config()
-        #self._send_git_request(suse_config, repo_id)
+        suse_config = _get_suse_config()
+        self._send_git_request(suse_config, repo_id)
 
         return response
 
