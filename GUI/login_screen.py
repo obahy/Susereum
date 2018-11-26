@@ -79,6 +79,7 @@ class UserInput(Gtk.Window):
     """
     print("Thank you.")
     self.destroy()
+    Gtk.main_quit()
 
 window = UserInput()
 window.connect("delete-event", Gtk.main_quit)
