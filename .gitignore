@@ -26,3 +26,5 @@ CodeAnalysis/SourceMeter_Interface/src/susereumGitHubCredentials
 ServerSideScripts/mycron
 
 ServerSideScripts/test\.sh
+
+GUI/smells_exist\.txt
