@@ -1,12 +1,12 @@
 #!/bin/bash
 #call me from cron every min or so
 #check each chain for any proposals
-for D in $HOME/.sawtooth_projects/.*/;
+for D in /home/practicum2018/.sawtooth_projects/.*/; #TODO make req to have one folder in home
 do
-	if [ "$D" == "$HOME/.sawtooth_projects/./" ] ;then
+	if [ "$D" == "/home/practicum2018/.sawtooth_projects/./" ] ;then
 		continue
 	fi
-	if [ "$D" == "$HOME/.sawtooth_projects/../" ] ;then
+	if [ "$D" == "/home/practicum2018/.sawtooth_projects/../" ] ;then
 		continue
 	fi
 	echo "checking: $D"
@@ -24,7 +24,7 @@ do
 		continue
 	else
 		#check if task exists
-		cron_cmd="* 1 * * * python3 vote_listener.py $proposal $D"
+		cron_cmd="* 1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py $proposal $D"
 		crontab -l > mycron
 		echo "adding.. cron command: $cron_cmd"
 		if grep -Fxq "$cron_cmd" mycron
