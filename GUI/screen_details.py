@@ -314,6 +314,7 @@ class MainWindow(Gtk.Window):
 
 		# 5th tab
 		self.page5 = Gtk.ScrolledWindow()
+		self.page5.set_border_width(10)
 
 		# Required columns for History tab
 		# we are ignoring URL from the Abel's comma seperated data. The fields are Type, Id, Data, State, URL and Date
