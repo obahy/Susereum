@@ -18,12 +18,12 @@ class MainWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="Susereum Projects")
         user_id = user_id_
         #TODO: Enable the following 2 lines later to do your thing Christian
-        #self.projects=[]
-        #self.read_projects()
+        self.projects=[]
+        self.read_projects()
 
         # Testing new changes... [adding additional 2 columns]
-        self.projects=[("Project 1", "Project Name 1", "1024", "11-11-2018"),
-                           ("Project 2", "Project Name 2", "2048", "12-12-2018")]
+        #self.projects=[("Project 1", "Project Name 1", "1024", "11-11-2018"),
+        #                   ("Project 2", "Project Name 2", "2048", "12-12-2018")]
 
         self.set_border_width(5)
         self.set_size_request(600, 300)
@@ -102,30 +102,22 @@ class MainWindow(Gtk.Window):
         self.row = Gtk.ListBoxRow()
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         self.row.add(hbox)
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        hbox.pack_start(vbox, True, True, 0)
-        self.lbl_suse = Gtk.Label(user_id+" suse:")
+        #vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.lbl_suse = Gtk.Label(user_id+" Suse:")
         hbox.pack_start(self.lbl_suse, True, True, 0)
+        hbox.pack_start(vbox, True, True, 0)
+
+        suse_value = "0000"
+        self.lbl_suse_value = Gtk.Label()
+        self.lbl_suse_value.set_markup("<b>"+ suse_value +"</b>")
+        hbox.pack_start(self.lbl_suse_value, True, True, 0)
+
         self.lbl_project = Gtk.Label('Select a project to view details')
-        vbox.pack_start(self.lbl_project, True, True, 0)
+        hbox.pack_start(self.lbl_project, True, True, 0)
         self.button = Gtk.Button.new_with_label("Show Details")
         self.button.connect("clicked", self.open_project)
-
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
-
-
-        # self.row = Gtk.ListBoxRow()
-        # hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-        # self.row.add(hbox)
-        # vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        # hbox.pack_start(vbox, True, True, 0)
-        # self.lbl_suse = Gtk.Label(user_id+" suse:")
-        # hbox.pack_start(self.lbl_suse, True, True, 0)
-        # self.txt_suse = Gtk.Entry()
-        # self.txt_suse.set_text("1234")
-        # hbox.pack_start(self.txt_suse, False, True, 0)
-        # self.listbox.add(self.row)
 
         self.connect("delete-event", Gtk.main_quit)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -135,11 +127,13 @@ class MainWindow(Gtk.Window):
     def read_projects(self):
         """
           read_projects - checks if there are any existing projects added to Susereum and adds them to the list view.
+          format: [("Project 1", "Project Name 1", "1024", "11-11-2018"),
+        #                   ("Project 2", "Project Name 2", "2048", "12-12-2018")]
         """
         for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
-            self.projects.append((prj[1:],self.get_time_date()))
+            self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], '50', self.get_time_date()))#TODO query suse
 
 
     def add_project(self, widget, list_store):
@@ -148,6 +142,7 @@ class MainWindow(Gtk.Window):
                          checks and opens the smells screen for the newly added project
           :param widget: list_store
         """
+
         #call newchain script
         url = str(self.txt_project.get_text())
         #repo_path = sys.argv[0]
@@ -164,12 +159,12 @@ class MainWindow(Gtk.Window):
         prj_name = data[3]
         prj_id = data[4]
         api = data[2]
-        subprocess.Popen(['./check_smell.sh', str(api)])#TODO I am not correct
-        time.sleep(7)
+        subprocess.Popen(['./check_smell.sh', str(api)])#TODO I am not correct CHECKKKKKKKKKKK XD
+        time.sleep(4)
         if os.path.isfile('smells_exist.txt'):
             print('SMEELL EXSISTS................................................... ')
             print('SMEELL EXSISTS................................................... ')
-            x = [prj_name, self.get_time_date()]
+            x = [prj_id,prj_name,"50",self.get_time_date()]#TODO query health
             print('SMEELL EXSISTS: ',x)
             print('SMEELL EXSISTS: ', x)
             print('SMEELL EXSISTS: ', x)
@@ -177,39 +172,30 @@ class MainWindow(Gtk.Window):
             print('SMEELL EXSISTS: ', x)
             print('SMEELL EXSISTS: ', x)
             print('SMEELL EXSISTS: ', x)
-            self.parent.list_store.append(x)
+            self.list_store.append(x)
         else:
             win = screen_smells.MainWindow(url, self)
             win.show()
-        #print(' getting api getting api getting api getting api getting apigetting apigetting api vgetting api')
-        #r = requests.get(self.url)
-        #data = r.text.split('\n')
-        #self.prj_name = data[3]
-        #self.prj_id = data[4]
-        #self.api = data[2]
-        #subprocess.Popen(['./check_smell.sh',str(self.api) ])
-        #time.sleep(2)
-        #print('check_smell check_smell check_smell check_smell check_smell check_smell check_smell check_smell ')
+        #TODO modify crontab to start process on boot
+        import sys
         '''
-        if os.path.exists('smells_exist.txt'):
-            print('FOUND THE FILE SMELLY')
-            os.remove('smells_exist.txt')
-            r = requests.get(self.url)
-            data = r.text.split('\n')
-            self.pbrj_name = data[3]
-            x = [self.prj_name, self.get_time_date()]
-            list_store.append(x)
-        else:
-            print('NO FOUND THE FILE SMELLY')'''
-		#self.list_store = list_store
-		#win = screen_smells.MainWindow(url, self)
-		#win.show()
-        '''
-        print("Adding project: " + str(self.txt_project.get_text()) + " " + self.get_time_date())
-        x = [prj_name, self.get_time_date()]
-        list_store.append(x)
-        from screen_smells import MainWindow
-        win = MainWindow()
+        import uuid
+        cron_file = 'starup_cron_' + str(uuid.uuid4())
+        print('deleting cron.. temp:', cron_file, ['./tmp_cron.sh', cron_file])
+        p = subprocess.Popen(['./tmp_cron.sh', cron_file])
+        time.sleep(2)
+        cron_cmd = '* 1 * * * python3 vote_listener.py ' + proposal_id + ' ' + proposal_date + ' ' + prj_path
+        new_cron_name = cron_file + "2"
+        new_cron = open(new_cron_name, 'w')
+        for line in open(cron_file, 'r').read().split('\n'):
+            if cron_cmd in line:
+                continue
+            new_cron.write(line + '\n')
+        new_cron.close()
+        subprocess.Popen(['crontab', new_cron_name])
+        time.sleep(2)
+        os.remove(cron_file)
+        os.remove(new_cron_name)
         '''
 
     def open_project(self, widget):
@@ -217,13 +203,9 @@ class MainWindow(Gtk.Window):
             open_project - opens the selected project details on the new screen..
             :param widget: widget
         """
-        #TODO: Enable the following 1 lines later to do your thing Christian
-        #self.prj_path = os.environ['HOME'] + '/.sawtooth_projects/.'+self.selected
         from screen_details import MainWindow
-        #win = MainWindow(self.prj_path) # ENABLE THIS LINE TOO AND DELETE NEXT LINE!!!
-        win = MainWindow("")
-        #win.show()
-        #var1.show()
+        win = MainWindow(os.environ['HOME']+'/.sawtooth_projects/'+self.selected) # ENABLE THIS LINE TOO AND DELETE NEXT LINE!!!
+
 
     def get_time_date(self):
         """
@@ -239,8 +221,8 @@ class MainWindow(Gtk.Window):
         """
         model, row = selection.get_selected()
         if row is not None:
-            print("\nSelection- " + "Project: " + str(model[row][0]) + " Date: " + str(model[row][1]) + "\n")
-            self.selected = str(model[row][0])
+            print("\nSelection- " + "ID: " + str(model[row][0]) + " Name: " + str(model[row][1]) + "\n")
+            self.selected = "."+str(model[row][1])+"_"+str(model[row][0])
 
 
 if __name__ == '__main__':

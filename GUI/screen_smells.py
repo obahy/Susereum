@@ -195,6 +195,15 @@ class MainWindow(Gtk.Window):
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
 
+        self.row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.row.add(hbox)
+
+        self.lbl_add_fields = Gtk.Label()
+        self.lbl_add_fields.set_markup("<a href=\"mailto:susereum@gmail.com\" title=\"Email Susereum@gmail.com\">Contact support (Susereum@gmail.com) to add more fields</a>")
+        hbox.pack_start(self.lbl_add_fields, True, True, 0)
+        self.listbox_3.add(self.row)
+
         self.connect("delete-event", Gtk.main_quit)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.show_all()
@@ -376,7 +385,7 @@ class MainWindow(Gtk.Window):
         """
         self.save_to_suse()
         print("Adding project: " + self.prj_name + " " + self.get_time_date())
-        x = [self.prj_name, self.get_time_date()]
+        x = [self.prj_id,self.prj_name,'50', self.get_time_date()]#TODO query health - should be default
         self.parent.list_store.append(x)
         #TODO call github to update .suse
 
