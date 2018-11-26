@@ -310,30 +310,16 @@ class MainWindow(Gtk.Window):
 		hbox.pack_start(self.lbl_add_fields, True, True, 0)
 		self.listbox_pro_2.add(self.row)
 
-
 		self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
 
 		# 5th tab
-		self.page5 = Gtk.Box()
-		self.page5.set_border_width(10)
-		box_history = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-		self.page5.add(box_history)
+		self.page5 = Gtk.ScrolledWindow()
 
 		# Required columns for History tab
 		# we are ignoring URL from the Abel's comma seperated data. The fields are Type, Id, Data, State, URL and Date
 		self.historical_data = [("Type 1", "ID 1", "Data 1", "State 1", "Date 1"),
 						 ("Type 2", "ID 2", "Data 2", "State 2", "Date 2")]
 		history_list_store = Gtk.ListStore(str, str, str, str, str)
-
-		self.listbox_history = Gtk.ListBox()
-		self.listbox_history.set_selection_mode(Gtk.SelectionMode.NONE)
-
-		box_history.pack_start(self.listbox_history, True, True, 0)
-
-		self.row = Gtk.ListBoxRow()
-
-		hbox_history = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-		self.row.add(hbox_history)
 
 		# # ListStore (lists that TreeViews can display) and specify data types
 		# history_list_store = Gtk.ListStore(str, str)
@@ -366,12 +352,7 @@ class MainWindow(Gtk.Window):
 		selected_row = history_tree_view.get_selection()
 		#selected_row.connect("changed", self.item_selected)
 
-		hbox_history.pack_start(history_tree_view, True, True, 0)
-
-		self.listbox_history.add(self.row)
-
-
-
+		self.page5.add(history_tree_view)
 		self.notebook.append_page(self.page5, Gtk.Label('History'))
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.show_all()
