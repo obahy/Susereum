@@ -58,15 +58,6 @@ class MainWindow(Gtk.Window):
         # keep going if more rows are required.
 
         #middle section
-        self.listbox_2 = Gtk.ListBox()
-        scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.add(self.listbox_2)
-        box_outer.pack_start(scrolled_window, True, True, 0)
-
-        self.row = Gtk.ListBoxRow()
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-        self.row.add(hbox)
-
         # # ListStore (lists that TreeViews can display) and specify data types
         # projects_list_store = Gtk.ListStore(str, str)
         for item in self.projects:
@@ -98,9 +89,10 @@ class MainWindow(Gtk.Window):
         selected_row = projects_tree_view.get_selection()
         selected_row.connect("changed", self.item_selected)
 
-        hbox.pack_start(projects_tree_view, True, True, 0)
-
-        self.listbox_2.add(self.row)
+        # Encapsulate the Projects Tree View in a Scrolled Window and pack into box_outer.
+        scrolled_window = Gtk.ScrolledWindow()
+        box_outer.pack_start(scrolled_window, True, True, 0)
+        scrolled_window.add(projects_tree_view)
 
         # Bottom section
         self.listbox_3 = Gtk.ListBox()
