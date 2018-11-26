@@ -59,7 +59,9 @@ class MainWindow(Gtk.Window):
 
         #middle section
         self.listbox_2 = Gtk.ListBox()
-        box_outer.pack_start(self.listbox_2, True, True, 0)
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.add(self.listbox_2)
+        box_outer.pack_start(scrolled_window, True, True, 0)
 
         self.row = Gtk.ListBoxRow()
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
