@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import json
 import subprocess
+import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -25,8 +26,8 @@ class MainWindow(Gtk.Window):
 		self.path = path_
 
 		# TODO: Enable the following 2 lines later to do your thing Christian
-		#ports = open(self.path+'/etc/.ports').read()
-		#self.api = ports.split('\n')[2].strip()
+		ports = open(self.path+'/etc/.ports').read()
+		self.api = ports.split('\n')[2].strip()
 
 		# First tab
 		self.page1 = Gtk.Box()
@@ -64,7 +65,7 @@ class MainWindow(Gtk.Window):
 		#plt.plot(healths,times,'ro')
 		#plt.axis(['Mon','Tues','Wed'])
 		plt.savefig('health.png')'''
-		img = Gtk.Image.new_from_file("health.png")
+		img = Gtk.Image.new_from_file("health.png") #TODO update this periodically and check for blank
 		self.page1.add(img)
 
 		self.notebook.append_page(self.page1, Gtk.Label('Health'))
@@ -73,8 +74,8 @@ class MainWindow(Gtk.Window):
 		self.page2 = Gtk.Box()
 		self.page2.set_border_width(10)
 		# TODO: Enable the following 2 lines later to do your thing Christian
-		#self.suse = open(self.path+'/etc/.suse','r').read()
-		#self.page2.add(Gtk.Label(self.suse))
+		self.suse = open(self.path+'/etc/.suse','r').read()
+		self.page2.add(Gtk.Label(self.suse))
 		self.notebook.append_page(self.page2, Gtk.Label('Smells'))
 
 		# Third tab
@@ -114,7 +115,7 @@ class MainWindow(Gtk.Window):
 		vbox_lb2.pack_start(self.lbl_accept, True, True, 0)
 
 		self.txt_accept = Gtk.Entry()
-		self.txt_accept.set_text("display magic number")
+		self.txt_accept.set_text("0000")
 		self.txt_accept.set_sensitive(False)
 		hbox_lb2.pack_start(self.txt_accept, True, True, 0)
 
@@ -134,7 +135,7 @@ class MainWindow(Gtk.Window):
 		vbox_lb3.pack_start(self.lbl_reject, True, True, 0)
 
 		self.txt_reject = Gtk.Entry()
-		self.txt_reject.set_text("display magic number")
+		self.txt_reject.set_text("0000")
 		self.txt_reject.set_sensitive(False)
 		hbox_lb3.pack_start(self.txt_reject, False, True, 0)
 
@@ -299,6 +300,17 @@ class MainWindow(Gtk.Window):
 		self.btn_save.connect("clicked", self.save_proposal)
 		self.listbox_pro_2.add(self.row)
 
+		self.row = Gtk.ListBoxRow()
+		hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+		self.row.add(hbox)
+
+		self.lbl_add_fields = Gtk.Label()
+		self.lbl_add_fields.set_markup(
+			"<a href=\"mailto:susereum@gmail.com\" title=\"Email Susereum@gmail.com\">Contact support (Susereum@gmail.com) to add more fields</a>")
+		hbox.pack_start(self.lbl_add_fields, True, True, 0)
+		self.listbox_pro_2.add(self.row)
+
+
 		self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
 
 		# 5th tab
@@ -340,7 +352,7 @@ class MainWindow(Gtk.Window):
 
 		# Testing new changes... [adding additional 2 columns]
 		# for i, col_title in enumerate(["Project", "Date"]):
-		for i, col_title in enumerate(["Type", "ID", "Data", "Suse", "Date"]):
+		for i, col_title in enumerate(["Type", "ID", "Data", "State", "Date"]):
 			# Render means draw or display the data (just display as normal text)
 			renderer = Gtk.CellRendererText()
 			# Create columns (text is column number)
@@ -374,6 +386,10 @@ class MainWindow(Gtk.Window):
 		"""
 
 		print("Accepting project")
+		proposal_id = subprocess.check_output(['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__)))+'/code_smell.py', 'list', '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:'+self.api])
+		subprocess.Popen(
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'vote',
+			 '--id', proposal_id, '--vote', 'yes', '--url', 'http://127.0.0.1:' + self.api])
 
 	def reject_proposal(self, widget):
 		"""
@@ -381,6 +397,12 @@ class MainWindow(Gtk.Window):
 		  :param widget: widget
 		"""
 		print("Rejecting project")
+		proposal_id = subprocess.check_output(
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'list',
+			 '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:' + self.api])
+		subprocess.Popen(
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'vote',
+			 '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
 
 	def save_proposal(self, widget):
 		"""
@@ -388,6 +410,11 @@ class MainWindow(Gtk.Window):
 		  :param widget: widget
 		"""
 		print("Saving proposal")
+		#TODO make proposal string
+		proposal = "LargeClass=100,SmallClass=10"
+		subprocess.Popen(
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'proposal',
+			 '--propose', proposal, '--url', 'http://127.0.0.1:' + self.api])
 
 	def on_tog_large_class(self, tog_large_class):
 		"""
