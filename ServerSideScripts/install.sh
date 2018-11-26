@@ -30,6 +30,7 @@ pip install pandas
 pip install requests
 pip install matplotlib
 pip install numpy
+pip install requests
 
 
 pip3 install --upgrade pip
@@ -40,6 +41,7 @@ pip3 install pandas
 pip3 install requests
 pip3 install matplotlib
 pip3 install numpy
+pip3 install requests
 
 #start services on reboot - cron task
 Dir=$(

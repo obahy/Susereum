@@ -1,12 +1,12 @@
 #!/bin/bash
 #call me from cron every min or so
 #check each chain for any proposals
-for D in $HOME/.sawtooth_projects/.*/;
+for D in /home/practicum2018/.sawtooth_projects/.*/; #TODO make req to have one folder in home
 do
-	if [ "$D" == "$HOME/.sawtooth_projects/./" ] ;then
+	if [ "$D" == "/home/practicum2018/.sawtooth_projects/./" ] ;then
 		continue
 	fi
-	if [ "$D" == "$HOME/.sawtooth_projects/../" ] ;then
+	if [ "$D" == "/home/practicum2018/.sawtooth_projects/../" ] ;then
 		continue
 	fi
 	echo "checking: $D"

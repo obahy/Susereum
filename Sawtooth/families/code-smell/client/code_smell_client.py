@@ -81,6 +81,7 @@ def _get_suse_config(conf_file=None):
 
     #identify code_smell family configuration file
     #conf_file = work_path + '/etc/.suse'
+    print(conf_file)
 
     if os.path.isfile(conf_file):
         try:
@@ -90,6 +91,7 @@ def _get_suse_config(conf_file=None):
             raise CodeSmellException("Unable to load code smell family configuration file: {}"
                                      .format(error))
     #load toml config into a dict
+    print (raw_config)
     toml_config = toml.loads(raw_config)
     return toml_config
 
@@ -300,6 +302,8 @@ class CodeSmellClient:
             state (Str), new proposal ID
         """
         proposal = self.show(proposal_id)
+        print(proposal)
+        print (state)
         self._update_proposal(proposal, state, repo_id)
 
     def _update_proposal(self, proposal, state, repo_id):
@@ -311,20 +315,22 @@ class CodeSmellClient:
             proposal (dict), proposal data
             sate (str), new proposal's state
         """
-        return
+#        return
         txn_date = _get_date()
         proposal = proposal["payload"].decode().split(',')
 
-        self._send_code_smell_txn(
-            txn_id=proposal1[1],
+        response = self._send_code_smell_txn(
+            txn_id=proposal[1],
             txn_type='proposal',
-            data=proposal1[2],
+            data=proposal[2],
             state=str(state),
             date=txn_date)
 
+        print (response)
+
         if state == 1:
             #update suse configuration file
-            self._update_suse_file(proposal1)
+            self._update_suse_file(proposal)
 
             #send new config to github
             #suse_config = _get_suse_config()
@@ -356,13 +362,17 @@ class CodeSmellClient:
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
 
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        #print(self._work_path)
+
+        #work_path = os.path.dirname(os.path.dirname(
+        #    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
         #identify code_smell family configuration file
-        conf_file = work_path + '/etc/.suse'
+        conf_file = self._work_path + 'etc/.suse'
+
+        print(self._work_path)
 
         #get current config
-        suse_config = _get_suse_config()
+        suse_config = _get_suse_config(conf_file)
 
         """
         start by traversing the proposal,
@@ -384,7 +394,11 @@ class CodeSmellClient:
                         tmp_type = code_type
                         break
                 #update code smell metric
-                suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
+                print(proposal_key)
+                if proposal_key == "CommentsToCodeRatioUpper" or proposal_key == "CommentsToCodeRatioLower":
+                    suse_config["code_smells"][tmp_type][proposal_key][0] = float(proposal_metric)
+                else:
+                    suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
             #save new configuration
             try:
@@ -395,7 +409,7 @@ class CodeSmellClient:
                 raise CodeSmellException("Unable to open configuration file {}".format(error))
 
             #publish new configuration file to all peers
-            self._publish_config()
+            self._publish_config(conf_file)
         except:
             raise CodeSmellException("Incorrect proposal format")
 
