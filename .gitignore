@@ -28,3 +28,4 @@ ServerSideScripts/mycron
 ServerSideScripts/test\.sh
 
 Sawtooth/etc/\.suse
+GUI/smells_exist\.txt

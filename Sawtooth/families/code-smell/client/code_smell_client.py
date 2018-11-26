@@ -184,6 +184,7 @@ class CodeSmellClient:
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
+        print (conf_file)       
         ###########################
         #Commented out for testing only
         ###########################
