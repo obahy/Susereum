@@ -24,7 +24,7 @@ transaction_id=`sawtooth transaction list --url http://127.0.0.1:1002 | tail -n 
 key=`sawtooth transaction show $transaction_id  --url http://127.0.0.1:$api | grep signer_public_key | awk '{print $2;}'`
 python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID --date $TIME --client_key $key &
 #url is for chain api
-echo "python3 $SAWTOOTH_HOME/bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID --date $TIME" > /commitran
+echo "python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID --date $TIME --client_key $key" > /commitran
 echo " $SENDERID $REPOID $NAME $COMMIT_URL $TIME" >> /commitran
 
 
