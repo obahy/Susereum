@@ -386,10 +386,17 @@ class MainWindow(Gtk.Window):
 		"""
 
 		print("Accepting project")
-		proposal_id = subprocess.check_output(['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__)))+'/code_smell.py', 'list', '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:'+self.api])
+		print("Rejecting project")
+		proposal_id = subprocess.check_output(
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
+			 'list', '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:' + self.api])
+		proposal_id = proposal_id.decode('utf-8').split(' ')[0]
+		print(['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
+			   'vote','--id', proposal_id, '--vote', 'yes', '--url', 'http://127.0.0.1:' + self.api])
 		subprocess.Popen(
-			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'vote',
-			 '--id', proposal_id, '--vote', 'yes', '--url', 'http://127.0.0.1:' + self.api])
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
+			 'vote', '--id', proposal_id, '--vote', 'yes', '--url', 'http://127.0.0.1:' + self.api])
+		#TODO make file so i cant vote again
 
 	def reject_proposal(self, widget):
 		"""
@@ -398,11 +405,15 @@ class MainWindow(Gtk.Window):
 		"""
 		print("Rejecting project")
 		proposal_id = subprocess.check_output(
-			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'list',
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py', 'list',
 			 '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:' + self.api])
-		subprocess.Popen(
-			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'vote',
+		proposal_id = proposal_id.decode('utf-8').split(' ')[0]
+		print(['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py', 'vote',
 			 '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
+		subprocess.Popen(
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py', 'vote',
+			 '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
+	# TODO make file so i cant vote again
 
 	def save_proposal(self, widget):
 		"""
@@ -411,9 +422,13 @@ class MainWindow(Gtk.Window):
 		"""
 		print("Saving proposal")
 		#TODO make proposal string
-		proposal = "LargeClass=100,SmallClass=10"
+		proposal = "LargeClass="+str(self.txt_large_class.get_text())+","+"SmallClass="+str(self.txt_small_class.get_text())+","\
+					+"GodClass="+str(self.txt_god_class.get_text())+","+"InappropriateIntimacy="+str(self.txt_inapp_intm.get_text())+","\
+					+"LargeMethod="+str(self.txt_large_method.get_text())+","+"SmallMethod="+str(self.txt_small_method.get_text())+","\
+					+"LargeParameterList="+str(self.txt_large_param.get_text())+","+"CommentsToCodeRatioLower="+str(self.txt_ctc_lw.get_text())+","\
+					+"CommentsToCodeRatioUpper="+str(self.txt_ctc_up.get_text())
 		subprocess.Popen(
-			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'proposal',
+			['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py', 'proposal',
 			 '--propose', proposal, '--url', 'http://127.0.0.1:' + self.api])
 
 	def on_tog_large_class(self, tog_large_class):
