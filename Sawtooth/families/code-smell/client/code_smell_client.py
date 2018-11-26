@@ -75,12 +75,14 @@ def _sha512(data):
     """
     return hashlib.sha512(data).hexdigest()
 
-def _get_suse_config():
+def _get_suse_config(config_path=None):
     work_path = os.path.dirname(os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
     #identify code_smell family configuration file
-    conf_file = work_path + '/etc/.suse'
+    #conf_file = work_path + '/etc/.suse'
+    conf_file = config_path
+    print (conf_file)
 
     if os.path.isfile(conf_file):
         try:
@@ -182,15 +184,16 @@ class CodeSmellClient:
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
+        print (conf_file)       
         ###########################
         #Commented out for testing only
         ###########################
         #send configuration file to all peers
-        self._publish_config()
+        self._publish_config(config_path=conf_file)
 
         #send new config to github
-        suse_config = _get_suse_config()
-        self._send_git_request(suse_config, repo_id)
+        #suse_config = _get_suse_config()
+        #self._send_git_request(suse_config, repo_id)
 
         return response
 
@@ -462,7 +465,7 @@ class CodeSmellClient:
 
         return response
 
-    def _publish_config(self):
+    def _publish_config(self, config_path=None):
         """
         function to send an update configuration transaction to the chain
         after the code smell configuration is updated all peers in the network
@@ -472,7 +475,8 @@ class CodeSmellClient:
             config (dictionary), code smell configuration
         """
         #read .suse configuration file
-        suse_config = _get_suse_config()
+        suse_config = _get_suse_config(config_path=config_path)
+        print (suse_config)
 
         #get current time
         txn_date = _get_date()
