@@ -189,8 +189,8 @@ class CodeSmellClient:
         self._publish_config(conf_file=conf_file)
 
         #send new config to github
-        #suse_config = _get_suse_config()
-        #self._send_git_request(suse_config, repo_id)
+        suse_config = _get_suse_config()
+        self._send_git_request(suse_config, repo_id)
 
         return response
 
@@ -326,6 +326,7 @@ class CodeSmellClient:
             self._update_suse_file(proposal)
 
             #send new config to github
+            #################COMMETOUT FOR TESTING ONLY####################
             suse_config = _get_suse_config()
             self._send_git_request(suse_config, repo_id)
 
@@ -355,13 +356,14 @@ class CodeSmellClient:
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
 
-        work_path = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+        #work_path = os.path.dirname(os.path.dirname(
+        #    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
         #identify code_smell family configuration file
-        conf_file = work_path + '/etc/.suse'
+        conf_file = self._work_path + '/etc/.suse'
+        print (conf_file)
 
         #get current config
-        suse_config = _get_suse_config()
+        suse_config = _get_suse_config(conf_file)
 
         """
         start by traversing the proposal,
@@ -383,7 +385,10 @@ class CodeSmellClient:
                         tmp_type = code_type
                         break
                 #update code smell metric
-                suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
+                if proposal_key == "CommentsToCodeRatioLower" or proposal_key == "CommentsToCodeRatioUpper":
+                    suse_config["code_smells"][tmp_type][proposal_key][0] = float(proposal_metric)
+                else:
+                    suse_config["code_smells"][tmp_type][proposal_key][0] = int(proposal_metric)
 
             #save new configuration
             try:
@@ -394,7 +399,7 @@ class CodeSmellClient:
                 raise CodeSmellException("Unable to open configuration file {}".format(error))
 
             #publish new configuration file to all peers
-            self._publish_config()
+            self._publish_config(conf_file=conf_file)
         except:
             raise CodeSmellException("Incorrect proposal format")
 
