@@ -71,11 +71,13 @@ class MainWindow(Gtk.Window):
 		self.notebook.append_page(self.page1, Gtk.Label('Health'))
 
 		# Second tab
-		self.page2 = Gtk.Box()
+		self.page2 = Gtk.ScrolledWindow()
 		self.page2.set_border_width(10)
+		page2_box = Gtk.Box()
 		# TODO: Enable the following 2 lines later to do your thing Christian
 		self.suse = open(self.path+'/etc/.suse','r').read()
-		self.page2.add(Gtk.Label(self.suse))
+		page2_box.add(Gtk.Label(self.suse))
+		self.page2.add(page2_box)
 		self.notebook.append_page(self.page2, Gtk.Label('Smells'))
 
 		# Third tab
