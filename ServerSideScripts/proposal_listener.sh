@@ -24,7 +24,7 @@ do
 		continue
 	else
 		#check if task exists
-		cron_cmd="* 1 * * * python3 vote_listener.py $proposal $D"
+		cron_cmd="* 1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py $proposal $D"
 		crontab -l > mycron
 		echo "adding.. cron command: $cron_cmd"
 		if grep -Fxq "$cron_cmd" mycron
