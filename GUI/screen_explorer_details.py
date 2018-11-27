@@ -44,29 +44,37 @@ class MainWindow(Gtk.Window):
         transactions = self.blockchain_requests(api_port, "/transactions")
         suse_transactions = []      # To be used later to calculate user/suse tab
 
-        for transaction in transactions['data']:
-            sender_id = transaction['header']['batcher_public_key']
-            payload = base64.b64decode(transaction['payload'])     # Returns base64 encoded comma-delimited payload
-            payload_list = payload.split(',')
-            #print("Payload: " + str(payload_list))
-            transaction_type = payload_list[0]      # Transactions type is always the first item
+        try:
+            for transaction in transactions['data']:
+                sender_id = transaction['header']['batcher_public_key']
+                payload = base64.b64decode(transaction['payload'])     # Returns base64 encoded comma-delimited payload
+                payload_list = payload.split(',')
+                #print("Payload: " + str(payload_list))
+                #user_github_id = payload_list[1]
+                #user_github_username = self.github_user_id_to_username(user_github_id)
+                #print(user_github_username)
+                #print("Payload: " + str(payload_list))
+                transaction_type = payload_list[0]      # Transactions type is always the first item
 
-            # Filter out transactions
-            if(transaction_type not in ["code_smell", "commit", "config", "health", "proposal", "suse", "vote"]):
-                continue
-            if(transaction_type == "suse"):
-                suse_transactions.append(transaction)
+                # Filter out transactions
+                if(transaction_type not in ["code_smell", "commit", "config", "health", "proposal", "suse", "vote"]):
+                    continue
 
-            timestamp = payload_list[len(payload_list) - 1]     # Timestamp is always the last item
+                # Prepare labels for data, different transaction types have different labels
+                if(transaction_type == "suse"):
+                    suse_transactions.append(transaction)
 
-            data = ""       # Data is everything in between
-            i = 1
-            while(i < len(payload_list) - 1):
-                data += payload_list[i] + "\n"
-                i += 1
+                timestamp = payload_list[len(payload_list) - 1]     # Timestamp is always the last item
 
-            self.historical_data.append((sender_id, timestamp, transaction_type, data))     # Add a tuple to the list to show in table
+                data = ""       # Data is everything in between
+                i = 1
+                while(i < len(payload_list) - 1):
+                    data += payload_list[i] + "\n"
+                    i += 1
 
+                self.historical_data.append((sender_id, timestamp, transaction_type, data))     # Add a tuple to the list to show in table
+        except:
+            print("Problem trying to parse the history transactions")
 
         #self.historical_data = [("Sender ID 1", "Time stamp 1", "Type 1", "Data 1"),
         #                       ("Sender ID 2", "Time stamp 2", "Type 2", "Data 2")]
@@ -94,6 +102,8 @@ class MainWindow(Gtk.Window):
         for i, col_title in enumerate(["Sender ID", "Time", "Type", "Data"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
+            #renderer.props.wrap_width = 100
+            #renderer.props.wrap_mode = Gtk.WRAP_WORD
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable
@@ -112,31 +122,32 @@ class MainWindow(Gtk.Window):
         self.page3.add(box_users)
 
         # Required columns for History tab
-        #self.user_data = []     # List of users and their suse values to be rendered
-        suse_sums = []          # dictionary to sum up suse values for each user
+        self.user_data = []     # List of users and their suse values to be rendered
+        suse_sums = {}          # dictionary to sum up suse values for each user
+
+        # Loop through all transactions of type suse, parse user id and suse awarded
+        # Sum up the suse values for each user and render them in a table
         for suse_transaction in suse_transactions:
-            print("Suse Transaction: " + str(suse_transactions))
-            sender_id = suse_transaction['header']['batcher_public_key']
-            payload = base64.b64decode(transaction['payload'])     # Returns base64 encoded comma-delimited payload
+            payload = base64.b64decode(suse_transaction['payload'])     # Returns base64 encoded comma-delimited payload
             payload_list = payload.split(',')
-            print(payload_list)
-            suse_awarded = payload_list[0]      # TODO: CHRISTIAN Add in the index of the suse value in the payload
+            user_github_id = payload_list[1]
+            user_github_username = self.github_user_id_to_username(user_github_id)
+            suse_awarded = float(payload_list[2])      # TODO: CHRISTIAN Add in the index of the suse value in the payload
 
             # Add suse to user in dict or create a new key-value in the dict
-            if sender_id in suse_sums:
-                suse_sums[sender_id] += suse_awarded
+            if user_github_username in suse_sums:
+                suse_sums[user_github_username] += suse_awarded
             else:
-                suse_sums[sender_id] = suse_awarded
+                suse_sums[user_github_username] = suse_awarded
 
         # Add user and sum values to self.user_data to be rendered
-        for suse_sum in suse_sums:
-            user = suse_sum.key
-            suse = suse_sum.value
-            #self.user_data.append((user, suse))     # Adds tuple to the user_data
+        for user_github_username, suse_sum in suse_sums.items():
+            suse_sum_formatted = str(format(suse_sum, '.2f'))
+            self.user_data.append((user_github_username, suse_sum_formatted))     # Adds tuple to the user_data for rendering
 
-        # TODO: CHRISTIAN Comment out the following 2 hard-coded user/suse data lines
-        self.user_data = [("User ID 1", "Suse 1"),
-                          ("User ID 2", "Suse 2")]
+        # Adding them dynamically now
+        #self.user_data = [("User ID 1", "Suse 1"),
+        #                  ("User ID 2", "Suse 2")]
         user_list_store = Gtk.ListStore(str, str)
 
         self.listbox_users = Gtk.ListBox()
@@ -177,6 +188,16 @@ class MainWindow(Gtk.Window):
         self.connect("delete-event", Gtk.main_quit)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.show_all()
+
+    def github_user_id_to_username(self, id):
+        try:
+            url = "https://api.github.com/user/" + id
+            r = requests.get(url)
+            github_username = r.json()['login'].encode('ascii')     # unicode to ascii
+            return github_username
+        except:
+            print("Problem trying to convert GitHub user id to username. Url: " + url + ", response: " + str(r.json()))
+        return str(id)
 
     def blockchain_requests(self, api_port, endpoint):
         """

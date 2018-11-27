@@ -127,6 +127,7 @@ class MainWindow(Gtk.Window):
         """
         #new chain equivalent
         repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        print(url)
         r = requests.get(url)
         data = r.text.split('\n')
         prj_name = data[3].encode('ascii')
@@ -137,9 +138,10 @@ class MainWindow(Gtk.Window):
         etc_dir = home+"."+prj_name+"_"+prj_id+"/etc/"
         
         try:
-            os.makedirs(etc_dir)
+            if not os.path.exists(etc_dir):
+                os.makedirs(etc_dir)
         except:
-            print("Couldn't make " + etc_dir)
+            print("ERROR: Couldn't make " + etc_dir)
         
 
         """
