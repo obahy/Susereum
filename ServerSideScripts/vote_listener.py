@@ -65,6 +65,8 @@ client = CodeSmellClient(base_url="http://127.0.0.1:"+str(api), keyfile=keyfile,
 #check if enough 'yes' votes to pass proposal
 print('pid:',proposal_id,api)
 votes = client.check_votes(proposal_id)
+if not votes:
+	sys.exit(0)
 yes_votes = votes.count(1)
 
 print('VOTES:',votes, (yes_votes >= approval_treshold))
