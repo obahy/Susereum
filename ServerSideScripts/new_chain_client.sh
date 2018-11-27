@@ -67,6 +67,7 @@ poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #cd $SAWTOOTH_HOME/bin
 python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/suse-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 
 
