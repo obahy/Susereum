@@ -133,10 +133,13 @@ class MainWindow(Gtk.Window):
           format: [("Project 1", "Project Name 1", "1024", "11-11-2018"),
         #                   ("Project 2", "Project Name 2", "2048", "12-12-2018")]
         """
+        self.total_suse = 0
         for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
             self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], '50', self.get_time_date()))#TODO query suse
+            
+            self.total_suse =
             #TODO check if proccess is running for this prj
 
 
@@ -182,27 +185,6 @@ class MainWindow(Gtk.Window):
         else:
             win = screen_smells.MainWindow(url, self)
             win.show()
-        '''
-        #TODO modify crontab to start process on boot
-        import sys
-        import uuid
-        cron_file = 'starup_cron_' + str(uuid.uuid4())
-        print('deleting cron.. temp:', cron_file, ['./tmp_cron.sh', cron_file])
-        p = subprocess.Popen(['./tmp_cron.sh', cron_file])
-        time.sleep(2)
-        cron_cmd = '* 1 * * * python3 vote_listener.py ' + proposal_id + ' ' + proposal_date + ' ' + prj_path
-        new_cron_name = cron_file + "2"
-        new_cron = open(new_cron_name, 'w')
-        for line in open(cron_file, 'r').read().split('\n'):
-            if cron_cmd in line:
-                continue
-            new_cron.write(line + '\n')
-        new_cron.close()
-        subprocess.Popen(['crontab', new_cron_name])
-        time.sleep(2)
-        os.remove(cron_file)
-        os.remove(new_cron_name)
-        '''
 
     def delete_project(self, widget):
         """
