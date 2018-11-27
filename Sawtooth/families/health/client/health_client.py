@@ -133,8 +133,8 @@ class HealthClient:
         s.close()
 
         print (my_ip)
-        print (client_key[5:].split(':')[0])
-        if my_ip == client_key[5:].split(':')[0]:
+        print (client_key[6:].split(':')[0])
+        if my_ip == client_key[6:].split(':')[0]:
             process_flag = 0
 
         #get user public key
