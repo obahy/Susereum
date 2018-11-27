@@ -147,10 +147,21 @@ class MainWindow(Gtk.Window):
 
 		self.listbox_vot_v3.add(self.row)
 
-		# self.row = Gtk.ListBoxRow()
-		# TODO Adeel Label here..
-		# self.lbl_vote_text = Gtk.Label('Vote data')
 
+		# Bottom Last Label
+		self.listbox_vot_v4 = Gtk.ListBox()
+		self.listbox_vot_v4.set_selection_mode(Gtk.SelectionMode.NONE)
+		box_vote.pack_start(self.listbox_vot_v4, True, True, 0)
+
+		self.row = Gtk.ListBoxRow()
+		hbox_lb4 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+		self.row.add(hbox_lb4)
+
+		#Label on the Vote tab.
+		self.lbl_vote_text = Gtk.Label("ajkshdkasjhdk")
+		self.lbl_vote_text.set_line_wrap(True)
+		hbox_lb4.pack_start(self.lbl_vote_text, True, True, 0)
+		self.listbox_vot_v4.add(self.row)
 
 		self.notebook.append_page(self.page3, Gtk.Label('Vote'))
 

@@ -138,8 +138,8 @@ class MainWindow(Gtk.Window):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
             self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], '50', self.get_time_date()))#TODO query suse
-            
-            self.total_suse =
+
+            self.total_suse = 50
             #TODO check if proccess is running for this prj
 
 
