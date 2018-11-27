@@ -221,24 +221,26 @@ def do_list(args):
         print (transactions)
 
 
-def do_suse(args, url=None, health=None, github_id=None):
+def do_suse(args=None, url=None, health=None, github_id=None):
     """
     create suse of new commit
 
     Args:
         args (array) arguments
     """
-    if args.health is None:
+    if args is None:
         health = health
+        gituser = github_id
+        username = getpass.getuser()
+        home = os.path.expanduser("~")
+        key_dir = os.path.join(home, ".sawtooth", "keys")
+        keyfile = '{}/{}.priv'.format(key_dir, username)
     else:
         health = args.health
-    if args.gituser is None:
-        gituser = github_id
-    else:
         gituser = args.gituser
+        url = _get_url(args)
+        keyfile = _get_keyfile(args)
 
-    url = _get_url(args)
-    keyfile = _get_keyfile(args)
     client = SuseClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
     response = client.suse(new_health=health, github_id=gituser)
