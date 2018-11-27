@@ -2,6 +2,9 @@ import gi, time
 import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+import re
+from itertools import dropwhile
+import requests
 
 """
 Sawtooth Explorer screen for Susereum.
@@ -14,9 +17,8 @@ class MainWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="Susereum Explorer")
 
         #TODO: Martin you can read data that you want to display on the list and add it to projects below.
-        self.projects=[("Project 1", "Project Name 1", "Health value 1", "11-11-2018"),
-                           ("Project 2", "Project Name 2", "Health value 2", "12-12-2018")]
-
+        self.projects=[]#[("Project 1", "Project Name 1", "Health value 1", "11-11-2018"),("Project 2", "Project Name 2", "Health value 2", "12-12-2018")]
+        self.read_projects()
         self.set_border_width(5)
         self.set_size_request(600, 300)
 
@@ -25,6 +27,7 @@ class MainWindow(Gtk.Window):
 
         # ListStore (lists that TreeViews can display) and specify data types
         projects_list_store = Gtk.ListStore(str, str, str, str)  # New Change#
+        self.list_store = projects_list_store
 
         # Top Section
         self.listbox = Gtk.ListBox()
@@ -58,8 +61,10 @@ class MainWindow(Gtk.Window):
         for item in self.projects:
             projects_list_store.append(list(item))
 
+        """
         for row in projects_list_store:
             print(row[:])  # Print all data
+        """
 
         # TreeView is the item that is displayed
         projects_tree_view = Gtk.TreeView(projects_list_store)
@@ -108,14 +113,85 @@ class MainWindow(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.show_all()
 
+    def findnth(self, haystack, needle, n):
+        parts= haystack.split(needle, n+1)
+        if len(parts) <= n+1:
+            return -1
+        return len(haystack)-len(parts[-1])-len(needle)
+
+    def add_project(self, url):
+        """
+          add_projects - Takes the url from the project field and runs the new chain client script.
+                         checks and opens the smells screen for the newly added project
+          :param widget: list_store
+        """
+        #new chain equivalent
+        repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        r = requests.get(url)
+        data = r.text.split('\n')
+        prj_name = data[3].encode('ascii')
+        prj_id = data[4].encode('ascii')
+        api = data[2].encode('ascii')
+        home = (os.environ['HOME']+'/.sawtooth_projects/').encode('ascii')
+
+        etc_dir = home+"."+prj_name+"_"+prj_id+"/etc/"
+        
+        try:
+            os.makedirs(etc_dir)
+        except:
+            print("Couldn't make " + etc_dir)
+        
+
+        """
+        try:
+            os.mkdir(home)
+        except:
+            print('couldnt make ' + home)
+            pass
+        try:
+
+            os.mkdir(home+"."+prj_name+"_"+prj_id)
+        except:
+            print('couldnt make home2')
+            pass
+        try:
+            os.mkdir(home+"."+prj_name+"_"+prj_id+"/etc")
+        except:
+            print('couldnt make home3')
+            pass
+        """
+
+        ports = open(etc_dir+'.ports','w+')
+        suse = open(etc_dir+'.suse','w+')
+        #repo = open(os.listdir((os.environ['HOME'])+'/.sawtooth_projects/.'+prj_name+"_"+prj_id+"/etc/")+'.repo','w')
+        ports.write(data[0]+'\n')
+        ports.write(data[1]+'\n')
+        ports.write(data[2]+'\n')
+        ports.close()
+        suse.write(r.text[self.findnth(r.text,'\n',3):])
+        suse.close()
+        x = [prj_id,prj_name,"50",self.get_time_date()]#TODO query suse
+        self.projects.append(x)
+       
+
     def read_projects(self):
         """
           read_projects - checks if there are any existing projects added to Susereum and adds them to the list view.
         """
-        for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
+        import request
+        r = requests.get('http://129.108.7.2/project_list.php')#check if there are project
+        urls = r.text.split(' ')
+        #print(r.text)
+        for url in urls:
+            #print(url)
+            if "http" in url:
+                self.add_project(url.strip())
+        '''for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
-            self.projects.append((prj[1:],self.get_time_date()))
+            list_item = (prj[1:],self.get_time_date())
+            if list_item in 
+            self.projects.append()'''
 
 
     def search_project(self, widget, list_store):
@@ -130,9 +206,8 @@ class MainWindow(Gtk.Window):
             :param widget: widget
         """
         from screen_explorer_details import MainWindow
-        win = MainWindow()
-        #TODO: Martin add your functionality here...
-
+        print("Opening details at " + str(self.selected_api_port) + " REST API port")
+        win = MainWindow(self.selected_api_port)
 
     def get_time_date(self):
         """
@@ -151,6 +226,15 @@ class MainWindow(Gtk.Window):
             print("\nSelection-" + str(model[row][0]) + ", " +str(model[row][1]) + ", " +str(model[row][2]) + ", " + str(model[row][3]))
             self.selected = str(model[row][0])
 
+            # Get REST API port from ~/.sawtooth_projects/<prj_name>_<prj_id>/etc/.ports
+            home = (os.environ['HOME']+'/.sawtooth_projects/').encode("ascii")
+            prj_id = str(model[row][0])
+            prj_name = str(model[row][1])
+            ports_dir = home+"."+prj_name+"_"+prj_id+"/etc/"+'.ports'
+            ports_file = open(ports_dir,'r')
+            ports_string = ports_file.read().encode('ascii')
+            self.selected_api_port = ports_string.split('\n')[2]           # REST API is the third line
+            ports_file.close()
 
 window = MainWindow()
 window.connect("delete-event", Gtk.main_quit)
