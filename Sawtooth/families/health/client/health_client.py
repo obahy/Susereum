@@ -48,6 +48,7 @@ from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: dis
 
 from client.health_exceptions import HealthException
 from client.health_process import calculate_health
+from client.suse_cli import do_suse
 
 def _sha512(data):
     """
@@ -123,13 +124,57 @@ class HealthClient:
 
         process_flag = 1
         #get user public key
-        #for file
-        user_key = self._signer.get_public_key().as_hex()
+        key_path = os.path.expanduser('~')
+        key_path = key_path + "/.sawtooth/keys"
+        for pub_file in os.listdir(key_path):
+            if pub_file.endswith("*.pub"):
+                print ("File:" + pub_file)
+                line = open(pub_file, 'r')
+                key = line.read().as_hex()
+                file.close()
+                if key == client_key:
+                    print("user key: " + key)
+                    print("client key: " + client_key)
+                    process_flag = 0
+                    break
+
+        #user_key = self._signer.get_public_key().as_hex()
         #root_key =
-        print("key from github:" + client_key)
-        print("user key:" + user_key)
-        if user_key == client_key:
-            process_flag = 0
+        #print("key from github:" + client_key)
+        #print("user key:" + user_key)
+        #if user_key == client_key:
+        #    process_flag = 0
+
+        #if process is zero then check latest health
+        #get latest health
+        if process_flag == 0:
+            result = self._send_request("transactions")
+            transactions = {}
+            try:
+                encoded_entries = yaml.safe_load(result)["data"]
+                for entry in encoded_entries:
+                    #try to pull the specific transaction, if the format is not right
+                    #the transaction corresponds to the consesus family
+                    try:
+                        transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                        if transaction_type == "health":
+                            transactions[entry["header_signature"]] = base64.b64decode(
+                                entry["payload"])
+                            #assuming we got all transactions in order
+                            break
+                    except:
+                        pass
+                #return transactions
+            except BaseException:
+                return None
+
+            for entry in transactions:
+                previous_commit = transactions[entry].decode().split(',')[4]
+                if previous_commit == github_url:
+                    #if the commit url of the previous health is equal to the new commit url
+                    #then ignore the transaction
+                    process_flag == 1
+                break
 
         #we got a new commit, calculate health
         if process_flag == 0:
@@ -159,7 +204,7 @@ class HealthClient:
                 health = calculate_health(suse_config=suse_config, csv_path=csv_path)
 
                 ## TODO: test this in integration
-                get_suse(url=self._base_url, health=health, github_id=github_id)
+                do_suse(url=self._base_url, health=health, github_id=github_id)
 
                 response = self._send_health_txn(
                     txn_type='health',
