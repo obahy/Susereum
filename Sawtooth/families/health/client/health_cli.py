@@ -240,7 +240,7 @@ def do_list(args):
         transactions = client.list(txn_type=args.type, limit=args.limit)
 
     if len(transactions) == 0:
-        pass #raise HealthException("No transactions found")
+        pass#raise HealthException("No transactions found")
     else:
         print (transactions)
 

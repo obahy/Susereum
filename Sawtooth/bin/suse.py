@@ -20,7 +20,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
     os.path.realpath(__file__))), 'families/suse/client'))
-#print (sys.path)
+
 from suse_cli import main_wrapper
 
 if __name__ == '__main__':
