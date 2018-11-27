@@ -36,6 +36,7 @@ class MainWindow(Gtk.Window):
 
 		healths = []
 		myDates = []
+		print(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
 		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
 		if not results:
 			pass
@@ -53,7 +54,7 @@ class MainWindow(Gtk.Window):
 										int(date[2]),
 										int(date[3]),
 										int(date[4]),
-										int(date[5])))#TODO update to new date format?
+										int(date[5])))
 				print(health,date)
 
 			fig, ax = plt.subplots()
@@ -67,7 +68,7 @@ class MainWindow(Gtk.Window):
 			plt.xlabel("Date")
 			plt.ylabel("Health")
 			plt.title("Health per Commit")
-			plt.yticks(np.arange(0,100,11))#TODO make dynamic
+			plt.yticks(np.arange(0,100,10))#TODO make dynamic
 			#plt.xticks(None,1)#TODO make dynamic
 			#plt.locator_params(axis='y',numticks=3)
 			#plt.show()
