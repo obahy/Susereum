@@ -123,8 +123,11 @@ class HealthClient:
 
         process_flag = 1
         #get user public key
+        #for file
         user_key = self._signer.get_public_key().as_hex()
-        print (user_key)
+        #root_key =
+        print("key from github:" + client_key)
+        print("user key:" + user_key)
         if user_key == client_key:
             process_flag = 0
 
@@ -156,7 +159,7 @@ class HealthClient:
                 health = calculate_health(suse_config=suse_config, csv_path=csv_path)
 
                 ## TODO: test this in integration
-                #get_suse(url=self._base_url, health=health, github_id=github_id)
+                get_suse(url=self._base_url, health=health, github_id=github_id)
 
                 response = self._send_health_txn(
                     txn_type='health',
