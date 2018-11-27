@@ -151,6 +151,7 @@ poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #sawtooth block list --url http://$IP:$API_PORT
 python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/suse-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 #TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
 #python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME 
