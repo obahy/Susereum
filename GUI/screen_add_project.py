@@ -112,9 +112,12 @@ class MainWindow(Gtk.Window):
         self.lbl_suse_value.set_markup("<b>"+ suse_value +"</b>")
         hbox.pack_start(self.lbl_suse_value, True, True, 0)
 
-        self.lbl_project = Gtk.Label('Select a project to view details')
+        self.lbl_project = Gtk.Label('Select project to delete/view')
         hbox.pack_start(self.lbl_project, True, True, 0)
-        self.button = Gtk.Button.new_with_label("Show Details")
+        self.btn_delete = Gtk.Button.new_with_label("Delete")
+        self.btn_delete.connect("clicked", self.delete_project)
+        hbox.pack_start(self.btn_delete, False, True, 0)
+        self.button = Gtk.Button.new_with_label("Details")
         self.button.connect("clicked", self.open_project)
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
@@ -201,6 +204,13 @@ class MainWindow(Gtk.Window):
         os.remove(new_cron_name)
         '''
 
+    def delete_project(self, widget):
+        """
+          delete_projects - Takes the url from the project field and runs the new chain client script.
+                         checks and opens the smells screen for the newly added project
+          :param widget: list_store
+        """
+        print("Deleting project")
 
     def open_project(self, widget):
         """
