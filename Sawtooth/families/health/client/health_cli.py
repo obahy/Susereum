@@ -223,7 +223,6 @@ def create_parser(prog_name):
 
     return parser
 
-
 def do_list(args):
     """
     list transactions of code smell family
@@ -241,7 +240,7 @@ def do_list(args):
         transactions = client.list(txn_type=args.type, limit=args.limit)
 
     if len(transactions) == 0:
-        raise HealthException("No transactions found")
+        pass #raise HealthException("No transactions found")
     else:
         print (transactions)
 

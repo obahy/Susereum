@@ -46,7 +46,7 @@ from sawtooth_sdk.protobuf.batch_pb2 import BatchHeader #pylint: disable=import-
 from sawtooth_sdk.protobuf.transaction_pb2 import Transaction #pylint: disable=import-error
 from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: disable=import-error
 
-from client.suse_exceptions import SuseException
+from suse_exceptions import SuseException
 
 def _sha512(data):
     """
