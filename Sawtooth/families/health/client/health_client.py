@@ -130,18 +130,21 @@ class HealthClient:
         key_path = os.path.expanduser('~')
         key_path = key_path + "/.sawtooth/keys"
         print (key_path)
+        print ("hash:" + self._signer.get_public_key().as_hex())
         for pub_file in os.listdir(key_path):
-            if ".pub" in pub_file:
-                print ("File:" + pub_file)
-                line = open(key_path + '/' + pub_file, 'r')
-                key = line.read().strip()
-                file.close()
-                client_key = client_key.strip()
-                if key == client_key:
-                    print("user key: " + key)
-                    print("client key: " + client_key)
-                    process_flag = 0
-                    break
+            #if ".pub" in pub_file:
+            print ("File:" + pub_file)
+            line = open(key_path + '/' + pub_file, 'r')
+            key = line.read().strip()
+            line.close()
+            client_key = client_key.strip()
+            print("user key: " + key)
+            print("client key: " + client_key)
+            if key == client_key:
+                print("user key: " + key)
+                print("client key: " + client_key)
+                process_flag = 0
+                break
 
         #user_key = self._signer.get_public_key().as_hex()
         #root_key =
@@ -365,8 +368,22 @@ class HealthClient:
         address = self._get_address(txn_id)
 
         #construct header
+
+        key_path = os.path.expanduser('~')
+        key_path = key_path + "/.sawtooth/keys"
+        print (key_path)
+        print ("hash:" + self._signer.get_public_key().as_hex())
+        for pub_file in os.listdir(key_path):
+            if "root.pub" in pub_file:
+                print ("File:" + pub_file)
+                line = open(key_path + '/' + pub_file, 'r')
+                key = line.read().strip()
+                line.close()
+                print("user key: " + key)
+                break
+
         header = TransactionHeader(
-            signer_public_key=self._signer.get_public_key().as_hex(),
+            signer_public_key=str(key),
             family_name="health",
             family_version="0.1",
             inputs=[address],

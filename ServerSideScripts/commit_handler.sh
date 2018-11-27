@@ -40,9 +40,10 @@ health_done=`sawtooth transaction list --url http://127.0.0.1:$api | grep "healt
 if [ -z "$health_done" ] ;then
 	
 	#get random client public key 
-	transaction_id=`sawtooth transaction list --url http://127.0.0.1:$api | tail -n +2 | shuf -n 1 | awk '{print $1;}'`
-	key=`sawtooth transaction show $transaction_id  --url http://127.0.0.1:$api | grep signer_public_key | awk '{print $2;}'`
-	python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID --date $TIME --client_key "$key" &
+	sawtooth peer list --url http://127.0.0.1:$api > ips
+	ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -n 1 >> ips
+	peer_ip=`cat ips | shuf -n 1 | awk '{print $1;}'`
+	python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID --date $TIME --client_key "$peer_ip" &
 	#url is for chain api
 	echo "python3 bin/health.py commit --url http://127.0.0.1:$api --giturl $COMMIT_URL --gituser $SENDERID --date $TIME --client_key $key" > /commitran
 	echo " $SENDERID $REPOID $NAME $COMMIT_URL $TIME ----- $transaction_id @ $key " >> /commitran
