@@ -95,6 +95,8 @@ echo $REPO_PATH > etc/.repo
 #make keys
 sawadm keygen
 sawtooth keygen
+chmod 777 ~/.sawtooth/keys/*.pub
+cp ~/.sawtooth /root/ -r
 
 sawset genesis -k keys/validator.priv -o config-genesis.batch
 

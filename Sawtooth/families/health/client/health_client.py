@@ -129,6 +129,7 @@ class HealthClient:
         #get user public key
         key_path = os.path.expanduser('~')
         key_path = key_path + "/.sawtooth/keys"
+        print (key_path)
         for pub_file in os.listdir(key_path):
             if pub_file.endswith("*.pub"):
                 print ("File:" + pub_file)
