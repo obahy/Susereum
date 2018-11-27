@@ -31,6 +31,7 @@ import hashlib
 import subprocess
 import yaml
 import requests
+import sys
 import toml #pylint: disable=import-error
 
 from pprint import pprint
@@ -48,7 +49,8 @@ from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: dis
 
 from client.health_exceptions import HealthException
 from client.health_process import calculate_health
-from client.suse_cli import do_suse
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), 'suse/client'))
+from suse_cli import do_suse
 
 def _sha512(data):
     """
