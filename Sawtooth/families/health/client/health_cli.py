@@ -223,7 +223,6 @@ def create_parser(prog_name):
 
     return parser
 
-
 def do_list(args):
     """
     list transactions of code smell family

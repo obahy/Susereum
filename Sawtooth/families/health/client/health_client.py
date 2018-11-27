@@ -33,6 +33,7 @@ import yaml
 import requests
 import sys
 import toml #pylint: disable=import-error
+import sys
 
 from pprint import pprint
 from base64 import b64encode

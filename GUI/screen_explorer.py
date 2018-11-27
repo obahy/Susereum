@@ -179,7 +179,6 @@ class MainWindow(Gtk.Window):
         """
           read_projects - checks if there are any existing projects added to Susereum and adds them to the list view.
         """
-        import request
         r = requests.get('http://129.108.7.2/project_list.php')#check if there are project
         urls = r.text.split(' ')
         #print(r.text)
@@ -237,30 +236,30 @@ class MainWindow(Gtk.Window):
             self.selected_api_port = ports_string.split('\n')[2]           # REST API is the third line
             ports_file.close()
 
-    def visible_cb(self, model, iter, data=None):
-        '''
-        :param model:
-        :param iter:
-        :param data:
-        :return:
-        '''
-        search_query = self.entry.get_text().lower()
-        active_category = self.catcombo.get_active()
-        search_in_all_columns = active_category == 0
-
-        if search_query == "":
-            return True
-
-        if search_in_all_columns:
-            for col in range(1,self.treeview.get_n_columns()):
-                value = model.get_value(iter, col).lower()
-                if value.startswith(search_query):
-                    return True
-
-            return False
-
-        value = model.get_value(iter, active_category).lower()
-        return True if value.startswith(search_query) else False
+    # def visible_cb(self, model, iter, data=None):
+    #     '''
+    #     :param model:
+    #     :param iter:
+    #     :param data:
+    #     :return:
+    #     '''
+    #     search_query = self.entry.get_text().lower()
+    #     active_category = self.catcombo.get_active()
+    #     search_in_all_columns = active_category == 0
+    #
+    #     if search_query == "":
+    #         return True
+    #
+    #     if search_in_all_columns:
+    #         for col in range(1,self.treeview.get_n_columns()):
+    #             value = model.get_value(iter, col).lower()
+    #             if value.startswith(search_query):
+    #                 return True
+    #
+    #         return False
+    #
+    #     value = model.get_value(iter, active_category).lower()
+    #     return True if value.startswith(search_query) else False
 
 window = MainWindow()
 window.connect("delete-event", Gtk.main_quit)
