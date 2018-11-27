@@ -10,6 +10,7 @@ import time
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from ErrorDialog import ErrorDialog
 
 """
 Project details screen for Susereum.
@@ -85,11 +86,13 @@ class MainWindow(Gtk.Window):
         self.notebook.append_page(self.page1, Gtk.Label('Health'))
 
         # Second tab
-        self.page2 = Gtk.Box()
+        self.page2 = Gtk.ScrolledWindow()
         self.page2.set_border_width(10)
+        page2_box = Gtk.Box()
         # TODO: Enable the following 2 lines later to do your thing Christian
         self.suse = open(self.path + '/etc/.suse', 'r').read()
-        self.page2.add(Gtk.Label(self.suse))
+        page2_box.add(Gtk.Label(self.suse))
+        self.page2.add(page2_box)
         self.notebook.append_page(self.page2, Gtk.Label('Smells'))
 
         # Third tab
@@ -342,26 +345,14 @@ class MainWindow(Gtk.Window):
         self.notebook.append_page(self.page4, Gtk.Label('Proposal'))
 
         # 5th tab
-        self.page5 = Gtk.Box()
+        self.page5 = Gtk.ScrolledWindow()
         self.page5.set_border_width(10)
-        box_history = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self.page5.add(box_history)
 
         # Required columns for History tab
         # we are ignoring URL from the Abel's comma seperated data. The fields are Type, Id, Data, State, URL and Date
         self.historical_data = [("Type 1", "ID 1", "Data 1", "State 1", "Date 1"),
                                 ("Type 2", "ID 2", "Data 2", "State 2", "Date 2")]
         history_list_store = Gtk.ListStore(str, str, str, str, str)
-
-        self.listbox_history = Gtk.ListBox()
-        self.listbox_history.set_selection_mode(Gtk.SelectionMode.NONE)
-
-        box_history.pack_start(self.listbox_history, True, True, 0)
-
-        self.row = Gtk.ListBoxRow()
-
-        hbox_history = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=50)
-        self.row.add(hbox_history)
 
         # # ListStore (lists that TreeViews can display) and specify data types
         # history_list_store = Gtk.ListStore(str, str)
@@ -394,10 +385,7 @@ class MainWindow(Gtk.Window):
         selected_row = history_tree_view.get_selection()
         # selected_row.connect("changed", self.item_selected)
 
-        hbox_history.pack_start(history_tree_view, True, True, 0)
-
-        self.listbox_history.add(self.row)
-
+        self.page5.add(history_tree_view)
         self.notebook.append_page(self.page5, Gtk.Label('History'))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.show_all()
@@ -442,6 +430,46 @@ class MainWindow(Gtk.Window):
              'vote',
              '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
 
+    def is_valid_proposal(self):
+        int_measures = {'Large class': self.txt_large_class.get_text(),
+                        'Small class': self.txt_small_class.get_text(),
+                        'Large method': self.txt_large_method.get_text(),
+                        'Small method': self.txt_small_method.get_text(),
+                        'Large param': self.txt_large_param.get_text(),
+                        'God class': self.txt_god_class.get_text(),
+                        'Inappropriate Intimacy': self.txt_inapp_intm.get_text()}
+
+        float_measures = {'Comments to code ratio [upper]': self.txt_ctc_up.get_text(),
+                          'Comments to code ratio [lower]': self.txt_ctc_lw.get_text()}
+
+        for key, value in int_measures.items():
+            try:
+                int_measures[key] = int(value)
+            except ValueError:
+                ErrorDialog(self, "Error!\n" + key + " must be an integer!")
+                return False
+
+        for key, value in float_measures.items():
+            try:
+                int_measures[key] = float(value)
+            except ValueError:
+                ErrorDialog(self, "Error!\n" + key + " must be a decimal value!")
+                return False
+
+        if int_measures['Small class'] > int_measures['Large class']:
+            ErrorDialog(self, "Error!\nSmall class cannot be larger than Large class!")
+            return False
+
+        if int_measures['Small method'] > int_measures['Large method']:
+            ErrorDialog(self, "Error!\nSmall method cannot be larger than Large method!")
+            return False
+
+        if float_measures['Comments to code ratio [lower]'] > float_measures['Comments to code ratio [upper]']:
+            ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
+            return False
+
+        return False
+
     # TODO make file so i cant vote again
 
     def save_proposal(self, widget):
@@ -449,6 +477,9 @@ class MainWindow(Gtk.Window):
         save_proposal - to save the proposal
         :param widget: widget
         """
+        if not self.is_valid_proposal():
+            return
+
         print("Saving proposal")
         # TODO make proposal string
         proposal = "LargeClass=" + str(self.txt_large_class.get_text()) + "," + "SmallClass=" + str(
