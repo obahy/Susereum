@@ -27,6 +27,7 @@ class RequestHandler:
 			repo_id (int): The GitHub ID for the project repository
 			repo_name (string): The name of the GitHub repository
 		"""
+		print("Getting commit history")
 		try:
 			url = "https://api.github.com/repositories/" + str(repo_id) + "/commits"
 			commits = self._git_get(url)	# Retreives the list of commits
@@ -55,7 +56,7 @@ class RequestHandler:
 				push_command_file = push_command_file.read()
 				push_command_file.rstrip()	# Remove newlines from command
 				command = push_command_file.format(str(sender_id), str(repo_id), repo_name, commit_url, formatted_ts)
-				#print "Command I'm running: " + command
+				print "Command I'm running: " + command
 				os.system(command)
 		except:
 			print("An exception occured trying to analyze all the past commit history")
@@ -324,7 +325,7 @@ approval_treshold=3
 			print "Suse file created successfully"
 			return content
 		else:
-			print "Problem creating Suse file"
+			print "Problem creating Suse file " + str(result_status_code)
 			return ""
 
 	# Github sends a signature in the payload header. Github created that signature by using their secret and hashing the entire payload with sha1
@@ -365,6 +366,7 @@ approval_treshold=3
 			URL (string): The URL to send the PUT request to (ex. https://api.github.com/repositories/155309878/contents/SuseMeasures.suse)
 			data (string): The payload you want to put (ex. the contents of the .suse file to override the current contents)
 		"""
+		_create_installation_token()		# Token periodically expires, so generate new token anytime I will need it
 		global TOKEN
 		data = json.dumps(data)		# This encodes the data as json, which is necessary bc we have nested json data
 		headers = {'Authorization': ('Token ' + TOKEN)}		# Adds token to authorize as the Susereum bot
@@ -441,12 +443,14 @@ def _get_environment_vars():
 	PRIVATE_KEY = os.environ['GITHUB_PRIVATE_KEY']
 	APP_IDENTIFIER = os.environ['GITHUB_APP_IDENTIFIER']
 
-def _create_installation_token(JWT):
+def _create_installation_token():
 	"""
 	Generates token needed to authenticate Git API commands. You can send GitHub your JWT and installation ID
 	and GitHub will return an authentication token.
 	"""
 	global TOKEN
+	print("Generating a new token")
+	JWT = _generate_JWT()
 	installation_id = "363304"	# This can be found in a integration_installation_repositories payload
 	URL = 'https://api.github.com/app/installations/'+installation_id+'/access_tokens'
 	headers = {'Accept': 'application/vnd.github.machine-man-preview+json',
@@ -460,6 +464,9 @@ def _generate_JWT():
 	"""
 	Creates a Json Web Token with a current time stamp and expiration time,
 	and then uses it to create an authentication token
+
+	Returns:
+		The JWT
 	"""
 	global PRIVATE_KEY, APP_IDENTIFIER 
 	current = datetime.datetime.utcnow()
@@ -470,11 +477,11 @@ def _generate_JWT():
 	
 	payload = {'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}
 	JWT = jwt.encode({'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}, PRIVATE_KEY, algorithm='RS256')
-	_create_installation_token(JWT)
+	return JWT
 	
 if __name__ == '__main__':
 	""" Begins the GitHub API Interface """
 	_get_environment_vars()
-	_generate_JWT()
+	_create_installation_token()
 	app = _create_listener()
 	app.run()
