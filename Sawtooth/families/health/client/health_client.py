@@ -31,7 +31,10 @@ import hashlib
 import subprocess
 import yaml
 import requests
+import sys
+import socket
 import toml #pylint: disable=import-error
+import sys
 
 from pprint import pprint
 from base64 import b64encode
@@ -48,6 +51,8 @@ from sawtooth_sdk.protobuf.transaction_pb2 import TransactionHeader #pylint: dis
 
 from client.health_exceptions import HealthException
 from client.health_process import calculate_health
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), 'suse/client'))
+from suse_cli import do_suse
 
 def _sha512(data):
     """
@@ -119,30 +124,74 @@ class HealthClient:
         """
         #get time
         txn_date = _get_date()
-        ## TODO:  test new logic to detect old commits
-        #commit_date = time.strptime(commit_date, "%Y-%m-%d-%H-%M-%S")
-        #current_date = time.strptime(txn_date, "%Y-%m-%d-%H-%M-%S")
 
-        #this is intend to detect replay transactions,
-        #since all peers must validate all transactions we detected that clients
-        #re-process the code analysis when they receive a commit.
-        #the commit has a timestamp, if the difference of minutes between the current date
-        #and the commit timestamp is greater than 1 then we consider it as an old transaction.
-        #if current_date.tm_min - commit_date.tm_min > 1:
-        #    new_commit = 1
-        #else:
-        #    new_commit = 0#2#0
-
-        #print (new_commit)
 
         process_flag = 1
-        #get user public key
-        user_key = self._signer.get_public_key().as_hex()
-        print (user_key)
-        if user_key == client_key:
-            process_flag = 0
-            #print ("same ley")
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        my_ip = s.getsockname()[0]
+        s.close()
 
+        print (my_ip)
+        print (client_key[6:].split(':')[0])
+        if my_ip == client_key[6:].split(':')[0]:
+            process_flag = 0
+
+        #get user public key
+        # key_path = os.path.expanduser('~')
+        # key_path = key_path + "/.sawtooth/keys"
+        # key=self._signer.get_public_key().as_hex(),
+        # for pub_file in os.listdir(key_path):
+        #     if ".pub" in pub_file:
+        #         print ("File:" + pub_file)
+        #         line = open(key_path + '/' + pub_file, 'r')
+        #         key = line.read().strip()
+        #         line.close()
+        #         client_key = client_key.strip()
+        #         key = self.
+        #         if key == client_key:
+        #             print("user key: " + key)
+        #             print("client key: " + client_key)
+        #             process_flag = 0
+        #             break
+
+        #user_key = self._signer.get_public_key().as_hex()
+        #root_key =
+        #print("key from github:" + client_key)
+        #print("user key:" + user_key)
+        #if user_key == client_key:
+        #    process_flag = 0
+
+        #if process is zero then check latest health
+        #get latest health
+        if process_flag == 0:
+            result = self._send_request("transactions")
+            transactions = {}
+            try:
+                encoded_entries = yaml.safe_load(result)["data"]
+                for entry in encoded_entries:
+                    #try to pull the specific transaction, if the format is not right
+                    #the transaction corresponds to the consesus family
+                    try:
+                        transaction_type = base64.b64decode(entry["payload"]).decode().split(',')[0]
+                        if transaction_type == "health":
+                            transactions[entry["header_signature"]] = base64.b64decode(
+                                entry["payload"])
+                            #assuming we got all transactions in order
+                            break
+                    except:
+                        pass
+                #return transactions
+            except BaseException:
+                return None
+
+            for entry in transactions:
+                previous_commit = transactions[entry].decode().split(',')[4]
+                if previous_commit == github_url:
+                    #if the commit url of the previous health is equal to the new commit url
+                    #then ignore the transaction
+                    process_flag == 1
+                break
 
         #we got a new commit, calculate health
         if process_flag == 0:
@@ -172,6 +221,9 @@ class HealthClient:
                 suse_config = suse_config["code_smells"]
                 health = calculate_health(suse_config=suse_config, csv_path=csv_path)
 
+                if health > 0:
+                    do_suse(url=self._base_url, health=health, github_id=github_user)
+
                 response = self._send_health_txn(
                     txn_type='health',
                     txn_id=github_user,
@@ -180,7 +232,6 @@ class HealthClient:
                     url=github_url,
                     client_key=client_key,
                     txn_date=txn_date)
-                ## TODO: call suse family to process suse.
                 return response
             except:
                 return "CSV Not Found"
@@ -326,8 +377,22 @@ class HealthClient:
         address = self._get_address(txn_id)
 
         #construct header
+
+        key_path = os.path.expanduser('~')
+        key_path = key_path + "/.sawtooth/keys"
+        print (key_path)
+        print ("hash:" + self._signer.get_public_key().as_hex())
+        for pub_file in os.listdir(key_path):
+            if "root.pub" in pub_file:
+                print ("File:" + pub_file)
+                line = open(key_path + '/' + pub_file, 'r')
+                key = line.read().strip()
+                line.close()
+                print("user key: " + key)
+                break
+
         header = TransactionHeader(
-            signer_public_key=self._signer.get_public_key().as_hex(),
+            signer_public_key=str(key),
             family_name="health",
             family_version="0.1",
             inputs=[address],

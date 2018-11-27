@@ -1,15 +1,16 @@
 #!/bin/bash
 #call me from cron every min or so
 #check each chain for any proposals
-for D in $HOME/.sawtooth_projects/.*/;
+#TODO verify i am running!!!!
+for D in /home/practicum2018/.sawtooth_projects/.*/; #TODO make req to have one folder in home
 do
-	if [ "$D" == "$HOME/.sawtooth_projects/./" ] ;then
+	if [ "$D" == "/home/practicum2018/.sawtooth_projects/./" ] ;then
 		continue
 	fi
-	if [ "$D" == "$HOME/.sawtooth_projects/../" ] ;then
+	if [ "$D" == "/home/practicum2018/.sawtooth_projects/../" ] ;then
 		continue
 	fi
-	echo "checking: $D"
+	echo "checking: $D $(date)" >> /proposal_ran
 	#start services
 	readarray ports < $D/etc/.ports
 	#RESULTS=$(cat $D/etc/.ports)
@@ -21,10 +22,10 @@ do
 	proposal=`python3 $D/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:$API_PORT`
 	if [ -z "$proposal" ]
 	then
-		continue
+		continue #there is no proposal right now
 	else
 		#check if task exists
-		cron_cmd="* 1 * * * python3 vote_listener.py $proposal $D"
+		cron_cmd="* 1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py $proposal $D"
 		crontab -l > mycron
 		echo "adding.. cron command: $cron_cmd"
 		if grep -Fxq "$cron_cmd" mycron

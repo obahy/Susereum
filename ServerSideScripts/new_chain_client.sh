@@ -60,13 +60,14 @@ fi
 #validator
 sawtooth-validator --bind component:tcp://127.0.0.1:$VALIDATOR_PORT_COM --bind network:tcp://$IP:$VALIDATOR_PORT_NET --endpoint tcp://$ENDPOINT:$VALIDATOR_PORT_NET --peers tcp://129.108.7.2:$VALIDATOR_PORT_NET & #--peers tcp://129.108.7.1:$VALIDATOR_PORT_NET &
 #rest api
-sawtooth-rest-api -v --bind localhost:$API_PORT --connect localhost:$VALIDATOR_PORT_COM &
+sawtooth-rest-api -v --bind 127.0.0.1:$API_PORT --connect 127.0.0.1:$VALIDATOR_PORT_COM &
 #processors
-settings-tp -v --connect tcp://localhost:$VALIDATOR_PORT_COM &
+settings-tp -v --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #cd $SAWTOOTH_HOME/bin
-python3 bin/codesmell-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
-python3 bin/health-tp --connect tcp://localhost:$VALIDATOR_PORT_COM &
+python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/suse-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 
 

@@ -390,8 +390,8 @@ class MainWindow(Gtk.Window):
         #TODO call github to update .suse
 
         #Call chain to update existing clients
-        print('RUNING:',(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )]))
-        subprocess.Popen(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id )])
+        print('RUNING:',(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id) , str(self.prj_id)]))
+        subprocess.Popen(['./smell.sh',str(self.api),((os.environ['HOME'])+'/.sawtooth_projects/.' + self.prj_name + '_' + self.prj_id) , str(self.prj_id)])
 
         #os.spawnl(os.P_DETACH, 'python3 ../Sawtooth/bin/code_smells.py default --connect http:127.0.0.1:'+str(self.api)+' --path '+('~/.sawtooth_projects/' + self.prj_name + '_' + self.prj_id ))
         # TODO close self

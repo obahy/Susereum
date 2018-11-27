@@ -95,6 +95,8 @@ echo $REPO_PATH > etc/.repo
 #make keys
 sawadm keygen
 sawtooth keygen
+chmod 777 ~/.sawtooth/keys/*.pub
+cp ~/.sawtooth /root/ -r
 
 sawset genesis -k keys/validator.priv -o config-genesis.batch
 
@@ -149,6 +151,7 @@ poet-validator-registry-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 #sawtooth block list --url http://$IP:$API_PORT
 python3 bin/codesmell-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 python3 bin/health-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
+python3 bin/suse-tp --connect tcp://127.0.0.1:$VALIDATOR_PORT_COM &
 
 #TODO call default - url-validator, and sawtooth repo ($SAWTOOTH_HOME/Sawtooth)
 #python3 families/code-smell/client/code_smell.py default --url http://127.0.0.1:$VALIDATOR_PORT_COM --path $SAWTOOTH_HOME 

@@ -1,7 +1,5 @@
 import os
 import sys
-#sys.path.insert(0, abspath(join(dirname(__file__), '../Sawtooth/families/code_smell/client')))
-print( os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'Sawtooth/families/code-smell')  )
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
     'Sawtooth/families/code-smell'))
@@ -18,7 +16,8 @@ def deleteSelfFromCron(proposal_id,proposal_date,prj_path):
 	print('deleting cron.. temp:',cron_file,['./tmp_cron.sh', cron_file])
 	p = subprocess.Popen(['./tmp_cron.sh', cron_file])
 	time.sleep(2)
-	cron_cmd = '* 1 * * * python3 vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
+	cron_cmd = '* 1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
+	print(cron_cmd)
 	new_cron_name = cron_file+"2"
 	new_cron = open(new_cron_name,'w')
 	for line in open(cron_file,'r').read().split('\n'):
@@ -66,10 +65,13 @@ client = CodeSmellClient(base_url="http://127.0.0.1:"+str(api), keyfile=keyfile,
 #check if enough 'yes' votes to pass proposal
 print('pid:',proposal_id,api)
 votes = client.check_votes(proposal_id)
+if not votes:
+	sys.exit(0)
 yes_votes = votes.count(1)
 
 print('VOTES:',votes, (yes_votes >= approval_treshold))
 if yes_votes >= approval_treshold:
+	print('pass by vote threshold pass')
 	client.update_proposal(proposal_id,1,repo_id)
 	deleteSelfFromCron(proposal_id,proposal_date,prj_path)
 	sys.exit(0)

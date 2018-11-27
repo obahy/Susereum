@@ -272,6 +272,11 @@ def add_default_parser(subparser, parent_parser):
         default=HOME,
         help="working directory")
 
+    parser.add_argument(
+        '--repo',
+        type=str,
+        help='send repo ID')
+
 def create_parent_parser(prog_name):
     """
     Create parent parser
@@ -430,7 +435,7 @@ def do_default(args):
     keyfile = _get_keyfile(args)
     client = CodeSmellClient(base_url=url, keyfile=keyfile, work_path=args.path)
 
-    response = client.default()
+    response = client.default(repo_id=args.repo)
 
     print(response)
 

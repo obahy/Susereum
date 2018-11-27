@@ -112,9 +112,12 @@ class MainWindow(Gtk.Window):
         self.lbl_suse_value.set_markup("<b>"+ suse_value +"</b>")
         hbox.pack_start(self.lbl_suse_value, True, True, 0)
 
-        self.lbl_project = Gtk.Label('Select a project to view details')
+        self.lbl_project = Gtk.Label('Select project to delete/view')
         hbox.pack_start(self.lbl_project, True, True, 0)
-        self.button = Gtk.Button.new_with_label("Show Details")
+        self.btn_delete = Gtk.Button.new_with_label("Delete")
+        self.btn_delete.connect("clicked", self.delete_project)
+        hbox.pack_start(self.btn_delete, False, True, 0)
+        self.button = Gtk.Button.new_with_label("Details")
         self.button.connect("clicked", self.open_project)
         hbox.pack_start(self.button, False, True, 0)
         self.listbox_3.add(self.row)
@@ -130,10 +133,14 @@ class MainWindow(Gtk.Window):
           format: [("Project 1", "Project Name 1", "1024", "11-11-2018"),
         #                   ("Project 2", "Project Name 2", "2048", "12-12-2018")]
         """
+        self.total_suse = 0
         for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
             self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], '50', self.get_time_date()))#TODO query suse
+
+            self.total_suse = 50
+            # TODO check if proccess is running for this prj
 
     def is_valid_url(self, url):
         if 'http://' not in url or '/connect/tmp' not in url:
@@ -168,6 +175,7 @@ class MainWindow(Gtk.Window):
         #repo_path = '\\'.join(repo_path.split('\\')[0:-2])
         print('GOING TO RUN:',['../ServerSideScripts/new_chain_client.sh',url,repo_path])
         subprocess.Popen(['../ServerSideScripts/new_chain_client.sh',url,repo_path])
+        time.sleep(5)
         self.list_store = list_store
         #win = screen_smells.MainWindow(url, self)
         #win.show()
@@ -177,8 +185,9 @@ class MainWindow(Gtk.Window):
         prj_name = data[3]
         prj_id = data[4]
         api = data[2]
+        print(['./check_smell.sh', str(api)])
         subprocess.Popen(['./check_smell.sh', str(api)])#TODO I am not correct CHECKKKKKKKKKKK XD
-        time.sleep(4)
+        time.sleep(3)
         if os.path.isfile('smells_exist.txt'):
             print('SMEELL EXSISTS................................................... ')
             print('SMEELL EXSISTS................................................... ')
@@ -194,27 +203,14 @@ class MainWindow(Gtk.Window):
         else:
             win = screen_smells.MainWindow(url, self)
             win.show()
-        #TODO modify crontab to start process on boot
-        import sys
-        '''
-        import uuid
-        cron_file = 'starup_cron_' + str(uuid.uuid4())
-        print('deleting cron.. temp:', cron_file, ['./tmp_cron.sh', cron_file])
-        p = subprocess.Popen(['./tmp_cron.sh', cron_file])
-        time.sleep(2)
-        cron_cmd = '* 1 * * * python3 vote_listener.py ' + proposal_id + ' ' + proposal_date + ' ' + prj_path
-        new_cron_name = cron_file + "2"
-        new_cron = open(new_cron_name, 'w')
-        for line in open(cron_file, 'r').read().split('\n'):
-            if cron_cmd in line:
-                continue
-            new_cron.write(line + '\n')
-        new_cron.close()
-        subprocess.Popen(['crontab', new_cron_name])
-        time.sleep(2)
-        os.remove(cron_file)
-        os.remove(new_cron_name)
-        '''
+
+    def delete_project(self, widget):
+        """
+          delete_projects - Takes the url from the project field and runs the new chain client script.
+                         checks and opens the smells screen for the newly added project
+          :param widget: list_store
+        """
+        print("Deleting project")
 
     def open_project(self, widget):
         """

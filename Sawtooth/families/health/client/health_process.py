@@ -114,20 +114,28 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
       else:
           return 0
 
-   rows[_smell] = rows[_smell] + 1 # Row counter per type of smell
+   #Fixes zero division if both code smells are zero
    scs = scs * wt_scs # Multiply Code Smell by Weight
    lcs = lcs * wt_lcs # Multiply Code Smell by Weight
+   if scs == 0 and lcs ==0:
+      return 0
+
+   rows[_smell] = rows[_smell] + 1 # Row counter per type of smell
+
    if _cm < scs: #Condition for penalization when code metric is under small Code Smell (cm < scm)
      h = rw - ((_cm - scs)**2) / (scs**2) * rw
      return h
    elif _cm <= lcs:
      h = rw
      return h
-   else: #Condition for penalization when code metric is over large Code Smell (cm > lcs)
+   #Fixes zero division if large code smells is zero
+   elif _cm > lcs and lcs != 0: #Condition for penalization when code metric is over large Code Smell (cm > lcs)
      h = rw - ((_cm - lcs)**2) / (lcs**2) * rw
      if h < 0:
        h = 0
-     return h
+     return h  
+   else:
+     return 100
 
 def calculate_health(suse_config, csv_path):
    """
@@ -166,14 +174,29 @@ def calculate_health(suse_config, csv_path):
        if lines == 0:
           total_health = -2 
           return (total_health) # Return -2 when file is empty 
-       #CAlculate average of each header
-       avg[head[2]] = h[head[2]]/rows[head[2]]
-       avg[head[3]] = h[head[3]]/rows[head[3]]
-       avg[head[5]] = h[head[5]]/rows[head[5]]
-       avg[head[4]] = h[head[4]]/rows[head[4]]
-       avg[head[7]] = h[head[7]]/rows[head[7]]
-     
-       total_health = (avg[head[2]] + avg[head[3]] + avg[head[5]] + avg[head[4]] + avg[head[7]]) / 5
+       #Calculate average of each header
+       #Validates each measure has rows > 0
+       div = 0
+       if rows[head[2]] > 0:
+           avg[head[2]] = h[head[2]]/rows[head[2]]
+           div = div +1   
+       if rows[head[3]]>0:
+           avg[head[3]] = h[head[3]]/rows[head[3]]
+           div = div +1
+       if rows[head[5]]>0:
+          avg[head[5]] = h[head[5]]/rows[head[5]]
+          div = div +1
+       if rows[head[4]]>0:
+          avg[head[4]] = h[head[4]]/rows[head[4]]
+          div = div +1
+       if rows[head[7]]>0:
+          avg[head[7]] = h[head[7]]/rows[head[7]]
+          div = div +1
+       #Validates number of code smells calculated > 0
+       if div > 0:
+          total_health = (avg[head[2]] + avg[head[3]] + avg[head[5]] + avg[head[4]] + avg[head[7]]) / div
+       else:
+          total_health = 0
        return total_health
    else:
        print("File not found")

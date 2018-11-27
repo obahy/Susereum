@@ -31,8 +31,8 @@ import argparse
 import traceback
 
 from colorlog import ColoredFormatter #pylint: disable=import-error
-from client.suse_client import SuseClient
-from client.suse_exceptions import SuseException
+from suse_client import SuseClient
+from suse_exceptions import SuseException
 
 DISTRIBUTION_NAME = 'susereum-suse'
 HOME = os.getenv('SAWTOOTH_HOME')
@@ -115,7 +115,7 @@ def add_list_parser(subparser, parent_parser):
         type=str,
         help="identify directory of user's private key file")
 
-def add_create_parser(subparser, parent_parser):
+def add_suse_parser(subparser, parent_parser):
     """
     add subparser default. this subparser will create suse based on the new  health
 
@@ -124,7 +124,7 @@ def add_create_parser(subparser, parent_parser):
         parent_parser (parser): parent parser
     """
     parser = subparser.add_parser(
-        'create',
+        'suse',
         help='Create suse',
         description='Generate suse from commit',
         parents=[parent_parser])
@@ -196,7 +196,7 @@ def create_parser(prog_name):
     subparsers = parser.add_subparsers(title='subcommands', dest='command')
 
     subparsers.required = True
-    add_create_parser(subparsers, parent_parser)
+    add_suse_parser(subparsers, parent_parser)
     add_list_parser(subparsers, parent_parser)
 
     return parser
@@ -221,25 +221,31 @@ def do_list(args):
         print (transactions)
 
 
-def do_create(args):
+def do_suse(args=None, url=None, health=None, github_id=None):
     """
     create suse of new commit
 
     Args:
         args (array) arguments
     """
-    if args.health is None:
-        raise SuseException("Missing health")
-    if args.gituser is None:
-        raise SuseException("Missing User ID")
+    if args is None:
+        health = health
+        gituser = github_id
+        username = getpass.getuser()
+        home = os.path.expanduser("~")
+        key_dir = os.path.join(home, ".sawtooth", "keys")
+        keyfile = '{}/{}.priv'.format(key_dir, username)
+    else:
+        health = args.health
+        gituser = args.gituser
+        url = _get_url(args)
+        keyfile = _get_keyfile(args)
 
-    url = _get_url(args)
-    keyfile = _get_keyfile(args)
     client = SuseClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.create(new_health=args.health, github_id=args.gituser)
+    response = client.suse(new_health=health, github_id=gituser)
 
-    print("Response: {}".format(response))
+    print(response)
 
 def _get_url(args):
     """
@@ -295,8 +301,8 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
     setup_loggers(verbose_level=verbose_level)
 
     #Define suse family functions
-    if args.command == 'create':
-        do_create(args)
+    if args.command == 'suse':
+        do_suse(args)
     elif args.command == 'list':
         do_list(args)
     else:

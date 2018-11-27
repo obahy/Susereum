@@ -84,6 +84,7 @@ class HealthTransactionHandler(TransactionHandler):
         """
         health_payload = HealthPayload.from_bytes(transaction.payload)
         health_state = HealthState(context)
+        print (health_payload.client_key)
 
         if health_payload.txn_type == 'commit':
             self.count_access += 1
@@ -96,12 +97,14 @@ class HealthTransactionHandler(TransactionHandler):
                 client_key=health_payload.client_key,
                 txn_date=health_payload.txn_date)
             health_state.set_transaction(health_payload.txn_id, active_transaction)
+            print (health_payload.client_key)
+            print (self.count_access)
             #call code analysis
             #the validator access the processor a couple of times, first to do a
             #kind of setup and second to publish the validated block
             #that's why6 we have a counter, we don't want to calculate the Health
             #each time. in the second time is when we know the block was validated
-            if self.count_access == 2:
+            if self.count_access == 1:
                 self.count_access = 0
                 print (health_payload.client_key)
                 process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date, health_payload.client_key)
