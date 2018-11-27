@@ -32,6 +32,7 @@ import subprocess
 import yaml
 import requests
 import sys
+import socket
 import toml #pylint: disable=import-error
 
 from pprint import pprint
@@ -125,21 +126,33 @@ class HealthClient:
 
 
         process_flag = 1
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        my_ip = s.getsockname()[0]
+        s.close()
+
+        print (my_ip)
+        print (client_key[5:].split(':')[0])
+        if my_ip == client_key[5:].split(':')[0]:
+            process_flag = 0
+
         #get user public key
-        key_path = os.path.expanduser('~')
-        key_path = key_path + "/.sawtooth/keys"
-        for pub_file in os.listdir(key_path):
-            if ".pub" in pub_file:
-                print ("File:" + pub_file)
-                line = open(key_path + '/' + pub_file, 'r')
-                key = line.read().strip()
-                file.close()
-                client_key = client_key.strip()
-                if key == client_key:
-                    print("user key: " + key)
-                    print("client key: " + client_key)
-                    process_flag = 0
-                    break
+        # key_path = os.path.expanduser('~')
+        # key_path = key_path + "/.sawtooth/keys"
+        # key=self._signer.get_public_key().as_hex(),
+        # for pub_file in os.listdir(key_path):
+        #     if ".pub" in pub_file:
+        #         print ("File:" + pub_file)
+        #         line = open(key_path + '/' + pub_file, 'r')
+        #         key = line.read().strip()
+        #         line.close()
+        #         client_key = client_key.strip()
+        #         key = self.
+        #         if key == client_key:
+        #             print("user key: " + key)
+        #             print("client key: " + client_key)
+        #             process_flag = 0
+        #             break
 
         #user_key = self._signer.get_public_key().as_hex()
         #root_key =
