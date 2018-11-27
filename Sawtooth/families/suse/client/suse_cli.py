@@ -31,8 +31,8 @@ import argparse
 import traceback
 
 from colorlog import ColoredFormatter #pylint: disable=import-error
-from client.suse_client import SuseClient
-from client.suse_exceptions import SuseException
+from suse_client import SuseClient
+from suse_exceptions import SuseException
 
 DISTRIBUTION_NAME = 'susereum-suse'
 HOME = os.getenv('SAWTOOTH_HOME')
