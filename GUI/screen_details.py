@@ -10,6 +10,7 @@ import time
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from ErrorDialog import ErrorDialog
 
 """
 Project details screen for Susereum.
@@ -392,17 +393,58 @@ class MainWindow(Gtk.Window):
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'vote',
              '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
 
+    def is_valid_proposal(self):
+        int_measures = {'Large class': self.txt_large_class.get_text(),
+                        'Small class': self.txt_small_class.get_text(),
+                        'Large method': self.txt_large_method.get_text(),
+                        'Small method': self.txt_small_method.get_text(),
+                        'Large param': self.txt_large_param.get_text(),
+                        'God class': self.txt_god_class.get_text(),
+                        'Inappropriate Intimacy': self.txt_inapp_intm.get_text()}
+
+        float_measures = {'Comments to code ratio [upper]': self.txt_ctc_up.get_text(),
+                          'Comments to code ratio [lower]': self.txt_ctc_lw.get_text()}
+
+        for key, value in int_measures.items():
+            try:
+                int_measures[key] = int(value)
+            except ValueError:
+                ErrorDialog(self, "Error!\n" + key + " must be an integer!")
+                return False
+
+        for key, value in float_measures.items():
+            try:
+                int_measures[key] = float(value)
+            except ValueError:
+                ErrorDialog(self, "Error!\n" + key + " must be a decimal value!")
+                return False
+
+        if int_measures['Small class'] > int_measures['Large class']:
+            ErrorDialog(self, "Error!\nSmall class cannot be larger than Large class!")
+            return False
+
+        if int_measures['Small method'] > int_measures['Large method']:
+            ErrorDialog(self, "Error!\nSmall method cannot be larger than Large method!")
+            return False
+
+        if float_measures['Comments to code ratio [lower]'] > float_measures['Comments to code ratio [upper]']:
+            ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
+            return False
+
+        return False
+
     def save_proposal(self, widget):
         """
         save_proposal - to save the proposal
         :param widget: widget
         """
-        print("Saving proposal")
-        # TODO make proposal string
-        proposal = "LargeClass=100,SmallClass=10"
-        subprocess.Popen(
-            ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'proposal',
-             '--propose', proposal, '--url', 'http://127.0.0.1:' + self.api])
+        if self.is_valid_proposal():
+            print("Saving proposal")
+            # TODO make proposal string
+            proposal = "LargeClass=100,SmallClass=10"
+            subprocess.Popen(
+                ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/code_smell.py', 'proposal',
+                 '--propose', proposal, '--url', 'http://127.0.0.1:' + self.api])
 
     def on_tog_large_class(self, tog_large_class):
         """
