@@ -20,7 +20,6 @@ else
 	#add task
 	echo "$cron_cmd" >> mycron
 	crontab mycron
-
 fi
 rm mycron
 echo "$cron_cmd $(date)" > /commit_handler_cron.txt
