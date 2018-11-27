@@ -209,8 +209,8 @@ class HealthClient:
                 suse_config = suse_config["code_smells"]
                 health = calculate_health(suse_config=suse_config, csv_path=csv_path)
 
-                ## TODO: test this in integration
-                do_suse(url=self._base_url, health=health, github_id=github_id)
+                if health > 0:
+                    do_suse(url=self._base_url, health=health, github_id=github_user)
 
                 response = self._send_health_txn(
                     txn_type='health',
