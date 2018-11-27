@@ -129,12 +129,14 @@ class HealthClient:
         #get user public key
         key_path = os.path.expanduser('~')
         key_path = key_path + "/.sawtooth/keys"
+        print (key_path)
         for pub_file in os.listdir(key_path):
-            if pub_file.endswith("*.pub"):
+            if ".pub" in pub_file:
                 print ("File:" + pub_file)
-                line = open(pub_file, 'r')
-                key = line.read().as_hex()
+                line = open(key_path + '/' + pub_file, 'r')
+                key = line.read().strip()
                 file.close()
+                client_key = client_key.strip()
                 if key == client_key:
                     print("user key: " + key)
                     print("client key: " + client_key)
