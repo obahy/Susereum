@@ -73,7 +73,7 @@ def _get_config_file():
             with open(conf_file) as config:
                 raw_config = config.read()
         except IOError as error:
-            raise HealthException("Unable to load code smell family configuration file: {}"
+            raise HealthException("Unable to load health family configuration file: {}"
                                   .format(error))
     #load toml config into a dict
     suse_config = toml.loads(raw_config)
@@ -124,42 +124,15 @@ class HealthClient:
         #get time
         txn_date = _get_date()
 
-
+        #get host ip adress
         process_flag = 1
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         my_ip = s.getsockname()[0]
         s.close()
 
-        print (my_ip)
-        print (client_key[5:].split(':')[0])
         if my_ip == client_key[5:].split(':')[0]:
             process_flag = 0
-
-        #get user public key
-        # key_path = os.path.expanduser('~')
-        # key_path = key_path + "/.sawtooth/keys"
-        # key=self._signer.get_public_key().as_hex(),
-        # for pub_file in os.listdir(key_path):
-        #     if ".pub" in pub_file:
-        #         print ("File:" + pub_file)
-        #         line = open(key_path + '/' + pub_file, 'r')
-        #         key = line.read().strip()
-        #         line.close()
-        #         client_key = client_key.strip()
-        #         key = self.
-        #         if key == client_key:
-        #             print("user key: " + key)
-        #             print("client key: " + client_key)
-        #             process_flag = 0
-        #             break
-
-        #user_key = self._signer.get_public_key().as_hex()
-        #root_key =
-        #print("key from github:" + client_key)
-        #print("user key:" + user_key)
-        #if user_key == client_key:
-        #    process_flag = 0
 
         #if process is zero then check latest health
         #get latest health
@@ -180,7 +153,6 @@ class HealthClient:
                             break
                     except:
                         pass
-                #return transactions
             except BaseException:
                 return None
 
@@ -231,8 +203,8 @@ class HealthClient:
                     client_key=client_key,
                     txn_date=txn_date)
                 return response
-            except:
-                return "CSV Not Found"
+            except Exception as error:
+                return error
 
     def commit(self, commit_url, github_id, commit_date, client_key):
         """
@@ -249,7 +221,6 @@ class HealthClient:
             data=commit_url,
             state='new',
             url=self._base_url,
-            #client_key = self._signer.get_public_key().as_hex(),
             client_key=client_key,
             txn_date=commit_date)
 
@@ -313,7 +284,7 @@ class HealthClient:
                       auth_user=None,
                       auth_password=None):
         """
-        send request to code smell processor`
+        send request to health processor`
         """
         if self._base_url.startswith("http://"):
             url = "{}/{}".format(self._base_url, suffix)
@@ -369,7 +340,7 @@ class HealthClient:
         #serialization is just a delimited utf-8 encoded strings
         payload = ",".join([txn_type, txn_id, data, state, url, client_key, str(txn_date)]).encode()
 
-        pprint("payload: {}".format(payload))######################################## pprint
+        #pprint("payload: {}".format(payload))
 
         #construct the address
         address = self._get_address(txn_id)

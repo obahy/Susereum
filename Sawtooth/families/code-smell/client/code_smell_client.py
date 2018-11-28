@@ -63,7 +63,6 @@ def update_config_file(config):
         with open(conf_file, 'w+') as suse_file:
             toml.dump(suse_config, suse_file)
             suse_file.close()
-            #print ("Suse file updated")
     except IOError as error:
         raise CodeSmellException("Unable to open configuration file {}".format(error))
 
@@ -76,12 +75,6 @@ def _sha512(data):
     return hashlib.sha512(data).hexdigest()
 
 def _get_suse_config(conf_file=None):
-    work_path = os.path.dirname(os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-
-    #identify code_smell family configuration file
-    #conf_file = work_path + '/etc/.suse'
-
     if os.path.isfile(conf_file):
         try:
             with open(conf_file) as config:
@@ -153,7 +146,6 @@ class CodeSmellClient:
 
             #get default code smells
             code_smells_config = parsed_toml_config['code_smells']
-            #code_smells_config = parsed_toml_config
 
             """traverse dict and process each code smell
                 nested for loop to procces level two dict."""
@@ -182,9 +174,6 @@ class CodeSmellClient:
         else:
             raise CodeSmellException("Configuration File {} does not exists".format(conf_file))
 
-        ###########################
-        #Commented out for testing only
-        ###########################
         #send configuration file to all peers
         self._publish_config(conf_file=conf_file)
 
@@ -327,7 +316,6 @@ class CodeSmellClient:
             self._update_suse_file(proposal)
 
             #send new config to github
-            #################COMMETOUT FOR TESTING ONLY####################
             suse_config = _get_suse_config(conf_file)
             self._send_git_request(suse_config, repo_id)
 
@@ -357,11 +345,8 @@ class CodeSmellClient:
         #get proposal payload
         proposal_payload = yaml.safe_load(proposal[2].replace(";", ","))
 
-        #work_path = os.path.dirname(os.path.dirname(
-        #    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
         #identify code_smell family configuration file
         conf_file = self._work_path + '/etc/.suse'
-        print (conf_file)
 
         #get current config
         suse_config = _get_suse_config(conf_file)
@@ -569,7 +554,7 @@ class CodeSmellClient:
         else:
             payload = ",".join([txn_type, txn_id, data, state]).encode()
 
-        pprint("payload: {}".format(payload))######################################## pprint
+        #pprint("payload: {}".format(payload))
 
         #construct the address
         address = self._get_address(txn_id)

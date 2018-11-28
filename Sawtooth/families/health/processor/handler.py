@@ -103,7 +103,6 @@ class HealthTransactionHandler(TransactionHandler):
             #each time. in the second time is when we know the block was validated
             if self.count_access == 1:
                 self.count_access = 0
-                print (health_payload.client_key)
                 process_health(health_payload.txn_id, health_payload.data, health_payload.url, health_payload.txn_date, health_payload.client_key)
         elif health_payload.txn_type == 'health':
             active_transaction = HealthTransaction(

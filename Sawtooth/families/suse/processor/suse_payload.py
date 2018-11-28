@@ -37,11 +37,6 @@ class SusePayload(object):
 
     def __init__(self, payload):
         #The payload is csv utf-8 encoded string
-        # try:
-        #     if payload.decode().split(",")[0] in ("suse"):
-        #         txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
-        # except ValueError:
-        #     raise InvalidTransaction("Invalid payload serialization")
         txn_type, txn_id, data, state, txn_date = payload.decode().split(",")
 
         if not txn_type:
@@ -52,8 +47,6 @@ class SusePayload(object):
             raise InvalidTransaction('Data is required')
         if not state:
             raise InvalidTransaction('State is required')
-        #if txn_type not in ('suse'):
-        #    raise InvalidTransaction('Invalid action: {}'.format(txn_type))
 
         self._txn_type = txn_type
         self._txn_id = txn_id

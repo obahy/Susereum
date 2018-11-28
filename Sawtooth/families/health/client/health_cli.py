@@ -241,7 +241,7 @@ def do_list(args):
         transactions = client.list(txn_type=args.type, limit=args.limit)
 
     if len(transactions) == 0:
-        pass#raise HealthException("No transactions found")
+        pass
     else:
         print (transactions)
 
@@ -252,10 +252,7 @@ def process_health(github_user, github_url, url, commit_date, client_key):
     keyfile = _get_keyfile()
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.code_analysis(github_url, github_user, commit_date, client_key)
-
-    print("Response: {}".format(response))
-
+    client.code_analysis(github_url, github_user, commit_date, client_key)
 
 def do_commit(args):
     """
@@ -278,9 +275,7 @@ def do_commit(args):
     keyfile = _get_keyfile(args)
     client = HealthClient(base_url=url, keyfile=keyfile, work_path=HOME)
 
-    response = client.commit(commit_url=args.giturl, github_id=args.gituser, commit_date=args.date, client_key=args.client_key)
-
-    print("Response: {}".format(response))
+    client.commit(commit_url=args.giturl, github_id=args.gituser, commit_date=args.date, client_key=args.client_key)
 
 def _get_url(args):
     """
