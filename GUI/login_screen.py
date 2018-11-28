@@ -59,13 +59,19 @@ class UserInput(Gtk.Window):
     command = 'curl -u "' + self.username.get_text() + '":"' + self.password.get_text() + '" https://api.github.com'
     out = os.popen(command).read()
     out_dict = json.loads(out)
+    print("LOGIN RESPONSE: ", out, out_dict)
 
     if ('message' in out_dict):  # response contains only has message if it's bad credentials
         print("Invalid user name or password")
     else:
         print("login sucessful")
+        command = 'curl https://api.github.com/users/'+self.username.get_text().split('@')[0]
+        out = os.popen(command).read()
+        out_dict = json.loads(out)
+        print("user RESPONSE: ", out, out_dict)
+        print('ID IS:',out_dict['id'])
         from screen_add_project import MainWindow
-        win = MainWindow(user_id)
+        win = MainWindow(user_id,out_dict['id'])
         self.destroy()
 
     #if(self.username.get_text()=='Admin' and self.password.get_text()=='P@ssw0rd'):

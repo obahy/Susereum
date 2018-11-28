@@ -124,8 +124,21 @@ class MainWindow(Gtk.Window):
 		self.lbl_accept = Gtk.Label('Overall acceptance:')
 		vbox_lb2.pack_start(self.lbl_accept, True, True, 0)
 
+		lastest_proposal_command = 'python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
+				  '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
+				  ' | awk \'{print $1;}\' | tr -d "\n"'
+		print(lastest_proposal_command)
+		lastest_proposal = os.popen(lastest_proposal_command).read().strip()
+		if not lastest_proposal:
+			votes =[]
+		else:
+			vote_commands='python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
+				  '/Sawtooth/bin/code_smell.py vote --view '+lastest_proposal+' --url http://127.0.0.1:'+self.api
+			print(vote_commands)
+			votes = eval(os.popen(vote_commands).read())
+
 		self.txt_accept = Gtk.Entry()
-		self.txt_accept.set_text("0000")
+		self.txt_accept.set_text(str(votes.count(1)))
 		self.txt_accept.set_sensitive(False)
 		hbox_lb2.pack_start(self.txt_accept, True, True, 0)
 
@@ -145,7 +158,7 @@ class MainWindow(Gtk.Window):
 		vbox_lb3.pack_start(self.lbl_reject, True, True, 0)
 
 		self.txt_reject = Gtk.Entry()
-		self.txt_reject.set_text("0000")
+		self.txt_reject.set_text(str(votes.count(0)))
 		self.txt_reject.set_sensitive(False)
 		hbox_lb3.pack_start(self.txt_reject, False, True, 0)
 
@@ -162,7 +175,25 @@ class MainWindow(Gtk.Window):
 		self.row.add(hbox_lb4)
 
 		#Label on the Vote tab.
-		self.lbl_vote_text = Gtk.Label("ajkshdkasjhdk")
+		command = 'tansaction=`python3 ' +os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() +\
+		'/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api+\
+		' | awk \'{print $1;}\'`; sawtooth transaction show "$tansaction" --url http://127.0.0.1:'+self.api+\
+		' | grep "payload:" | awk \'{print $2;}\' | base64 --decode'
+
+		proposal = os.popen(command).read()
+		if not proposal:
+			proposal = "There are no proposals at this time"
+		else:
+			print("TEMP:",proposal.split(',')[2].replace(";",",").replace("'",'"'))
+			temp = json.loads(proposal.split(',')[2].replace(";",",").replace("'",'"'))
+
+			proposal = ""
+			for key,value in temp.items():
+				proposal = proposal+key+" : "+value+"\n"
+
+
+		print(command)
+		self.lbl_vote_text = Gtk.Label(proposal)
 		self.lbl_vote_text.set_line_wrap(True)
 		hbox_lb4.pack_start(self.lbl_vote_text, True, True, 0)
 		self.listbox_vot_v4.add(self.row)

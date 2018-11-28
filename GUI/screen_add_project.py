@@ -14,10 +14,10 @@ After savign smells, user can select an existing project from the list and navig
 """
 
 class MainWindow(Gtk.Window):
-    def __init__(self, user_id_):
+    def __init__(self, user_id_,num_id_):
         Gtk.Window.__init__(self, title="Susereum Projects")
-        user_id = user_id_
-        #TODO: Enable the following 2 lines later to do your thing Christian
+        self.user_id = user_id_
+        self.num_id = num_id_
         self.projects=[]
         self.read_projects()
 
@@ -103,13 +103,13 @@ class MainWindow(Gtk.Window):
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         self.row.add(hbox)
         #vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.lbl_suse = Gtk.Label(user_id+" Suse:")
+        self.lbl_suse = Gtk.Label(self.user_id+" Suse:")
         hbox.pack_start(self.lbl_suse, True, True, 0)
         hbox.pack_start(vbox, True, True, 0)
 
         suse_value = "0000"
         self.lbl_suse_value = Gtk.Label()
-        self.lbl_suse_value.set_markup("<b>"+ suse_value +"</b>")
+        self.lbl_suse_value.set_markup("<b>"+  ("{0:.2f}".format(self.total_suse)) +"</b>")
         hbox.pack_start(self.lbl_suse_value, True, True, 0)
 
         self.lbl_project = Gtk.Label('Select project to delete/view')
@@ -133,13 +133,26 @@ class MainWindow(Gtk.Window):
           format: [("Project 1", "Project Name 1", "1024", "11-11-2018"),
         #                   ("Project 2", "Project Name 2", "2048", "12-12-2018")]
         """
-        self.total_suse = 0
+        self.total_suse = 0.0
         for prj in os.listdir((os.environ['HOME'])+'/.sawtooth_projects/'):
             if prj == '.' or prj == '..' or not prj.startswith('.'):
                 continue
-            self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], '50', self.get_time_date()))#TODO query suse
+            #TODO query suse
+            suse = 0.0
+            try:
+                ports = open((os.environ['HOME'])+'/.sawtooth_projects/'+prj+ '/etc/.ports').read()
+                api = ports.split('\n')[2].strip()
+                command = 'sawtooth transaction list --url http://127.0.0.1:'+api+' | grep '+str(self.num_id)+' | head -n 1 | awk "{print $5}"'
+                out = os.popen(command).read()
+                print(out)
+                if ',' in out:
+                    suse = out.split(',')[2]
+            except Exception as e:
+                print('Getting SUSE err:', e)
 
-            self.total_suse = 50
+            self.total_suse = float(self.total_suse) + float(suse)
+            self.projects.append((prj[1:].split('_')[1], prj[1:].split('_')[0], ("{0:.2f}".format(float(suse))), self.get_time_date()))
+
             #TODO check if proccess is running for this prj
 
 
