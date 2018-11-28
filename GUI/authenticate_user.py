@@ -23,4 +23,4 @@ def authenticate(username, password):
 
 if __name__ == '__main__':
 	print("Authenticating user")
-	print authenticate("martin-morales", "wrong_password")
+	print(authenticate("martin-morales", "wrong_password"))

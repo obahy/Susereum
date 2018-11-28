@@ -38,49 +38,49 @@ class MainWindow(Gtk.Window):
         self.page1.set_border_width(10)
         # TODO thread health update
 
-		healths = []
-		myDates = []
-		print(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
-		results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
-		if not results:
-			pass
-		else:
-			results = results.decode('utf-8').replace("'","\"").replace('": b"','": "').strip()
-			dictionary = json.loads(results)
-			for value in dictionary.values():
-				data = value.split(',')#transaction_name,sender_id,health,status,time
-				health = data[2]
-				date = data[6].split('-') #[data[4][0:4],data[4][5:7],data[4][8:10],data[4][11:13],data[4][14:16],data[4][17:19]]
-				healths.append(float(health))
-				print(date)
-				myDates.append(datetime(int(date[0]),
-										int(date[1]),
-										int(date[2]),
-										int(date[3]),
-										int(date[4]),
-										int(date[5])))
-				print(health,date)
+        healths = []
+        myDates = []
+        print(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
+        results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url','http://127.0.0.1:'+str(self.api)])
+        if not results:
+            pass
+        else:
+            results = results.decode('utf-8').replace("'","\"").replace('": b"','": "').strip()
+            dictionary = json.loads(results)
+            for value in dictionary.values():
+                data = value.split(',')#transaction_name,sender_id,health,status,time
+                health = data[2]
+                date = data[6].split('-') #[data[4][0:4],data[4][5:7],data[4][8:10],data[4][11:13],data[4][14:16],data[4][17:19]]
+                healths.append(float(health))
+                print(date)
+                myDates.append(datetime(int(date[0]),
+                                        int(date[1]),
+                                        int(date[2]),
+                                        int(date[3]),
+                                        int(date[4]),
+                                        int(date[5])))
+                print(health,date)
 
-			fig, ax = plt.subplots()
-			ax.plot(myDates,healths,'ro')
-			myfmt = DateFormatter("%y-%m-%d")
-			ax.xaxis.set_major_formatter(myfmt)
-			#ax.set_xlim(myDates[0], myDates[-1])
-			ax.set_ylim(0, 100)
-			## Rotate date labels automatically
-			fig.autofmt_xdate()
-			plt.xlabel("Date")
-			plt.ylabel("Health")
-			plt.title("Health per Commit")
-			plt.yticks(np.arange(0,100,10))#TODO make dynamic
-			#plt.xticks(None,1)#TODO make dynamic
-			#plt.locator_params(axis='y',numticks=3)
-			#plt.show()
-			#plt.plot(healths,times,'ro')
-			#plt.axis(['Mon','Tues','Wed'])
-			plt.savefig('health.png')
-			img = Gtk.Image.new_from_file("health.png") #TODO update this periodically and check for blank
-			self.page1.add(img)
+            fig, ax = plt.subplots()
+            ax.plot(myDates,healths,'ro')
+            myfmt = DateFormatter("%y-%m-%d")
+            ax.xaxis.set_major_formatter(myfmt)
+            #ax.set_xlim(myDates[0], myDates[-1])
+            ax.set_ylim(0, 100)
+            ## Rotate date labels automatically
+            fig.autofmt_xdate()
+            plt.xlabel("Date")
+            plt.ylabel("Health")
+            plt.title("Health per Commit")
+            plt.yticks(np.arange(0,100,10))#TODO make dynamic
+            #plt.xticks(None,1)#TODO make dynamic
+            #plt.locator_params(axis='y',numticks=3)
+            #plt.show()
+            #plt.plot(healths,times,'ro')
+            #plt.axis(['Mon','Tues','Wed'])
+            plt.savefig('health.png')
+            img = Gtk.Image.new_from_file("health.png") #TODO update this periodically and check for blank
+            self.page1.add(img)
 
         self.notebook.append_page(self.page1, Gtk.Label('Health'))
 
@@ -130,23 +130,23 @@ class MainWindow(Gtk.Window):
         self.lbl_accept = Gtk.Label('Overall acceptance:')
         vbox_lb2.pack_start(self.lbl_accept, True, True, 0)
 
-		lastest_proposal_command = 'python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
-				  '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
-				  ' | awk \'{print $1;}\' | tr -d "\n"'
-		print(lastest_proposal_command)
-		lastest_proposal = os.popen(lastest_proposal_command).read().strip()
-		if not lastest_proposal:
-			votes =[]
-		else:
-			vote_commands='python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
-				  '/Sawtooth/bin/code_smell.py vote --view '+lastest_proposal+' --url http://127.0.0.1:'+self.api
-			print(vote_commands)
-			votes = eval(os.popen(vote_commands).read())
+        lastest_proposal_command = 'python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
+                  '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
+                  ' | awk \'{print $1;}\' | tr -d "\n"'
+        print(lastest_proposal_command)
+        lastest_proposal = os.popen(lastest_proposal_command).read().strip()
+        if not lastest_proposal:
+            votes =[]
+        else:
+            vote_commands='python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
+                  '/Sawtooth/bin/code_smell.py vote --view '+lastest_proposal+' --url http://127.0.0.1:'+self.api
+            print(vote_commands)
+            votes = eval(os.popen(vote_commands).read())
 
-		self.txt_accept = Gtk.Entry()
-		self.txt_accept.set_text(str(votes.count(1)))
-		self.txt_accept.set_sensitive(False)
-		hbox_lb2.pack_start(self.txt_accept, True, True, 0)
+        self.txt_accept = Gtk.Entry()
+        self.txt_accept.set_text(str(votes.count(1)))
+        self.txt_accept.set_sensitive(False)
+        hbox_lb2.pack_start(self.txt_accept, True, True, 0)
 
         self.listbox_vot_v2.add(self.row)
 
@@ -163,10 +163,10 @@ class MainWindow(Gtk.Window):
         self.lbl_reject = Gtk.Label('Overall rejection:')
         vbox_lb3.pack_start(self.lbl_reject, True, True, 0)
 
-		self.txt_reject = Gtk.Entry()
-		self.txt_reject.set_text(str(votes.count(0)))
-		self.txt_reject.set_sensitive(False)
-		hbox_lb3.pack_start(self.txt_reject, False, True, 0)
+        self.txt_reject = Gtk.Entry()
+        self.txt_reject.set_text(str(votes.count(0)))
+        self.txt_reject.set_sensitive(False)
+        hbox_lb3.pack_start(self.txt_reject, False, True, 0)
 
         self.listbox_vot_v3.add(self.row)
 
@@ -179,35 +179,31 @@ class MainWindow(Gtk.Window):
         hbox_lb4 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
         self.row.add(hbox_lb4)
 
-        # Label on the Vote tab.
-        self.lbl_vote_text = Gtk.Label("ajkshdkasjhdk")
+        #Label on the Vote tab.
+        command = 'tansaction=`python3 ' +os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() +\
+        '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api+\
+        ' | awk \'{print $1;}\'`; sawtooth transaction show "$tansaction" --url http://127.0.0.1:'+self.api+\
+        ' | grep "payload:" | awk \'{print $2;}\' | base64 --decode'
+
+        proposal = os.popen(command).read()
+        if not proposal:
+            proposal = "There are no proposals at this time"
+        else:
+            print("TEMP:",proposal.split(',')[2].replace(";",",").replace("'",'"'))
+            temp = json.loads(proposal.split(',')[2].replace(";",",").replace("'",'"'))
+
+            proposal = ""
+            for key,value in temp.items():
+                proposal = proposal+key+" : "+value+"\n"
+
+
+        print(command)
+        self.lbl_vote_text = Gtk.Label(proposal)
         self.lbl_vote_text.set_line_wrap(True)
         hbox_lb4.pack_start(self.lbl_vote_text, True, True, 0)
         self.listbox_vot_v4.add(self.row)
 
-		#Label on the Vote tab.
-		command = 'tansaction=`python3 ' +os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() +\
-		'/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api+\
-		' | awk \'{print $1;}\'`; sawtooth transaction show "$tansaction" --url http://127.0.0.1:'+self.api+\
-		' | grep "payload:" | awk \'{print $2;}\' | base64 --decode'
-
-		proposal = os.popen(command).read()
-		if not proposal:
-			proposal = "There are no proposals at this time"
-		else:
-			print("TEMP:",proposal.split(',')[2].replace(";",",").replace("'",'"'))
-			temp = json.loads(proposal.split(',')[2].replace(";",",").replace("'",'"'))
-
-			proposal = ""
-			for key,value in temp.items():
-				proposal = proposal+key+" : "+value+"\n"
-
-
-		print(command)
-		self.lbl_vote_text = Gtk.Label(proposal)
-		self.lbl_vote_text.set_line_wrap(True)
-		hbox_lb4.pack_start(self.lbl_vote_text, True, True, 0)
-		self.listbox_vot_v4.add(self.row)
+        self.notebook.append_page(self.page3, Gtk.Label('Vote'))
 
         # 4th tab
         self.page4 = Gtk.Box()
