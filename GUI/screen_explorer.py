@@ -75,6 +75,7 @@ class MainWindow(Gtk.Window):
         for i, col_title in enumerate(["ID", "Project Name", "Health", "Date"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
+            renderer.props.wrap_width = 250
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable

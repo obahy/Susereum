@@ -102,8 +102,7 @@ class MainWindow(Gtk.Window):
         for i, col_title in enumerate(["Sender ID", "Time", "Type", "Data"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
-            #renderer.props.wrap_width = 100
-            #renderer.props.wrap_mode = Gtk.WRAP_WORD
+            renderer.props.wrap_width = 250
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable
@@ -172,6 +171,7 @@ class MainWindow(Gtk.Window):
         for i, col_title in enumerate(["User ID", "Suse"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
+            renderer.props.wrap_width = 250
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable
