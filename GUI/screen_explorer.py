@@ -26,9 +26,9 @@ class MainWindow(Gtk.Window):
         self.add(box_outer)
 
         # ListStore (lists that TreeViews can display) and specify data types
-        projects_list_store = Gtk.ListStore(str, str, str, str)  # New Change#
+        self.projects_list_store = Gtk.ListStore(str, str, str, str)  # New Change#
         self.filter = self.projects_list_store.filter_new()
-        self.list_store = projects_list_store
+        self.list_store = self.projects_list_store
 
         # Top Section
         self.listbox = Gtk.ListBox()
@@ -44,7 +44,7 @@ class MainWindow(Gtk.Window):
         self.txt_project.set_text("Project")
         vbox.pack_start(self.txt_project, True, True, 0)
         self.btn_search = Gtk.Button.new_with_label("Search")
-        self.btn_search.connect("clicked", self.search_project, projects_list_store)
+        self.btn_search.connect("clicked", self.search_project, self.projects_list_store)
 
         hbox.pack_start(self.btn_search, False, True, 0)
         self.listbox.add(self.row)
@@ -60,7 +60,7 @@ class MainWindow(Gtk.Window):
 
 
         for item in self.projects:
-            projects_list_store.append(list(item))
+            self.projects_list_store.append(list(item))
 
         """
         for row in projects_list_store:
@@ -68,7 +68,7 @@ class MainWindow(Gtk.Window):
         """
 
         # TreeView is the item that is displayed
-        projects_tree_view = Gtk.TreeView(projects_list_store)
+        projects_tree_view = Gtk.TreeView(self.projects_list_store)
         # Enumerate to add counter (i) to loop
 
         # Testing new changes... [adding additional 2 columns]
@@ -76,6 +76,7 @@ class MainWindow(Gtk.Window):
         for i, col_title in enumerate(["ID", "Project Name", "Health", "Date"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
+            renderer.props.wrap_width = 250
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable
@@ -128,6 +129,7 @@ class MainWindow(Gtk.Window):
         """
         #new chain equivalent
         repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        print(url)
         r = requests.get(url)
         data = r.text.split('\n')
         prj_name = data[3].encode('ascii')
@@ -138,9 +140,10 @@ class MainWindow(Gtk.Window):
         etc_dir = home+"."+prj_name+"_"+prj_id+"/etc/"
         
         try:
-            os.makedirs(etc_dir)
+            if not os.path.exists(etc_dir):
+                os.makedirs(etc_dir)
         except:
-            print("Couldn't make " + etc_dir)
+            print("ERROR: Couldn't make " + etc_dir)
         
 
         """

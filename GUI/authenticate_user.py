@@ -16,7 +16,6 @@ def authenticate(username, password):
 	command = 'curl -u "' + username + '":"' + password + '" https://api.github.com'
 	out = os.popen(command).read()
 	out_dict = json.loads(out)
-	
 	if('message' in out_dict):		# response contains only has message if it's bad credentials
 		return False
 	else:
@@ -24,4 +23,4 @@ def authenticate(username, password):
 
 if __name__ == '__main__':
 	print("Authenticating user")
-	print authenticate("martin-morales", "wrong_password")	
+	print(authenticate("martin-morales", "wrong_password"))
