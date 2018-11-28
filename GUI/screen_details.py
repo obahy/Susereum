@@ -7,10 +7,13 @@ import json
 import subprocess
 import os
 import time
+import base64
+import requests
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 from ErrorDialog import ErrorDialog
+
 
 """
 Project details screen for Susereum.
@@ -22,6 +25,8 @@ Existing smells can also be edited from this screen.
 
 class MainWindow(Gtk.Window):
     def __init__(self, path_):
+        self.username_mappings = {}
+
         Gtk.Window.__init__(self, title="Susereum Home")
         self.set_border_width(5)
         self.set_size_request(600, 300)
@@ -189,15 +194,14 @@ class MainWindow(Gtk.Window):
         if not proposal:
             proposal = "There are no proposals at this time"
         else:
-            print("TEMP:",proposal.split(',')[2].replace(";",",").replace("'",'"'))
+            #print("TEMP:",proposal.split(',')[2].replace(";",",").replace("'",'"'))
             temp = json.loads(proposal.split(',')[2].replace(";",",").replace("'",'"'))
 
             proposal = ""
             for key,value in temp.items():
                 proposal = proposal+key+" : "+value+"\n"
 
-
-        print(command)
+        #print(command)
         self.lbl_vote_text = Gtk.Label(proposal)
         self.lbl_vote_text.set_line_wrap(True)
         hbox_lb4.pack_start(self.lbl_vote_text, True, True, 0)
@@ -380,9 +384,70 @@ class MainWindow(Gtk.Window):
 
         # Required columns for History tab
         # we are ignoring URL from the Abel's comma seperated data. The fields are Type, Id, Data, State, URL and Date
-        self.historical_data = [("Type 1", "ID 1", "Data 1", "State 1", "Date 1"),
-                                ("Type 2", "ID 2", "Data 2", "State 2", "Date 2")]
-        history_list_store = Gtk.ListStore(str, str, str, str, str)
+        self.historical_data = []
+
+        transactions = self.blockchain_requests(self.api, "/transactions")
+        suse_transactions = []  # To be used later to calculate user/suse tab
+
+        #print("TEST transactions: " + str(transactions))
+
+        try:
+            for transaction in transactions['data']:
+                #print("---TESTING---")
+                if("sawtooth_" in str(transaction)):    # Filter out transactions with "sawtooth_"
+                    continue
+                #print(str(transaction))
+                # sender_id = transaction['header']['batcher_public_key']
+                payload = base64.b64decode(transaction['payload'])  # Returns base64 encoded comma-delimited payload
+                #print("Payload: " + str(payload))
+                #print("Payload type: " + str(type(payload)))
+                #print(str(payload))
+                payload = str(payload)
+                payload = payload.replace("b'", "")
+                payload = payload.replace('b"', "")
+                payload = payload.replace("'", "")
+                #print("payload after removing byte things: " + payload)
+                payload_list = payload.split(',')
+                print("Payload list: " + str(payload_list))
+                # user_github_id = payload_list[1]
+                # user_github_username = self.github_user_id_to_username(user_github_id)
+                # print(user_github_username)
+                #print("Payload: " + str(payload_list))
+                transaction_type = payload_list[0]  # Transactions type is always the first item
+
+                sender_id = "Anonymous"
+                if (transaction_type in ["commit", "health", "suse"]):
+                    user_github_id = payload_list[1]
+                    print("####################")
+                    sender_id = self.github_user_id_to_username(user_github_id)
+                    print("####################")
+                    #print(sender_id)
+
+                # Filter out transactions
+                if (transaction_type not in ["code_smell", "commit", "health", "proposal", "suse", "vote"]):
+                    continue
+
+                # Prepare labels for data, different transaction types have different labels
+                if (transaction_type == "suse"):
+                    suse_transactions.append(transaction)
+
+                timestamp = payload_list[len(payload_list) - 1]  # Timestamp is always the last item
+
+                data = ""  # Data is everything in between
+                i = 1
+                while (i < len(payload_list) - 1):
+                    data += payload_list[i] + "\n"
+                    i += 1
+
+                self.historical_data.append(
+                    (sender_id, timestamp, transaction_type, data))  # Add a tuple to the list to show in table
+                print(self.historical_data)
+        except:
+            print("Problem trying to parse the history transactions")
+
+        # self.historical_data = [("Sender ID 1", "Time stamp 1", "Type 1", "Data 1"),
+        #                       ("Sender ID 2", "Time stamp 2", "Type 2", "Data 2")]
+        history_list_store = Gtk.ListStore(str, str, str, str)
 
         # # ListStore (lists that TreeViews can display) and specify data types
         # history_list_store = Gtk.ListStore(str, str)
@@ -401,9 +466,10 @@ class MainWindow(Gtk.Window):
 
         # Testing new changes... [adding additional 2 columns]
         # for i, col_title in enumerate(["Project", "Date"]):
-        for i, col_title in enumerate(["Type", "ID", "Data", "State", "Date"]):
+        for i, col_title in enumerate(["Sender ID", "Time", "Type", "Data"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
+            renderer.props.wrap_width = 250
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable
@@ -604,6 +670,42 @@ class MainWindow(Gtk.Window):
           :returns: time stamp
         """
         return time.strftime("%m-%d-%Y %H:%M")
+
+    def github_user_id_to_username(self, id):
+        print("###3#################")
+        username = ""
+        if id in self.username_mappings:
+            print("1####################")
+            username = self.username_mappins[id]
+            print(username)
+            return username
+
+        try:
+            url = "https://api.github.com/user/" + id
+            r = requests.get(url)
+            username = r.json()['login'].encode('ascii')     # unicode to ascii
+            username = str(username).replace("b'", "").replace("'", "")
+            print(username)
+            return username
+        except:
+            print("Problem trying to convert GitHub user id to username. You only have 60 requests/hour.")
+        return str(id)
+
+    def blockchain_requests(self, api_port, endpoint):
+        """
+        Makes GET request to blockchain. Hard coded server IP.
+
+        Args:
+            api_port: The port of the blockchain REST API you want to query
+            endpoint: The blockchain resource endpoint (refer to https://sawtooth.hyperledger.org/docs/core/releases/1.0/architecture/rest_api.html)
+        Returns:
+            A JSON dictionary of the response
+        """
+        SERVER_IP = '129.108.7.2'
+        url = "http://" + SERVER_IP + ":" + str(api_port) + endpoint
+        #print("URL requesting: " + url)
+        r = requests.get(url)
+        return r.json()
 
 
 if __name__ == '__main__':
