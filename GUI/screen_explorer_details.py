@@ -60,7 +60,9 @@ class MainWindow(Gtk.Window):
                 sender_id = "Anonymous"
                 if(transaction_type in ["commit", "health", "suse"]):
                     user_github_id = payload_list[1]
+                    # TODO: Uncomment this to show GitHub user name in the history tab
                     sender_id = self.github_user_id_to_username(user_github_id)
+                    #sender_id = user_github_id
 
                 # Filter out transactions
                 if(transaction_type not in ["code_smell", "commit", "health", "proposal", "suse", "vote"]):

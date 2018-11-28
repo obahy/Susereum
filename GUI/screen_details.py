@@ -396,32 +396,18 @@ class MainWindow(Gtk.Window):
                 #print("---TESTING---")
                 if("sawtooth_" in str(transaction)):    # Filter out transactions with "sawtooth_"
                     continue
-                #print(str(transaction))
-                # sender_id = transaction['header']['batcher_public_key']
                 payload = base64.b64decode(transaction['payload'])  # Returns base64 encoded comma-delimited payload
-                #print("Payload: " + str(payload))
-                #print("Payload type: " + str(type(payload)))
-                #print(str(payload))
                 payload = str(payload)
-                payload = payload.replace("b'", "")
-                payload = payload.replace('b"', "")
-                payload = payload.replace("'", "")
-                #print("payload after removing byte things: " + payload)
+                payload = payload.replace("b'", "").replace('b"', "").replace("'", "")
                 payload_list = payload.split(',')
-                print("Payload list: " + str(payload_list))
-                # user_github_id = payload_list[1]
-                # user_github_username = self.github_user_id_to_username(user_github_id)
-                # print(user_github_username)
-                #print("Payload: " + str(payload_list))
                 transaction_type = payload_list[0]  # Transactions type is always the first item
 
                 sender_id = "Anonymous"
                 if (transaction_type in ["commit", "health", "suse"]):
                     user_github_id = payload_list[1]
-                    print("####################")
-                    sender_id = self.github_user_id_to_username(user_github_id)
-                    print("####################")
-                    #print(sender_id)
+                    # TODO: Uncomment this to get GitHub username
+                    #sender_id = self.github_user_id_to_username(user_github_id)
+                    sender_id = user_github_id
 
                 # Filter out transactions
                 if (transaction_type not in ["code_smell", "commit", "health", "proposal", "suse", "vote"]):
@@ -448,7 +434,6 @@ class MainWindow(Gtk.Window):
         # self.historical_data = [("Sender ID 1", "Time stamp 1", "Type 1", "Data 1"),
         #                       ("Sender ID 2", "Time stamp 2", "Type 2", "Data 2")]
         history_list_store = Gtk.ListStore(str, str, str, str)
-
         # # ListStore (lists that TreeViews can display) and specify data types
         # history_list_store = Gtk.ListStore(str, str)
         for item in self.historical_data:
@@ -672,12 +657,9 @@ class MainWindow(Gtk.Window):
         return time.strftime("%m-%d-%Y %H:%M")
 
     def github_user_id_to_username(self, id):
-        print("###3#################")
         username = ""
         if id in self.username_mappings:
-            print("1####################")
             username = self.username_mappins[id]
-            print(username)
             return username
 
         try:
@@ -685,7 +667,6 @@ class MainWindow(Gtk.Window):
             r = requests.get(url)
             username = r.json()['login'].encode('ascii')     # unicode to ascii
             username = str(username).replace("b'", "").replace("'", "")
-            print(username)
             return username
         except:
             print("Problem trying to convert GitHub user id to username. You only have 60 requests/hour.")
