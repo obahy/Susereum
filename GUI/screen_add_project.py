@@ -6,6 +6,7 @@ import screen_smells
 import requests
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from ErrorDialog import ErrorDialog
 """
 Add project screen for Susereum.
 Uses the provided URL for the project in order to add the project
@@ -105,7 +106,6 @@ class MainWindow(Gtk.Window):
         #vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.lbl_suse = Gtk.Label(self.user_id+" Suse:")
         hbox.pack_start(self.lbl_suse, True, True, 0)
-        hbox.pack_start(vbox, True, True, 0)
 
         suse_value = "0000"
         self.lbl_suse_value = Gtk.Label()
@@ -155,6 +155,22 @@ class MainWindow(Gtk.Window):
 
             #TODO check if proccess is running for this prj
 
+    def is_valid_url(self, url):
+        if 'http://' not in url or '/connect/tmp' not in url:
+            ErrorDialog(self, "Error!\nInvalid Project URL!")
+            return False
+        try:
+            r = requests.get(url)
+            if r.status_code != 200:
+                ErrorDialog(self, "Error!\nUnable to connect to project! Invalid URL!")
+                return False
+        except requests.exceptions.ConnectionError:
+            ErrorDialog(self, "Error!\nUnable to connect to Susereum server!")
+            return False
+        if '[about]' not in r.text:
+            ErrorDialog(self, "Error!\nInvalid file at " + url)
+            return False
+        return True
 
     def add_project(self, widget, list_store):
         """
@@ -165,6 +181,8 @@ class MainWindow(Gtk.Window):
 
         #call newchain script
         url = str(self.txt_project.get_text())
+        if not self.is_valid_url(url):
+            return
         #repo_path = sys.argv[0]
         repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         #repo_path = '\\'.join(repo_path.split('\\')[0:-2])

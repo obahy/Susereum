@@ -1,6 +1,7 @@
 import gi, os, json
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from ErrorDialog import ErrorDialog
 
 """
 Login Screen for Susereum.
@@ -62,7 +63,7 @@ class UserInput(Gtk.Window):
     print("LOGIN RESPONSE: ", out, out_dict)
 
     if ('message' in out_dict):  # response contains only has message if it's bad credentials
-        print("Invalid user name or password")
+        ErrorDialog(self, "Invalid user name or password!")
     else:
         print("login sucessful")
         command = 'curl https://api.github.com/users/'+self.username.get_text().split('@')[0]
