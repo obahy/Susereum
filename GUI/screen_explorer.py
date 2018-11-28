@@ -76,6 +76,7 @@ class MainWindow(Gtk.Window):
         for i, col_title in enumerate(["ID", "Project Name", "Health", "Date"]):
             # Render means draw or display the data (just display as normal text)
             renderer = Gtk.CellRendererText()
+            renderer.props.wrap_width = 250
             # Create columns (text is column number)
             column = Gtk.TreeViewColumn(col_title, renderer, text=i)
             # Make column sortable and selectable
@@ -128,6 +129,7 @@ class MainWindow(Gtk.Window):
         """
         #new chain equivalent
         repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        print(url)
         r = requests.get(url)
         data = r.text.split('\n')
         prj_name = data[3].encode('ascii')
@@ -138,9 +140,10 @@ class MainWindow(Gtk.Window):
         etc_dir = home+"."+prj_name+"_"+prj_id+"/etc/"
         
         try:
-            os.makedirs(etc_dir)
+            if not os.path.exists(etc_dir):
+                os.makedirs(etc_dir)
         except:
-            print("Couldn't make " + etc_dir)
+            print("ERROR: Couldn't make " + etc_dir)
         
 
         """
