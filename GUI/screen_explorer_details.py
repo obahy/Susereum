@@ -17,10 +17,13 @@ the project overview. This screen also provides the additional functionality to 
 """
 
 class MainWindow(Gtk.Window):
+
     def __init__(self, api_port):
+        self.username_mappings = {}
+
         Gtk.Window.__init__(self, title="Explorer Details")
         self.set_border_width(5)
-        self.set_size_request(600, 300)
+        self.set_size_request(800, 1000)
         self.notebook = Gtk.Notebook()
         self.add(self.notebook)
 
@@ -46,7 +49,7 @@ class MainWindow(Gtk.Window):
 
         try:
             for transaction in transactions['data']:
-                sender_id = transaction['header']['batcher_public_key']
+                #sender_id = transaction['header']['batcher_public_key']
                 payload = base64.b64decode(transaction['payload'])     # Returns base64 encoded comma-delimited payload
                 payload_list = payload.split(',')
                 #print("Payload: " + str(payload_list))
@@ -56,8 +59,13 @@ class MainWindow(Gtk.Window):
                 #print("Payload: " + str(payload_list))
                 transaction_type = payload_list[0]      # Transactions type is always the first item
 
+                sender_id = "Anonymous"
+                if(transaction_type in ["commit", "health", "suse"]):
+                    user_github_id = payload_list[1]
+                    sender_id = self.github_user_id_to_username(user_github_id)
+
                 # Filter out transactions
-                if(transaction_type not in ["code_smell", "commit", "config", "health", "proposal", "suse", "vote"]):
+                if(transaction_type not in ["code_smell", "commit", "health", "proposal", "suse", "vote"]):
                     continue
 
                 # Prepare labels for data, different transaction types have different labels
@@ -190,13 +198,18 @@ class MainWindow(Gtk.Window):
         self.show_all()
 
     def github_user_id_to_username(self, id):
+        username = ""
+        if id in self.username_mappings:
+            username = self.username_mappins[id]
+            return username
+
         try:
             url = "https://api.github.com/user/" + id
             r = requests.get(url)
-            github_username = r.json()['login'].encode('ascii')     # unicode to ascii
-            return github_username
+            username = r.json()['login'].encode('ascii')     # unicode to ascii
+            return username
         except:
-            print("Problem trying to convert GitHub user id to username. Url: " + url + ", response: " + str(r.json()))
+            print("Problem trying to convert GitHub user id to username. You only have 60 requests/hour.")
         return str(id)
 
     def blockchain_requests(self, api_port, endpoint):
