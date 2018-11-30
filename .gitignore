@@ -30,3 +30,5 @@ ServerSideScripts/test\.sh
 Sawtooth/etc/\.suse
 GUI/smells_exist\.txt
 ServerSideScripts/ips
+
+GUI/private-key\.pem

@@ -9,6 +9,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import requests     # Have to manually send requests to each blockchain REST API bc Sawtooth doesn't support 32-bit architecture
 import base64
+import os
 
 """
 Project details screen for Susereum explorer.
@@ -20,6 +21,7 @@ class MainWindow(Gtk.Window):
 
     def __init__(self, api_port):
         self.username_mappings = {}
+	_get_environment_vars()
 
         Gtk.Window.__init__(self, title="Explorer Details")
         self.set_border_width(5)
@@ -60,7 +62,6 @@ class MainWindow(Gtk.Window):
                 sender_id = "Anonymous"
                 if(transaction_type in ["commit", "health", "suse"]):
                     user_github_id = payload_list[1]
-                    # TODO: Uncomment this to show GitHub user name in the history tab
                     sender_id = self.github_user_id_to_username(user_github_id)
                     #sender_id = user_github_id
 
@@ -119,6 +120,9 @@ class MainWindow(Gtk.Window):
         self.user_data = []     # List of users and their suse values to be rendered
         suse_sums = {}          # dictionary to sum up suse values for each user
 
+	# Get the authentication token ready to increase our rate limit
+	_create_installation_token()
+
         # Loop through all transactions of type suse, parse user id and suse awarded
         # Sum up the suse values for each user and render them in a table
         for suse_transaction in suse_transactions:
@@ -126,7 +130,8 @@ class MainWindow(Gtk.Window):
             payload_list = payload.split(',')
             user_github_id = payload_list[1]
             user_github_username = self.github_user_id_to_username(user_github_id)
-            suse_awarded = float(payload_list[2])      # TODO: CHRISTIAN Add in the index of the suse value in the payload
+            #user_github_username = user_github_id
+            suse_awarded = float(payload_list[2])
 
             # Add suse to user in dict or create a new key-value in the dict
             if user_github_username in suse_sums:
@@ -175,14 +180,16 @@ class MainWindow(Gtk.Window):
         self.show_all()
 
     def github_user_id_to_username(self, id):
+	global TOKEN
         username = ""
         if id in self.username_mappings:
             username = self.username_mappins[id]
             return username
 
         try:
+            headers = {'Authorization': ('Token ' + TOKEN)}		# Adds token to authorize as the Susereum bot
             url = "https://api.github.com/user/" + id
-            r = requests.get(url)
+            r = requests.get(url, headers=headers)
             username = r.json()['login'].encode('ascii')     # unicode to ascii
             return username
         except:
@@ -211,6 +218,47 @@ class MainWindow(Gtk.Window):
           :returns: time stamp
         """
         return time.strftime("%m-%d-%Y %H:%M")
+
+def _get_environment_vars():
+	"""
+	Gets environment variables needed to verify
+	and authenticate our app as a Susereum bot
+	"""
+	global PRIVATE_KEY, APP_IDENTIFIER
+	PRIVATE_KEY = os.environ['GITHUB_PRIVATE_KEY']
+	APP_IDENTIFIER = os.environ['GITHUB_APP_IDENTIFIER']
+
+def _create_installation_token():
+	"""
+	Generates token needed to authenticate Git API commands. You can send GitHub your JWT and installation ID
+	and GitHub will return an authentication token.
+	"""
+	global TOKEN
+	
+	JWT = _generate_JWT()
+	installation_id = "363304"	# This can be found in a integration_installation_repositories payload
+	URL = 'https://api.github.com/app/installations/'+installation_id+'/access_tokens'
+	headers = {'Accept': 'application/vnd.github.machine-man-preview+json',
+				'Authorization': ('Bearer ' + JWT)}
+	raw_data = requests.post(URL, headers = headers)
+	json_data = json.loads(raw_data.text)
+	TOKEN = json_data['token']
+	return TOKEN
+
+def _generate_JWT():
+	"""
+	Creates a Json Web Token with a current time stamp and expiration time,
+	and then uses it to create an authentication token
+	"""
+	global PRIVATE_KEY, APP_IDENTIFIER 
+	current = datetime.datetime.utcnow()
+	current_time = calendar.timegm(current.timetuple())
+	
+	future = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
+	expiration_time = calendar.timegm(future.timetuple())
+	
+	payload = {'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}
+	JWT = jwt.encode({'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}, PRIVATE_KEY, algorithm='RS256')
 
 if __name__ == '__main__':
     window = MainWindow()
