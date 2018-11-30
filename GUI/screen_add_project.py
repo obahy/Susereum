@@ -142,9 +142,9 @@ class MainWindow(Gtk.Window):
             try:
                 ports = open((os.environ['HOME'])+'/.sawtooth_projects/'+prj+ '/etc/.ports').read()
                 api = ports.split('\n')[2].strip()
-                command = 'sawtooth transaction list --url http://127.0.0.1:'+api+' | grep '+str(self.num_id)+' | head -n 1 | awk "{print $5}"'
+                command = 'sawtooth transaction list --url http://127.0.0.1:'+api+' | grep '+str(self.num_id)+' | grep b\\\'suse, | head -n 1 | awk "{print $5}"'
                 out = os.popen(command).read()
-                print(out)
+                print("OUT,OUT,OUT,OUT,",out)
                 if ',' in out:
                     suse = out.split(',')[2]
             except Exception as e:
