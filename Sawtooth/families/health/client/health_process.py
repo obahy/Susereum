@@ -15,8 +15,8 @@
 """
 Health Calculation Process
 
-This process calculates the health of a code base by using the code smells for 
-the project. It reads the csv file from code analyzer and the code_smell.toml 
+This process calculates the health of a code base by using the code smells for
+the project. It reads the csv file from code analyzer and the code_smell.toml
 """
 import csv
 import toml
@@ -31,7 +31,7 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
             _type (str): type of code is either class or method
             _smell (str): description of the code smell to evaluate
             _cm (str) : code measure value
-            rows (int) : number of rows calculated for a specific code smell 
+            rows (int) : number of rows calculated for a specific code smell
             switch_cs_data (int, float) : code smell data dictionary
         Returns:
             h (float): health of the transaction code analized
@@ -44,10 +44,10 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
      _cm = int(_cm)
    rw = 100 #Maximum reward for good code health
    #health, Small Code Smell, Large Code Smell
-   h = scs = lcs = 0.00 
+   h = scs = lcs = 0.00
    #Weigth Small Code Smell, Weight Large Code Smell
-   wt_scs = wt_lcs = 1 
-   
+   wt_scs = wt_lcs = 1
+
    #Check the type of code (Class or Method) then find the code smell ranges
    if _type == "class":
       if _smell == "Lines of Code":
@@ -58,8 +58,8 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
           lcs_list = switch_cs_data.get(_type).get('LargeClass')
           lcs = lcs_list[0]
           wt_lcs = lcs_list [1]
-         
-      elif _smell == "Comment-to-Code Ratio":                
+
+      elif _smell == "Comment-to-Code Ratio":
           scs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioLower')
           scs = scs_list[0] * 100
           wt_scs = scs_list[1] * 100
@@ -67,12 +67,12 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
           lcs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioUpper')
           lcs = lcs_list[0] * 100
           wt_lcs = lcs_list [1] * 100
-        
+
       elif _smell == "Number of Outgoing Invocations": #GOD class for Classes
           lcs_list = switch_cs_data.get(_type).get('GodClass')
           lcs = lcs_list[0]
           wt_lcs = lcs_list [1]
-      
+
       elif _smell == "Number of Directly-Used Elements": #InappropiateIntimacy for Classes
           lcs_list = switch_cs_data.get(_type).get('InappropriateIntimacy')
           lcs = lcs_list[0]
@@ -93,7 +93,7 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
           lcs = lcs_list[0]
           wt_lcs = lcs_list [1]
 
-      elif _smell == "Comment-to-Code Ratio":      
+      elif _smell == "Comment-to-Code Ratio":
           scs_list = switch_cs_data.get('comments').get('CommentsToCodeRatioLower')
           scs = scs_list[0] * 100
           wt_scs = scs_list[1] * 100
@@ -106,7 +106,7 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
           return 0
       elif _smell == "Number of Directly-Used Elements":   #NO InappropiateIntimacy for Methods
           return 0
-      elif _smell == "Number of Parameters":          
+      elif _smell == "Number of Parameters":
           lcs_list = switch_cs_data.get(_type).get('LargeParameterList')
           lcs = lcs_list[0]
           wt_lcs = lcs_list [1]
@@ -133,28 +133,28 @@ def health_function(_type, _smell , _cm, rows, switch_cs_data):
      h = rw - ((_cm - lcs)**2) / (lcs**2) * rw
      if h < 0:
        h = 0
-     return h  
+     return h
    else:
      return 100
 
 def calculate_health(suse_config, csv_path):
    """
-        Opens the csv file from code analyzer that contains all the transactions of the 
-        code base. A for loop traverses each transaction to call the health_function, 
+        Opens the csv file from code analyzer that contains all the transactions of the
+        code base. A for loop traverses each transaction to call the health_function,
         sums the results and gets the average heal for the code base.
-        
+
         Args:
             suse_config (int, float) : code smell data dictionary
             csv_path (str): Type of code is either class or method
-            
+
         Returns:
-            total_health (float): Total health of the code base 
+            total_health (float): Total health of the code base
    """
-   if os.path.exists(csv_path):          
+   if os.path.exists(csv_path):
        with open(csv_path, newline='') as csvfile:
-         # Using csv Reader 
+         # Using csv Reader
          reader = csv.reader(csvfile)
-         # CSV Header list:  
+         # CSV Header list:
          # 0: Type of Smell, 1: Name, 2: Lines of Code, 3: Comment-to-Code Ratio
          # 4: Number of Directly-Used Elements, 5: Number of Outgoing Invocations
          # 6: Name of Owner Class, 7: Number of Parameters
@@ -172,14 +172,14 @@ def calculate_health(suse_config, csv_path):
              h[head[7]] = h[head[7]] + health_function(x[0].lower(), head[7], x[7], rows, suse_config)
              lines = lines +1
        if lines == 0:
-          total_health = -2 
-          return (total_health) # Return -2 when file is empty 
+          total_health = -2
+          return (total_health) # Return -2 when file is empty
        #Calculate average of each header
        #Validates each measure has rows > 0
        div = 0
        if rows[head[2]] > 0:
            avg[head[2]] = h[head[2]]/rows[head[2]]
-           div = div +1   
+           div = div +1
        if rows[head[3]]>0:
            avg[head[3]] = h[head[3]]/rows[head[3]]
            div = div +1
@@ -203,22 +203,3 @@ def calculate_health(suse_config, csv_path):
        total_health = -1
        return (total_health) # Return -1 when file is not found
        
-#suse_config or switch_cs_data example
-# {'class': 
-#     {'LargeClass': [200, 1], 
-#      'SmallClass': [100, 1], 
-#      'GodClass': [5, 1], 
-#      'InappropriateIntimacy': [2, 1]}, 
-#  'method': 
-#     {'LargeMethod': [10, 1], 
-#      'SmallMethod': [3, 1], 
-#      'LargeParameterList': [4, 1]}, 
-#  'comments': 
-#     {'CommentsToCodeRatioLower': [0.2, 0.01], 
-#      'CommentsToCodeRatioUpper': [0.5, 0.01]}
-# }
-
-# DEFAULT_PATH = 'C:\\Users\\hecto\\OneDrive\\Documents\\Software Practicum\\HealthCode\\'
-# healthTotal = calculateHealth(DEFAULT_PATH)
-# print("----TOTAL HEALTH-------:")
-# print (healthTotal)
