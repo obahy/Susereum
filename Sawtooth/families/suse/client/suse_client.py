@@ -252,7 +252,7 @@ class SuseClient:
         #serialization is just a delimited utf-8 encoded strings
         payload = ",".join([txn_type, txn_id, data, state, str(txn_date)]).encode()
 
-        pprint("payload: {}".format(payload))######################################## pprint
+        #pprint("payload: {}".format(payload))
 
         #construct the address
         address = self._get_address(txn_id)
