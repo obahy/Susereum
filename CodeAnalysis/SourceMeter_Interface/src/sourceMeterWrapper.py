@@ -313,14 +313,23 @@ def arg_type(arg):
     return "url" if "github.com" in arg else "path"
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
+def main(args):
+    """Main method for the Source Meter Wrapper script.
+
+    Args:
+        args: System arguments passed into the script
+    """
+    if len(args) != 3:
         print "Error: Incorrect number of arguments. Usage should be:\n" \
               "$ python sourceMeterWrapper.py <(GitHub Project Repo) | (Path to Project)> " \
               "<Directory Where to Store Results>"
-    elif arg_type(sys.argv[1]) is "url":
-        analyze_from_repo(sys.argv[1], sys.argv[2])
-    elif os.path.isdir(sys.argv[1]):
-        analyze_from_path(sys.argv[1], sys.argv[2])
+    elif arg_type(args[1]) is "url":
+        analyze_from_repo(args[1], args[2])
+    elif os.path.isdir(args[1]):
+        analyze_from_path(args[1], args[2])
     else:
         print "Error: The passed argument is not a url and it is not a valid directory."
+
+
+if __name__ == "__main__":
+    main(sys.argv)
