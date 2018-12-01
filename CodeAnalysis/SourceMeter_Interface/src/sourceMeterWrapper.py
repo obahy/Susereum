@@ -307,6 +307,8 @@ def arg_type(arg):
 
     Args:
         arg (str): Either a URL to a GitHub repository or the system path to a project.
+    Returns:
+        The type of argument, either "url" or "path".
     """
     return "url" if "github.com" in arg else "path"
 
