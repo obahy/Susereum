@@ -8,7 +8,7 @@ import sys
 from subprocess import Popen
 from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
-    CLASS_KEEP_COL, METHOD_KEEP_COL, CLEAN_UP_REPO_FILES, FOLDER, TMP_DIR
+    CLASS_KEEP_COL, METHOD_KEEP_COL, CLEAN_UP_REPO_FILES, TMP_DIR
 
 """Source Meter Wrapper.
 
