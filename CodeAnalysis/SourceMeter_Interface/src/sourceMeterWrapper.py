@@ -157,16 +157,35 @@ def add_inits(proj_dir):
     """This function is used when projects of type "python" are going to be analyzed. Source Meter assumes
     that each directory for a Python project contains __init__.py files. Because of this, f a directory contains .py
     files and the directory does not contain an __init__.py file, Source Meter will ignore it. To counter this, and
-    ensure that all .py files are analyzed, we traverse all subdirectories and ensure that __init__.py exists. Adding
-    it where it is not needed has no side effects, as Source Meter will only consider .py files.
+    ensure that all .py files are analyzed, we traverse all subdirectories and ensure that __init__.py exists. If it
+    does not exist, we add it so that Source Meter can analyze it.
 
     Args:
         proj_dir (str): The path of the project, whose subdirectories will have __init__.py added.
     """
+    added_inits = []
     for root, dirs, files in os.walk(proj_dir):
-        f = open(root + os.sep + '__init__.py', 'w')
-        f.write('')
-        f.close()
+        files_in_root = os.listdir(root)
+        for filename in files_in_root:
+            if filename.endswith('.py') and '__init__.py' not in files_in_root:
+                f = open(root + os.sep + '__init__.py', 'w')
+                f.write('')
+                f.close()
+                added_inits.append(os.path.join(root, '__init__.py'))
+                break
+    return added_inits
+
+
+def remove_inits(added_inits):
+    """This function is used when projects of type "python" have been analyzed, and this module had to add
+    __init__.py files in order to analyze  Python files. This function takes in a list of added files by the wrapper
+    and will remove them.
+
+        Args:
+            added_inits (list): A list of paths to added __init__.py files that will be removed.
+        """
+    for added_init in added_inits:
+        os.remove(added_init)
 
 
 def analyze_from_repo(url, results_dir):
@@ -180,12 +199,15 @@ def analyze_from_repo(url, results_dir):
     proj_name = proj_info[0]
     proj_dir = proj_info[1]
     proj_type = get_project_type(proj_dir)
+    added_inits = []
     if proj_type is "python":
-        add_inits(proj_dir)
+        added_inits = add_inits(proj_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
     if CLEAN_UP_REPO_FILES:
         clear_dir(TMP_DIR)
+    if len(added_inits):
+        remove_inits(added_inits)
     print results_dir
     return results_dir
 
@@ -201,10 +223,13 @@ def analyze_from_path(proj_dir, results_dir):
         proj_dir = proj_dir[:-1]
     proj_name = get_project_name(proj_dir)
     proj_type = get_project_type(proj_dir)
+    added_inits = []
     if proj_type is "python":
-        add_inits(proj_dir)
+        added_inits = add_inits(proj_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
+    if len(added_inits):
+        remove_inits(added_inits)
     print results_dir
     return results_dir
 
