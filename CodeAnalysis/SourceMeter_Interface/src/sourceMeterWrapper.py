@@ -204,10 +204,10 @@ def analyze_from_repo(url, results_dir):
         added_inits = add_inits(proj_dir)
     exec_metric_analysis(proj_dir, proj_name, proj_type, results_dir)
     consolidate_metrics(proj_name, proj_type, results_dir)
-    if CLEAN_UP_REPO_FILES:
-        clear_dir(TMP_DIR)
     if len(added_inits):
         remove_inits(added_inits)
+    if CLEAN_UP_REPO_FILES:
+        clear_dir(TMP_DIR)
     print results_dir
     return results_dir
 
