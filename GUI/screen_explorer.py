@@ -30,25 +30,26 @@ class MainWindow(Gtk.Window):
         self.filter = self.projects_list_store.filter_new()
         self.list_store = self.projects_list_store
 
-        # Top Section
-        self.listbox = Gtk.ListBox()
-        self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        box_outer.pack_start(self.listbox, False, True, 0)
-
-        self.row = Gtk.ListBoxRow()
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-        self.row.add(hbox)
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        hbox.pack_start(vbox, True, True, 0)
-        self.txt_project = Gtk.Entry()
-        self.txt_project.set_text("Project")
-        vbox.pack_start(self.txt_project, True, True, 0)
-        self.btn_search = Gtk.Button.new_with_label("Search")
-        self.btn_search.connect("clicked", self.search_project, self.projects_list_store)
-
-        hbox.pack_start(self.btn_search, False, True, 0)
-        self.listbox.add(self.row)
-        # keep going if more rows are required.
+        # # removed search functionality
+        # # Top Section
+        # self.listbox = Gtk.ListBox()
+        # self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        # box_outer.pack_start(self.listbox, False, True, 0)
+        #
+        # self.row = Gtk.ListBoxRow()
+        # hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        # self.row.add(hbox)
+        # vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        # hbox.pack_start(vbox, True, True, 0)
+        # self.txt_project = Gtk.Entry()
+        # self.txt_project.set_text("Project")
+        # vbox.pack_start(self.txt_project, True, True, 0)
+        # self.btn_search = Gtk.Button.new_with_label("Search")
+        # self.btn_search.connect("clicked", self.search_project, self.projects_list_store)
+        #
+        # hbox.pack_start(self.btn_search, False, True, 0)
+        # self.listbox.add(self.row)
+        # # keep going if more rows are required.
 
         #middle section
         self.listbox_2 = Gtk.ListBox()
@@ -132,11 +133,13 @@ class MainWindow(Gtk.Window):
         print(url)
         r = requests.get(url)
         data = r.text.split('\n')
-        prj_name = data[3].encode('ascii')
-        prj_id = data[4].encode('ascii')
-        api = data[2].encode('ascii')
-        home = (os.environ['HOME']+'/.sawtooth_projects/').encode('ascii')
+        prj_name = str(data[3].encode('utf-8'))[2:-1]
+        prj_id = str(data[4].encode('utf-8'))[2:-1]
+        api = str(data[2].encode('utf-8'))[2:-1]
 
+        home = str((os.environ['HOME']+'/.sawtooth_projects/').encode('utf-8'))[2:-1]
+        #print(home, prj_name, prj_id)
+        #print(type(home), type(prj_name), type(prj_id))
         etc_dir = home+"."+prj_name+"_"+prj_id+"/etc/"
         
         try:
@@ -183,7 +186,7 @@ class MainWindow(Gtk.Window):
           read_projects - checks if there are any existing projects added to Susereum and adds them to the list view.
         """
         r = requests.get('http://129.108.7.2/project_list.php')#check if there are project
-        urls = r.text.split(' ')
+        urls = r.text.split('\n')
         #print(r.text)
         for url in urls:
             #print(url)
@@ -196,12 +199,12 @@ class MainWindow(Gtk.Window):
             if list_item in 
             self.projects.append()'''
 
-
-    def search_project(self, widget, list_store):
-        """
-          search_project -
-          :param widget: list_store
-        """
+    # removed search functionality.
+    # def search_project(self, widget, list_store):
+    #     """
+    #       search_project -
+    #       :param widget: list_store
+    #     """
 
     def show_details(self, widget):
         """
@@ -230,13 +233,18 @@ class MainWindow(Gtk.Window):
             self.selected = str(model[row][0])
 
             # Get REST API port from ~/.sawtooth_projects/<prj_name>_<prj_id>/etc/.ports
-            home = (os.environ['HOME']+'/.sawtooth_projects/').encode("ascii")
+            home = str((os.environ['HOME']+'/.sawtooth_projects/').encode("ascii"))[2:-1]
             prj_id = str(model[row][0])
             prj_name = str(model[row][1])
+            #print(home, prj_name, prj_id)
+            #print(type(home), type(prj_name), type(prj_id))
             ports_dir = home+"."+prj_name+"_"+prj_id+"/etc/"+'.ports'
             ports_file = open(ports_dir,'r')
-            ports_string = ports_file.read().encode('ascii')
-            self.selected_api_port = ports_string.split('\n')[2]           # REST API is the third line
+            ports_string = str(ports_file.read().encode('ascii'))[2:-1]
+            #print(type(ports_string))
+            #print(ports_string)
+            #print(ports_string.split('\\n'))
+            self.selected_api_port = int(ports_string.split('\\n')[2])           # REST API is the third line
             ports_file.close()
 
     # def visible_cb(self, model, iter, data=None):

@@ -10,6 +10,9 @@ from gi.repository import Gtk
 import requests     # Have to manually send requests to each blockchain REST API bc Sawtooth doesn't support 32-bit architecture
 import base64
 import os
+import jwt
+import datetime
+import calendar
 
 """
 Project details screen for Susereum explorer.
@@ -21,7 +24,7 @@ class MainWindow(Gtk.Window):
 
     def __init__(self, api_port):
         self.username_mappings = {}
-	_get_environment_vars()
+        _get_environment_vars()
 
         Gtk.Window.__init__(self, title="Explorer Details")
         self.set_border_width(5)
@@ -47,17 +50,15 @@ class MainWindow(Gtk.Window):
         transactions = self.blockchain_requests(api_port, "/transactions")
         suse_transactions = []      # To be used later to calculate user/suse tab
 
+        # Get the authentication token ready to increase our rate limit
+        _create_installation_token()
+
         try:
             for transaction in transactions['data']:
-                #sender_id = transaction['header']['batcher_public_key']
-                payload = base64.b64decode(transaction['payload'])     # Returns base64 encoded comma-delimited payload
+                payload = str(base64.b64decode(transaction['payload']))[2:-1]     # Returns base64 encoded comma-delimited payload
                 payload_list = payload.split(',')
-                #print("Payload: " + str(payload_list))
-                #user_github_id = payload_list[1]
-                #user_github_username = self.github_user_id_to_username(user_github_id)
-                #print(user_github_username)
-                #print("Payload: " + str(payload_list))
                 transaction_type = payload_list[0]      # Transactions type is always the first item
+                timestamp = payload_list[len(payload_list) - 1]  # Timestamp is always the last item
 
                 sender_id = "Anonymous"
                 if(transaction_type in ["commit", "health", "suse"]):
@@ -70,16 +71,43 @@ class MainWindow(Gtk.Window):
                     continue
 
                 # Prepare labels for data, different transaction types have different labels
-                if(transaction_type == "suse"):
-                    suse_transactions.append(transaction)
-
-                timestamp = payload_list[len(payload_list) - 1]     # Timestamp is always the last item
-
-                data = ""       # Data is everything in between
-                i = 1
-                while(i < len(payload_list) - 1):
-                    data += payload_list[i] + "\n"
-                    i += 1
+                if(transaction_type == "code_smell"):
+                    data = "Code Smell: " + payload_list[1] + "\n"
+                    data += "Values: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                elif (transaction_type == "commit"):
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Commit URL: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                    data += "REST API URL: " + payload_list[4] + "\n"
+                    data += "Peer IP: " + payload_list[5] + "\n"
+                elif (transaction_type == "health"):
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Health: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                    data += "Commit URL: " + payload_list[4] + "\n"
+                    data += "IP Peer: " + payload_list[5] + "\n"
+                elif (transaction_type == "proposal"):
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Code Smells: " + self._beautify_code_smells(payload_list[2]) + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                elif(transaction_type == "suse"):
+                    suse_transactions.append(transaction)       # To sum up the values
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Suse: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                elif (transaction_type == "vote"):
+                    data = "Vote ID: " + payload_list[1] + "\n"
+                    data += "Proposal ID: " + payload_list[2] + "\n"
+                    active = payload_list[3]
+                    active = active.replace('0', 'closed').replace('1', 'active')
+                    data += "State: " + active + "\n"
+                else:
+                    data = ""       # Data is everything in between
+                    i = 1
+                    while(i < len(payload_list) - 1):
+                        data += payload_list[i] + "\n"
+                        i += 1
 
                 self.historical_data.append((sender_id, timestamp, transaction_type, data))     # Add a tuple to the list to show in table
         except:
@@ -120,13 +148,11 @@ class MainWindow(Gtk.Window):
         self.user_data = []     # List of users and their suse values to be rendered
         suse_sums = {}          # dictionary to sum up suse values for each user
 
-	# Get the authentication token ready to increase our rate limit
-	_create_installation_token()
-
         # Loop through all transactions of type suse, parse user id and suse awarded
         # Sum up the suse values for each user and render them in a table
         for suse_transaction in suse_transactions:
-            payload = base64.b64decode(suse_transaction['payload'])     # Returns base64 encoded comma-delimited payload
+            payload = str(base64.b64decode(suse_transaction['payload']))[2:-1]     # Returns base64 encoded comma-delimited payload
+            #print(payload)
             payload_list = payload.split(',')
             user_github_id = payload_list[1]
             user_github_username = self.github_user_id_to_username(user_github_id)
@@ -155,6 +181,7 @@ class MainWindow(Gtk.Window):
         # # ListStore (lists that TreeViews can display) and specify data types
         # user_list_store = Gtk.ListStore(str, str)
         for item in self.user_data:
+            #print(item)
             user_list_store.append(list(item))
 
         # TreeView is the item that is displayed
@@ -179,11 +206,21 @@ class MainWindow(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.show_all()
 
+    def _beautify_code_smells(self, code_smells):
+        data = "\n"
+        code_smells = code_smells.replace("'", '"').replace(";", ",")
+        my_dict = json.loads(code_smells)
+        for k, v in my_dict.items():
+            data += "\t" + k + ": " + v + "\n"
+        return data
+
     def github_user_id_to_username(self, id):
-	global TOKEN
+        global TOKEN
+
         username = ""
         if id in self.username_mappings:
-            username = self.username_mappins[id]
+            #print("Found a user in username mappings")
+            username = self.username_mappings[id]
             return username
 
         try:
@@ -191,9 +228,12 @@ class MainWindow(Gtk.Window):
             url = "https://api.github.com/user/" + id
             r = requests.get(url, headers=headers)
             username = r.json()['login'].encode('ascii')     # unicode to ascii
+            username = str(username)[2:-1]
+            self.username_mappings[id] = username
+
             return username
         except:
-            print("Problem trying to convert GitHub user id to username. You only have 60 requests/hour.")
+            print("Problem trying to convert GitHub user id to username. You only have 5000 authenticated requests/hour.")
         return str(id)
 
     def blockchain_requests(self, api_port, endpoint):
@@ -220,45 +260,54 @@ class MainWindow(Gtk.Window):
         return time.strftime("%m-%d-%Y %H:%M")
 
 def _get_environment_vars():
-	"""
-	Gets environment variables needed to verify
-	and authenticate our app as a Susereum bot
-	"""
-	global PRIVATE_KEY, APP_IDENTIFIER
-	PRIVATE_KEY = os.environ['GITHUB_PRIVATE_KEY']
-	APP_IDENTIFIER = os.environ['GITHUB_APP_IDENTIFIER']
+    """
+    Gets environment variables needed to verify
+    and authenticate our app as a Susereum bot
+    """
+    global PRIVATE_KEY, APP_IDENTIFIER
+    #PRIVATE_KEY_2 = os.getenv('GITHUB_PRIVATE_KEY')
+    #APP_IDENTIFIER = os.getenv('GITHUB_APP_IDENTIFIER')
+    file = open('private-key.pem', 'r')
+    PRIVATE_KEY = file.read()
+    file.close()
+    APP_IDENTIFIER = "18490"
 
 def _create_installation_token():
-	"""
-	Generates token needed to authenticate Git API commands. You can send GitHub your JWT and installation ID
-	and GitHub will return an authentication token.
-	"""
-	global TOKEN
-	
-	JWT = _generate_JWT()
-	installation_id = "363304"	# This can be found in a integration_installation_repositories payload
-	URL = 'https://api.github.com/app/installations/'+installation_id+'/access_tokens'
-	headers = {'Accept': 'application/vnd.github.machine-man-preview+json',
-				'Authorization': ('Bearer ' + JWT)}
-	raw_data = requests.post(URL, headers = headers)
-	json_data = json.loads(raw_data.text)
-	TOKEN = json_data['token']
-	return TOKEN
+    """
+    Generates token needed to authenticate Git API commands. You can send GitHub your JWT and installation ID
+    and GitHub will return an authentication token.
+    """
+    global TOKEN
+
+    JWT = _generate_JWT()
+    installation_id = "363304"	# This can be found in a integration_installation_repositories payload
+    URL = 'https://api.github.com/app/installations/'+installation_id+'/access_tokens'
+    headers = {'Accept': 'application/vnd.github.machine-man-preview+json',
+                'Authorization': ('Bearer ' + JWT)}
+    raw_data = requests.post(URL, headers = headers)
+    json_data = json.loads(raw_data.text)
+    TOKEN = json_data['token']
+    #print(TOKEN)
+    return TOKEN
 
 def _generate_JWT():
-	"""
-	Creates a Json Web Token with a current time stamp and expiration time,
-	and then uses it to create an authentication token
-	"""
-	global PRIVATE_KEY, APP_IDENTIFIER 
-	current = datetime.datetime.utcnow()
-	current_time = calendar.timegm(current.timetuple())
-	
-	future = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
-	expiration_time = calendar.timegm(future.timetuple())
-	
-	payload = {'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}
-	JWT = jwt.encode({'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}, PRIVATE_KEY, algorithm='RS256')
+    """
+    Creates a Json Web Token with a current time stamp and expiration time,
+    and then uses it to create an authentication token
+    """
+    global PRIVATE_KEY, APP_IDENTIFIER
+    current = datetime.datetime.utcnow()
+    current_time = calendar.timegm(current.timetuple())
+
+    future = datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
+    expiration_time = calendar.timegm(future.timetuple())
+
+    #print("Private key: " + PRIVATE_KEY)
+    #print("App identifier: " + APP_IDENTIFIER)
+    payload = {'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}
+    JWT = jwt.encode({'iat': current_time, 'exp': expiration_time, 'iss': APP_IDENTIFIER}, PRIVATE_KEY, algorithm='RS256')
+    #print("JWT: " + str(JWT)[2:-1])
+    return str(JWT)[2:-1]
 
 if __name__ == '__main__':
     window = MainWindow()
