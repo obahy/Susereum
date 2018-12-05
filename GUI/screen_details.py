@@ -549,11 +549,13 @@ class MainWindow(Gtk.Window):
                 ErrorDialog(self, "Error!\n" + key + " must be a decimal value!")
                 return False
 
-        if int_measures['Small class'] > int_measures['Large class']:
+        if self.tog_large_class.get_active() and self.tog_small_class.get_active() and \
+                int_measures['Small class'] > int_measures['Large class']:
             ErrorDialog(self, "Error!\nSmall class cannot be larger than Large class!")
             return False
 
-        if int_measures['Small method'] > int_measures['Large method']:
+        if self.tog_large_method.get_active() and self.tog_small_method.get_active() and \
+                int_measures['Small method'] > int_measures['Large method']:
             ErrorDialog(self, "Error!\nSmall method cannot be larger than Large method!")
             return False
 

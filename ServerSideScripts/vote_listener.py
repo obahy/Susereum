@@ -16,7 +16,7 @@ def deleteSelfFromCron(proposal_id,proposal_date,prj_path):
 	print('deleting cron.. temp:',cron_file,['./tmp_cron.sh', cron_file])
 	p = subprocess.Popen(['./tmp_cron.sh', cron_file])
 	time.sleep(2)
-	cron_cmd = '* */1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
+	cron_cmd = '@hourly python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
 	print(cron_cmd)
 	new_cron_name = cron_file+"2"
 	new_cron = open(new_cron_name,'w')
@@ -71,7 +71,7 @@ yes_votes = votes.count(1)
 
 print('VOTES:',votes, (yes_votes >= approval_treshold))
 if yes_votes >= approval_treshold:
-	print('pass by vote threshold pass')
+	print('pass by vote threshold pass',yes_votes)
 	client.update_proposal(proposal_id,1,repo_id)
 	deleteSelfFromCron(proposal_id,proposal_date,prj_path)
 	sys.exit(0)
@@ -82,8 +82,10 @@ deadline = datetime.datetime.strptime(proposal_date,"%Y-%m-%d-%H-%M-%S") + datet
 print("TIMEs:",now,deadline)
 if now > deadline:
 	if yes_votes >= int(len(votes)/2):
+		print("I pass by votes 50%:",len(votes))
 		client.update_proposal(proposal_id,1,repo_id)
 	else:
+		print("I falied by ttime:",len(votes))
 		client.update_proposal(proposal_id,0,repo_id)
 	deleteSelfFromCron(proposal_id,proposal_date,prj_path)
 
