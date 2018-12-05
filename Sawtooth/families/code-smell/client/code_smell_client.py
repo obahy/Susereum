@@ -290,8 +290,12 @@ class CodeSmellClient:
             state (Str), new proposal ID
         """
         proposal = self.show(proposal_id)
-        print(proposal)
-        print (state)
+
+        if state == 1:
+            state = "Accepted"
+        else:
+            state = "Rejected"
+
         self._update_proposal(proposal, state, repo_id)
 
     def _update_proposal(self, proposal, state, repo_id):

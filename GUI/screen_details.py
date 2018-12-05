@@ -139,14 +139,17 @@ class MainWindow(Gtk.Window):
                   '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
                   ' | awk \'{print $1;}\' | tr -d "\n"'
         print(lastest_proposal_command)
-        lastest_proposal = os.popen(lastest_proposal_command).read().strip()
-        if not lastest_proposal:
+        self.lastest_proposal = os.popen(lastest_proposal_command).read().strip()
+        if not self.lastest_proposal:
             votes =[]
         else:
             vote_commands='python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
-                  '/Sawtooth/bin/code_smell.py vote --view '+lastest_proposal+' --url http://127.0.0.1:'+self.api
+                  '/Sawtooth/bin/code_smell.py vote --view '+self.lastest_proposal+' --url http://127.0.0.1:'+self.api
             print(vote_commands)
-            votes = eval(os.popen(vote_commands).read())
+            try:
+                votes = eval(os.popen(vote_commands).read())
+            except:
+                votes = []
 
         self.txt_accept = Gtk.Entry()
         self.txt_accept.set_text(str(votes.count(1)))
@@ -553,6 +556,10 @@ class MainWindow(Gtk.Window):
 
         if float_measures['Comments to code ratio [lower]'] > float_measures['Comments to code ratio [upper]']:
             ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
+            return False
+
+        if not self.lastest_proposal:
+            ErrorDialog(self, "Error!\nThere is an active proposal")
             return False
 
         return True
