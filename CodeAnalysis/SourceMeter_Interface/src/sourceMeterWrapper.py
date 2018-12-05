@@ -5,7 +5,7 @@ import re
 import shutil
 import socket
 import sys
-from subprocess import Popen
+from subprocess import Popen, check_call, CalledProcessError
 from pandas import read_csv, concat
 from constants import CLEAN_UP_SM_FILES, SOURCE_METER_JAVA_PATH, SOURCE_METER_PYTHON_PATH, \
     CLASS_KEEP_COL, METHOD_KEEP_COL, CLEAN_UP_REPO_FILES, TMP_DIR
@@ -338,6 +338,100 @@ def arg_type(arg):
     return "url" if "github.com" in arg else "path"
 
 
+def is_pathname_valid(pathname):
+    """ Returns whether the pathname is writable and valid.
+    This method was adapted from a Stack Overflow Question: https://stackoverflow.com/a/34102855
+
+    Args:
+        pathname (str): A string representation of a system path.
+
+    Returns:
+        `True` if the passed pathname is a valid pathname for the current OS;
+        `False` otherwise.
+    """
+    # If this pathname is either not a string or is but is empty, this pathname
+    # is invalid.
+    try:
+        if not isinstance(pathname, str) or not pathname:
+            return False
+
+        # Root directory guaranteed to exist
+        root_dirname = os.path.sep
+        assert os.path.isdir(root_dirname)  # ...Murphy and her ironclad Law
+
+        # Test whether each path component split from this pathname is valid or
+        # not, ignoring non-existent and non-readable path components.
+        for pathname_part in pathname.split(os.path.sep):
+            try:
+                if len(pathname_part):
+                    if root_dirname is os.path.sep:
+                        root_dirname += pathname_part
+                    else:
+                        root_dirname = root_dirname + os.path.sep + pathname_part
+                    os.lstat(root_dirname)
+            except OSError:
+                return False
+        # If a "TypeError" exception was raised, it almost certainly has the
+        # error message "embedded NUL character" indicating an invalid pathname.
+    except TypeError:
+        return False
+        # If no exception was raised, all path components and hence this
+        # pathname itself are valid. (Praise be to the curmudgeonly python.)
+    else:
+        return True
+
+
+def is_path_creatable(pathname):
+    """ Returns whether a pathname is creatable.
+        This method was adapted from a Stack Overflow Question: https://stackoverflow.com/a/34102855
+
+    Args:
+        pathname (str): A string representation of a system path.
+    Returns:
+        `True` if the current user has sufficient permissions to create the passed
+        pathname; `False` otherwise.
+    """
+    # Parent directory of the passed path. If empty, we substitute the current
+    # working directory (CWD) instead.
+    dirname = os.path.dirname(pathname) or os.getcwd()
+    return os.access(dirname, os.W_OK)
+
+
+def is_path_exists_or_creatable(pathname):
+    """ Returns whether a pathname is valid and whether or not it already exists or is creatable.
+        This method was adapted from a Stack Overflow Question: https://stackoverflow.com/a/34102855
+
+    Args:
+        pathname (str): A string representation of a system path.
+    `True` if the passed pathname is a valid pathname and whether it currently exists or
+    is hypothetically creatable; `False` otherwise.
+
+    """
+    try:
+        # To prevent "os" module calls from raising undesirable exceptions on
+        # invalid pathnames, is_pathname_valid() is explicitly called first.
+        return is_pathname_valid(pathname) and (os.path.exists(pathname) or is_path_creatable(pathname))
+    # Report failure on non-fatal filesystem complaints (e.g., connection
+    # timeouts, permissions issues) implying this path to be inaccessible. All
+    # other exceptions are unrelated fatal issues and should not be caught here.
+    except OSError:
+        return False
+
+
+def is_valid_github_repo_url(url):
+    """ Returns whether a url is a valid GitHub Repo URL, by using 'git ls-remote'.
+
+    Args:
+        url (str): A string representation of a system path.
+    Returns:
+        `True` if 'git ls-remote <url>' call returns 0 (success); `False` otherwise.
+    """
+    try:
+        return check_call(['git', 'ls-remote', url.split('/commit')[0]]) == 0
+    except CalledProcessError:
+        return False
+
+
 def main(args):
     """Main method for the Source Meter Wrapper script.
 
@@ -348,12 +442,15 @@ def main(args):
         print "Error: Incorrect number of arguments. Usage should be:\n" \
               "$ python sourceMeterWrapper.py <(GitHub Project Repo) | (Path to Project)> " \
               "<Directory Where to Store Results>"
-    elif arg_type(args[1]) is "url":
-        analyze_from_repo(args[1], args[2])
-    elif os.path.isdir(args[1]):
-        analyze_from_path(args[1], args[2])
-    else:
-        print "Error: The passed argument is not a url and it is not a valid directory."
+    else:  # Number of args is correct
+        if arg_type(args[2]) is "path":  # Verify that args[2] is a valid path
+            if not is_path_exists_or_creatable(args[2]):
+                print "Error: The second passed argument is not a valid directory."
+            else:
+                if not is_valid_github_repo_url(args[2]):  # Verify that args[1] is a valid GitHub Repo URL
+                    print "Error: The first passed argument is not a valid GitHub Repo URL."
+                else:
+                    analyze_from_repo(args[1], args[2])
 
 
 if __name__ == "__main__":
