@@ -204,7 +204,7 @@ class MainWindow(Gtk.Window):
         if os.path.isfile('smells_exist.txt'):
             print('SMEELL EXSISTS................................................... ')
             print('SMEELL EXSISTS................................................... ')
-            x = [prj_id,prj_name,"50",self.get_time_date()]#TODO query health
+            x = [prj_id,prj_name,"0",self.get_time_date()]#TODO query health
             print('SMEELL EXSISTS: ',x)
             print('SMEELL EXSISTS: ', x)
             print('SMEELL EXSISTS: ', x)
@@ -224,6 +224,12 @@ class MainWindow(Gtk.Window):
           :param widget: list_store
         """
         print("Deleting project")
+        if not self.selected:
+            return
+        import shutil
+        shutil.rmtree(os.environ['HOME']+'/.sawtooth_projects/'+self.selected)
+        #TODO remove label
+
 
     def open_project(self, widget):
         """
