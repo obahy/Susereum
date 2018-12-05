@@ -16,7 +16,7 @@ def deleteSelfFromCron(proposal_id,proposal_date,prj_path):
 	print('deleting cron.. temp:',cron_file,['./tmp_cron.sh', cron_file])
 	p = subprocess.Popen(['./tmp_cron.sh', cron_file])
 	time.sleep(2)
-	cron_cmd = '* 1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
+	cron_cmd = '* */1 * * * python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
 	print(cron_cmd)
 	new_cron_name = cron_file+"2"
 	new_cron = open(new_cron_name,'w')
