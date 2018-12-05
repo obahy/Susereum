@@ -257,14 +257,18 @@ class CodeSmellClient:
         #check for an active proposal, transactions are return in sequential order.
         proposal_result = self._send_request("state?address={}".format(code_smell_prefix))
         encoded_entries = yaml.safe_load(proposal_result)["data"]
-        for entry in encoded_entries:
-            #look for the first proposal transactiosn
-            if base64.b64decode(entry["data"]).decode().split(',')[0] == "proposal":
-                last_proposal = base64.b64decode(entry["data"]).decode().split(',')
-                break
+        print (encoded_entries)
         try:
-            if last_proposal[3] == "active":
-                return "Invalid Operation, another proposal is Active"
+            for entry in encoded_entries:
+                print (base64.b64decode(entry["data"]).decode().split(',')[0])
+                #look for the first proposal transactiosn
+                if base64.b64decode(entry["data"]).decode().split(',')[0] == "proposal":
+                    last_proposal = base64.b64decode(entry["data"]).decode().split(',')
+                    break
+            print (last_proposal)
+        #try:
+            #if last_proposal[3] == "active":
+            #    return "Invalid Operation, another proposal is Active"
         except BaseException:
             pass
 
