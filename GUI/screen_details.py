@@ -532,7 +532,7 @@ class MainWindow(Gtk.Window):
 
         for key, value in float_measures.items():
             try:
-                int_measures[key] = float(value)
+                float_measures[key] = float(value)
             except ValueError:
                 ErrorDialog(self, "Error!\n" + key + " must be a decimal value!")
                 return False
@@ -549,7 +549,7 @@ class MainWindow(Gtk.Window):
             ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
             return False
 
-        return False
+        return True
 
     # TODO make file so i cant vote again
 
@@ -562,15 +562,11 @@ class MainWindow(Gtk.Window):
             return
 
         print("Saving proposal")
-        # TODO make proposal string
-        proposal = "LargeClass=" + str(self.txt_large_class.get_text()) + "," + "SmallClass=" + str(
-            self.txt_small_class.get_text()) + "," \
-                   + "GodClass=" + str(self.txt_god_class.get_text()) + "," + "InappropriateIntimacy=" + str(
-            self.txt_inapp_intm.get_text()) + "," \
-                   + "LargeMethod=" + str(self.txt_large_method.get_text()) + "," + "SmallMethod=" + str(
-            self.txt_small_method.get_text()) + "," \
-                   + "LargeParameterList=" + str(
-            self.txt_large_param.get_text()) + "," + "CommentsToCodeRatioLower=" + str(self.txt_ctc_lw.get_text()) + "," \
+        # TODO remove dont cares
+        proposal = "LargeClass=" + str(self.txt_large_class.get_text()) + "," + "SmallClass=" + str(self.txt_small_class.get_text()) + "," \
+                   + "GodClass=" + str(self.txt_god_class.get_text()) + "," + "InappropriateIntimacy=" + str(self.txt_inapp_intm.get_text()) + "," \
+                   + "LargeMethod=" + str(self.txt_large_method.get_text()) + "," + "SmallMethod=" + str(self.txt_small_method.get_text()) + "," \
+                   + "LargeParameterList=" + str(self.txt_large_param.get_text()) + "," + "CommentsToCodeRatioLower=" + str(self.txt_ctc_lw.get_text()) + "," \
                    + "CommentsToCodeRatioUpper=" + str(self.txt_ctc_up.get_text())
         subprocess.Popen(
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
