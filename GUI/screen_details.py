@@ -526,6 +526,9 @@ class MainWindow(Gtk.Window):
         for key, value in int_measures.items():
             try:
                 int_measures[key] = int(value)
+                if int_measures[key] < 0:
+                    ErrorDialog(self, "Error!\n" + key + " cannot be negative!")
+                    return False
             except ValueError:
                 ErrorDialog(self, "Error!\n" + key + " must be an integer!")
                 return False
@@ -533,6 +536,9 @@ class MainWindow(Gtk.Window):
         for key, value in float_measures.items():
             try:
                 float_measures[key] = float(value)
+                if float_measures[key] < 0:
+                    ErrorDialog(self, "Error!\n" + key + " cannot be negative!")
+                    return False
             except ValueError:
                 ErrorDialog(self, "Error!\n" + key + " must be a decimal value!")
                 return False
