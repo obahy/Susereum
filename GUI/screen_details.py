@@ -138,8 +138,11 @@ class MainWindow(Gtk.Window):
         lastest_proposal_command = 'python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
                   '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
                   ' | awk \'{print $1;}\' | tr -d "\n"'
+
         print(lastest_proposal_command)
         self.lastest_proposal = os.popen(lastest_proposal_command).read().strip()
+        if self.lastest_proposal == "Error: No transactions found":
+            self.lastest_proposal = None
         if not self.lastest_proposal:
             votes =[]
         else:
@@ -193,19 +196,19 @@ class MainWindow(Gtk.Window):
         ' | awk \'{print $1;}\'`; sawtooth transaction show "$tansaction" --url http://127.0.0.1:'+self.api+\
         ' | grep "payload:" | awk \'{print $2;}\' | base64 --decode'
 
-        proposal = os.popen(command).read()
-        if not proposal:
-            proposal = "There are no proposals at this time"
+        self.proposal = os.popen(command).read()
+        if not self.proposal:
+            self.proposal = "There are no proposals at this time"
         else:
             #print("TEMP:",proposal.split(',')[2].replace(";",",").replace("'",'"'))
-            temp = json.loads(proposal.split(',')[2].replace(";",",").replace("'",'"'))
+            temp = json.loads(self.proposal.split(',')[2].replace(";",",").replace("'",'"'))
 
-            proposal = ""
+            self.proposal = ""
             for key,value in temp.items():
-                proposal = proposal+key+" : "+value+"\n"
+                self.proposal = self.proposal+key+" : "+value+"\n"
 
         #print(command)
-        self.lbl_vote_text = Gtk.Label(proposal)
+        self.lbl_vote_text = Gtk.Label(self.proposal)
         self.lbl_vote_text.set_line_wrap(True)
         hbox_lb4.pack_start(self.lbl_vote_text, True, True, 0)
         self.listbox_vot_v4.add(self.row)
@@ -409,8 +412,8 @@ class MainWindow(Gtk.Window):
                 if (transaction_type in ["commit", "health", "suse"]):
                     user_github_id = payload_list[1]
                     # TODO: Uncomment this to get GitHub username
-                    sender_id = self.github_user_id_to_username(user_github_id)
-                    #sender_id = user_github_id
+                    #sender_id = self.github_user_id_to_username(user_github_id)
+                    sender_id = user_github_id
 
                 # Filter out transactions
                 if (transaction_type not in ["code_smell", "commit", "health", "proposal", "suse", "vote"]):
@@ -560,9 +563,11 @@ class MainWindow(Gtk.Window):
             ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
             return False
 
-        if not self.lastest_proposal:
-            ErrorDialog(self, "Error!\nThere is an active proposal")
+        if self.lastest_proposal:
+            ErrorDialog(self, "Error!\nThere is an active proposal__"+self.lastest_proposal)
             return False
+        else:
+            ErrorDialog(self, "Error!\nYou are fine, no propsoals" + self.lastest_proposal)
 
         return True
 
