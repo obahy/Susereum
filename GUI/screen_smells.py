@@ -385,7 +385,7 @@ class MainWindow(Gtk.Window):
         """
         self.save_to_suse()
         print("Adding project: " + self.prj_name + " " + self.get_time_date())
-        x = [self.prj_id,self.prj_name,'50', self.get_time_date()]#TODO query health - should be default
+        x = [self.prj_id,self.prj_name,'0', self.get_time_date()]#TODO query health - should be default
         self.parent.list_store.append(x)
         #TODO call github to update .suse
 

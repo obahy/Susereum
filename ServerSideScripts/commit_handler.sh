@@ -10,7 +10,8 @@ echo 'about to run'
 
 
 #check if cron is set up, if not add
-cron_cmd="10 * * * * /home/practicum2018/Suserium/Susereum/ServerSideScripts/commit_handler.sh $1 $2 $3 $4 $5"
+cron_cmd_g="\*/10 \* \* \* \* /home/practicum2018/Suserium/Susereum/ServerSideScripts/commit_handler.sh $1 $2 $3 $4 $5"
+cron_cmd="*/10 * * * * /home/practicum2018/Suserium/Susereum/ServerSideScripts/commit_handler.sh $1 $2 $3 $4 $5"
 crontab -l > mycron
 echo "adding.. cron command: $cron_cmd"
 if grep -Fxq "$cron_cmd" mycron
@@ -31,7 +32,7 @@ cd $(dirname "$0")
 pwd
 )
 readarray ports < $Dir/map/$REPOID
-export SAWTOOTH_HOME="$HOME/.sawtooth_projects/.$(echo $NAME)_$(echo $REPOID)"
+export SAWTOOTH_HOME="/home/practicum2018/.sawtooth_projects/.$(echo $NAME)_$(echo $REPOID)"
 cd $SAWTOOTH_HOME
 #push to chain the commit
 api=$(echo ${ports[2]} | tr -d '\n')
@@ -58,10 +59,11 @@ if [ -z "$health_done" ] ;then
 	echo " $SENDERID $REPOID $NAME $COMMIT_URL $TIME ----- $transaction_id @ $key " >> /commitran
 else
 	#delete self from cron
-	cron_cmd="10 \* \* \* \* /home/practicum2018/Suserium/Susereum/ServerSideScripts/commit_handler.sh $1 $2 $3 $4 $5"
+	cron_cmd="\*/10 \* \* \* \* /home/practicum2018/Suserium/Susereum/ServerSideScripts/commit_handler.sh $1 $2 $3 $4 $5"
 	echo "deleting self $cron_cmd"
 	crontab -l | grep -v "$cron_cmd" > mycron
 	crontab mycron
+	cat mycron
 	rm mycron
 fi
 

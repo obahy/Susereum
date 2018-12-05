@@ -139,14 +139,17 @@ class MainWindow(Gtk.Window):
                   '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
                   ' | awk \'{print $1;}\' | tr -d "\n"'
         print(lastest_proposal_command)
-        lastest_proposal = os.popen(lastest_proposal_command).read().strip()
-        if not lastest_proposal:
+        self.lastest_proposal = os.popen(lastest_proposal_command).read().strip()
+        if not self.lastest_proposal:
             votes =[]
         else:
             vote_commands='python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
-                  '/Sawtooth/bin/code_smell.py vote --view '+lastest_proposal+' --url http://127.0.0.1:'+self.api
+                  '/Sawtooth/bin/code_smell.py vote --view '+self.lastest_proposal+' --url http://127.0.0.1:'+self.api
             print(vote_commands)
-            votes = eval(os.popen(vote_commands).read())
+            try:
+                votes = eval(os.popen(vote_commands).read())
+            except:
+                votes = []
 
         self.txt_accept = Gtk.Entry()
         self.txt_accept.set_text(str(votes.count(1)))
@@ -555,7 +558,11 @@ class MainWindow(Gtk.Window):
             ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
             return False
 
-        return False
+        if not self.lastest_proposal:
+            ErrorDialog(self, "Error!\nThere is an active proposal")
+            return False
+
+        return True
 
     # TODO make file so i cant vote again
 
@@ -568,15 +575,11 @@ class MainWindow(Gtk.Window):
             return
 
         print("Saving proposal")
-        # TODO make proposal string
-        proposal = "LargeClass=" + str(self.txt_large_class.get_text()) + "," + "SmallClass=" + str(
-            self.txt_small_class.get_text()) + "," \
-                   + "GodClass=" + str(self.txt_god_class.get_text()) + "," + "InappropriateIntimacy=" + str(
-            self.txt_inapp_intm.get_text()) + "," \
-                   + "LargeMethod=" + str(self.txt_large_method.get_text()) + "," + "SmallMethod=" + str(
-            self.txt_small_method.get_text()) + "," \
-                   + "LargeParameterList=" + str(
-            self.txt_large_param.get_text()) + "," + "CommentsToCodeRatioLower=" + str(self.txt_ctc_lw.get_text()) + "," \
+        # TODO remove dont cares
+        proposal = "LargeClass=" + str(self.txt_large_class.get_text()) + "," + "SmallClass=" + str(self.txt_small_class.get_text()) + "," \
+                   + "GodClass=" + str(self.txt_god_class.get_text()) + "," + "InappropriateIntimacy=" + str(self.txt_inapp_intm.get_text()) + "," \
+                   + "LargeMethod=" + str(self.txt_large_method.get_text()) + "," + "SmallMethod=" + str(self.txt_small_method.get_text()) + "," \
+                   + "LargeParameterList=" + str(self.txt_large_param.get_text()) + "," + "CommentsToCodeRatioLower=" + str(self.txt_ctc_lw.get_text()) + "," \
                    + "CommentsToCodeRatioUpper=" + str(self.txt_ctc_up.get_text())
         subprocess.Popen(
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
