@@ -357,6 +357,8 @@ def is_pathname_valid(pathname):
         if not isinstance(pathname, str) or not pathname:
             return False
 
+        pathname = os.path.abspath(pathname)
+
         # Root directory guaranteed to exist
         root_dirname = os.path.sep
         assert os.path.isdir(root_dirname)  # ...Murphy and her ironclad Law
@@ -395,6 +397,7 @@ def is_path_creatable(pathname):
     """
     # Parent directory of the passed path. If empty, we substitute the current
     # working directory (CWD) instead.
+    pathname = os.path.abspath(pathname)
     dirname = os.path.dirname(pathname) or os.getcwd()
     return os.access(dirname, os.W_OK)
 
@@ -409,10 +412,11 @@ def is_path_exists_or_creatable(pathname):
     is hypothetically creatable; `False` otherwise.
 
     """
+    pathname = os.path.abspath(pathname)
     try:
         # To prevent "os" module calls from raising undesirable exceptions on
         # invalid pathnames, is_pathname_valid() is explicitly called first.
-        return is_pathname_valid(pathname) and (os.path.exists(pathname) or is_path_creatable(pathname))
+        return is_pathname_valid(pathname) or os.path.exists(pathname) or is_path_creatable(pathname)
     # Report failure on non-fatal filesystem complaints (e.g., connection
     # timeouts, permissions issues) implying this path to be inaccessible. All
     # other exceptions are unrelated fatal issues and should not be caught here.
@@ -449,7 +453,7 @@ def main(args):
             if not is_path_exists_or_creatable(args[2]):
                 print "Error: The second passed argument is not a valid directory."
             else:
-                if not is_valid_github_repo_url(args[2]):  # Verify that args[1] is a valid GitHub Repo URL
+                if not is_valid_github_repo_url(args[1]):  # Verify that args[1] is a valid GitHub Repo URL
                     print "Error: The first passed argument is not a valid GitHub Repo URL."
                 else:
                     analyze_from_repo(args[1], args[2])
