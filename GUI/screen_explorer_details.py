@@ -1,6 +1,6 @@
 import gi
 import numpy as np
-from datetime import datetime
+#from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import json
@@ -25,6 +25,7 @@ class MainWindow(Gtk.Window):
     def __init__(self, api_port):
         self.username_mappings = {}
         _get_environment_vars()
+        self.api = api_port
 
         Gtk.Window.__init__(self, title="Explorer Details")
         self.set_border_width(5)
@@ -51,7 +52,7 @@ class MainWindow(Gtk.Window):
                     '-')  # [data[4][0:4],data[4][5:7],data[4][8:10],data[4][11:13],data[4][14:16],data[4][17:19]]
                 healths.append(float(health))
                 print(date)
-                myDates.append(datetime(int(date[0]),
+                myDates.append(datetime.datetime(int(date[0]),
                                         int(date[1]),
                                         int(date[2]),
                                         int(date[3]),

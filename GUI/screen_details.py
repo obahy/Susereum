@@ -127,13 +127,7 @@ class MainWindow(Gtk.Window):
         self.listbox_vot_v2.set_selection_mode(Gtk.SelectionMode.NONE)
         box_vote.pack_start(self.listbox_vot_v2, False, True, 0)
 
-        self.row = Gtk.ListBoxRow()
-        hbox_lb2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-        self.row.add(hbox_lb2)
-        vbox_lb2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        hbox_lb2.pack_start(vbox_lb2, True, True, 0)
-        self.lbl_accept = Gtk.Label('Overall acceptance:')
-        vbox_lb2.pack_start(self.lbl_accept, True, True, 0)
+
 
         lastest_proposal_command = 'python3 ' + os.path.dirname(os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
                   '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
@@ -154,10 +148,17 @@ class MainWindow(Gtk.Window):
             except:
                 votes = []
 
-        self.txt_accept = Gtk.Entry()
-        self.txt_accept.set_text(str(votes.count(1)))
-        self.txt_accept.set_sensitive(False)
-        hbox_lb2.pack_start(self.txt_accept, True, True, 0)
+        #self.txt_accept = Gtk.Entry()
+        #self.txt_accept.set_text(str(votes.count(1)))
+        #self.txt_accept.set_sensitive(False)
+        #hbox_lb2.pack_start(self.txt_accept, True, True, 0)
+        self.row = Gtk.ListBoxRow()
+        hbox_lb2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.row.add(hbox_lb2)
+        vbox_lb2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        hbox_lb2.pack_start(vbox_lb2, True, True, 0)
+        self.lbl_accept = Gtk.Label('Overall acceptance: '+str(votes.count(1)))
+        vbox_lb2.pack_start(self.lbl_accept, True, True, 0)
 
         self.listbox_vot_v2.add(self.row)
 
@@ -171,13 +172,13 @@ class MainWindow(Gtk.Window):
         self.row.add(hbox_lb3)
         vbox_lb3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         hbox_lb3.pack_start(vbox_lb3, True, True, 0)
-        self.lbl_reject = Gtk.Label('Overall rejection:')
+        self.lbl_reject = Gtk.Label('Overall rejection: '+str(votes.count(0)))
         vbox_lb3.pack_start(self.lbl_reject, True, True, 0)
 
-        self.txt_reject = Gtk.Entry()
-        self.txt_reject.set_text(str(votes.count(0)))
-        self.txt_reject.set_sensitive(False)
-        hbox_lb3.pack_start(self.txt_reject, False, True, 0)
+        #self.txt_reject = Gtk.Entry()
+        #self.txt_reject.set_text(str(votes.count(0)))
+        #self.txt_reject.set_sensitive(False)
+        #hbox_lb3.pack_start(self.txt_reject, False, True, 0)
 
         self.listbox_vot_v3.add(self.row)
 
@@ -427,19 +428,13 @@ class MainWindow(Gtk.Window):
                 if (transaction_type == "code_smell"):
                     data = "Code Smell: " + payload_list[1] + "\n"
                     data += "Values: " + payload_list[2] + "\n"
-                    data += "State: " + payload_list[3] + "\n"
                 elif (transaction_type == "commit"):
                     data = "GitHub ID: " + payload_list[1] + "\n"
                     data += "Commit URL: " + payload_list[2] + "\n"
-                    data += "State: " + payload_list[3] + "\n"
-                    data += "REST API URL: " + payload_list[4] + "\n"
-                    data += "Peer IP: " + payload_list[5] + "\n"
                 elif (transaction_type == "health"):
                     data = "GitHub ID: " + payload_list[1] + "\n"
                     data += "Health: " + payload_list[2] + "\n"
-                    data += "State: " + payload_list[3] + "\n"
                     data += "Commit URL: " + payload_list[4] + "\n"
-                    data += "IP Peer: " + payload_list[5] + "\n"
                 elif (transaction_type == "proposal"):
                     data = "GitHub ID: " + payload_list[1] + "\n"
                     data += "Code Smells: " + self._beautify_code_smells(payload_list[2]) + "\n"
@@ -525,15 +520,27 @@ class MainWindow(Gtk.Window):
         """
         print("Accepting project")
         print("Rejecting project")
+        #check locker
+
         proposal_id = subprocess.check_output(
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
              'list', '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:' + self.api])
         proposal_id = proposal_id.decode('utf-8').split(' ')[0]
+        try:
+            clocker = open('votelock.txt', 'r').read()
+            if proposal_id in clocker:
+                ErrorDialog(self, "You already voted!")
+                return
+        except:
+            pass
         print(['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
                'vote', '--id', proposal_id, '--vote', 'yes', '--url', 'http://127.0.0.1:' + self.api])
         subprocess.Popen(
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
              'vote', '--id', proposal_id, '--vote', 'yes', '--url', 'http://127.0.0.1:' + self.api])
+        locker = open('votelock.txt','w')
+        locker.write(proposal_id)
+        locker.close()
 
     # TODO make file so i cant vote again
 
@@ -548,6 +555,13 @@ class MainWindow(Gtk.Window):
              'list',
              '--type', 'proposal', '--active', '1', '--url', 'http://127.0.0.1:' + self.api])
         proposal_id = proposal_id.decode('utf-8').split(' ')[0]
+        try:
+            clocker = open('votelock.txt', 'r').read()
+            if proposal_id in clocker:
+                ErrorDialog(self, "You already voted!")
+                return
+        except:
+            pass
         print(['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
                'vote',
                '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
@@ -555,6 +569,9 @@ class MainWindow(Gtk.Window):
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
              'vote',
              '--id', proposal_id, '--vote', 'no', '--url', 'http://127.0.0.1:' + self.api])
+        locker = open('votelock.txt', 'w')
+        locker.write(proposal_id)
+        locker.close()
 
     def is_valid_proposal(self):
         int_measures = {'Large class': self.txt_large_class.get_text(),

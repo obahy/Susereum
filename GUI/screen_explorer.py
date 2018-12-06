@@ -5,6 +5,8 @@ from gi.repository import Gtk
 import re
 from itertools import dropwhile
 import requests
+import subprocess
+import json
 
 """
 Sawtooth Explorer screen for Susereum.
@@ -141,13 +143,30 @@ class MainWindow(Gtk.Window):
         #print(home, prj_name, prj_id)
         #print(type(home), type(prj_name), type(prj_id))
         etc_dir = home+"."+prj_name+"_"+prj_id+"/etc/"
-        
+
+        print(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url',
+               'http://129.108.7.2:' + str(api)])
+        results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url',
+                                           'http://129.108.7.2:' + str(api)])
+        if not results:
+            health = "50"
+        else:
+            results = results.decode('utf-8').replace("'", "\"").replace('": b"', '": "').strip()
+            dictionary = json.loads(results)
+            for value in dictionary.values():
+                dataz = value.split(',')
+                print(dataz)
+                health = dataz[2]
+                if '-2' in health:
+                    health = "-"
+                break
+
         try:
             if not os.path.exists(etc_dir):
                 os.makedirs(etc_dir)
         except:
             print("ERROR: Couldn't make " + etc_dir)
-        
+
 
         """
         try:
@@ -177,7 +196,7 @@ class MainWindow(Gtk.Window):
         ports.close()
         suse.write(r.text[self.findnth(r.text,'\n',3):])
         suse.close()
-        x = [prj_id,prj_name,"50",self.get_time_date()]#TODO query suse
+        x = [prj_id,prj_name,health,self.get_time_date()]#TODO query suse
         self.projects.append(x)
        
 
