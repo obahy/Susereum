@@ -324,7 +324,7 @@ class CodeSmellClient:
 
         print (response)
 
-        if state == 1:
+        if state == "Accepted":
             #update suse configuration file
             self._update_suse_file(proposal)
 

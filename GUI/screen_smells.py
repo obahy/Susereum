@@ -7,6 +7,7 @@ import subprocess
 import os
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from ErrorDialog import ErrorDialog
 
 """
 Add code smells screen for Susereum.
@@ -316,27 +317,76 @@ class MainWindow(Gtk.Window):
         #TODO Christian, Abel needs the REPO ID as well from here.
         suse = open(self.suse_path,'r')
 
+    def are_valid_smells(self):
+        int_measures = {'Large class': self.txt_large_class.get_text(),
+                        'Small class': self.txt_small_class.get_text(),
+                        'Large method': self.txt_large_method.get_text(),
+                        'Small method': self.txt_small_method.get_text(),
+                        'Large param': self.txt_large_param.get_text(),
+                        'God class': self.txt_god_class.get_text(),
+                        'Inappropriate Intimacy': self.txt_inapp_intm.get_text(),
+                        'Proposal active days': self.txt_pro_act.get_text(),
+                        'Approval threshold': self.txt_app_tre.get_text()}
+
+        float_measures = {'Comments to code ratio [upper]': self.txt_ctc_up.get_text(),
+                          'Comments to code ratio [lower]': self.txt_ctc_lw.get_text()}
+
+        for key, value in int_measures.items():
+            try:
+                int_measures[key] = int(value)
+                if int_measures[key] < 0:
+                    ErrorDialog(self, "Error!\n" + key + " cannot be negative!")
+                    return False
+            except ValueError:
+                ErrorDialog(self, "Error!\n" + key + " must be an integer!")
+                return False
+
+        for key, value in float_measures.items():
+            try:
+                float_measures[key] = float(value)
+                if float_measures[key] < 0:
+                    ErrorDialog(self, "Error!\n" + key + " cannot be negative!")
+                    return False
+            except ValueError:
+                ErrorDialog(self, "Error!\n" + key + " must be a decimal value!")
+                return False
+
+        if self.tog_large_class.get_active() and self.tog_small_class.get_active() and \
+                int_measures['Small class'] > int_measures['Large class']:
+            ErrorDialog(self, "Error!\nSmall class cannot be larger than Large class!")
+            return False
+
+        if self.tog_large_method.get_active() and self.tog_small_method.get_active() and \
+                int_measures['Small method'] > int_measures['Large method']:
+            ErrorDialog(self, "Error!\nSmall method cannot be larger than Large method!")
+            return False
+
+        if float_measures['Comments to code ratio [lower]'] > float_measures['Comments to code ratio [upper]']:
+            ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
+            return False
+        return True
+
     def save_to_suse(self):
         """
           save_to_suse - create the suse file, fetch smells data from the GUI fields
         """
         #read vars from GUI
-        smell = [str(self.txt_pro_act.get_text()),
-                 str(self.txt_app_tre.get_text()),
-                 str(self.txt_large_class.get_text()),
-                 str(self.txt_god_class.get_text()),
-                 str(self.txt_small_class.get_text()),
-                 str(self.txt_inapp_intm.get_text()),
-                 str(self.txt_ctc_up.get_text()),
-                 str(self.txt_ctc_lw.get_text()),
-                 str(self.txt_large_method.get_text()),
-                 str(self.txt_large_param.get_text()),
-                 str(self.txt_small_method.get_text())]
-        #TODO validate input
+        if self.are_valid_smells():
+            smell = [str(self.txt_pro_act.get_text()),
+                     str(self.txt_app_tre.get_text()),
+                     str(self.txt_large_class.get_text()),
+                     str(self.txt_god_class.get_text()),
+                     str(self.txt_small_class.get_text()),
+                     str(self.txt_inapp_intm.get_text()),
+                     str(self.txt_ctc_up.get_text()),
+                     str(self.txt_ctc_lw.get_text()),
+                     str(self.txt_large_method.get_text()),
+                     str(self.txt_large_param.get_text()),
+                     str(self.txt_small_method.get_text())]
 
-        #write to suse
-        suse = open(self.suse_path, 'w')
-        suse.write('''# Copyright 2017 Intel Corporation
+            #write to suse
+            suse = open(self.suse_path, 'w')
+            suse.write('''# Copyright 2017 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
