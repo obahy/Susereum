@@ -38,7 +38,6 @@ do
 			echo -n ""
 		else
 			#add task
-			echo "" >> mycron
 			echo "$cron_cmd" >> mycron
 			crontab mycron
 			
