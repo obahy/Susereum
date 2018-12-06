@@ -229,6 +229,10 @@ class MainWindow(Gtk.Window):
         import shutil
         shutil.rmtree(os.environ['HOME']+'/.sawtooth_projects/'+self.selected)
         #TODO remove label
+        print(self.projects)
+        print(self.selindex)
+        self.projects.remove(self.selindex)
+        print(self.projects)
 
 
     def open_project(self, widget):
@@ -256,6 +260,7 @@ class MainWindow(Gtk.Window):
         if row is not None:
             print("\nSelection- " + "ID: " + str(model[row][0]) + " Name: " + str(model[row][1]) + "\n")
             self.selected = "."+str(model[row][1])+"_"+str(model[row][0])
+            self.selindex = (str(model[row][0]),str(model[row][1]),str(model[row][2]),str(model[row][3]))
 
 
 if __name__ == '__main__':
