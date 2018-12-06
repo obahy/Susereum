@@ -12,23 +12,20 @@ import uuid
 import time
 
 def deleteSelfFromCron(proposal_id,proposal_date,prj_path):
-	cron_file = 'vote_cron_'+str(uuid.uuid4())
-	print('deleting cron.. temp:',cron_file,['./tmp_cron.sh', cron_file])
-	p = subprocess.Popen(['./tmp_cron.sh', cron_file])
-	time.sleep(2)
+	#print('deleting cron.. temp:',cron_file,['./tmp_cron.sh', cron_file])
+	p = str(subprocess.check_output(['crontab','-l']))[2:-1].replace('\\n','\n')
 	cron_cmd = '@hourly python3 /home/practicum2018/Suserium/Susereum/ServerSideScripts/vote_listener.py '+proposal_id+' '+proposal_date+' '+prj_path
 	print(cron_cmd)
-	new_cron_name = cron_file+"2"
-	new_cron = open(new_cron_name,'w')
-	for line in open(cron_file,'r').read().split('\n'):
+	cron_name = 'vote_cron_'+str(uuid.uuid4())
+	new_cron = open(cron_name,'w')
+	for line in p.split('\n'):
 		if cron_cmd in line:
 			continue
 		new_cron.write(line+'\n')
 	new_cron.close()
-	subprocess.Popen(['crontab', new_cron_name])
+	subprocess.Popen(['crontab', cron_name])
 	time.sleep(2)
-	os.remove(cron_file)
-	os.remove(new_cron_name)
+	os.remove(cron_name)
 
 
 proposal_id = sys.argv[1]
