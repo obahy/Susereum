@@ -126,11 +126,23 @@ class SuseClient:
             previous_heatlh = transactions[entry].decode().split(',')[2]
             break
 
-        suse = float(new_health) - float(previous_heatlh)
+        new_suse = float(new_health) - float(previous_heatlh)
 
+        #get previous suse
+        try:
+            project_path = self._work_path
+            ports = open(project_path + '/etc/.ports').read()
+            api = ports.split('\n')[2].strip()
+            command = 'sawtooth transaction list --url http://127.0.0.1:'+api+' | grep '+str(self.github_id)+' | grep b\\\'suse, | head -n 1 | awk "{print $5}"'
+            out = os.popen(command).read()
+            if ',' in out:
+                previous_suse = out.split(',')[2]
+        except Exception as e:
+            pass
+
+        suse = float(new_suse) + float(previous_suse)
         #the amount of suse is related to the amount of health, with a realtion of 1-to-1
         #we also provide negative suses
-
         response = self._send_suse_txn(
             txn_type='suse',
             txn_id=github_id,
