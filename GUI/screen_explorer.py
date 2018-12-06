@@ -159,7 +159,8 @@ class MainWindow(Gtk.Window):
                 health = dataz[2]
                 if '-2' in health:
                     health = "-"
-                break
+                else:
+                    break
 
         try:
             if not os.path.exists(etc_dir):

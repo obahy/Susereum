@@ -542,6 +542,18 @@ class MainWindow(Gtk.Window):
         locker.write(proposal_id)
         locker.close()
 
+
+        #self.txt_accept = Gtk.Entry()
+        #self.txt_accept.set_text(str(votes.count(1)))
+        #self.txt_accept.set_sensitive(False)
+        #hbox_lb2.pack_start(self.txt_accept, True, True, 0)
+        try:
+            vote = int(self.lbl_accept.get_text().split(":")[1][1:])+1
+            self.lbl_accept.set_text(self.lbl_accept.get_text().split(":")[0]+" "+str(vote))
+        except:
+            pass
+
+
     # TODO make file so i cant vote again
 
     def reject_proposal(self, widget):
@@ -572,6 +584,11 @@ class MainWindow(Gtk.Window):
         locker = open('votelock.txt', 'w')
         locker.write(proposal_id)
         locker.close()
+        try:
+            vote = int(self.lbl_reject.get_text().split(":")[1][1:])+1
+            self.lbl_accept.set_text(self.lbl_reject.get_text().split(":")[0]+" "+str(vote))
+        except:
+            pass
 
     def is_valid_proposal(self):
         int_measures = {'Large class': self.txt_large_class.get_text(),
