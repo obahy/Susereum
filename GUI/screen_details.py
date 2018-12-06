@@ -423,13 +423,52 @@ class MainWindow(Gtk.Window):
                 if (transaction_type == "suse"):
                     suse_transactions.append(transaction)
 
+                # Prepare labels for data, different transaction types have different labels
+                if (transaction_type == "code_smell"):
+                    data = "Code Smell: " + payload_list[1] + "\n"
+                    data += "Values: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                elif (transaction_type == "commit"):
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Commit URL: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                    data += "REST API URL: " + payload_list[4] + "\n"
+                    data += "Peer IP: " + payload_list[5] + "\n"
+                elif (transaction_type == "health"):
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Health: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                    data += "Commit URL: " + payload_list[4] + "\n"
+                    data += "IP Peer: " + payload_list[5] + "\n"
+                elif (transaction_type == "proposal"):
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Code Smells: " + self._beautify_code_smells(payload_list[2]) + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                elif (transaction_type == "suse"):
+                    suse_transactions.append(transaction)  # To sum up the values
+                    data = "GitHub ID: " + payload_list[1] + "\n"
+                    data += "Suse: " + payload_list[2] + "\n"
+                    data += "State: " + payload_list[3] + "\n"
+                elif (transaction_type == "vote"):
+                    data = "Vote ID: " + payload_list[1] + "\n"
+                    data += "Proposal ID: " + payload_list[2] + "\n"
+                    active = payload_list[3]
+                    active = active.replace('0', 'closed').replace('1', 'active')
+                    data += "State: " + active + "\n"
+                else:
+                    data = ""  # Data is everything in between
+                    i = 1
+                    while (i < len(payload_list) - 1):
+                        data += payload_list[i] + "\n"
+                        i += 1
+
                 timestamp = payload_list[len(payload_list) - 1]  # Timestamp is always the last item
 
-                data = ""  # Data is everything in between
-                i = 1
-                while (i < len(payload_list) - 1):
-                    data += payload_list[i] + "\n"
-                    i += 1
+                #data = ""  # Data is everything in between
+                #i = 1
+                #while (i < len(payload_list) - 1):
+                #    data += payload_list[i] + "\n"
+                #    i += 1
 
                 self.historical_data.append(
                     (sender_id, timestamp, transaction_type, data))  # Add a tuple to the list to show in table
