@@ -33,6 +33,52 @@ class MainWindow(Gtk.Window):
         self.add(self.notebook)
 
         # First tab
+        healths = []
+        myDates = []
+        print(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url',
+               'http://127.0.0.1:' + str(self.api)])
+        results = subprocess.check_output(['python3', '../Sawtooth/bin/health.py', 'list', '--type', 'health', '--url',
+                                           'http://127.0.0.1:' + str(self.api)])
+        if not results:
+            pass
+        else:
+            results = results.decode('utf-8').replace("'", "\"").replace('": b"', '": "').strip()
+            dictionary = json.loads(results)
+            for value in dictionary.values():
+                data = value.split(',')  # transaction_name,sender_id,health,status,time
+                health = data[2]
+                date = data[6].split(
+                    '-')  # [data[4][0:4],data[4][5:7],data[4][8:10],data[4][11:13],data[4][14:16],data[4][17:19]]
+                healths.append(float(health))
+                print(date)
+                myDates.append(datetime(int(date[0]),
+                                        int(date[1]),
+                                        int(date[2]),
+                                        int(date[3]),
+                                        int(date[4]),
+                                        int(date[5])))
+                print(health, date)
+
+            fig, ax = plt.subplots()
+            ax.plot(myDates, healths, 'ro')
+            myfmt = DateFormatter("%y-%m-%d")
+            ax.xaxis.set_major_formatter(myfmt)
+            # ax.set_xlim(myDates[0], myDates[-1])
+            ax.set_ylim(0, 100)
+            ## Rotate date labels automatically
+            fig.autofmt_xdate()
+            plt.xlabel("Date")
+            plt.ylabel("Health")
+            plt.title("Health per Commit")
+            plt.yticks(np.arange(0, 100, 10))  # TODO make dynamic
+            # plt.xticks(None,1)#TODO make dynamic
+            # plt.locator_params(axis='y',numticks=3)
+            # plt.show()
+            # plt.plot(healths,times,'ro')
+            # plt.axis(['Mon','Tues','Wed'])
+            plt.savefig('health.png')
+            img = Gtk.Image.new_from_file("health.png")  # TODO update this periodically and check for blank
+
         self.page1 = Gtk.Box()
         self.page1.set_border_width(10)
         img = Gtk.Image.new_from_file("health.png")
