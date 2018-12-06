@@ -68,7 +68,7 @@ class MainWindow(Gtk.Window):
 
             fig, ax = plt.subplots()
             ax.plot(myDates,healths,'ro')
-            myfmt = DateFormatter("%y-%m-%d")
+            myfmt = DateFormatter("%d-%m-%y")
             ax.xaxis.set_major_formatter(myfmt)
             #ax.set_xlim(myDates[0], myDates[-1])
             ax.set_ylim(0, 100)
@@ -563,11 +563,19 @@ class MainWindow(Gtk.Window):
             ErrorDialog(self, "Error!\nComments to code ratio: Lower cannot be greater than Upper!")
             return False
 
+        lastest_proposal_command = 'python3 ' + os.path.dirname(
+            os.path.dirname(os.path.realpath(__file__).strip()).strip()).strip() + \
+                                   '/Sawtooth/bin/code_smell.py list --type proposal --active 1 --url http://127.0.0.1:' + self.api + \
+                                   ' | awk \'{print $1;}\' | tr -d "\n"'
+        print(lastest_proposal_command)
+        self.lastest_proposal = os.popen(lastest_proposal_command).read().strip()
+        if self.lastest_proposal == "Error: No transactions found":
+            self.lastest_proposal = None
         if self.lastest_proposal:
-            ErrorDialog(self, "Error!\nThere is an active proposal__"+self.lastest_proposal)
+            ErrorDialog(self, "Error!\nThere is an active proposal")
             return False
         else:
-            ErrorDialog(self, "Error!\nYou are fine, no propsoals" + self.lastest_proposal)
+            ErrorDialog(self, "Your proposal was sent. Time to vote!")
 
         return True
 
@@ -586,8 +594,8 @@ class MainWindow(Gtk.Window):
         proposal = "LargeClass=" + str(self.txt_large_class.get_text()) + "," + "SmallClass=" + str(self.txt_small_class.get_text()) + "," \
                    + "GodClass=" + str(self.txt_god_class.get_text()) + "," + "InappropriateIntimacy=" + str(self.txt_inapp_intm.get_text()) + "," \
                    + "LargeMethod=" + str(self.txt_large_method.get_text()) + "," + "SmallMethod=" + str(self.txt_small_method.get_text()) + "," \
-                   + "LargeParameterList=" + str(self.txt_large_param.get_text()) + "," + "CommentsToCodeRatioLower=" + str(self.txt_ctc_lw.get_text()) + "," \
-                   + "CommentsToCodeRatioUpper=" + str(self.txt_ctc_up.get_text())
+                   + "LargeParameterList=" + str(self.txt_large_param.get_text()) + "," + "CommentsToCodeRatioLower=" + str(float(self.txt_ctc_lw.get_text())) + "," \
+                   + "CommentsToCodeRatioUpper=" + str(float(self.txt_ctc_up.get_text()))
         subprocess.Popen(
             ['python3', os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/Sawtooth/bin/code_smell.py',
              'proposal',
