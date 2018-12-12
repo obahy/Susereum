@@ -39,9 +39,12 @@ pip3 install toml
 pip3 install pygobject
 pip3 install pandas
 pip3 install requests
-pip3 install matplotlib
 pip3 install numpy
+pip3 install matplotlib
 pip3 install requests
+
+python3 -m pip install numpy
+python3 -m pip install matplotlib
 
 #start services on reboot - cron task
 Dir=$(
